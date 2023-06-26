@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const modelDB_1 = __importDefault(require("./modelDB"));
 const Event = modelDB_1.default.define('Event', {
-    id: {
+    eventId: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },

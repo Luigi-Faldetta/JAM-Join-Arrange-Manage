@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import sequelize from './modelDB';
 
 const Event = sequelize.define('Event', {
-  id: {
+  eventId: {
     type: DataTypes.STRING,
     allowNull: false,
   },

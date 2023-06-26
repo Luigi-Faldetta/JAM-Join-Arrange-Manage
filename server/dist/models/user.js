@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const modelDB_1 = __importDefault(require("./modelDB"));
 const User = modelDB_1.default.define('User', {
-    id: {
+    userId: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
