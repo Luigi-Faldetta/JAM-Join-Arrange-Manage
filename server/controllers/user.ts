@@ -1,4 +1,3 @@
-import bcrypt from 'bcrypt';
 import { User } from '../models/associations';
 import { UserModel } from '../models/user';
 import { Request, Response } from 'express';
@@ -17,15 +16,12 @@ const postUser = async (req: Request, res: Response) => {
   if (user) return res.status(409).send({ error: '409', message: 'User already exists' });
 
   try {
-    const hash = await bcrypt.hash(password, 10);
-    const user = await User.create({ ...req.body, password: hash });
+    const user = await User.create({ ...req.body });
     let safeUser = {
       id: user.id,
-      avatar: user.avatar,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      age: user.age,
-      infoAboutUser: user.infoAboutUser,
+      profilePic: user.profilePic,
+      name: user.name,
+      phone: user.phone,
     };
 
     res.status(201).json({
@@ -39,52 +35,55 @@ const postUser = async (req: Request, res: Response) => {
   }
 };
 
-const login = async (req: Request, res: Response) => {
-  try {
-    // const { email, password } = (req as customRequest).body;
-    const { email, password } = req.body;
+// const login = async (req: Request, res: Response) => {
+//   try {
+//     const { email, password } = req.body;
 
-    const user: UserModel | null = await User.findOne({ where: { email: email } });
-    if (!user) throw new Error();
+//     const user: UserModel | null = await User.findOne({ where: { email: email } });
+//     if (!user) throw new Error();
 
-    const validatedPass = await bcrypt.compare(password, user.password);
-    if (!validatedPass) throw new Error();
+//     if (!password) throw new Error();
+//     req.session.uid = user.id;
 
-    // (req as customRequest).session.uid = user.id;
-    req.session.uid = user.id;
+//     res.status(200).send({ success: true, data: user.id, message: 'OK' });
+//   } catch (err: any) {
+//     console.log(err);
+//     res.status(401).send({ error: '401', message: 'Username or password is incorrect' });
+//   }
+// };
 
-    res.status(200).send({ success: true, data: user.id, message: 'OK' });
-  } catch (err: any) {
-    console.log(err);
-    res.status(401).send({ error: '401', message: 'Username or password is incorrect' });
-  }
-};
-
-const logout = (req: Request, res: Response) => {
-  req.session.destroy((error) => {
-    if (error) {
-      res.status(500).send({ error, message: 'Could not log out, please try again' });
-    } else {
-      res.clearCookie('sid').status(200).send({ message: 'Logout successful' });
-    }
-  });
-};
+// const logout = (req: Request, res: Response) => {
+//   req.session.destroy((error: any) => {
+//     if (error) {
+//       res.status(500).send({ error, message: 'Could not log out, please try again' });
+//     } else {
+//       res.clearCookie('sid').status(200).send({ message: 'Logout successful' });
+//     }
+//   });
+// };
 
 const getUserInfo = async function (req: Request, res: Response) {
   try {
     let user = await User.findOne({ where: { id: req.params.id } });
     if (user) {
       let safeUser = {
-        id: req.params.id,
-        avatar: user.avatar,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        age: user.age,
-        email: user.email,
-        infoAboutUser: user.infoAboutUser,
+        id: user.id,
+        profilePic: user.profilePic,
+        name: user.name,
+        phone: user.phone,
       };
       res.status(200).json(safeUser);
     }
+  } catch (err: any) {
+    console.error(err);
+    res.status(400).send({ error: '400', message: 'Bad user request' });
+  }
+};
+const getAllUsers = async function (req: Request, res: Response) {
+  try {
+    const usersIds = req.body.ids;
+    const users = await User.findAll({ where: { id: usersIds } });
+    res.status(200).json(users);
   } catch (err: any) {
     console.error(err);
     res.status(400).send({ error: '400', message: 'Bad user request' });
@@ -107,17 +106,16 @@ export const editUser = async function (req: Request, res: Response) {
       let userUpdated = {};
   
       if (info.password) {
-        const hash = await bcrypt.hash(info.password, 10);
-        userUpdated = await user.update({ ...info, password: hash });
+        userUpdated = await user.update({ ...info});
       } else {
         userUpdated = await user.update(info);
       }
   
       res.status(200).json(userUpdated);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       res.status(500).json({ message: err.message });
     }
   };
 
-export default { postUser, getUserInfo, login, logout, editUser };
+export default { postUser, getUserInfo, editUser, getAllUsers};
