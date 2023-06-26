@@ -62,7 +62,7 @@ const postUser = async (req: Request, res: Response) => {
 //   });
 // };
 
-const getUserInfo = async function (req: Request, res: Response) {
+const getUserInfo = async (req: Request, res: Response) => {
   try {
     let user = await User.findOne({ where: { id: req.params.id } });
     if (user) {
@@ -79,7 +79,7 @@ const getUserInfo = async function (req: Request, res: Response) {
     res.status(400).send({ error: '400', message: 'Bad user request' });
   }
 };
-const getAllUsers = async function (req: Request, res: Response) {
+const getAllUsers = async (req: Request, res: Response) => {
   try {
     const usersIds = req.body.ids;
     const users = await User.findAll({ where: { id: usersIds } });
@@ -90,7 +90,7 @@ const getAllUsers = async function (req: Request, res: Response) {
   }
 };
 
-export const editUser = async function (req: Request, res: Response) {
+export const editUser = async (req: Request, res: Response) => {
     const { id, info } = req.body;
     try {
       const user = await User.findByPk(id);
@@ -117,5 +117,21 @@ export const editUser = async function (req: Request, res: Response) {
       res.status(500).json({ message: err.message });
     }
   };
-
-export default { postUser, getUserInfo, editUser, getAllUsers};
+export const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    console.log(id);
+    if (!id)
+      res.status(400).json({
+        success: false,
+        data: id,
+        message: "wrong id",
+      });
+    let user = await User.destroy({ where: { id: id } });
+    res.json(user);
+  } catch (error: any) {
+    console.log(error);
+    res.status(400).send(error.message);
+  }
+}
+export default { postUser, getUserInfo, editUser, getAllUsers, deleteUser};

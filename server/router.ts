@@ -8,7 +8,7 @@ import { user, event, todo, expense } from './controllers/index'
 router.post('/register', user.postUser)
 router.get('/user/:id', user.getUserInfo)
 router.patch('/user/:id', user.editUser)
-router.delete('/user/:id', () => { })
+router.delete('/user/:id', user.deleteUser)
 router.get('/users/:eventid', user.getAllUsers)
 
 // Event
@@ -19,10 +19,10 @@ router.delete('/event/:id', event.deleteEvent)
 router.get('/events/:userid', event.getUserEvents)
 
 // Todo
-router.post('/todo', () => { })
-router.patch('/todo/:id', () => { })
-router.delete('/todo/:id', () => { })
-router.get('/todos/:eventid', () => { })
+router.post('/todo', todo.postToDo)
+router.patch('/todo/:id', todo.getToDO)
+router.delete('/todo/:id', todo.deleteToDO)
+router.get('/todos/:eventid', todo.updateToDo)
 
 // Expense
 router.post('/expense', expense.newExpense)
