@@ -2,6 +2,8 @@ import routes from 'express';
 import './models/modelDB'
 const router = routes.Router();
 
+import { user, event, todo, expense } from './controllers/index'
+
 // User
 router.post('/register', () => { })
 router.get('/user/:id', () => { })
@@ -10,11 +12,11 @@ router.delete('/user/:id', () => { })
 router.get('/users/:eventid', () => { })
 
 // Event
-router.post('/newevent', () => { })
-router.get('/event/:id', () => { })
-router.patch('/event/:id', () => { })
-router.delete('/event/:id', () => { })
-router.get('/events/:userid', () => { })
+router.post('/newevent', event.newEvent)
+router.get('/event/:id', event.getEvent)
+router.patch('/event/:id', event.updateEvent)
+router.delete('/event/:id', event.deleteEvent)
+router.get('/events/:userid', event.getUserEvents)
 
 // Todo
 router.post('/todo', () => { })
@@ -23,11 +25,11 @@ router.delete('/todo/:id', () => { })
 router.get('/todos/:eventid', () => { })
 
 // Expense
-router.post('/expense', () => { })
-router.delete('/expense/:id', () => { })
-router.get('/expenses/:eventid', () => { })
+router.post('/expense', expense.newExpense)
+router.delete('/expense/:id', expense.deleteExpense)
+router.get('/expenses/:eventid', expense.getExpenses)
 
 // Else
-router.get('/*', () => { console.log('Not found')})
+router.get('/*', () => { console.log('URL not found') })
 
 export default router;
