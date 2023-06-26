@@ -1,5 +1,3 @@
-'use strict';
-
 import { DataTypes } from 'sequelize';
 import sequelize from './modelDB';
 

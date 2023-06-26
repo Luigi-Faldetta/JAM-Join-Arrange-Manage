@@ -1,5 +1,3 @@
-'use strict';
-
 import { Sequelize } from 'sequelize';
 
 const sequelize = new Sequelize(process.env.DB_NAME || 'Database', process.env.DB_USER || 'user', process.env.PW || 'pw', {
