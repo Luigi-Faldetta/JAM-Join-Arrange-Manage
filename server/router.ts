@@ -5,11 +5,11 @@ const router = routes.Router();
 import { user, event, todo, expense } from './controllers/index'
 
 // User
-router.post('/register', () => { })
-router.get('/user/:id', () => { })
-router.patch('/user/:id', () => { })
+router.post('/register', user.postUser)
+router.get('/user/:id', user.getUserInfo)
+router.patch('/user/:id', user.editUser)
 router.delete('/user/:id', () => { })
-router.get('/users/:eventid', () => { })
+router.get('/users/:eventid', user.getAllUsers)
 
 // Event
 router.post('/newevent', event.newEvent)

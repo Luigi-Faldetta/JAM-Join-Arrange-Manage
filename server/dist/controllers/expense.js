@@ -8,11 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const expense_1 = require("../models/expense");
+const expense_1 = __importDefault(require("../models/expense"));
 const newExpense = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const expense = yield expense_1.Expense.create(req.body);
+        const expense = yield expense_1.default.create(req.body);
         res.status(201).json(expense);
     }
     catch (err) {
@@ -22,7 +25,7 @@ const newExpense = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 const deleteExpense = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const deletedExpense = yield expense_1.Expense.destroy({ where: { _id: req.params.id } });
+        const deletedExpense = yield expense_1.default.destroy({ where: { _id: req.params.id } });
         res.status(201).json(deletedExpense);
     }
     catch (err) {
@@ -32,7 +35,7 @@ const deleteExpense = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 const getExpenses = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const expenses = yield expense_1.Expense.findAll({
+        const expenses = yield expense_1.default.findAll({
             where: { eventId: req.params.id }
         });
         res.status(201).json(expenses);

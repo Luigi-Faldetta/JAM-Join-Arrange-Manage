@@ -8,11 +8,11 @@ require("./models/modelDB");
 const router = express_1.default.Router();
 const index_1 = require("./controllers/index");
 // User
-router.post('/register', () => { });
-router.get('/user/:id', () => { });
-router.patch('/user/:id', () => { });
+router.post('/register', index_1.user.postUser);
+router.get('/user/:id', index_1.user.getUserInfo);
+router.patch('/user/:id', index_1.user.editUser);
 router.delete('/user/:id', () => { });
-router.get('/users/:eventid', () => { });
+router.get('/users/:eventid', index_1.user.getAllUsers);
 // Event
 router.post('/newevent', index_1.event.newEvent);
 router.get('/event/:id', index_1.event.getEvent);
