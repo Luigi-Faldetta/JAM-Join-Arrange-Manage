@@ -1,11 +1,11 @@
-import ToDo from "../models/associations"
+import ToDo from "../models/todo"
 import { Response, Request, NextFunction } from "express";
 
 const postToDo = async (req: Request, res: Response) => {
     try {
         const { title, isDone, creatorId, eventId } =
         req.body;
-        const newtodo = await ToDo.create(title, isDone, creatorId, eventId);
+        const newtodo = await ToDo.create({title, isDone, creatorId, eventId});
         res.status(201).json({
             success: true,
             data: newtodo,
@@ -17,7 +17,7 @@ const postToDo = async (req: Request, res: Response) => {
     }
 
 }
-const getToDO = async function (req: Request, res: Response, next: NextFunction) {
+const getToDo = async function (req: Request, res: Response, next: NextFunction) {
     try {
       let todos = await ToDo.findAll({ where: { id: req.params.id } });
       if (!todos) {
@@ -36,7 +36,7 @@ const getToDO = async function (req: Request, res: Response, next: NextFunction)
     }
   };
 
-const deleteToDO = async function (req: Request, res: Response,) {
+const deleteToDo = async function (req: Request, res: Response,) {
     try {
       const id = req.params.id;
       if (!id)
@@ -87,4 +87,4 @@ const updateToDo = async function (req: Request, res: Response, next: NextFuncti
       res.status(500).json({ message: error.message });
     }
   };
-  export default {postToDo, getToDO, deleteToDO, updateToDo}
+  export default {postToDo, getToDo, deleteToDo, updateToDo}

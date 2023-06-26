@@ -20,8 +20,8 @@ router.get('/events/:userid', event.getUserEvents)
 
 // Todo
 router.post('/todo', todo.postToDo)
-router.patch('/todo/:id', todo.getToDO)
-router.delete('/todo/:id', todo.deleteToDO)
+router.patch('/todo/:id', todo.getToDo)
+router.delete('/todo/:id', todo.deleteToDo)
 router.get('/todos/:eventid', todo.updateToDo)
 
 // Expense

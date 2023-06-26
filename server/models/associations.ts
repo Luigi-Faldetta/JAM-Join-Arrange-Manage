@@ -24,4 +24,4 @@ Event.hasMany(UserEvents, {
   foreignKey: 'eventId',
 });
 
-export { User, Event, UserEvents };
+export default { User, Event, UserEvents };
