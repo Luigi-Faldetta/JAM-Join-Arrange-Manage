@@ -1,14 +1,12 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import CreateEventForm from './Components/CreateEventForm';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-       
-        
-      </header>
+      <CreateEventForm></CreateEventForm>
     </div>
   );
 }

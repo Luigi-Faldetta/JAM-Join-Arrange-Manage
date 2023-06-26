@@ -2,7 +2,10 @@ function CreateEventForm () {
     return (
         <>
         <div>
-            TEST
+            <form>
+                
+                
+            </form>
         </div>
         </>
     )
