@@ -1,4 +1,4 @@
-export interface EventTypes {
+interface EventTypes {
   eventId: string;
   date: Date;
   location: string;
@@ -8,7 +8,7 @@ export interface EventTypes {
   coverPic: string;
 }
 
-export interface UserTypes {
+interface UserTypes {
   userId: string;
   name: string;
   email: string;
@@ -17,16 +17,18 @@ export interface UserTypes {
   password: string;
 }
 
-export interface ExpenseTypes {
+interface ExpenseTypes {
   item: string;
   cost: string;
   purchaseId: string;
   eventId: string;
 }
 
-export interface ToDo {
+interface TodoTypes {
   title: string;
   creatorId: string;
   eventId: string;
   isDone: boolean;
 }
+
+export { EventTypes, UserTypes, ExpenseTypes, TodoTypes };
