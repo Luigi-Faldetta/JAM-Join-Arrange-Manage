@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Event } from '../models/associations'
+import Event from '../models/associations'
 
 const newEvent = async (req: Request, res: Response) => {
   try {
