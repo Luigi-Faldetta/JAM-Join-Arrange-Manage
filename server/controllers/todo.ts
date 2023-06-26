@@ -1,7 +1,7 @@
 import ToDo from "../models/associations"
 import { Response, Request, NextFunction } from "express";
 
-export const postTodo = async (req: Request, res: Response) => {
+const postToDo = async (req: Request, res: Response) => {
     try {
         const { title, isDone, creatorId, eventId } =
         req.body;
@@ -11,13 +11,13 @@ export const postTodo = async (req: Request, res: Response) => {
             data: newtodo,
             message: "newtodo created",
           });
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ message: err.message });
+    } catch (error: any) {
+        console.log(error);
+        res.status(500).json({ message: error.message });
     }
 
 }
-export const getToDO = async function (req: Request, res: Response, next: NextFunction) {
+const getToDO = async function (req: Request, res: Response, next: NextFunction) {
     try {
       let todos = await ToDo.findAll({ where: { id: req.params.id } });
       if (!todos) {
@@ -30,13 +30,13 @@ export const getToDO = async function (req: Request, res: Response, next: NextFu
       } 
   
       res.status(200).json(todos);
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({ message: err.message });
+    } catch (error: any) {
+      console.log(error);
+      res.status(500).json({ message: error.message });
     }
   };
 
-  export const deleteToDO = async function (req: Request, res: Response,) {
+const deleteToDO = async function (req: Request, res: Response,) {
     try {
       const id = req.params.id;
       if (!id)
@@ -51,13 +51,13 @@ export const getToDO = async function (req: Request, res: Response, next: NextFu
         data: todo,
         message: "todo deleted",
       });
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
       res.status(400).send(error.message);
     }
   };
 
-  export const updateToDo = async function (req: Request, res: Response, next: NextFunction) {
+const updateToDo = async function (req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
       const { title, isDone, creatorId, eventId } = req.body;
@@ -82,8 +82,9 @@ export const getToDO = async function (req: Request, res: Response, next: NextFu
         data: todo,
         message: 'ToDo item updated successfully.',
       });
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({ message: err.message });
+    } catch (error: any) {
+      console.log(error);
+      res.status(500).json({ message: error.message });
     }
   };
+  export default {postToDo, getToDO, deleteToDO, updateToDo}

@@ -2,32 +2,34 @@ import routes from 'express';
 import './models/modelDB'
 const router = routes.Router();
 
+import { user, event, todo, expense } from './controllers/index'
+
 // User
-router.post('/register', () => { })
-router.get('/user/:id', () => { })
-router.patch('/user/:id', () => { })
-router.delete('/user/:id', () => { })
-router.get('/users/:eventid', () => { })
+router.post('/register', user.postUser)
+router.get('/user/:id', user.getUserInfo)
+router.patch('/user/:id', user.editUser)
+router.delete('/user/:id', user.deleteUser)
+router.get('/users/:eventid', user.getAllUsers)
 
 // Event
-router.post('/newevent', () => { })
-router.get('/event/:id', () => { })
-router.patch('/event/:id', () => { })
-router.delete('/event/:id', () => { })
-router.get('/events/:userid', () => { })
+router.post('/newevent', event.newEvent)
+router.get('/event/:id', event.getEvent)
+router.patch('/event/:id', event.updateEvent)
+router.delete('/event/:id', event.deleteEvent)
+router.get('/events/:userid', event.getUserEvents)
 
 // Todo
-router.post('/todo', () => { })
-router.patch('/todo/:id', () => { })
-router.delete('/todo/:id', () => { })
-router.get('/todos/:eventid', () => { })
+router.post('/todo', todo.postToDo)
+router.patch('/todo/:id', todo.getToDO)
+router.delete('/todo/:id', todo.deleteToDO)
+router.get('/todos/:eventid', todo.updateToDo)
 
 // Expense
-router.post('/expense', () => { })
-router.delete('/expense/:id', () => { })
-router.get('/expenses/:eventid', () => { })
+router.post('/expense', expense.newExpense)
+router.delete('/expense/:id', expense.deleteExpense)
+router.get('/expenses/:eventid', expense.getExpenses)
 
 // Else
-router.get('/*', () => { console.log('Not found')})
+router.get('/*', () => { console.log('URL not found') })
 
 export default router;

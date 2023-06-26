@@ -8,12 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.editUser = void 0;
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const associations_1 = require("../models/associations");
 // import { customRequest } from '../middleware/auth';
 const postUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -26,15 +22,12 @@ const postUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (user)
         return res.status(409).send({ error: '409', message: 'User already exists' });
     try {
-        const hash = yield bcrypt_1.default.hash(password, 10);
-        const user = yield associations_1.User.create(Object.assign(Object.assign({}, req.body), { password: hash }));
+        const user = yield associations_1.User.create(Object.assign({}, req.body));
         let safeUser = {
             id: user.id,
-            avatar: user.avatar,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            age: user.age,
-            infoAboutUser: user.infoAboutUser,
+            profilePic: user.profilePic,
+            name: user.name,
+            phone: user.phone,
         };
         res.status(201).json({
             success: true,
@@ -47,51 +40,54 @@ const postUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).json({ message: err.message });
     }
 });
-const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        // const { email, password } = (req as customRequest).body;
-        const { email, password } = req.body;
-        const user = yield associations_1.User.findOne({ where: { email: email } });
-        if (!user)
-            throw new Error();
-        const validatedPass = yield bcrypt_1.default.compare(password, user.password);
-        if (!validatedPass)
-            throw new Error();
-        // (req as customRequest).session.uid = user.id;
-        req.session.uid = user.id;
-        res.status(200).send({ success: true, data: user.id, message: 'OK' });
-    }
-    catch (err) {
-        console.log(err);
-        res.status(401).send({ error: '401', message: 'Username or password is incorrect' });
-    }
-});
-const logout = (req, res) => {
-    req.session.destroy((error) => {
-        if (error) {
-            res.status(500).send({ error, message: 'Could not log out, please try again' });
-        }
-        else {
-            res.clearCookie('sid').status(200).send({ message: 'Logout successful' });
-        }
-    });
-};
+// const login = async (req: Request, res: Response) => {
+//   try {
+//     const { email, password } = req.body;
+//     const user: UserModel | null = await User.findOne({ where: { email: email } });
+//     if (!user) throw new Error();
+//     if (!password) throw new Error();
+//     req.session.uid = user.id;
+//     res.status(200).send({ success: true, data: user.id, message: 'OK' });
+//   } catch (err: any) {
+//     console.log(err);
+//     res.status(401).send({ error: '401', message: 'Username or password is incorrect' });
+//   }
+// };
+// const logout = (req: Request, res: Response) => {
+//   req.session.destroy((error: any) => {
+//     if (error) {
+//       res.status(500).send({ error, message: 'Could not log out, please try again' });
+//     } else {
+//       res.clearCookie('sid').status(200).send({ message: 'Logout successful' });
+//     }
+//   });
+// };
 const getUserInfo = function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             let user = yield associations_1.User.findOne({ where: { id: req.params.id } });
             if (user) {
                 let safeUser = {
-                    id: req.params.id,
-                    avatar: user.avatar,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    age: user.age,
-                    email: user.email,
-                    infoAboutUser: user.infoAboutUser,
+                    id: user.id,
+                    profilePic: user.profilePic,
+                    name: user.name,
+                    phone: user.phone,
                 };
                 res.status(200).json(safeUser);
             }
+        }
+        catch (err) {
+            console.error(err);
+            res.status(400).send({ error: '400', message: 'Bad user request' });
+        }
+    });
+};
+const getAllUsers = function (req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const usersIds = req.body.ids;
+            const users = yield associations_1.User.findAll({ where: { id: usersIds } });
+            res.status(200).json(users);
         }
         catch (err) {
             console.error(err);
@@ -114,8 +110,7 @@ const editUser = function (req, res) {
             }
             let userUpdated = {};
             if (info.password) {
-                const hash = yield bcrypt_1.default.hash(info.password, 10);
-                userUpdated = yield user.update(Object.assign(Object.assign({}, info), { password: hash }));
+                userUpdated = yield user.update(Object.assign({}, info));
             }
             else {
                 userUpdated = yield user.update(info);
@@ -129,4 +124,4 @@ const editUser = function (req, res) {
     });
 };
 exports.editUser = editUser;
-exports.default = { postUser, getUserInfo, login, logout, editUser: exports.editUser };
+exports.default = { postUser, getUserInfo, editUser: exports.editUser, getAllUsers };
