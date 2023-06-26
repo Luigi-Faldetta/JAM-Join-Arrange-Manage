@@ -1,4 +1,5 @@
 import routes from 'express';
+import './models/modelDB'
 const router = routes.Router();
 
 // User

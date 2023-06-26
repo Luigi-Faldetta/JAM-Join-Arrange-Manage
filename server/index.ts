@@ -1,4 +1,5 @@
 import app from './app';
+// import sequelize from './models/modelDB'
 
 (async () => {
   try {
