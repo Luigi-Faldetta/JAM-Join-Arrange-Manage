@@ -8,15 +8,6 @@ import {
   // initialEventState,
 } from "../../reduxFiles/slices/events";
 
-declare global {
-  interface Window {
-    my_modal_3: {
-      showModal: () => void;
-      // hideModal: () => void;
-    };
-  }
-}
-
 function CreateEventForm() {
   const dispatch = useDispatch();
 
@@ -68,8 +59,8 @@ function CreateEventForm() {
               type="eventName"
               id="eventName"
               name="eventName"
-              // onChange={onChangeHandler}
               className="shadow-sm 
+              
                           bg-gray-50 border border-gray-300 
                           text-gray-900 text-sm 
                           rounded-lg 
@@ -96,7 +87,6 @@ function CreateEventForm() {
               onChange={(date) => setEventDate(date)}
               dateFormat="EEE MMM d 🗓 h:mm aa 🕣"
               minDate={new Date()}
-              // startDate={eventDate}
               wrapperClassName="w-full"
               className="shadow-sm 
                          bg-gray-50 
@@ -123,7 +113,6 @@ function CreateEventForm() {
               type="eventLocation"
               id="eventLocation"
               name="eventLocation"
-              // onChange={onChangeHandler}
               placeholder="Eg. '12345 Rainbow Lane...'"
               className="shadow-sm 
                           bg-gray-50 border border-gray-300 
@@ -145,7 +134,6 @@ function CreateEventForm() {
               type="eventDescription"
               id="eventDescription"
               name="eventDescription"
-              // onChange={onChangeHandler}
               placeholder="Eg. 'Music will be pumping, the dance floor will be on fire' "
               className="shadow-sm 
                           bg-gray-50 border border-gray-300 
