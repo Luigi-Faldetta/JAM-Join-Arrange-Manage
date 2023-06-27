@@ -1,11 +1,3 @@
-declare global {
-  interface Window {
-    my_modal_3: {
-      showModal: () => void;
-    };
-  }
-}
-
 function CreateUserForm() {
   return (
     <>
@@ -14,9 +6,9 @@ function CreateUserForm() {
       </button>
       <dialog id="my_modal_3" className="modal">
         <form method="dialog" className="modal-box">
-          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+          <div className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
             ✕
-          </button>
+          </div>
           <h3 className="font-bold text-lg">Hello!</h3>
 
           <form>
