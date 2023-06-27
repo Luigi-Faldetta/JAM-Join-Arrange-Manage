@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editUser = void 0;
+exports.deleteUser = exports.editUser = void 0;
 const associations_1 = require("../models/associations");
 // import { customRequest } from '../middleware/auth';
 const postUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -23,15 +23,15 @@ const postUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.status(409).send({ error: '409', message: 'User already exists' });
     try {
         const user = yield associations_1.User.create(Object.assign({}, req.body));
-        let safeUser = {
-            id: user.id,
-            profilePic: user.profilePic,
-            name: user.name,
-            phone: user.phone,
-        };
+        // let safeUser = {
+        //   id: user.id,
+        //   profilePic: user.profilePic,
+        //   name: user.name,
+        //   phone: user.phone,
+        // };
         res.status(201).json({
             success: true,
-            data: safeUser,
+            data: user,
             message: 'User created',
         });
     }
@@ -62,66 +62,79 @@ const postUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 //     }
 //   });
 // };
-const getUserInfo = function (req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            let user = yield associations_1.User.findOne({ where: { id: req.params.id } });
-            if (user) {
-                let safeUser = {
-                    id: user.id,
-                    profilePic: user.profilePic,
-                    name: user.name,
-                    phone: user.phone,
-                };
-                res.status(200).json(safeUser);
-            }
+const getUserInfo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let user = yield associations_1.User.findOne({ where: { id: req.params.id } });
+        if (user) {
+            //   let safeUser = {
+            //     id: user.id,
+            //     profilePic: user.profilePic,
+            //     name: user.name,
+            //     phone: user.phone,
+            //   };
+            //   res.status(200).json(safeUser);
         }
-        catch (err) {
-            console.error(err);
-            res.status(400).send({ error: '400', message: 'Bad user request' });
+    }
+    catch (err) {
+        console.error(err);
+        res.status(400).send({ error: '400', message: 'Bad user request' });
+    }
+});
+const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const usersIds = req.body.ids;
+        const users = yield associations_1.User.findAll({ where: { id: usersIds } });
+        res.status(200).json(users);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(400).send({ error: '400', message: 'Bad user request' });
+    }
+});
+const editUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id, info } = req.body;
+    try {
+        const user = yield associations_1.User.findByPk(id);
+        if (!user) {
+            res.status(404).json({
+                success: false,
+                data: null,
+                message: 'User not found.',
+            });
+            return;
         }
-    });
-};
-const getAllUsers = function (req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const usersIds = req.body.ids;
-            const users = yield associations_1.User.findAll({ where: { id: usersIds } });
-            res.status(200).json(users);
+        let userUpdated = {};
+        if (info.password) {
+            userUpdated = yield user.update(Object.assign({}, info));
         }
-        catch (err) {
-            console.error(err);
-            res.status(400).send({ error: '400', message: 'Bad user request' });
+        else {
+            userUpdated = yield user.update(info);
         }
-    });
-};
-const editUser = function (req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const { id, info } = req.body;
-        try {
-            const user = yield associations_1.User.findByPk(id);
-            if (!user) {
-                res.status(404).json({
-                    success: false,
-                    data: null,
-                    message: 'User not found.',
-                });
-                return;
-            }
-            let userUpdated = {};
-            if (info.password) {
-                userUpdated = yield user.update(Object.assign({}, info));
-            }
-            else {
-                userUpdated = yield user.update(info);
-            }
-            res.status(200).json(userUpdated);
-        }
-        catch (err) {
-            console.error(err);
-            res.status(500).json({ message: err.message });
-        }
-    });
-};
+        res.status(200).json(userUpdated);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ message: err.message });
+    }
+});
 exports.editUser = editUser;
-exports.default = { postUser, getUserInfo, editUser: exports.editUser, getAllUsers };
+const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = req.params.id;
+        console.log(id);
+        if (!id)
+            res.status(400).json({
+                success: false,
+                data: id,
+                message: "wrong id",
+            });
+        let user = yield associations_1.User.destroy({ where: { id: id } });
+        res.json(user);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(400).send(error.message);
+    }
+});
+exports.deleteUser = deleteUser;
+exports.default = { postUser, getUserInfo, editUser: exports.editUser, getAllUsers, deleteUser: exports.deleteUser };

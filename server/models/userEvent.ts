@@ -14,15 +14,7 @@ const userEvents = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-  },
-  {
-    indexes: [
-      {
-        unique: true,
-        fields: ['userId', 'eventId'],
-      },
-    ],
-  }
+  }, { timestamps: false }
 );
 
 export default userEvents;

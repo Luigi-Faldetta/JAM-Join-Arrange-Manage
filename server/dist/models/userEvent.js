@@ -14,12 +14,5 @@ const userEvents = modelDB_js_1.default.define('userEvents', {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
     },
-}, {
-    indexes: [
-        {
-            unique: true,
-            fields: ['userId', 'eventId'],
-        },
-    ],
-});
+}, { timestamps: false });
 exports.default = userEvents;

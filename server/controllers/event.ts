@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import { Event } from '../models/associations'
+import { Event, UserEvents } from '../models/associations'
 
+// It works
 const newEvent = async (req: Request, res: Response) => {
   try {
     const event = await Event.create(req.body)
@@ -11,21 +12,23 @@ const newEvent = async (req: Request, res: Response) => {
   }
 }
 
+// It works
 const getEvent = async (req: Request, res: Response) => {
-  try {
+  try {   
     const event = await Event.findOne({
       where: { eventId: req.params.id }
     })
-    res.status(200).json('hello');
+    res.status(200).json(event);
   } catch (err: any) {
     console.error(err);
     res.status(500).json({ message: err.message });
   }
 }
 
+// It works
 const updateEvent = async (req: Request, res: Response) => {
   try {
-    const updatedEvent = await Event.update(req.body, { where: { id: req.params.id }, returning: true })
+    const updatedEvent = await Event.update(req.body, { where: { eventId: req.params.id }, returning: true })
     res.status(200).json(updatedEvent);
   } catch (err: any) {
     console.error(err);
@@ -33,9 +36,10 @@ const updateEvent = async (req: Request, res: Response) => {
   }
 }
 
+// It works
 const deleteEvent = async (req: Request, res: Response) => {
   try {
-    const deletedEvent = await Event.destroy({ where: { id: req.params.id } })
+    const deletedEvent = await Event.destroy({ where: { eventId: req.params.id } })
     res.status(200).json(deletedEvent);
   } catch (err: any) {
     console.error(err);

@@ -1,5 +1,5 @@
 import { User } from '../models/associations';
-import { UserModel } from '../models/user';
+// import { UserModel } from '../models/user';
 import { Request, Response } from 'express';
 // import { customRequest } from '../middleware/auth';
 
@@ -17,16 +17,16 @@ const postUser = async (req: Request, res: Response) => {
 
   try {
     const user = await User.create({ ...req.body });
-    let safeUser = {
-      id: user.id,
-      profilePic: user.profilePic,
-      name: user.name,
-      phone: user.phone,
-    };
+    // let safeUser = {
+    //   id: user.id,
+    //   profilePic: user.profilePic,
+    //   name: user.name,
+    //   phone: user.phone,
+    // };
 
     res.status(201).json({
       success: true,
-      data: safeUser,
+      data: user,
       message: 'User created',
     });
   } catch (err: any) {
@@ -66,13 +66,13 @@ const getUserInfo = async (req: Request, res: Response) => {
   try {
     let user = await User.findOne({ where: { id: req.params.id } });
     if (user) {
-      let safeUser = {
-        id: user.id,
-        profilePic: user.profilePic,
-        name: user.name,
-        phone: user.phone,
-      };
-      res.status(200).json(safeUser);
+    //   let safeUser = {
+    //     id: user.id,
+    //     profilePic: user.profilePic,
+    //     name: user.name,
+    //     phone: user.phone,
+    //   };
+    //   res.status(200).json(safeUser);
     }
   } catch (err: any) {
     console.error(err);

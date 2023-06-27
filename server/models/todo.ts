@@ -18,6 +18,6 @@ const Todo = sequelize.define('Todo', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-});
+}, { timestamps: false });
 
 export default Todo;

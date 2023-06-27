@@ -2,26 +2,28 @@ import User from './user';
 import Event from './event';
 import UserEvents from './userEvent';
 
-User.hasMany(Event, {
-  foreignKey: 'host',
-});
-
-User.belongsToMany(Event, {
-  through: UserEvents,
-  foreignKey: 'userId',
-});
-
 Event.belongsTo(User, {
   foreignKey: 'host',
 });
 
+// THIS IS WRONG. USER HAS NO FOREIGN KEY
+// User.hasOne(Event, {
+//   foreignKey: 'userId',
+// });
+
 Event.belongsToMany(User, {
   through: UserEvents,
-  foreignKey: 'eventId',
+  foreignKey: 'XeventId',
 });
 
-Event.hasMany(UserEvents, {
-  foreignKey: 'eventId',
+User.belongsToMany(Event, {
+  through: UserEvents,
+  foreignKey: 'XuserId',
 });
 
-export default { User, Event, UserEvents };
+// Event.hasMany(UserEvents, {
+//   foreignKey: 'eventId',
+// });
+
+
+export { User, Event, UserEvents };
