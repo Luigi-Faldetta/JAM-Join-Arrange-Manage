@@ -10,7 +10,7 @@ function App() {
   return (
     <div className="App">
       <UserDashboardPage></UserDashboardPage>
-      {/* <CreateUserForm></CreateUserForm> */}
+      <CreateUserForm></CreateUserForm>
     </div>
   );
 }
