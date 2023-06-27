@@ -2,7 +2,7 @@ import app from './app';
 
 (async () => {
   try {
-    const port = process.env.SERVER_PORT || 3200;
+    const port = process.env.PORT || 3200;
     app.listen(port, () => {
       console.log(`Server started on port ${port}`);
     });
