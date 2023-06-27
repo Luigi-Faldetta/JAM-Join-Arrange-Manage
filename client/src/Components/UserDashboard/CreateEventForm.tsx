@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch } from "react-redux";
@@ -12,18 +12,26 @@ declare global {
   interface Window {
     my_modal_3: {
       showModal: () => void;
+      // hideModal: () => void;
     };
   }
 }
 
 function CreateEventForm() {
   const dispatch = useDispatch();
+  // const formRef = useRef<HTMLFormElement>(null);
 
   const [eventDate, setEventDate] = useState<Date | null>(null);
+  const [open, setOpen] = useState(false);
+
+  // const [formState, setFormState] = useState({} as EventState);
+  // const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { value, name } = e.target;
+  //   setFormState((prevState) => ({ ...prevState, [name]: value }));
+  // };
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    // event.preventDefault(); //removed as it was preventing modal to close
-
+    event.preventDefault(); //removed as it was preventing modal from closing
     const eventFormData: EventState = {
       eventName: event.currentTarget.eventName.value,
       eventDateAndTime: eventDate,
@@ -38,18 +46,22 @@ function CreateEventForm() {
     console.log("in component", eventFormData);
 
     dispatch(createEvent(eventFormData));
+    setOpen(false);
   };
 
   return (
     <>
-      <button className="btn" onClick={() => window.my_modal_3.showModal()}>
+      <button className="btn" onClick={() => setOpen(true)}>
         Host event
       </button>
-      <dialog id="my_modal_3" className="modal">
+      <dialog id="my_modal_3" className="modal" open={open}>
         <form method="dialog" className="modal-box" onSubmit={handleFormSubmit}>
-          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+          <div
+            onClick={() => setOpen(false)}
+            className="btn btn-circle absolute right-2 top-2"
+          >
             ✕
-          </button>
+          </div>
           <h3 className="font-bold text-lg">Add the event details here:</h3>
 
           <div className="mb-6">
@@ -62,6 +74,8 @@ function CreateEventForm() {
             <input
               type="eventName"
               id="eventName"
+              name="eventName"
+              // onChange={onChangeHandler}
               className="shadow-sm 
                           bg-gray-50 border border-gray-300 
                           text-gray-900 text-sm 
@@ -115,6 +129,8 @@ function CreateEventForm() {
             <input
               type="eventLocation"
               id="eventLocation"
+              name="eventLocation"
+              // onChange={onChangeHandler}
               placeholder="Eg. '12345 Rainbow Lane...'"
               className="shadow-sm 
                           bg-gray-50 border border-gray-300 
@@ -123,12 +139,11 @@ function CreateEventForm() {
                           focus:ring-blue-500 focus:border-blue-500 
                           block w-full p-2.5 
                           dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-              required
             />
           </div>
           <div className="mb-6">
             <label
-              htmlFor="repeat-password"
+              htmlFor="eventDescription"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
               Description
@@ -136,6 +151,8 @@ function CreateEventForm() {
             <input
               type="eventDescription"
               id="eventDescription"
+              name="eventDescription"
+              // onChange={onChangeHandler}
               placeholder="Eg. 'Music will be pumping, the dance floor will be on fire' "
               className="shadow-sm 
                           bg-gray-50 border border-gray-300 
