@@ -1,24 +1,19 @@
-<<<<<<< HEAD
-import { configureStore } from '@reduxjs/toolkit';
-import eventReducers from './slices/events'
-import expenseReducers from './slices/expenses'
-import toDoReducers from './slices/toDos'
-import userReducers from './slices/users'
-=======
 import { configureStore } from "@reduxjs/toolkit";
-import rootReducer from "./reducer";
->>>>>>> create-event-form
+import eventReducers from "./slices/events";
+import expenseReducers from "./slices/expenses";
+import toDoReducers from "./slices/toDos";
+import userReducers from "./slices/users";
 
 const store = configureStore({
   reducer: {
     eventListReducer: eventReducers.eventListReducer,
-    eventReducer:eventReducers.eventReducer,
+    eventReducer: eventReducers.eventReducer,
     userListReducer: userReducers.userListReducer,
     userReducer: userReducers.userReducer,
     toDoListReducer: toDoReducers.toDoListReducer,
     toDoReduer: toDoReducers.toDoReducer,
-    expenseListReducer:expenseReducers.expenseListReducer,
-    expenseReducer:expenseReducers.expenseReducer
+    expenseListReducer: expenseReducers.expenseListReducer,
+    expenseReducer: expenseReducers.expenseReducer,
   },
   devTools: true,
 });
