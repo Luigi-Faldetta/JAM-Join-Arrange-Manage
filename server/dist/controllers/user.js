@@ -62,61 +62,67 @@ const postUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 //     }
 //   });
 // };
-const getUserInfo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        let user = yield associations_1.User.findOne({ where: { id: req.params.id } });
-        if (user) {
-            //   let safeUser = {
-            //     id: user.id,
-            //     profilePic: user.profilePic,
-            //     name: user.name,
-            //     phone: user.phone,
-            //   };
-            //   res.status(200).json(safeUser);
+const getUserInfo = function (req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            let user = yield associations_1.User.findOne({ where: { id: req.params.id } });
+            if (user) {
+                let safeUser = {
+                    id: user.id,
+                    profilePic: user.profilePic,
+                    name: user.name,
+                    phone: user.phone,
+                };
+                res.status(200).json(safeUser);
+            }
         }
-    }
-    catch (err) {
-        console.error(err);
-        res.status(400).send({ error: '400', message: 'Bad user request' });
-    }
-});
-const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const usersIds = req.body.ids;
-        const users = yield associations_1.User.findAll({ where: { id: usersIds } });
-        res.status(200).json(users);
-    }
-    catch (err) {
-        console.error(err);
-        res.status(400).send({ error: '400', message: 'Bad user request' });
-    }
-});
-const editUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id, info } = req.body;
-    try {
-        const user = yield associations_1.User.findByPk(id);
-        if (!user) {
-            res.status(404).json({
-                success: false,
-                data: null,
-                message: 'User not found.',
-            });
-            return;
+        catch (err) {
+            console.error(err);
+            res.status(400).send({ error: '400', message: 'Bad user request' });
         }
-        let userUpdated = {};
-        if (info.password) {
-            userUpdated = yield user.update(Object.assign({}, info));
+    });
+};
+const getAllUsers = function (req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const usersIds = req.body.ids;
+            const users = yield associations_1.User.findAll({ where: { id: usersIds } });
+            res.status(200).json(users);
         }
-        else {
-            userUpdated = yield user.update(info);
+        catch (err) {
+            console.error(err);
+            res.status(400).send({ error: '400', message: 'Bad user request' });
         }
-        res.status(200).json(userUpdated);
-    }
-    catch (err) {
-        console.error(err);
-        res.status(500).json({ message: err.message });
-    }
-});
+    });
+};
+const editUser = function (req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { id, info } = req.body;
+        try {
+            const user = yield associations_1.User.findByPk(id);
+            if (!user) {
+                res.status(404).json({
+                    success: false,
+                    data: null,
+                    message: 'User not found.',
+                });
+                return;
+            }
+            let userUpdated = {};
+            if (info.password) {
+                userUpdated = yield user.update(Object.assign({}, info));
+            }
+            else {
+                userUpdated = yield user.update(info);
+            }
+            res.status(200).json(userUpdated);
+        }
+        catch (err) {
+            console.error(err);
+            res.status(500).json({ message: err.message });
+        }
+    });
+};
 exports.editUser = editUser;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

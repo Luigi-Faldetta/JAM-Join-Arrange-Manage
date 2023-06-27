@@ -63,8 +63,9 @@ const postUser = async (req: Request, res: Response) => {
 // };
 
 const getUserInfo = async (req: Request, res: Response) => {
+  console.log(req.params)
   try {
-    let user = await User.findOne({ where: { id: req.params.id } });
+    let user = await User.findOne({ where: { userId: req.params.id } });
     if (user) {
     //   let safeUser = {
     //     id: user.id,
@@ -72,7 +73,7 @@ const getUserInfo = async (req: Request, res: Response) => {
     //     name: user.name,
     //     phone: user.phone,
     //   };
-    //   res.status(200).json(safeUser);
+      res.status(200).json(user);
     }
   } catch (err: any) {
     console.error(err);
@@ -91,7 +92,8 @@ const getAllUsers = async (req: Request, res: Response) => {
 };
 
 export const editUser = async (req: Request, res: Response) => {
-    const { id, info } = req.body;
+  const id = req.params.id
+    const info = req.body;
     try {
       const user = await User.findByPk(id);
       if (!user) {
@@ -120,7 +122,6 @@ export const editUser = async (req: Request, res: Response) => {
 export const deleteUser = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    console.log(id);
     if (!id)
       res.status(400).json({
         success: false,
