@@ -1,10 +1,18 @@
 import { DataTypes } from 'sequelize';
+import Sequelize from 'sequelize';
 import sequelize from './modelDB';
 
 const User = sequelize.define('User', {
+  // userId: {
+  //   type: DataTypes.INTEGER,
+  //   allowNull: false,
+  //   primaryKey: true 
+  // },
   userId: {
-    type: DataTypes.STRING,
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4,
     allowNull: false,
+    primaryKey: true 
   },
   name: {
     type: DataTypes.STRING,
@@ -26,6 +34,6 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-});
+}, { timestamps: false });
 
 export default User;

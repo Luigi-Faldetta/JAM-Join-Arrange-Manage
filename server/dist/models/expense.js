@@ -11,7 +11,7 @@ const Expense = modelDB_1.default.define('Expense', {
         allowNull: false,
     },
     cost: {
-        type: sequelize_1.DataTypes.NUMBER,
+        type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
     },
     purchaserId: {
@@ -22,5 +22,5 @@ const Expense = modelDB_1.default.define('Expense', {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
-});
+}, { timestamps: false });
 exports.default = Expense;

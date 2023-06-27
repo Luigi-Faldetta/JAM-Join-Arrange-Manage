@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const associations_1 = require("../models/associations");
+// It works
 const newEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const event = yield associations_1.Event.create(req.body);
@@ -20,21 +21,23 @@ const newEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).json({ message: err.message });
     }
 });
+// It works
 const getEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const event = yield associations_1.Event.findOne({
             where: { eventId: req.params.id }
         });
-        res.status(200).json('hello');
+        res.status(200).json(event);
     }
     catch (err) {
         console.error(err);
         res.status(500).json({ message: err.message });
     }
 });
+// It works
 const updateEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const updatedEvent = yield associations_1.Event.update(req.body, { where: { id: req.params.id }, returning: true });
+        const updatedEvent = yield associations_1.Event.update(req.body, { where: { eventId: req.params.id }, returning: true });
         res.status(200).json(updatedEvent);
     }
     catch (err) {
@@ -42,9 +45,10 @@ const updateEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(500).json({ message: err.message });
     }
 });
+// It works
 const deleteEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const deletedEvent = yield associations_1.Event.destroy({ where: { id: req.params.id } });
+        const deletedEvent = yield associations_1.Event.destroy({ where: { eventId: req.params.id } });
         res.status(200).json(deletedEvent);
     }
     catch (err) {

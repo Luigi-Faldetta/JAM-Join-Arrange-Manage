@@ -7,7 +7,7 @@ const Expense = sequelize.define('Expense', {
     allowNull: false,
   },
   cost: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   purchaserId: {
@@ -18,6 +18,6 @@ const Expense = sequelize.define('Expense', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-});
+}, { timestamps: false });
 
 export default Expense;

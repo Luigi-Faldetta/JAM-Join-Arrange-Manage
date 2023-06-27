@@ -29,7 +29,4 @@ router.post('/expense', expense.newExpense)
 router.delete('/expense/:id', expense.deleteExpense)
 router.get('/expenses/:eventid', expense.getExpenses)
 
-// Else
-router.get('/*', () => { console.log('URL not found') })
-
 export default router;

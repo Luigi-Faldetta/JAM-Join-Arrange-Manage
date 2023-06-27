@@ -11,7 +11,7 @@ const index_1 = require("./controllers/index");
 router.post('/register', index_1.user.postUser);
 router.get('/user/:id', index_1.user.getUserInfo);
 router.patch('/user/:id', index_1.user.editUser);
-router.delete('/user/:id', () => { });
+router.delete('/user/:id', index_1.user.deleteUser);
 router.get('/users/:eventid', index_1.user.getAllUsers);
 // Event
 router.post('/newevent', index_1.event.newEvent);
@@ -20,14 +20,12 @@ router.patch('/event/:id', index_1.event.updateEvent);
 router.delete('/event/:id', index_1.event.deleteEvent);
 router.get('/events/:userid', index_1.event.getUserEvents);
 // Todo
-router.post('/todo', () => { });
-router.patch('/todo/:id', () => { });
-router.delete('/todo/:id', () => { });
-router.get('/todos/:eventid', () => { });
+router.post('/todo', index_1.todo.postToDo);
+router.patch('/todo/:id', index_1.todo.getToDo);
+router.delete('/todo/:id', index_1.todo.deleteToDo);
+router.get('/todos/:eventid', index_1.todo.updateToDo);
 // Expense
 router.post('/expense', index_1.expense.newExpense);
 router.delete('/expense/:id', index_1.expense.deleteExpense);
 router.get('/expenses/:eventid', index_1.expense.getExpenses);
-// Else
-router.get('/*', () => { console.log('URL not found'); });
 exports.default = router;

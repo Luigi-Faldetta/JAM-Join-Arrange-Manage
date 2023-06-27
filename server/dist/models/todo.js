@@ -22,5 +22,5 @@ const Todo = modelDB_1.default.define('Todo', {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
-});
+}, { timestamps: false });
 exports.default = Todo;

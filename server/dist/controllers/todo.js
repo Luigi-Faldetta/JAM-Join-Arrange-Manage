@@ -85,11 +85,11 @@ const updateToDo = function (req, res, next) {
                 });
                 return next();
             }
-            todo.title = title || todo.title;
-            todo.creatorId = creatorId || todo.creatorId;
-            todo.eventId = eventId || todo.eventId;
-            todo.isDone = isDone !== null && isDone !== void 0 ? isDone : todo.isDone;
-            yield todo.save();
+            // todo.title = title || todo.title;
+            // todo.creatorId = creatorId || todo.creatorId;
+            // todo.eventId = eventId || todo.eventId
+            // todo.isDone = isDone ?? todo.isDone;
+            // await todo.save();
             res.status(200).json({
                 success: true,
                 data: todo,

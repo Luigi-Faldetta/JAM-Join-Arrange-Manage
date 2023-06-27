@@ -71,11 +71,11 @@ const updateToDo = async function (req: Request, res: Response, next: NextFuncti
         return next();
       }
   
-      todo.title = title || todo.title;
-      todo.creatorId = creatorId || todo.creatorId;
-      todo.eventId = eventId || todo.eventId
-      todo.isDone = isDone ?? todo.isDone;
-      await todo.save();
+      // todo.title = title || todo.title;
+      // todo.creatorId = creatorId || todo.creatorId;
+      // todo.eventId = eventId || todo.eventId
+      // todo.isDone = isDone ?? todo.isDone;
+      // await todo.save();
   
       res.status(200).json({
         success: true,
