@@ -60,7 +60,7 @@ const deleteToDo = async function (req: Request, res: Response,) {
 const updateToDo = async function (req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const { title, isDone, creatorId, eventId } = req.body;
+      const info = req.body;
       let todo = await ToDo.findByPk(id);
       if (!todo) {
         res.status(404).json({
@@ -70,6 +70,8 @@ const updateToDo = async function (req: Request, res: Response, next: NextFuncti
         });
         return next();
       }
+      let todoUpdated = {}
+      todoUpdated = await todo.update(info);
   
       // todo.title = title || todo.title;
       // todo.creatorId = creatorId || todo.creatorId;
@@ -79,7 +81,7 @@ const updateToDo = async function (req: Request, res: Response, next: NextFuncti
   
       res.status(200).json({
         success: true,
-        data: todo,
+        data: todoUpdated,
         message: 'ToDo item updated successfully.',
       });
     } catch (error: any) {
