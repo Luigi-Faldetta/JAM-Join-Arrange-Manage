@@ -7,12 +7,12 @@ import Sequelize from 'sequelize';
 const UserEvents = sequelize.define(
   'userEvents',
   {
-    XuserId: {
+    userId: {
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4,
       allowNull: false,
     },
-    XeventId: {
+    eventId: {
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4,
       allowNull: false,

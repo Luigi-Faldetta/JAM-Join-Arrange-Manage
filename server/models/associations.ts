@@ -15,15 +15,15 @@ Event.belongsToMany(User, {
 
 User.belongsToMany(Event, {
   through: UserEvents,
-  foreignKey: 'XuserId',
+  foreignKey: 'userId',
 });
 
 Todo.belongsTo(Event, {
-  foreignKey: 'YeventId',
+  foreignKey: 'eventId',
 });
 
 Todo.belongsTo(User, {
-  foreignKey: 'YcreatorId',
+  foreignKey: 'creatorId',
 });
 
 Expense.belongsTo(Event, {

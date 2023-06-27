@@ -11,12 +11,12 @@ const Todo = sequelize.define('Todo', {
     type: DataTypes.BOOLEAN,
     allowNull: false,
   },
-  YcreatorId: {
+  creatorId: {
     type: Sequelize.UUID,
     defaultValue: Sequelize.UUIDV4,
     allowNull: false,
   },
-  YeventId: {
+  eventId: {
     type: Sequelize.UUID,
     defaultValue: Sequelize.UUIDV4,
     allowNull: false,
