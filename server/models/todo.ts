@@ -1,7 +1,6 @@
-'use strict';
-
 import { DataTypes } from 'sequelize';
 import sequelize from './modelDB';
+import Sequelize from 'sequelize';
 
 const Todo = sequelize.define('Todo', {
   title: {
@@ -13,13 +12,15 @@ const Todo = sequelize.define('Todo', {
     allowNull: false,
   },
   creatorId: {
-    type: DataTypes.STRING,
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4,
     allowNull: false,
   },
   eventId: {
-    type: DataTypes.STRING,
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4,
     allowNull: false,
   },
-});
+}, { timestamps: false });
 
 export default Todo;

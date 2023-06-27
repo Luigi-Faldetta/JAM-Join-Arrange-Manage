@@ -1,12 +1,13 @@
-'use strict';
-
-import { DataTypes } from 'sequelize';
+import { DataTypes, Model, BuildOptions  } from 'sequelize';
 import sequelize from './modelDB';
+import Sequelize from 'sequelize';
 
 const Event = sequelize.define('Event', {
-  id: {
-    type: DataTypes.STRING,
+  eventId: {
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4,
     allowNull: false,
+    primaryKey: true 
   },
   date: {
     type: DataTypes.DATE,
@@ -21,7 +22,7 @@ const Event = sequelize.define('Event', {
     allowNull: false,
   },
   host: {
-    type: DataTypes.STRING,
+    type: Sequelize.UUID,
     allowNull: false,
   },
   description: {
@@ -32,6 +33,6 @@ const Event = sequelize.define('Event', {
     type: DataTypes.STRING,
     allowNull: true
   },
-});
+}, { timestamps: false });
 
 export default Event;

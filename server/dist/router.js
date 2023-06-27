@@ -4,29 +4,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-require("./models/modelDB");
 const router = express_1.default.Router();
+require("./models/modelDB");
+const index_1 = require("./controllers/index");
 // User
-router.post('/register', () => { });
-router.get('/user/:id', () => { });
-router.patch('/user/:id', () => { });
-router.delete('/user/:id', () => { });
-router.get('/users/:eventid', () => { });
+router.post('/register', index_1.user.postUser);
+router.get('/user/:id', index_1.user.getUserInfo);
+router.patch('/user/:id', index_1.user.editUser);
+router.delete('/user/:id', index_1.user.deleteUser);
+router.get('/users/:eventid', index_1.user.getAllUsers);
 // Event
-router.post('/newevent', () => { });
-router.get('/event/:id', () => { });
-router.patch('/event/:id', () => { });
-router.delete('/event/:id', () => { });
-router.get('/events/:userid', () => { });
+router.post('/newevent', index_1.event.newEvent);
+router.get('/event/:eventid', index_1.event.getEvent);
+router.patch('/event/:eventid', index_1.event.updateEvent);
+router.delete('/event/:eventid', index_1.event.deleteEvent);
+router.get('/events/:userid', index_1.event.getUserEvents);
 // Todo
-router.post('/todo', () => { });
-router.patch('/todo/:id', () => { });
-router.delete('/todo/:id', () => { });
-router.get('/todos/:eventid', () => { });
+router.post('/todo', index_1.todo.postToDo);
+router.patch('/todo/:id', index_1.todo.updateToDo);
+router.delete('/todo/:id', index_1.todo.deleteToDo);
+router.get('/todos/:eventid', index_1.todo.getToDos);
 // Expense
-router.post('/expense', () => { });
-router.delete('/expense/:id', () => { });
-router.get('/expenses/:eventid', () => { });
-// Else
-router.get('/*', () => { console.log('Not found'); });
+router.post('/expense', index_1.expense.newExpense);
+router.delete('/expense/:id', index_1.expense.deleteExpense);
+router.get('/expenses/:eventid', index_1.expense.getExpenses);
+//UserEvents
+router.post('/useractivity', index_1.eventActivity.joinEvent);
+router.delete('/useractivity', index_1.eventActivity.leaveEvent);
 exports.default = router;
