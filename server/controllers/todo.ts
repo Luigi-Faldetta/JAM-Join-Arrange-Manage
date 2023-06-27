@@ -1,11 +1,11 @@
-import ToDo from "../models/todo"
+import { request } from "http";
+import Todo from "../models/todo"
 import { Response, Request, NextFunction } from "express";
-
+import UserEvents from "../models/userEvent";
+//needs req.body {title, isDone, creatorId, eventId}
 const postToDo = async (req: Request, res: Response) => {
     try {
-        const { title, isDone, creatorId, eventId } =
-        req.body;
-        const newtodo = await ToDo.create({title, isDone, creatorId, eventId});
+        const newtodo = await Todo.create({...req.body});
         res.status(201).json({
             success: true,
             data: newtodo,
@@ -17,25 +17,28 @@ const postToDo = async (req: Request, res: Response) => {
     }
 
 }
-const getToDo = async function (req: Request, res: Response, next: NextFunction) {
-    try {
-      let todos = await ToDo.findAll({ where: { id: req.params.id } });
-      if (!todos) {
-        res.status(404).json({
-          success: false,
-          data: null,
-          message: "Activities not found.",
-        });
-        return next();
-      } 
-  
-      res.status(200).json(todos);
-    } catch (error: any) {
-      console.log(error);
-      res.status(500).json({ message: error.message });
+// Needs req.params.eventId*
+const getToDos = async function (req: Request, res: Response, next: NextFunction) {
+  try {
+    const todosIds = await UserEvents.findAll({
+      where: { eventId: req.params.eventid },
+    });
+    if (todosIds) {
+      const todosArray = [];
+      for (const todo of todosIds) {
+        todosArray.push(todo.dataValues.todoId);
+      }
+      const users = await Todo.findAll({ where: { userId: todosArray } });
+      res.status(200).json(users);
+    } else {
+      throw "No users where found";
     }
+  } catch (err: any) {
+    console.error(err);
+    res.status(500).json({ message: err.message });
+  }
   };
-
+// Needs req.params.todoId*
 const deleteToDo = async function (req: Request, res: Response,) {
     try {
       const id = req.params.id;
@@ -45,7 +48,7 @@ const deleteToDo = async function (req: Request, res: Response,) {
           data: id,
           message: "wrong id",
         });
-      let todo = await ToDo.destroy({ where: { id: id } });
+      let todo = await Todo.destroy({ where: { id: id } });
       res.status(201).json({
         success: true,
         data: todo,
@@ -56,12 +59,13 @@ const deleteToDo = async function (req: Request, res: Response,) {
       res.status(400).send(error.message);
     }
   };
-
+// Needs req.params.todoId*
+//needs body with info
 const updateToDo = async function (req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
       const info = req.body;
-      let todo = await ToDo.findByPk(id);
+      let todo = await Todo.findByPk(id);
       if (!todo) {
         res.status(404).json({
           success: false,
@@ -73,12 +77,6 @@ const updateToDo = async function (req: Request, res: Response, next: NextFuncti
       let todoUpdated = {}
       todoUpdated = await todo.update(info);
   
-      // todo.title = title || todo.title;
-      // todo.creatorId = creatorId || todo.creatorId;
-      // todo.eventId = eventId || todo.eventId
-      // todo.isDone = isDone ?? todo.isDone;
-      // await todo.save();
-  
       res.status(200).json({
         success: true,
         data: todoUpdated,
@@ -89,4 +87,4 @@ const updateToDo = async function (req: Request, res: Response, next: NextFuncti
       res.status(500).json({ message: error.message });
     }
   };
-  export default {postToDo, getToDo, deleteToDo, updateToDo}
+  export default {postToDo, getToDos, deleteToDo, updateToDo}
