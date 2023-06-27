@@ -6,17 +6,8 @@ export interface ExpenseState {
     value: string
 }
 
-export interface ExpenseListState {
-    //update interface once types are declared
-    value:ExpenseState[]
-}
-
 const initialExpenseState:ExpenseState = {
     value: ""
-}
-
-const initialExpenseListState: ExpenseListState = {
-    value: [],
 }
 
 export const expenseSlice = createSlice({
@@ -31,12 +22,12 @@ export const expenseSlice = createSlice({
 
 export const expenseListSlice = createSlice({
     name: "expenseList",
-    initialState: initialExpenseListState,
+    initialState: [] as ExpenseState[],
     reducers: {
         //state type will be Expense when the type is created.
-        createExpenseList: (state) => { state.value = []},
-        deleteExpenseList: (state) => { state.value = []},
-        updateExpenseList: (state) => { state.value = []},
+        createExpenseList: (state) => { state = []},
+        deleteExpenseList: (state) => { state = []},
+        updateExpenseList: (state) => { state = []},
     }
 })
 

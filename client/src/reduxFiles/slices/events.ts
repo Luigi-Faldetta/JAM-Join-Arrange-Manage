@@ -6,18 +6,11 @@ export interface EventState {
     value: string
 }
 
-export interface EventListState {
-    //update interface once types are declared
-    value:EventState[]
-}
 
 const initialEventState:EventState = {
     value: ""
 }
 
-const initialEventListState: EventListState = {
-    value: [],
-}
 
 export const eventSlice = createSlice({
     name: "event",
@@ -32,12 +25,12 @@ export const eventSlice = createSlice({
 
 export const eventListSlice = createSlice({
     name: "eventList",
-    initialState: initialEventListState,
+    initialState: [] as EventState[],
     reducers: {
         //state type will be Event when the type is created.
-        createEventList: (state) => { state.value = []},
-        deleteEventList: (state) => { state.value = []},
-        updateEventList: (state) => { state.value = []},
+        createEventList: (state) => { state = []},
+        deleteEventList: (state) => { state = []},
+        updateEventList: (state) => { state = []},
     }
 })
 

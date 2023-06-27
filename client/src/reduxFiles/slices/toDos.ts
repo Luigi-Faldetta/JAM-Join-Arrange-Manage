@@ -6,17 +6,8 @@ export interface ToDoState {
     value: string
 }
 
-export interface ToDoListState {
-    //update interface once types are declared
-    value:ToDoState[]
-}
-
 const initialToDoState:ToDoState = {
     value: ""
-}
-
-const initialToDoListState: ToDoListState = {
-    value: [],
 }
 
 export const toDoSlice = createSlice({
@@ -32,12 +23,12 @@ export const toDoSlice = createSlice({
 
 export const toDoListSlice = createSlice({
     name: "toDoList",
-    initialState: initialToDoListState,
+    initialState: [] as ToDoState[],
     reducers: {
         //state type will be ToDo when the type is created.
-        createToDoList: (state) => { state.value = []},
-        deleteToDoList: (state) => { state.value = []},
-        updateToDoList: (state) => { state.value = []},
+        createToDoList: (state) => { state = []},
+        deleteToDoList: (state) => { state = []},
+        updateToDoList: (state) => { state = []},
     }
 })
 
