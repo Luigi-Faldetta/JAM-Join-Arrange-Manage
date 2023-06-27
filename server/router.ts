@@ -13,9 +13,9 @@ router.get('/users/:eventid', user.getAllUsers)
 
 // Event
 router.post('/newevent', event.newEvent)
-router.get('/event/:id', event.getEvent)
-router.patch('/event/:id', event.updateEvent)
-router.delete('/event/:id', event.deleteEvent)
+router.get('/event/:eventid', event.getEvent)
+router.patch('/event/:eventid', event.updateEvent)
+router.delete('/event/:eventid', event.deleteEvent)
 router.get('/events/:userid', event.getUserEvents)
 
 // Todo

@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import sequelize from './modelDB';
+import Sequelize from 'sequelize';
 
 const Expense = sequelize.define('Expense', {
   item: {
@@ -11,11 +12,13 @@ const Expense = sequelize.define('Expense', {
     allowNull: false,
   },
   purchaserId: {
-    type: DataTypes.STRING,
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4,
     allowNull: false,
   },
   eventId: {
-    type: DataTypes.STRING,
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4,
     allowNull: false,
   },
 }, { timestamps: false });
