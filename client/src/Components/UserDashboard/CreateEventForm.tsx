@@ -19,16 +19,9 @@ declare global {
 
 function CreateEventForm() {
   const dispatch = useDispatch();
-  // const formRef = useRef<HTMLFormElement>(null);
 
   const [eventDate, setEventDate] = useState<Date | null>(null);
   const [open, setOpen] = useState(false);
-
-  // const [formState, setFormState] = useState({} as EventState);
-  // const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { value, name } = e.target;
-  //   setFormState((prevState) => ({ ...prevState, [name]: value }));
-  // };
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); //removed as it was preventing modal from closing
@@ -39,7 +32,7 @@ function CreateEventForm() {
       eventDescription: event.currentTarget.eventDescription.value,
       // eventHost and eventAttendees need to be updated to
       // reflect hostID after login.
-      eventHost: ["hostId"],
+      eventHost: "hostId",
       eventAttendees: ["hostId"],
     };
 
