@@ -2,6 +2,9 @@ import { Request, Response } from 'express';
 import { Event, UserEvents } from '../models/associations'
 
 // It works
+// {"location": "here", "title": "test title",
+// "host": id, "description": "Blah blah",
+// "coverPic": "pic} 
 const newEvent = async (req: Request, res: Response) => {
   try {
     const event = await Event.create(req.body)
@@ -13,10 +16,11 @@ const newEvent = async (req: Request, res: Response) => {
 }
 
 // It works
+// /req.params.eventId*
 const getEvent = async (req: Request, res: Response) => {
   try {   
     const event = await Event.findOne({
-      where: { eventId: req.params.id }
+      where: { eventId: req.params.eventid }
     })
     res.status(200).json(event);
   } catch (err: any) {
@@ -25,10 +29,11 @@ const getEvent = async (req: Request, res: Response) => {
   }
 }
 
-// It works
+// It works (review return body)
+// /req.params.eventId*
 const updateEvent = async (req: Request, res: Response) => {
   try {
-    const updatedEvent = await Event.update(req.body, { where: { eventId: req.params.id }, returning: true })
+    const updatedEvent = await Event.update(req.body, { where: { eventId: req.params.eventid }, returning: true })
     res.status(200).json(updatedEvent);
   } catch (err: any) {
     console.error(err);
@@ -37,9 +42,10 @@ const updateEvent = async (req: Request, res: Response) => {
 }
 
 // It works
+// /req.params.eventId*
 const deleteEvent = async (req: Request, res: Response) => {
   try {
-    const deletedEvent = await Event.destroy({ where: { eventId: req.params.id } })
+    const deletedEvent = await Event.destroy({ where: { eventId: req.params.eventid } })
     res.status(200).json(deletedEvent);
   } catch (err: any) {
     console.error(err);
@@ -47,12 +53,17 @@ const deleteEvent = async (req: Request, res: Response) => {
   }
 }
 
+// /req.params.userId*
 const getUserEvents = async (req: Request, res: Response) => {
   try {
-    const events = await Event.findAll({
-      where: { host: req.params.id }
+    const eventIds = await UserEvents.findAll({
+      where: { XuserId: req.params.userid }
     })
-    res.status(200).json(events);
+    // events is an array of eventIds?
+    // Try the line below
+    // const events = await Event.findAll({ where: {id: eventIds}})
+    // res.status(200).json(events);
+    res.status(200).json(eventIds);
   } catch (err: any) {
     console.error(err);
     res.status(500).json({ message: err.message });

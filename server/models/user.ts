@@ -3,11 +3,6 @@ import Sequelize from 'sequelize';
 import sequelize from './modelDB';
 
 const User = sequelize.define('User', {
-  // userId: {
-  //   type: DataTypes.INTEGER,
-  //   allowNull: false,
-  //   primaryKey: true 
-  // },
   userId: {
     type: Sequelize.UUID,
     defaultValue: Sequelize.UUIDV4,

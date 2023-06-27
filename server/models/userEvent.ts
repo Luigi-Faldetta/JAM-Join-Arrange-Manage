@@ -2,16 +2,19 @@
 
 import { DataTypes } from 'sequelize';
 import sequelize from './modelDB.js';
+import Sequelize from 'sequelize';
 
 const UserEvents = sequelize.define(
   'userEvents',
   {
-    userId: {
-      type: DataTypes.INTEGER,
+    XuserId: {
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
       allowNull: false,
     },
-    eventId: {
-      type: DataTypes.INTEGER,
+    XeventId: {
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
       allowNull: false,
     },
   }, { timestamps: false }
