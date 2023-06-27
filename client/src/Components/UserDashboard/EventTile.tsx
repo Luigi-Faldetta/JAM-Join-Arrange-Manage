@@ -1,3 +1,5 @@
+import { createEventList } from "../../reduxFiles/slices/events";
+
 function EventTile() {
   return (
     <>
