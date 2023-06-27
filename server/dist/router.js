@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-require("./models/modelDB");
 const router = express_1.default.Router();
+require("./models/modelDB");
 const index_1 = require("./controllers/index");
 // User
 router.post('/register', index_1.user.postUser);
@@ -21,9 +21,9 @@ router.delete('/event/:eventid', index_1.event.deleteEvent);
 router.get('/events/:userid', index_1.event.getUserEvents);
 // Todo
 router.post('/todo', index_1.todo.postToDo);
-router.patch('/todo/:id', index_1.todo.getToDo);
+router.patch('/todo/:id', index_1.todo.updateToDo);
 router.delete('/todo/:id', index_1.todo.deleteToDo);
-router.get('/todos/:eventid', index_1.todo.updateToDo);
+router.get('/todos/:eventid', index_1.todo.getToDos);
 // Expense
 router.post('/expense', index_1.expense.newExpense);
 router.delete('/expense/:id', index_1.expense.deleteExpense);

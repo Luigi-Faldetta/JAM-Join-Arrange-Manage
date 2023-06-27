@@ -25,7 +25,7 @@ const newEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).json({ message: err.message });
     }
 });
-// Needs req.params.eventId
+// Needs req.params.eventid
 const getEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const event = yield associations_1.Event.findOne({
@@ -42,8 +42,7 @@ const getEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).json({ message: err.message });
     }
 });
-// Review return body * *  * * * * * * ** * 
-// Needs req.params.eventId
+// Needs req.params.eventid
 // Needs body with changes {"title": "new title"} 
 const updateEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -59,7 +58,7 @@ const updateEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(500).json({ message: err.message });
     }
 });
-// Needs req.params.eventId
+// Needs req.params.eventid
 const deleteEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const deletedEvent = yield associations_1.Event.destroy({ where: { eventId: req.params.eventid } });
@@ -74,7 +73,7 @@ const deleteEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(400).json({ message: err.message });
     }
 });
-// Needs req.params.userId
+// Needs req.params.userid
 const getUserEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const eventIds = yield associations_1.UserEvents.findAll({ where: { userId: req.params.userid } });

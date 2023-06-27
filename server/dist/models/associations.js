@@ -17,7 +17,7 @@ event_1.default.belongsTo(user_1.default, {
 });
 event_1.default.belongsToMany(user_1.default, {
     through: userEvent_1.default,
-    foreignKey: 'XeventId',
+    foreignKey: 'eventId',
 });
 user_1.default.belongsToMany(event_1.default, {
     through: userEvent_1.default,

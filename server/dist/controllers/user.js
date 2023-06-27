@@ -11,28 +11,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.editUser = void 0;
 const associations_1 = require("../models/associations");
-// import { customRequest } from '../middleware/auth';
+// Needs body like {"name": "email", "password"}
 const postUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!req.body.email)
-        return res.status(409).send({ error: '409', message: 'Missing input email' });
+        return res
+            .status(409)
+            .send({ error: "409", message: "Missing input email" });
     if (!req.body.password)
-        return res.status(409).send({ error: '409', message: 'Missing input password' });
+        return res
+            .status(409)
+            .send({ error: "409", message: "Missing input password" });
     const { password, email } = req.body;
     const user = yield associations_1.User.findOne({ where: { email: email } });
     if (user)
-        return res.status(409).send({ error: '409', message: 'User already exists' });
+        return res
+            .status(409)
+            .send({ error: "409", message: "User already exists" });
     try {
         const user = yield associations_1.User.create(Object.assign({}, req.body));
-        // let safeUser = {
-        //   id: user.id,
-        //   profilePic: user.profilePic,
-        //   name: user.name,
-        //   phone: user.phone,
-        // };
+        //TODO:we need to send back "safe user" instead of sending the user object
         res.status(201).json({
             success: true,
             data: user,
-            message: 'User created',
+            message: "User created",
         });
     }
     catch (err) {
@@ -40,58 +41,46 @@ const postUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).json({ message: err.message });
     }
 });
-// const login = async (req: Request, res: Response) => {
-//   try {
-//     const { email, password } = req.body;
-//     const user: UserModel | null = await User.findOne({ where: { email: email } });
-//     if (!user) throw new Error();
-//     if (!password) throw new Error();
-//     req.session.uid = user.id;
-//     res.status(200).send({ success: true, data: user.id, message: 'OK' });
-//   } catch (err: any) {
-//     console.log(err);
-//     res.status(401).send({ error: '401', message: 'Username or password is incorrect' });
-//   }
-// };
-// const logout = (req: Request, res: Response) => {
-//   req.session.destroy((error: any) => {
-//     if (error) {
-//       res.status(500).send({ error, message: 'Could not log out, please try again' });
-//     } else {
-//       res.clearCookie('sid').status(200).send({ message: 'Logout successful' });
-//     }
-//   });
-// };
+// Needs req.params.userId*
 const getUserInfo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.params);
     try {
         let user = yield associations_1.User.findOne({ where: { userId: req.params.id } });
         if (user) {
-            //   let safeUser = {
-            //     id: user.id,
-            //     profilePic: user.profilePic,
-            //     name: user.name,
-            //     phone: user.phone,
-            //   };
+            //TODO:we need to send back "safe user" instead of sending the user object
             res.status(200).json(user);
         }
     }
     catch (err) {
         console.error(err);
-        res.status(400).send({ error: '400', message: 'Bad user request' });
+        res.status(400).send({ error: "400", message: "Bad user request" });
     }
 });
+// Needs req.params.eventId*
 const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const usersIds = req.body.ids;
-        const users = yield associations_1.User.findAll({ where: { id: usersIds } });
-        res.status(200).json(users);
+        const userIds = yield associations_1.UserEvents.findAll({
+            where: { eventId: req.params.eventid },
+        });
+        if (userIds) {
+            const usersArray = [];
+            for (const user of userIds) {
+                usersArray.push(user.dataValues.userId);
+            }
+            const users = yield associations_1.Event.findAll({ where: { userId: usersArray } });
+            res.status(200).json(users);
+        }
+        else {
+            throw "No users where found";
+        }
     }
     catch (err) {
         console.error(err);
-        res.status(400).send({ error: '400', message: 'Bad user request' });
+        res.status(500).json({ message: err.message });
     }
 });
+// Needs req.params.userId*
+//needs body with info
 const editUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
     const info = req.body;
@@ -101,7 +90,7 @@ const editUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             res.status(404).json({
                 success: false,
                 data: null,
-                message: 'User not found.',
+                message: "User not found.",
             });
             return;
         }
@@ -120,6 +109,7 @@ const editUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.editUser = editUser;
+// Needs req.params.userId*
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.params.id;

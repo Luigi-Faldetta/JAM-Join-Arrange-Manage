@@ -1,11 +1,8 @@
-'use strict';
-
-import { DataTypes } from 'sequelize';
 import sequelize from './modelDB.js';
 import Sequelize from 'sequelize';
 
 const UserEvents = sequelize.define(
-  'userEvents',
+  'UserEvents',
   {
     userId: {
       type: Sequelize.UUID,

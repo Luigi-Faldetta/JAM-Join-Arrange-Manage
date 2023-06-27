@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const todo_1 = __importDefault(require("../models/todo"));
+//needs req.body {title, isDone, creatorId, eventId}
 const postToDo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { title, isDone, creatorId, eventId } = req.body;
-        const newtodo = yield todo_1.default.create({ title, isDone, creatorId, eventId });
+        const newtodo = yield todo_1.default.create(Object.assign({}, req.body));
         res.status(201).json({
             success: true,
             data: newtodo,
@@ -28,19 +28,29 @@ const postToDo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).json({ message: error.message });
     }
 });
-const getToDo = function (req, res, next) {
+// Needs req.params.todoId
+// Needs body with info
+const updateToDo = function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            let todos = yield todo_1.default.findAll({ where: { id: req.params.id } });
-            if (!todos) {
+            const { id } = req.params;
+            const info = req.body;
+            let todo = yield todo_1.default.findByPk(id);
+            if (!todo) {
                 res.status(404).json({
                     success: false,
                     data: null,
-                    message: "Activities not found.",
+                    message: 'ToDo item not found.',
                 });
                 return next();
             }
-            res.status(200).json(todos);
+            let todoUpdated = {};
+            todoUpdated = yield todo.update(info);
+            res.status(200).json({
+                success: true,
+                data: todoUpdated,
+                message: 'ToDo item updated successfully.',
+            });
         }
         catch (error) {
             console.log(error);
@@ -48,6 +58,7 @@ const getToDo = function (req, res, next) {
         }
     });
 };
+// Needs req.params.todoId*
 const deleteToDo = function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -71,37 +82,29 @@ const deleteToDo = function (req, res) {
         }
     });
 };
-const updateToDo = function (req, res, next) {
+// Needs req.params.eventId
+const getToDos = function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { id } = req.params;
-            const info = req.body;
-            let todo = yield todo_1.default.findByPk(id);
-            if (!todo) {
-                res.status(404).json({
-                    success: false,
-                    data: null,
-                    message: 'ToDo item not found.',
-                });
-                return next();
-            }
-            let todoUpdated = {};
-            todoUpdated = yield todo.update(info);
-            // todo.title = title || todo.title;
-            // todo.creatorId = creatorId || todo.creatorId;
-            // todo.eventId = eventId || todo.eventId
-            // todo.isDone = isDone ?? todo.isDone;
-            // await todo.save();
-            res.status(200).json({
-                success: true,
-                data: todoUpdated,
-                message: 'ToDo item updated successfully.',
+            const todosIds = yield todo_1.default.findAll({
+                where: { eventId: req.params.eventid },
             });
+            if (todosIds) {
+                const todosArray = [];
+                for (const todo of todosIds) {
+                    todosArray.push(todo.dataValues.id);
+                }
+                const todos = yield todo_1.default.findAll({ where: { id: todosArray } });
+                res.status(200).json(todos);
+            }
+            else {
+                throw "No todos where found";
+            }
         }
-        catch (error) {
-            console.log(error);
-            res.status(500).json({ message: error.message });
+        catch (err) {
+            console.error(err);
+            res.status(500).json({ message: err.message });
         }
     });
 };
-exports.default = { postToDo, getToDo, deleteToDo, updateToDo };
+exports.default = { postToDo, updateToDo, deleteToDo, getToDos };
