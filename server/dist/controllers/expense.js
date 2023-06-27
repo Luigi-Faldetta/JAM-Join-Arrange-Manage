@@ -13,6 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const expense_1 = __importDefault(require("../models/expense"));
+// It works
+// {"item": "item", "cost": "20",
+// "purchaserId": id, "eventId": id }
 const newExpense = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const expense = yield expense_1.default.create(req.body);
@@ -23,9 +26,11 @@ const newExpense = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(500).json({ message: err.message });
     }
 });
+// It works
+// /req.params.id*
 const deleteExpense = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const deletedExpense = yield expense_1.default.destroy({ where: { _id: req.params.id } });
+        const deletedExpense = yield expense_1.default.destroy({ where: { id: req.params.id } });
         res.status(201).json(deletedExpense);
     }
     catch (err) {
@@ -33,10 +38,12 @@ const deleteExpense = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(500).json({ message: err.message });
     }
 });
+// It works
+// /req.params.eventId*
 const getExpenses = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const expenses = yield expense_1.default.findAll({
-            where: { eventId: req.params.id }
+            where: { eventId: req.params.eventid }
         });
         res.status(201).json(expenses);
     }

@@ -1,7 +1,7 @@
 import routes from 'express';
-import './models/modelDB'
 const router = routes.Router();
 
+import './models/modelDB'
 import { user, event, todo, expense, eventActivity } from './controllers/index'
 
 // User

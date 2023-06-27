@@ -8,20 +8,30 @@ const user_1 = __importDefault(require("./user"));
 exports.User = user_1.default;
 const event_1 = __importDefault(require("./event"));
 exports.Event = event_1.default;
+const todo_1 = __importDefault(require("./todo"));
+const expense_1 = __importDefault(require("./expense"));
 const userEvent_1 = __importDefault(require("./userEvent"));
 exports.UserEvents = userEvent_1.default;
 event_1.default.belongsTo(user_1.default, {
     foreignKey: 'host',
 });
-// THIS IS WRONG. USER HAS NO FOREIGN KEY
-// User.hasOne(Event, {
-//   foreignKey: 'userId',
-// });
 event_1.default.belongsToMany(user_1.default, {
     through: userEvent_1.default,
     foreignKey: 'XeventId',
 });
 user_1.default.belongsToMany(event_1.default, {
     through: userEvent_1.default,
-    foreignKey: 'XuserId',
+    foreignKey: 'userId',
+});
+todo_1.default.belongsTo(event_1.default, {
+    foreignKey: 'eventId',
+});
+todo_1.default.belongsTo(user_1.default, {
+    foreignKey: 'creatorId',
+});
+expense_1.default.belongsTo(event_1.default, {
+    foreignKey: 'eventId',
+});
+expense_1.default.belongsTo(user_1.default, {
+    foreignKey: 'purchaserId',
 });

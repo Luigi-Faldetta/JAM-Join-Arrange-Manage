@@ -75,7 +75,7 @@ const updateToDo = function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id } = req.params;
-            const { title, isDone, creatorId, eventId } = req.body;
+            const info = req.body;
             let todo = yield todo_1.default.findByPk(id);
             if (!todo) {
                 res.status(404).json({
@@ -85,6 +85,8 @@ const updateToDo = function (req, res, next) {
                 });
                 return next();
             }
+            let todoUpdated = {};
+            todoUpdated = yield todo.update(info);
             // todo.title = title || todo.title;
             // todo.creatorId = creatorId || todo.creatorId;
             // todo.eventId = eventId || todo.eventId
@@ -92,7 +94,7 @@ const updateToDo = function (req, res, next) {
             // await todo.save();
             res.status(200).json({
                 success: true,
-                data: todo,
+                data: todoUpdated,
                 message: 'ToDo item updated successfully.',
             });
         }

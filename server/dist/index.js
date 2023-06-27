@@ -13,10 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./app"));
-// import sequelize from './models/modelDB'
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const port = process.env.SERVER_PORT || 3333;
+        const port = process.env.SERVER_PORT || 3200;
         app_1.default.listen(port, () => {
             console.log(`Server started on port ${port}`);
         });

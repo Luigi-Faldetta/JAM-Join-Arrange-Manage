@@ -1,9 +1,8 @@
 import app from './app';
-// import sequelize from './models/modelDB'
 
 (async () => {
   try {
-    const port = process.env.SERVER_PORT || 3333;
+    const port = process.env.SERVER_PORT || 3200;
     app.listen(port, () => {
       console.log(`Server started on port ${port}`);
     });

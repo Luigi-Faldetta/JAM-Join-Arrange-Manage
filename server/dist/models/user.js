@@ -7,11 +7,6 @@ const sequelize_1 = require("sequelize");
 const sequelize_2 = __importDefault(require("sequelize"));
 const modelDB_1 = __importDefault(require("./modelDB"));
 const User = modelDB_1.default.define('User', {
-    // userId: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    //   primaryKey: true 
-    // },
     userId: {
         type: sequelize_2.default.UUID,
         defaultValue: sequelize_2.default.UUIDV4,
