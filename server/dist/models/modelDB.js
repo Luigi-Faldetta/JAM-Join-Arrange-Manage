@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
-const sequelize = new sequelize_1.Sequelize(process.env.DB_NAME || 'Database', process.env.DB_USER || 'user', process.env.PW || 'pw', {
+const sequelize = new sequelize_1.Sequelize(process.env.DB_NAME || 'Main', process.env.DB_USER || 'postgres', process.env.PW || '2603', {
     host: 'localhost',
     dialect: 'postgres',
     port: 5432,

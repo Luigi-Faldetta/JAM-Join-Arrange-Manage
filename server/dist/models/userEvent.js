@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const modelDB_js_1 = __importDefault(require("./modelDB.js"));
-const userEvents = modelDB_js_1.default.define('userEvents', {
+const UserEvents = modelDB_js_1.default.define('userEvents', {
     userId: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
@@ -15,4 +15,4 @@ const userEvents = modelDB_js_1.default.define('userEvents', {
         allowNull: false,
     },
 }, { timestamps: false });
-exports.default = userEvents;
+exports.default = UserEvents;

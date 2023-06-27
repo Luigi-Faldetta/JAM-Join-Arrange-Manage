@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 
-const sequelize = new Sequelize(process.env.DB_NAME || 'Database', process.env.DB_USER || 'user', process.env.PW || 'pw', {
+const sequelize = new Sequelize(process.env.DB_NAME || 'Main', process.env.DB_USER || 'postgres', process.env.PW || '2603', {
   host: 'localhost',
   dialect: 'postgres',
   port: 5432,

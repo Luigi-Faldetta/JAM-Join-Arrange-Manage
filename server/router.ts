@@ -2,7 +2,7 @@ import routes from 'express';
 import './models/modelDB'
 const router = routes.Router();
 
-import { user, event, todo, expense } from './controllers/index'
+import { user, event, todo, expense, eventActivity } from './controllers/index'
 
 // User
 router.post('/register', user.postUser)
@@ -28,5 +28,10 @@ router.get('/todos/:eventid', todo.updateToDo)
 router.post('/expense', expense.newExpense)
 router.delete('/expense/:id', expense.deleteExpense)
 router.get('/expenses/:eventid', expense.getExpenses)
+
+//UserEvents
+router.post('/useractivity', eventActivity.joinEvent)
+router.delete('/useractivity', eventActivity.leaveEvent)
+
 
 export default router;
