@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const associations_1 = require("../models/associations");
-// It works
+// Needs body like {"title": "test title", "host": id} 
 const newEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const event = yield associations_1.Event.create(req.body);
@@ -21,11 +21,11 @@ const newEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).json({ message: err.message });
     }
 });
-// It works
+// Needs req.params.eventId*
 const getEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const event = yield associations_1.Event.findOne({
-            where: { eventId: req.params.id }
+            where: { eventId: req.params.eventid }
         });
         res.status(200).json(event);
     }
@@ -34,10 +34,11 @@ const getEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).json({ message: err.message });
     }
 });
-// It works
+// Review return body
+// Needs req.params.eventId*
 const updateEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const updatedEvent = yield associations_1.Event.update(req.body, { where: { eventId: req.params.id }, returning: true });
+        const updatedEvent = yield associations_1.Event.update(req.body, { where: { eventId: req.params.eventid }, returning: true });
         res.status(200).json(updatedEvent);
     }
     catch (err) {
@@ -45,10 +46,10 @@ const updateEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(500).json({ message: err.message });
     }
 });
-// It works
+// Needs req.params.eventId*
 const deleteEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const deletedEvent = yield associations_1.Event.destroy({ where: { eventId: req.params.id } });
+        const deletedEvent = yield associations_1.Event.destroy({ where: { eventId: req.params.eventid } });
         res.status(200).json(deletedEvent);
     }
     catch (err) {
@@ -56,12 +57,23 @@ const deleteEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(400).json({ message: err.message });
     }
 });
+// Needs req.params.userId*
 const getUserEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const events = yield associations_1.Event.findAll({
-            where: { host: req.params.id }
+        const eventIds = yield associations_1.UserEvents.findAll({
+            where: { userId: req.params.userid }
         });
-        res.status(200).json(events);
+        if (eventIds) {
+            const eventsArray = [];
+            for (const event of eventIds) {
+                eventsArray.push(event.dataValues.eventId);
+            }
+            const events = yield associations_1.Event.findAll({ where: { eventId: eventsArray } });
+            res.status(200).json(events);
+        }
+        else {
+            throw 'No events where found';
+        }
     }
     catch (err) {
         console.error(err);

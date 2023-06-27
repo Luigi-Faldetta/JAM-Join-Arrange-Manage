@@ -10,7 +10,7 @@ Event.belongsTo(User, {
 
 Event.belongsToMany(User, {
   through: UserEvents,
-  foreignKey: 'XeventId',
+  foreignKey: 'eventId',
 });
 
 User.belongsToMany(Event, {
