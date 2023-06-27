@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Event, UserEvents } from '../models/associations'
 
-// Needs body with at least the next properties {"title": "test title", "host": id} 
+// Needs body with at least the next properties {"title": "test", "host": id} 
 const newEvent = async (req: Request, res: Response) => {
   try {
     const event = await Event.create(req.body)
@@ -68,7 +68,7 @@ const deleteEvent = async (req: Request, res: Response) => {
 const getUserEvents = async (req: Request, res: Response) => {
   try {
     const eventIds = await UserEvents.findAll({ where: { userId: req.params.userid } })
-    if (eventIds) {
+    if (eventIds.length) {
       const eventsArray = []
       for (const event of eventIds) { eventsArray.push(event.dataValues.eventId) }
       const events = await Event.findAll({ where: { eventId: eventsArray } })
@@ -78,7 +78,7 @@ const getUserEvents = async (req: Request, res: Response) => {
         message: 'User events fetched',
       });
     } else {
-      throw 'No events where found'
+      throw new Error ('No events where found')
     }
   } catch (err: any) {
     console.error(err);

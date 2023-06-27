@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const associations_1 = require("../models/associations");
-// Needs body with at least the next properties {"title": "test title", "host": id} 
+// Needs body with at least the next properties {"title": "test", "host": id} 
 const newEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const event = yield associations_1.Event.create(req.body);
@@ -77,7 +77,7 @@ const deleteEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 const getUserEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const eventIds = yield associations_1.UserEvents.findAll({ where: { userId: req.params.userid } });
-        if (eventIds) {
+        if (eventIds.length) {
             const eventsArray = [];
             for (const event of eventIds) {
                 eventsArray.push(event.dataValues.eventId);
@@ -90,7 +90,7 @@ const getUserEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             });
         }
         else {
-            throw 'No events where found';
+            throw new Error('No events where found');
         }
     }
     catch (err) {

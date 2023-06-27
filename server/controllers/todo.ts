@@ -82,7 +82,7 @@ const getToDos = async function (req: Request, res: Response, next: NextFunction
       const todos = await Todo.findAll({ where: { id: todosArray } });
       res.status(200).json(todos);
     } else {
-      throw "No todos where found";
+      throw new Error("No todos where found");
     }
   } catch (err: any) {
     console.error(err);
