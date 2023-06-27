@@ -7,6 +7,9 @@ const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 require("./models/modelDB");
 const index_1 = require("./controllers/index");
+router.get('/health', (_req, res) => {
+    res.send({ health: 'server runnning!!' });
+});
 // User
 router.post('/register', index_1.user.postUser);
 router.get('/user/:id', index_1.user.getUserInfo);
