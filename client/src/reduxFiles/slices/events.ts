@@ -7,7 +7,7 @@ export interface EventState {
   eventDateAndTime: Date | null;
   eventLocation: string | null;
   eventDescription: string | null;
-  eventHost: string[];
+  eventHost: string;
   eventAttendees: string[];
 }
 
@@ -17,7 +17,7 @@ const initialEventState: EventState = {
   eventDateAndTime: null,
   eventLocation: "",
   eventDescription: "",
-  eventHost: [],
+  eventHost: "",
   eventAttendees: [],
   //   },
 };
