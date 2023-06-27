@@ -4,6 +4,11 @@ const router = routes.Router();
 import './models/modelDB'
 import { user, event, todo, expense, eventActivity } from './controllers/index'
 
+
+router.get('/health', (_req, res) => {
+    res.send({ health: 'server runnning!!'})
+})
+
 // User
 router.post('/register', user.postUser)
 router.get('/user/:id', user.getUserInfo)
