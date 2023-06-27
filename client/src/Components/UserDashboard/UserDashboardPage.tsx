@@ -7,6 +7,8 @@ import { RootState } from "../../reduxFiles/store";
 function UserDashboardPage() {
   const eventList = useSelector((state: RootState) => state.eventListReducer);
 
+  // add fetch to get all the events
+
   return (
     <>
       <div className="flex flex-row">
