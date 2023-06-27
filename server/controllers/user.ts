@@ -1,4 +1,4 @@
-import { User, UserEvents, Event } from "../models/associations";
+import { User, UserEvents } from "../models/associations";
 import { Request, Response } from "express";
 
 // Needs body like {"name": "email", "password"}
@@ -56,12 +56,14 @@ const getAllUsers = async (req: Request, res: Response) => {
     const userIds = await UserEvents.findAll({
       where: { eventId: req.params.eventid },
     });
+    // console.log(userIds)
     if (userIds) {
       const usersArray = [];
       for (const user of userIds) {
         usersArray.push(user.dataValues.userId);
       }
-      const users = await Event.findAll({ where: { userId: usersArray } });
+
+      const users = await User.findAll({ where: { userId: usersArray } });
       res.status(200).json(users);
     } else {
       throw "No users where found";
