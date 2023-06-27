@@ -4,16 +4,15 @@ const router = routes.Router();
 import './models/modelDB'
 import { user, event, todo, expense, eventActivity } from './controllers/index'
 
-
 router.get('/health', (_req, res) => {
-    res.send({ health: 'server runnning!!'})
+    res.send({ health: 'Server runnning!! =)'})
 })
 
 // User
 router.post('/register', user.postUser)
-router.get('/user/:id', user.getUserInfo)
-router.patch('/user/:id', user.editUser)
-router.delete('/user/:id', user.deleteUser)
+router.get('/user/:userid', user.getUser)
+router.patch('/user/:userid', user.editUser)
+router.delete('/user/:userid', user.deleteUser)
 router.get('/users/:eventid', user.getAllUsers)
 
 // Event
@@ -37,6 +36,5 @@ router.get('/expenses/:eventid', expense.getExpenses)
 //UserEvents
 router.post('/useractivity', eventActivity.joinEvent)
 router.delete('/useractivity', eventActivity.leaveEvent)
-
 
 export default router;
