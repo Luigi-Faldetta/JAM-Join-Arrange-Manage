@@ -15,7 +15,7 @@ export const thesisDbApi = createApi({
         // wont have id's by default
         addEvent: build.mutation({
             query:(event:EventState) => ({
-                url: 'events/',
+                url: 'newevent/',
                 method: 'POST',
                 body: event
             })
@@ -26,7 +26,7 @@ export const thesisDbApi = createApi({
         // wont have id's by default
         addUser: build.mutation({
             query:(user:UserState) => ({
-                url: 'events/',
+                url: 'register/',
                 method: 'POST',
                 body: user
             })
@@ -37,7 +37,7 @@ export const thesisDbApi = createApi({
         // wont have id's by default
         addExpense: build.mutation({
             query:(expense:ExpenseState) => ({
-                url: 'events/',
+                url: 'expense/',
                 method: 'POST',
                 body: expense
             })
@@ -48,7 +48,7 @@ export const thesisDbApi = createApi({
         // wont have id's by default
         addToDo: build.mutation({
             query:(toDo:ToDoState) => ({
-                url: 'events/',
+                url: 'todo/',
                 method: 'POST',
                 body: toDo
             })
