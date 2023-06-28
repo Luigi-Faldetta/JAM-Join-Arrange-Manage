@@ -56,12 +56,12 @@ function CreateUserForm() {
       </button>
       <dialog id="my_modal_3" className="modal" open={open}>
         <form method="dialog" className="modal-box" onSubmit={handleFormSubmit}>
-          <button
+          <div
             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
             onClick={() => setOpen(false)}
           >
             ✕
-          </button>
+          </div>
           <h3 className="font-bold text-lg">Sign Up Here</h3>
 
           <div className="mb-6">
