@@ -36,7 +36,13 @@ function CreateEventForm() {
 
   return (
     <>
-      <button className="btn" onClick={() => setOpen(true)}>
+      <button
+        className="btn"
+        onClick={(event) => {
+          event.stopPropagation();
+          setOpen(true);
+        }}
+      >
         Host event
       </button>
       <dialog id="my_modal_3" className="modal" open={open}>
