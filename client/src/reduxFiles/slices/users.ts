@@ -4,7 +4,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 export interface UserState {
   //update interface once types are declared
   id?: string;
-  name: string;
+  name?: string;
   email: string;
   password: string;
   phone?: string;
