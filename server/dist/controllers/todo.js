@@ -13,10 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const todo_1 = __importDefault(require("../models/todo"));
-<<<<<<< HEAD
-=======
-const userEvent_1 = __importDefault(require("../models/userEvent"));
->>>>>>> controllers
 //needs req.body {title, isDone, creatorId, eventId}
 const postToDo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -32,7 +28,6 @@ const postToDo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).json({ message: error.message });
     }
 });
-<<<<<<< HEAD
 // Needs req.params.todoId
 // Needs body with info
 const updateToDo = function (req, res, next) {
@@ -56,30 +51,10 @@ const updateToDo = function (req, res, next) {
                 data: todoUpdated,
                 message: 'ToDo item updated successfully.',
             });
-=======
-// Needs req.params.eventId*
-const getToDos = function (req, res, next) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const todosIds = yield userEvent_1.default.findAll({
-                where: { eventId: req.params.eventid },
-            });
-            if (todosIds) {
-                const todosArray = [];
-                for (const todo of todosIds) {
-                    todosArray.push(todo.dataValues.todoId);
-                }
-                const users = yield todo_1.default.findAll({ where: { userId: todosArray } });
-                res.status(200).json(users);
-            }
-            else {
-                throw "No users where found";
-            }
->>>>>>> controllers
         }
-        catch (err) {
-            console.error(err);
-            res.status(500).json({ message: err.message });
+        catch (error) {
+            console.log(error);
+            res.status(500).json({ message: error.message });
         }
     });
 };
@@ -107,37 +82,12 @@ const deleteToDo = function (req, res) {
         }
     });
 };
-<<<<<<< HEAD
 // Needs req.params.eventId
 const getToDos = function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const todosIds = yield todo_1.default.findAll({
                 where: { eventId: req.params.eventid },
-=======
-// Needs req.params.todoId*
-//needs body with info
-const updateToDo = function (req, res, next) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const { id } = req.params;
-            const info = req.body;
-            let todo = yield todo_1.default.findByPk(id);
-            if (!todo) {
-                res.status(404).json({
-                    success: false,
-                    data: null,
-                    message: 'ToDo item not found.',
-                });
-                return next();
-            }
-            let todoUpdated = {};
-            todoUpdated = yield todo.update(info);
-            res.status(200).json({
-                success: true,
-                data: todoUpdated,
-                message: 'ToDo item updated successfully.',
->>>>>>> controllers
             });
             if (todosIds) {
                 const todosArray = [];
@@ -148,7 +98,7 @@ const updateToDo = function (req, res, next) {
                 res.status(200).json(todos);
             }
             else {
-                throw "No todos where found";
+                throw new Error("No todos where found");
             }
         }
         catch (err) {
@@ -157,8 +107,4 @@ const updateToDo = function (req, res, next) {
         }
     });
 };
-<<<<<<< HEAD
 exports.default = { postToDo, updateToDo, deleteToDo, getToDos };
-=======
-exports.default = { postToDo, getToDos, deleteToDo, updateToDo };
->>>>>>> controllers

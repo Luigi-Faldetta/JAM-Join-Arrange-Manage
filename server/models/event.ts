@@ -1,4 +1,4 @@
-import { DataTypes, Model, BuildOptions  } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import sequelize from './modelDB';
 import Sequelize from 'sequelize';
 
@@ -19,10 +19,6 @@ const Event = sequelize.define('Event', {
   },
   title: {
     type: DataTypes.STRING,
-    allowNull: false,
-  },
-  host: {
-    type: Sequelize.UUID,
     allowNull: false,
   },
   description: {
