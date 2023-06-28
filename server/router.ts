@@ -2,7 +2,7 @@ import routes from 'express';
 const router = routes.Router();
 
 import './models/modelDB'
-import { user, event, todo, expense, eventActivity } from './controllers/index'
+import { user, event, todo, expense, userEvent, session } from './controllers/index'
 
 router.get('/health', (_req, res) => {
     res.send({ health: 'Server runnning!! =)'})
@@ -11,7 +11,7 @@ router.get('/health', (_req, res) => {
 // User
 router.post('/register', user.newUser)
 router.get('/user/:userid', user.getUser)
-router.patch('/user/:userid', user.editUser)
+router.patch('/user/:userid', user.updateUser)
 router.delete('/user/:userid', user.deleteUser)
 router.get('/users/:eventid', user.getAllUsers)
 
@@ -23,18 +23,22 @@ router.delete('/event/:eventid', event.deleteEvent)
 router.get('/events/:userid', event.getUserEvents)
 
 // Todo
-router.post('/todo', todo.postToDo)
-router.patch('/todo/:id', todo.updateToDo)
-router.delete('/todo/:id', todo.deleteToDo)
+router.post('/todo', todo.newToDo)
+router.patch('/todo/:todoid', todo.updateToDo)
+router.delete('/todo/:todoid', todo.deleteToDo)
 router.get('/todos/:eventid', todo.getToDos)
 
 // Expense
 router.post('/expense', expense.newExpense)
-router.delete('/expense/:id', expense.deleteExpense)
+router.delete('/expense/:expenseid', expense.deleteExpense)
 router.get('/expenses/:eventid', expense.getExpenses)
 
-//UserEvents
-router.post('/useractivity', eventActivity.joinEvent)
-router.delete('/useractivity', eventActivity.leaveEvent)
+// User events
+router.post('/useractivity', userEvent.joinEvent)
+router.delete('/useractivity', userEvent.leaveEvent)
+
+// Session
+router.post('/userlogin', session.logIn);
+router.get('/userlogout', session.logOut);
 
 export default router;
