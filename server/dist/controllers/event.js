@@ -10,11 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const associations_1 = require("../models/associations");
-<<<<<<< HEAD
-// Needs body with at least the next properties {"title": "test", "host": id} 
-=======
 // Needs body with at least {"title"} 
->>>>>>> 4e9092a317cf45a21dbf7e96bbf9f07bde05e3a7
 const newEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, host } = req.body;
     if (!title || !host) {

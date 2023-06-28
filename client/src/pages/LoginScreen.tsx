@@ -7,10 +7,10 @@ const LoginScreen = () => {
     navigate('/');
   }
   return (
-    <>
+    <div className="about">
       <h1>Login Screen</h1>
       <button type="button" onClick={handleClick}>Back Home</button>
-    </>
+    </div>
   )
 };
 

@@ -7,10 +7,10 @@ const ProfileScreen = () => {
     navigate('/');
   }
   return (
-    <>
+    <div className="profile">
       <h1>Profile Screen</h1>
       <button type="button" onClick={handleClick}>Back Home</button>
-    </>
+    </div>
   )
 }
 

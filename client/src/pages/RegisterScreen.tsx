@@ -7,10 +7,10 @@ const RegisterScreen = () => {
     navigate('/');
   }
   return (
-    <>
+    <div className="faqs">
       <h1>Register Screen</h1>
       <button type="button" onClick={handleClick}>Back Home</button>
-    </>
+    </div>
   )
 }
 
