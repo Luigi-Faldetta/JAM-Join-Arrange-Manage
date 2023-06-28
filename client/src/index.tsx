@@ -12,10 +12,10 @@ import {
   Route,
   RouterProvider,
 } from 'react-router-dom';
-import HomeScreen from './pages/HomeScreen';
 import LoginScreen from './pages/LoginScreen';
 import RegisterScreen from './pages/RegisterScreen';
 import ProfileScreen from './pages/ProfileScreen';
+import LandingPage from './pages/LandingPage';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,7 +26,7 @@ const router = createBrowserRouter(
       <Route
         index={true}
         path='/'
-        element={<HomeScreen />}
+        element={<LandingPage/>}
       />
       <Route
         path='/about'
