@@ -25,10 +25,6 @@ const Event = modelDB_1.default.define('Event', {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
-    host: {
-        type: sequelize_2.default.UUID,
-        allowNull: false,
-    },
     description: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: true,
