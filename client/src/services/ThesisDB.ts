@@ -65,49 +65,34 @@ export const thesisDbApi = createApi({
                 headers: {'Content-type': 'application/json; charset=UTF-8' },
             })
         }),
-        //the second type argument for query I THINK refers to the type 
-        //of the parameter we will use to fetch this list, so userID
-        getEvents: build.query({
+       
+        //for more complete code and better error handling, refer back to the 
+            //and implement the transformErrorResponse, providesTags, OnQueryStarted,
+            //transformResponse and OnCacheEntryStarted, 
+            //https://redux-toolkit.js.org/rtk-query/usage/queries
+
+        getEvents: build.query<ApiResponse<EventState[]>, string>({
             query: (userId) => ({url:`events/${userId}`}),
-            //for more complete code and better error handling, refer back to the 
-            //and implement the transformErrorResponse, providesTags, OnQueryStarted,
-            //transformResponse and OnCacheEntryStarted, 
-            //https://redux-toolkit.js.org/rtk-query/usage/queries
         }),
-        getEvent: build.query({
+
+        getEvent: build.query<ApiResponse<EventState>, string>({
             query: (eventId) => ({url:`event/${eventId}`}),
-            //for more complete code and better error handling, refer back to the 
-            //and implement the transformErrorResponse, providesTags, OnQueryStarted,
-            //transformResponse and OnCacheEntryStarted, 
-            //https://redux-toolkit.js.org/rtk-query/usage/queries
         }),
-        getUsers: build.query({
+
+        getUsers: build.query<ApiResponse<UserState[]>, string>({
             query: (eventId) => ({url:`users/${eventId}`}),
-            //for more complete code and better error handling, refer back to the 
-            //and implement the transformErrorResponse, providesTags, OnQueryStarted,
-            //transformResponse and OnCacheEntryStarted, 
-            //https://redux-toolkit.js.org/rtk-query/usage/queries
         }),
+
         getUser: build.query<ApiResponse<UserState>, string>({
             query: (userId) => ({url:`user/${userId}`}),
-            //for more complete code and better error handling, refer back to the 
-            //and implement the transformErrorResponse, providesTags, OnQueryStarted,
-            //transformResponse and OnCacheEntryStarted, 
-            //https://redux-toolkit.js.org/rtk-query/usage/queries
         }),
-        getExpenses: build.query({
+
+        getExpenses: build.query<ApiResponse<ExpenseState[]>, string>({
             query: (eventId) => ({url:`expenses/${eventId}`}),
-            //for more complete code and better error handling, refer back to the 
-            //and implement the transformErrorResponse, providesTags, OnQueryStarted,
-            //transformResponse and OnCacheEntryStarted, 
-            //https://redux-toolkit.js.org/rtk-query/usage/queries
         }),
-        getTodos: build.query({
+
+        getTodos: build.query<ApiResponse<ToDoState[]>, string>({
             query: (eventId) => ({url:`todos/${eventId}`}),
-            //for more complete code and better error handling, refer back to the 
-            //and implement the transformErrorResponse, providesTags, OnQueryStarted,
-            //transformResponse and OnCacheEntryStarted, 
-            //https://redux-toolkit.js.org/rtk-query/usage/queries
         }),
     }),
   })
