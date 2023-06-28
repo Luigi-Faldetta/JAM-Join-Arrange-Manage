@@ -1,10 +1,10 @@
 const LandingAbout = () => {
   return (
     <div className="about-page" id="about">
-      <h1>About</h1>
       <p 
       className='about-text max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400'
       >
+        {/* <h1>About</h1> */}
         J.A.M. - Join, Arrange, Manage is an all-in-one application designed to
         streamline event organization and management. With J.A.M., users can
         easily create events, coordinate schedules, manage attendees, split
