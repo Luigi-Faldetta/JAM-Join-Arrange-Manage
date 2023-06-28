@@ -23,14 +23,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.editUser = void 0;
 const associations_1 = require("../models/associations");
 // Needs body with at least {"name", "email", "password"}
-const postUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
-        return res.status(409).send({ error: "409", message: "Missing input data" });
+        return res.status(409)
+            .send({ error: "409", message: "Missing input data" });
     }
     const user = yield associations_1.User.findOne({ where: { email } });
     if (user)
-        return res.status(409).send({ error: "409", message: "User already exists" });
+        return res.status(409)
+            .send({ error: "409", message: "User already exists" });
     try {
         const user = yield associations_1.User.create(req.body);
         // @ts-ignore
@@ -49,7 +51,9 @@ const postUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 // Needs req.params.userid
 const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = yield associations_1.User.findOne({ where: { userId: req.params.userid } });
+        const user = yield associations_1.User.findOne({
+            where: { userId: req.params.userid }
+        });
         // if (!user) {
         //   return res.status(409).send({ error: "409", message: "No user found" })
         // }
@@ -140,4 +144,4 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(500).json({ message: err.message });
     }
 });
-exports.default = { postUser, getUser, editUser: exports.editUser, deleteUser: exports.deleteUser, getAllUsers };
+exports.default = { newUser, getUser, editUser: exports.editUser, deleteUser: exports.deleteUser, getAllUsers };

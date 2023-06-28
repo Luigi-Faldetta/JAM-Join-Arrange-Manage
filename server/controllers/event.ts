@@ -1,8 +1,15 @@
 import { Request, Response } from 'express';
 import { Event, UserEvents } from '../models/associations'
 
-// Needs body with at least the next properties {"title": "test", "host": id} 
+// Needs body with at least {"title", "host"} 
 const newEvent = async (req: Request, res: Response) => {
+  const { title, host } = req.body;
+
+  if (!title || !host) {
+    return res.status(400)
+      .send({ error: "400", message: "Missing input data" })
+  }
+
   try {
     const event = await Event.create(req.body)
     res.status(201).json({
@@ -22,6 +29,9 @@ const getEvent = async (req: Request, res: Response) => {
     const event = await Event.findOne({
       where: { eventId: req.params.eventid }
     })
+
+    if(!event) { console.log('hello there') }
+
     res.status(200).json({
       success: true,
       data: event,

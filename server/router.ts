@@ -9,7 +9,7 @@ router.get('/health', (_req, res) => {
 })
 
 // User
-router.post('/register', user.postUser)
+router.post('/register', user.newUser)
 router.get('/user/:userid', user.getUser)
 router.patch('/user/:userid', user.editUser)
 router.delete('/user/:userid', user.deleteUser)

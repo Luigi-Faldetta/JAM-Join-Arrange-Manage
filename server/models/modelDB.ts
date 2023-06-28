@@ -13,7 +13,7 @@ const sequelize = __HEROKU__
 (async () => {
   try {
     await sequelize.sync();
-    console.log('Database connected with Sequelize');
+    console.log(`Connected to database '${process.env.DB_NAME}'`);
   } catch (error) {
     console.error('Failed to connect with Database =(', error);
   }

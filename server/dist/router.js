@@ -11,7 +11,7 @@ router.get('/health', (_req, res) => {
     res.send({ health: 'Server runnning!! =)' });
 });
 // User
-router.post('/register', index_1.user.postUser);
+router.post('/register', index_1.user.newUser);
 router.get('/user/:userid', index_1.user.getUser);
 router.patch('/user/:userid', index_1.user.editUser);
 router.delete('/user/:userid', index_1.user.deleteUser);

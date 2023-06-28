@@ -2,17 +2,19 @@ import { Request, Response } from "express";
 import { User, UserEvents } from "../models/associations";
 
 // Needs body with at least {"name", "email", "password"}
-const postUser = async (req: Request, res: Response) => {
+const newUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
-    return res.status(409).send({ error: "409", message: "Missing input data" })
+    return res.status(409)
+      .send({ error: "409", message: "Missing input data" })
   }
 
   const user = await User.findOne({ where: { email } });
 
   if (user)
-    return res.status(409).send({ error: "409", message: "User already exists" });
+    return res.status(409)
+      .send({ error: "409", message: "User already exists" });
 
   try {
     const user = await User.create(req.body);
@@ -34,7 +36,9 @@ const postUser = async (req: Request, res: Response) => {
 // Needs req.params.userid
 const getUser = async (req: Request, res: Response) => {
   try {
-    const user = await User.findOne({ where: { userId: req.params.userid } });
+    const user = await User.findOne({
+      where: { userId: req.params.userid } 
+    });
 
     // if (!user) {
     //   return res.status(409).send({ error: "409", message: "No user found" })
@@ -130,4 +134,4 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
-export default { postUser, getUser, editUser, deleteUser, getAllUsers };
+export default { newUser, getUser, editUser, deleteUser, getAllUsers };
