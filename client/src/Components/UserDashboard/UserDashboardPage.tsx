@@ -15,7 +15,7 @@ function UserDashboardPage() {
         <div className="m-5 w-1/2 h-full flex flex-col gap-5">
           {/* {eventList ? (
             eventList.map((event) => {
-              return <EventTile></EventTile>;
+              return <EventTile event={event}></EventTile>;
             })
           ) : (
             <h3>No Upcoming Events</h3>
