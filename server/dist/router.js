@@ -8,13 +8,17 @@ const router = express_1.default.Router();
 require("./models/modelDB");
 const index_1 = require("./controllers/index");
 router.get('/health', (_req, res) => {
+<<<<<<< HEAD
     res.send({ health: 'server runnning!!' });
+=======
+    res.send({ health: 'Server runnning!! =)' });
+>>>>>>> 4e9092a317cf45a21dbf7e96bbf9f07bde05e3a7
 });
 // User
-router.post('/register', index_1.user.postUser);
-router.get('/user/:id', index_1.user.getUserInfo);
-router.patch('/user/:id', index_1.user.editUser);
-router.delete('/user/:id', index_1.user.deleteUser);
+router.post('/register', index_1.user.newUser);
+router.get('/user/:userid', index_1.user.getUser);
+router.patch('/user/:userid', index_1.user.editUser);
+router.delete('/user/:userid', index_1.user.deleteUser);
 router.get('/users/:eventid', index_1.user.getAllUsers);
 // Event
 router.post('/newevent', index_1.event.newEvent);

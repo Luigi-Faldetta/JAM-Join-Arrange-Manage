@@ -10,8 +10,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const associations_1 = require("../models/associations");
+<<<<<<< HEAD
 // Needs body with at least the next properties {"title": "test", "host": id} 
+=======
+// Needs body with at least {"title"} 
+>>>>>>> 4e9092a317cf45a21dbf7e96bbf9f07bde05e3a7
 const newEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { title, host } = req.body;
+    if (!title || !host) {
+        return res.status(400)
+            .send({ error: "400", message: "Missing input data" });
+    }
     try {
         const event = yield associations_1.Event.create(req.body);
         res.status(201).json({
@@ -31,6 +40,9 @@ const getEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const event = yield associations_1.Event.findOne({
             where: { eventId: req.params.eventid }
         });
+        if (!event) {
+            console.log('hello there');
+        }
         res.status(200).json({
             success: true,
             data: event,
@@ -43,7 +55,7 @@ const getEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 // Needs req.params.eventid
-// Needs body with changes {"title": "new title"} 
+// Needs body with the changes 
 const updateEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const updatedEvent = yield associations_1.Event.update(req.body, { where: { eventId: req.params.eventid }, returning: true });

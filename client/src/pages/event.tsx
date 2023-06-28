@@ -1,12 +1,11 @@
-import Attendees from "../Components/Attendees";
-import Todos from "../Components/Todos";
-
+import EventMini from "../Components/EventDashboard/EventMini";
+import ToggleButton from "../Components/EventDashboard/ToggleButton";
 
 export default function Event () {
     return (
         <>
-        <Todos></Todos>
-        <Attendees></Attendees>
+   <EventMini></EventMini>
+   <ToggleButton></ToggleButton>
         </>
     )
 }
