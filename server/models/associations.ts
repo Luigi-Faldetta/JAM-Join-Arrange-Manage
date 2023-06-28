@@ -2,19 +2,19 @@ import User from './user';
 import Event from './event';
 import Todo from './todo';
 import Expense from './expense';
-import UserEvents from './userEvent';
+import UserEvent from './userEvent';
 
 Event.belongsTo(User, {
   foreignKey: 'host',
 });
 
 Event.belongsToMany(User, {
-  through: UserEvents,
+  through: UserEvent,
   foreignKey: 'eventId',
 });
 
 User.belongsToMany(Event, {
-  through: UserEvents,
+  through: UserEvent,
   foreignKey: 'userId',
 });
 
@@ -34,4 +34,4 @@ Expense.belongsTo(User, {
   foreignKey: 'purchaserId',
 });
 
-export { User, Event, UserEvents };
+export { User, Event, UserEvent };

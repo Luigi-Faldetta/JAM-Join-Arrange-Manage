@@ -3,7 +3,8 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface ToDoState {
     //update interface once types are declared
-    value: string
+    id?: string;
+    value: string;
 }
 
 const initialToDoState:ToDoState = {
