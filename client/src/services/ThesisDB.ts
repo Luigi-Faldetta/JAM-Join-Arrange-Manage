@@ -5,15 +5,15 @@ import { ToDoState } from '../reduxFiles/slices/toDos'
 import { UserState } from '../reduxFiles/slices/users'
 import { ApiResponse } from './ApiResponseType'
 
-// const {data, error} = useGetUserQuery("f099247b-189d-4025-81eb-1a53c1e9c332")
+// const {data, error, isLoading} = useGetUserQuery("f099247b-189d-4025-81eb-1a53c1e9c332")
 // const [addNewUser] = useAddUserMutation()
 
-// const postUser = async () => {
+// const onSubmit = async () => {
 //   try {
 //     const res = await addNewUser({name: "Xavi3", email: "xavi3@email.com", password: "xavi3"});
-//     console.log((res as { data : ApiResponse<UserState>}).data.data.name)
+//     // console.log((res as { data : ApiResponse<UserState>}).data.data.name)
 //   } catch (error) {
-//     console.error(error)
+//     // console.error(error)
 //   }
 // }
 
@@ -113,7 +113,7 @@ export const thesisDbApi = createApi({
 
         updateUser: build.mutation<ApiResponse<UserState>, Partial<UserState> & Pick<UserState, 'id'>>({
             query:({id, ...patch}) => ({
-                url: 'register/',
+                url: `user/${id}`,
                 method: 'PATCH',
                 body: patch,
                 headers: {'Content-type': 'application/json; charset=UTF-8' },
@@ -122,7 +122,7 @@ export const thesisDbApi = createApi({
         
         updateTodo: build.mutation<ApiResponse<ToDoState>, Partial<ToDoState> & Pick<ToDoState, 'id'>>({
             query:({id, ...patch}) => ({
-                url: 'register/',
+                url: `todo/${id}`,
                 method: 'PATCH',
                 body: patch,
                 headers: {'Content-type': 'application/json; charset=UTF-8' },
@@ -143,4 +143,7 @@ export const thesisDbApi = createApi({
     useGetTodosQuery,
     useGetUserQuery,
     useGetUsersQuery,
+    useUpdateUserMutation,
+    useUpdateEventMutation,
+    useUpdateTodoMutation,
 } = thesisDbApi;
