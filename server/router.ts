@@ -2,7 +2,7 @@ import routes from 'express';
 const router = routes.Router();
 
 import './models/modelDB'
-import { user, event, todo, expense, eventActivity } from './controllers/index'
+import { user, event, todo, expense, eventActivity, session } from './controllers/index'
 
 router.get('/health', (_req, res) => {
     res.send({ health: 'Server runnning!! =)'})
@@ -33,8 +33,12 @@ router.post('/expense', expense.newExpense)
 router.delete('/expense/:id', expense.deleteExpense)
 router.get('/expenses/:eventid', expense.getExpenses)
 
-//UserEvents
+// User events
 router.post('/useractivity', eventActivity.joinEvent)
 router.delete('/useractivity', eventActivity.leaveEvent)
+
+// Session
+router.post('/login', session.logIn);
+router.post('/logout', session.logOut);
 
 export default router;

@@ -58,7 +58,7 @@ describe('User controller tests', () => {
   });
   describe('Get user', () => {
     //
-    it('Fetchs an user', async () => {
+    it('Fetches an user', async () => {
       const user = await User.findOne({ where: { email: userMocks.user01.email } });
       const res = await request(app)
         .get('/user/' + user.userId)
@@ -83,7 +83,7 @@ describe('User controller tests', () => {
         .get('/user/patata')
       const parsedRes = JSON.parse(res.text);
       expect(res.status).toBe(400);
-      expect(parsedRes.message).toBe('Bad user request');
+      expect(parsedRes.message).toContain('invalid input syntax for type uuid');
     });
     //
   });
@@ -103,30 +103,34 @@ describe('User controller tests', () => {
       expect(parsedRes.data.name).toBe(userMocks.user01.name);
       expect(parsedRes.data.email).toBe(userMocks.user02.email)
     });
-    // TO BE DONE
-    // it('Update fails with wrong id', async () => {
-    //   expect(true).toBeTruthy()
-    // });
+    //
+    it('Update fails with wrong uuid', async () => {
+      const res = await request(app)
+        .patch('/user/' + userMocks.randomUUID)
+        .send(userMocks.user02)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/);
+      const parsedRes = JSON.parse(res.text);
+      expect(res.status).toBe(500);
+      expect(parsedRes.message).toContain('Cannot read properties of undefined');
+    });
     //
   });
   describe('Deletes an user', () => {
-    // TO BE DONE
-    // it('Deletes an user', async () => {
-    //   const user = await User.findOne({ where: { email: userMocks.user02.email } });
-    //   console.log('u', user);
-    //   const res = await request(app)
-    //   .delete('/user/' + user.userId)
-    //   const parsedRes = JSON.parse(res.text);
-    //   console.log('pR', parsedRes);
-    //   expect(res.status).toBe(200);
-    //   expect(parsedRes.success).toBe(true);
-    //   expect(parsedRes.message).toBe('User deleted');
-    //   expect(parsedRes.data.name).toBe(userMocks.user02.name);
-    //   expect(parsedRes.data.email).toBe(userMocks.user02.email)
-    // });
-  });
-  describe('Get users from event', () => {
     //
+    it('Deletes an user', async () => {
+      const user = await User.findOne({ where: { email: userMocks.user02.email } });
+      const res = await request(app)
+        .delete('/user/' + user.userId)
+      const parsedRes = JSON.parse(res.text);
+      expect(res.status).toBe(200);
+      expect(parsedRes.success).toBe(true);
+      expect(parsedRes.message).toBe('User deleted');
+      expect(parsedRes.data).toBe(1);
+    });
   });
+  // describe('Fetches users from event', () => {
+    //
+  // });
 
 });

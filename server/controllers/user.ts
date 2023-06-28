@@ -64,7 +64,7 @@ const getUser = async (req: Request, res: Response) => {
 };
 
 // Needs req.params.userid
-// Needs body with info
+// Needs body with the changes 
 export const editUser = async (req: Request, res: Response) => {
   try {
     let updatedUser = {}
@@ -100,7 +100,7 @@ export const deleteUser = async (req: Request, res: Response) => {
     });
 
   } catch (err: any) {
-    console.log(err);
+    console.error(err);
     res.status(400).send({ message: err.message });
   }
 };

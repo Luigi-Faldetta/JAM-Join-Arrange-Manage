@@ -3,7 +3,7 @@ const { __HEROKU__ } = process.env;
 
 const sequelize = __HEROKU__ 
   ? new Sequelize(process.env.DB!)
-  : new Sequelize(process.env.DB_NAME || 'database', process.env.DB_USER || 'user', process.env.PW || 'password', {
+  : new Sequelize(process.env.DB_NAME || 'grouptesting', process.env.DB_USER || 'alejandro', process.env.PW || '', {
     host: 'localhost',
     dialect: 'postgres',
     port: 5432,

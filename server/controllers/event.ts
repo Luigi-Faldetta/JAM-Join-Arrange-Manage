@@ -77,13 +77,13 @@ const deleteEvent = async (req: Request, res: Response) => {
 // Needs req.params.userid
 const getUserEvents = async (req: Request, res: Response) => {
   try {
-    const eventIds = await UserEvents.findAll({ 
-      where: { userId: req.params.userid } 
+    const eventIds = await UserEvents.findAll({
+      where: { userId: req.params.userid }
     })
     if (eventIds.length) {
       const eventsArray = []
-      for (const event of eventIds) { 
-        eventsArray.push(event.dataValues.eventId) 
+      for (const event of eventIds) {
+        eventsArray.push(event.dataValues.eventId)
       }
 
       const events = await Event.findAll({ where: { eventId: eventsArray } })

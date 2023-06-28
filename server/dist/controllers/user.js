@@ -50,7 +50,7 @@ const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
     catch (err) {
-        console.error(err);
+        // console.error(err);
         res.status(500).json({ message: err.message });
     }
 });
@@ -73,12 +73,12 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
     catch (err) {
-        console.error(err);
+        // console.error(err);
         res.status(400).json({ message: err.message });
     }
 });
 // Needs req.params.userid
-// Needs body with info
+// Needs body with the changes 
 const editUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let updatedUser = {};
@@ -98,7 +98,7 @@ const editUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
     catch (err) {
-        console.error(err);
+        // console.error(err);
         res.status(500).json({ message: err.message });
     }
 });
@@ -142,7 +142,7 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         }
     }
     catch (err) {
-        console.error(err);
+        // console.error(err);
         res.status(500).json({ message: err.message });
     }
 });
