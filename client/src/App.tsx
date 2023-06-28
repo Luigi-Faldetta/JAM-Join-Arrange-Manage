@@ -1,18 +1,11 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import CreateEventForm from "./Components/UserDashboard/CreateEventForm";
-import CreateUserForm from "./Components/UserDashboard/CreateUserForm";
-import Users from "./reduxFiles/slices/users";
-import UserDashboardPage from "./Components/UserDashboard/UserDashboardPage";
+import CreateEventForm from "./Components/CreateEventForm";
+import CreateUserForm from "./Components/CreateUserForm";
 
 function App() {
-  return (
-    <div className="App">
-      <UserDashboardPage></UserDashboardPage>
-      {/* <CreateUserForm></CreateUserForm> */}
-    </div>
-  );
+  return <div className="App"></div>;
 }
 
 export default App;

@@ -62,25 +62,13 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         const userIds = yield associations_1.UserEvents.findAll({
             where: { eventId: req.params.eventid },
         });
-<<<<<<< HEAD
-        if (userIds) {
-            const usersArray = [];
-            for (const user of userIds) {
-                usersArray.push(user.dataValues.userId);
-            }
-            const users = yield associations_1.Event.findAll({ where: { userId: usersArray } });
-=======
         // console.log(userIds)
         if (userIds) {
             const usersArray = [];
             for (const user of userIds) {
-                console.log(user.dataValues);
-                console.log(user.dataValues.userId);
                 usersArray.push(user.dataValues.userId);
             }
-            console.log(usersArray);
             const users = yield associations_1.User.findAll({ where: { userId: usersArray } });
->>>>>>> controllers
             res.status(200).json(users);
         }
         else {
