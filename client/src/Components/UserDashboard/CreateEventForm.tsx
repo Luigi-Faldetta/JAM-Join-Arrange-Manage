@@ -7,6 +7,7 @@ import {
   EventState,
   // initialEventState,
 } from "../../reduxFiles/slices/events";
+import PictureUpload from "../PictureUpload";
 
 function CreateEventForm() {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ function CreateEventForm() {
       eventName: event.currentTarget.eventName.value,
       eventDateAndTime: eventDate,
       eventLocation: event.currentTarget.eventLocation.value,
-      eventDescription: event.currentTarget.eventDescription.value,
+      eventDescription: null,
       // eventHost and eventAttendees need to be updated to
       // reflect hostID after login.
       eventHost: "hostId",
@@ -46,39 +47,43 @@ function CreateEventForm() {
           >
             ✕
           </div>
-          <h3 className="font-bold text-lg">Add the event details here:</h3>
 
-          <div className="mb-6">
-            <label
-              htmlFor="eventName"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Event Name
-            </label>
-            <input
-              type="eventName"
-              id="eventName"
-              name="eventName"
-              maxLength={30}
-              className="shadow-sm 
+          {/* -------- image upload and event name container --------- */}
+          <div className="flex flex-col justify-center text-center bg-gray-100 rounded-md p-4 mb-5">
+            <PictureUpload></PictureUpload>
+            <div className="mt-3">
+              <label
+                htmlFor="eventName"
+                className="block mb-2 text-md font-medium text-gray-900 dark:text-white"
+              >
+                Event Name
+              </label>
+              <input
+                type="eventName"
+                id="eventName"
+                name="eventName"
+                maxLength={30}
+                className="shadow-sm 
               
                           bg-gray-50 border border-gray-300 
-                          text-gray-900 text-sm 
                           rounded-lg 
+                          text-gray-900 text-sm 
                           focus:ring-blue-500 focus:border-blue-500 
                           block w-full p-2.5 
                           dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-              placeholder="Eg. 'Anna's houseparty...'"
-              required
-            />
+                placeholder="Eg. 'Anna's houseparty...'"
+                required
+              />
+            </div>
           </div>
+          {/* -------- image upload and event name container --------- */}
 
-          <div className="mb-6  w-full ">
+          <div className="mb-4  w-full ">
             <label
               htmlFor="eventDateAndTime"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Event Date & Time
+              Date & Time
             </label>
             <DatePicker
               selectsStart
@@ -103,7 +108,7 @@ function CreateEventForm() {
             />
           </div>
 
-          <div className="mb-6">
+          <div className="mb-5">
             <label
               htmlFor="eventLocation"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -124,7 +129,7 @@ function CreateEventForm() {
                           dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
             />
           </div>
-          <div className="mb-6">
+          {/* <div className="mb-6">
             <label
               htmlFor="eventDescription"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -145,14 +150,15 @@ function CreateEventForm() {
                           dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
               required
             />
-          </div>
+          </div> */}
 
           <button
             type="submit"
             className="text-white 
-                        bg-blue-700 hover:bg-blue-800 
+                        bg-gradient-to-r from-red-500 to-red-600 hover:bg-blue-800 
                         focus:ring-4 focus:outline-none focus:ring-blue-300 
                         font-medium 
+                        w-full
                         rounded-lg 
                         text-sm 
                         px-5 py-2.5 
