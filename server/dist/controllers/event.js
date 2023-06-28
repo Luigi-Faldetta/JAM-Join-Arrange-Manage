@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const associations_1 = require("../models/associations");
-// Needs body with at least {"title", "host"} 
+// Needs body with at least {"title"} 
 const newEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, host } = req.body;
     if (!title || !host) {
@@ -51,7 +51,7 @@ const getEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 // Needs req.params.eventid
-// Needs body with changes {"title": "new title"} 
+// Needs body with the changes 
 const updateEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const updatedEvent = yield associations_1.Event.update(req.body, { where: { eventId: req.params.eventid }, returning: true });
