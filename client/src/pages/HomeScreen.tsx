@@ -1,7 +1,11 @@
+import CreateUserForm from '../Components/UserDashboard/CreateUserForm';
+import UserDashboardPage from '../Components/UserDashboard/UserDashboardPage';
+
 const HomeScreen = () => {
   return (
     <>
-      <h1>Home Screen</h1>
+      <UserDashboardPage></UserDashboardPage>
+      <CreateUserForm></CreateUserForm>
     </>
   );
 };

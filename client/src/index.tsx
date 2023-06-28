@@ -26,19 +26,19 @@ const router = createBrowserRouter(
       <Route
         index={true}
         path='/'
-        element={<HomeScreen/>}
+        element={<HomeScreen />}
       />
       <Route
-        path='/login'
-        element={<LoginScreen/>}
+        path='/about'
+        element={<LoginScreen />}
       />
       <Route
-        path='/register'
-        element={<RegisterScreen/>}
+        path='/faqs'
+        element={<RegisterScreen />}
       />
       <Route
         path='/profile'
-        element={<ProfileScreen/>}
+        element={<ProfileScreen />}
       />
     </Route>
   )
