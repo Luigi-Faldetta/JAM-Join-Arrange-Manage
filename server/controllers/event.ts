@@ -1,8 +1,15 @@
 import { Request, Response } from 'express';
 import { Event, UserEvents } from '../models/associations'
 
-// Needs body with at least the next properties {"title": "test", "host": id} 
+// Needs body with at least {"title"} 
 const newEvent = async (req: Request, res: Response) => {
+  const { title, host } = req.body;
+
+  if (!title || !host) {
+    return res.status(400)
+      .send({ error: "400", message: "Missing input data" })
+  }
+
   try {
     const event = await Event.create(req.body)
     res.status(201).json({
@@ -22,6 +29,9 @@ const getEvent = async (req: Request, res: Response) => {
     const event = await Event.findOne({
       where: { eventId: req.params.eventid }
     })
+
+    if (!event) { console.log('hello there') }
+
     res.status(200).json({
       success: true,
       data: event,
@@ -34,7 +44,7 @@ const getEvent = async (req: Request, res: Response) => {
 }
 
 // Needs req.params.eventid
-// Needs body with changes {"title": "new title"} 
+// Needs body with the changes 
 const updateEvent = async (req: Request, res: Response) => {
   try {
     const updatedEvent = await Event.update(req.body, { where: { eventId: req.params.eventid }, returning: true })
@@ -78,7 +88,7 @@ const getUserEvents = async (req: Request, res: Response) => {
         message: 'User events fetched',
       });
     } else {
-      throw new Error ('No events where found')
+      throw new Error('No events where found')
     }
   } catch (err: any) {
     console.error(err);
