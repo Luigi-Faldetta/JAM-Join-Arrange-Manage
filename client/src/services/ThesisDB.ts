@@ -3,14 +3,7 @@ import { EventState } from '../reduxFiles/slices/events'
 import { ExpenseState } from '../reduxFiles/slices/expenses'
 import { ToDoState } from '../reduxFiles/slices/toDos'
 import { UserState } from '../reduxFiles/slices/users'
-
-export interface ApiResponse<T> {
-    data: T
-    success: boolean
-    message: string
-    error?: string | null
-}
-
+import { ApiResponse } from './ApiResponseType'
 
 // const {data, error} = useGetUserQuery("f099247b-189d-4025-81eb-1a53c1e9c332")
 // const [addNewUser] = useAddUserMutation()
@@ -27,7 +20,7 @@ export interface ApiResponse<T> {
 // console.log("data: ", data);
 
 // someReturn 
-// {error ? console.log({error}) : data ? <h3>{data.data.name}</h3> : <p>couldn't fetch</p>}  
+// {error ? console.log({error}) : isLoading ? <p>loading...</p> : data ? <h3>{data.data.name}</h3> : <p>couldn't fetch</p>}  
 
 export const thesisDbApi = createApi({
     reducerPath: 'thesisDbApi',
