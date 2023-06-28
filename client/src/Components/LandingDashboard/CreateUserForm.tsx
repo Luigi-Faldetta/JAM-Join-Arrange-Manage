@@ -28,16 +28,13 @@ function CreateUserForm() {
     const userFormData: UserState = {
       name: nameInputRef.current?.value || "",
       email: emailInputRef.current?.value || "",
-      phone: phoneInputRef.current?.value || "",
       password: passwordInputRef.current?.value || "",
-      profilePic: "", // TODO: add claudinary
     };
 
     console.log(userFormData);
     dispatch(createUser(userFormData));
     setOpen(false);
     setPasswordMatch(true);
-    nameInputRef.current!.value = "";
     emailInputRef.current!.value = "";
     phoneInputRef.current!.value = "";
     passwordInputRef.current!.value = "";
@@ -54,7 +51,7 @@ function CreateUserForm() {
   };
   return (
     <>
-      <button className="btn" onClick={() => setOpen(true)}>
+      <button className="text-blue-700 hover:text-blue-800 text-sm font-medium underline mt-2" onClick={() => setOpen(true)}>
         Sign Up
       </button>
       <dialog id="my_modal_3" className="modal" open={open}>
@@ -81,22 +78,6 @@ function CreateUserForm() {
               placeholder="Your name"
               required
               ref={nameInputRef}
-            />
-          </div>
-          <div className="mb-6">
-            <label
-              htmlFor="phone"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Your Phone Number
-            </label>
-            <input
-              type="text"
-              id="phone"
-              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-              placeholder="Your phone number"
-              required
-              ref={phoneInputRef}
             />
           </div>
           <div className="mb-6">
