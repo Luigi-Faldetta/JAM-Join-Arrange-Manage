@@ -3,11 +3,9 @@ import UserEvents from '../models/userEvent';
 
 const joinEvent = async (req: Request, res: Response) => {
   try {
-    const { userId, eventId } = req.body;
-    await UserEvents.create({ userId, eventId });
+    await UserEvents.create(req.body);
     res.status(201).json({
       success: true,
-      data: null,
       message: 'User joined the activity.',
     });
     
@@ -18,16 +16,11 @@ const joinEvent = async (req: Request, res: Response) => {
 
 const leaveEvent = async (req: Request, res: Response) => {
   try {
-    const { userId, eventId } = req.body;
     await UserEvents.destroy({
-      where: {
-        userId: userId,
-        activityId: eventId,
-      },
+      where: req.body,
     });
     res.status(200).json({
       success: true,
-      data: null,
       message: 'User left the activity.',
     });
 

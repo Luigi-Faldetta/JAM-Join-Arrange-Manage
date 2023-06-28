@@ -74,7 +74,7 @@ describe('User controller tests', () => {
       const res = await request(app)
         .get('/user/' + userMocks.randomUUID)
       const parsedRes = JSON.parse(res.text);
-      expect(res.status).toBe(409);
+      expect(res.status).toBe(404);
       expect(parsedRes.message).toBe('No user found');
     });
     //

@@ -31,27 +31,40 @@ const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
         return res.status(409)
-            .send({ error: "409", message: "Missing input data" });
+            .json({
+            success: false,
+            error: "409",
+            data: null,
+            message: "Missing input data"
+        });
     }
     const user = yield associations_1.User.findOne({ where: { email } });
     if (user)
         return res.status(409)
-            .send({ error: "409", message: "User already exists" });
+            .json({
+            success: false,
+            error: "409",
+            data: null,
+            message: "User already exists"
+        });
     const inputPassword = password;
     try {
         const hash = yield bcrypt_1.default.hash(inputPassword, 10);
         const user = yield associations_1.User.create(Object.assign(Object.assign({}, req.body), { password: hash }));
         // @ts-ignore
         const _a = Object.assign({}, user.dataValues), { password } = _a, safeUser = __rest(_a, ["password"]);
-        res.status(201).json({
+        res.status(201)
+            .json({
             success: true,
+            error: null,
             data: safeUser,
             message: "User created",
         });
     }
     catch (err) {
-        // console.error(err);
-        res.status(500).json({ message: err.message });
+        process.env.NODE_ENV !== 'test' && console.error(err);
+        res.status(500)
+            .json({ message: err.message });
     }
 });
 // Needs req.params.userid
@@ -61,20 +74,28 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             where: { userId: req.params.userid }
         });
         if (!user) {
-            return res.status(409)
-                .send({ error: "409", message: "No user found" });
+            return res.status(404)
+                .json({
+                success: false,
+                error: "404",
+                data: null,
+                message: "No user found"
+            });
         }
         // @ts-ignore
         const _b = Object.assign({}, user.dataValues), { password } = _b, safeUser = __rest(_b, ["password"]);
-        res.status(200).json({
+        res.status(200)
+            .json({
             success: true,
+            error: null,
             data: safeUser,
             message: "User fetched",
         });
     }
     catch (err) {
-        // console.error(err);
-        res.status(400).json({ message: err.message });
+        process.env.NODE_ENV !== 'test' && console.error(err);
+        res.status(400)
+            .json({ message: err.message });
     }
 });
 // Needs req.params.userid
@@ -91,15 +112,18 @@ const editUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         // @ts-ignore
         const _c = Object.assign({}, updatedUser[1][0].dataValues), { password } = _c, safeUpdatedUser = __rest(_c, ["password"]);
-        res.status(200).json({
+        res.status(200)
+            .json({
             success: true,
+            error: null,
             data: safeUpdatedUser,
             message: "User updated",
         });
     }
     catch (err) {
-        // console.error(err);
-        res.status(500).json({ message: err.message });
+        process.env.NODE_ENV !== 'test' && console.error(err);
+        res.status(500)
+            .json({ message: err.message });
     }
 });
 exports.editUser = editUser;
@@ -107,15 +131,18 @@ exports.editUser = editUser;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const deletedUser = yield associations_1.User.destroy({ where: { userId: req.params.userid } });
-        res.status(200).json({
+        res.status(200)
+            .json({
             success: true,
+            error: null,
             data: deletedUser,
             message: 'User deleted',
         });
     }
     catch (err) {
-        console.log(err);
-        res.status(400).send({ message: err.message });
+        process.env.NODE_ENV !== 'test' && console.error(err);
+        res.status(400)
+            .json({ message: err.message });
     }
 });
 exports.deleteUser = deleteUser;
@@ -131,8 +158,10 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 usersArray.push(user.dataValues.userId);
             }
             const users = yield associations_1.User.findAll({ where: { userId: usersArray } });
-            res.status(200).json({
+            res.status(200)
+                .json({
                 success: true,
+                error: null,
                 data: users,
                 message: 'Event users fetched',
             });
@@ -142,8 +171,9 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         }
     }
     catch (err) {
-        // console.error(err);
-        res.status(500).json({ message: err.message });
+        process.env.NODE_ENV !== 'test' && console.error(err);
+        res.status(500)
+            .json({ message: err.message });
     }
 });
 exports.default = { newUser, getUser, editUser: exports.editUser, deleteUser: exports.deleteUser, getAllUsers };

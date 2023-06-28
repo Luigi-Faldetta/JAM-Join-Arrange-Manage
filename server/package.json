@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest test",
+    "test": "NODE_ENV=test jest test",
     "test-user": "jest test/user.test",
     "test-event": "jest test/event.test",
     "server": "tsc && npx nodemon dist/index.js",

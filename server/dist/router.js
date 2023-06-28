@@ -31,7 +31,10 @@ router.get('/todos/:eventid', index_1.todo.getToDos);
 router.post('/expense', index_1.expense.newExpense);
 router.delete('/expense/:id', index_1.expense.deleteExpense);
 router.get('/expenses/:eventid', index_1.expense.getExpenses);
-//UserEvents
-router.post('/useractivity', index_1.eventActivity.joinEvent);
-router.delete('/useractivity', index_1.eventActivity.leaveEvent);
+// User events
+router.post('/useractivity', index_1.userEvent.joinEvent);
+router.delete('/useractivity', index_1.userEvent.leaveEvent);
+// Session
+router.post('/login', index_1.session.logIn);
+router.get('/logout', index_1.session.logOut);
 exports.default = router;
