@@ -27,21 +27,17 @@ export const thesisDbApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: 'https://codeworks-thesis-4063bceaa74a.herokuapp.com/' }),
     tagTypes: ['EventState', 'ExpenseState', 'ToDoState', 'UserState'], //for tracking what will be referenced from the cache
     endpoints: (build) => ({
-        // build.mutation has two type parameters, the first is any, 
-        // do we need to fix/address this?
-        // also in mutation type, we may need to include pick<T> since these
-        // wont have id's by default
-        addEvent: build.mutation({
-            query:(event:EventState) => ({
+        // build.mutation has two type parameters, the first is response type the second is parameter type.
+        // partial sets all properties to optional for parameter, pick selects which properties should be required for parameter
+        addEvent: build.mutation<ApiResponse<EventState>, Partial<EventState> & Pick<EventState, 'title'>>({
+            query:(event) => ({
                 url: 'newevent/',
                 method: 'POST',
-                body: event
+                body: event,
+                headers: {'Content-type': 'application/json; charset=UTF-8' },
             })
         }),
-        // build.mutation has two type parameters, the first is any, 
-        // do we need to fix/address this?
-        // also in mutation type, we may need to include pick<T> since these
-        // wont have id's by default
+
         addUser: build.mutation<ApiResponse<UserState>, Partial<UserState> & Pick<UserState, 'name' | 'email' | 'password'>>({
             query:(user) => ({
                 url: 'register/',
@@ -51,26 +47,22 @@ export const thesisDbApi = createApi({
             }),
             invalidatesTags: ['UserState'],
         }),
-        // build.mutation has two type parameters, the first is any, 
-        // do we need to fix/address this?
-        // also in mutation type, we may need to include pick<T> since these
-        // wont have id's by default
-        addExpense: build.mutation({
+
+        addExpense: build.mutation<ApiResponse<ExpenseState>, Partial<ExpenseState> & Pick<ExpenseState, 'value'>>({
             query:(expense) => ({
                 url: 'expense/',
                 method: 'POST',
                 body: expense,
+                headers: {'Content-type': 'application/json; charset=UTF-8' },
             })
         }),
-        // build.mutation has two type parameters, the first is any, 
-        // do we need to fix/address this?
-        // also in mutation type, we may need to include pick<T> since these
-        // wont have id's by default
-        addToDo: build.mutation({
-            query:(toDo:ToDoState) => ({
+
+        addToDo: build.mutation<ApiResponse<ToDoState>, Partial<ToDoState> & Pick<ToDoState, 'value'>>({
+            query:(toDo) => ({
                 url: 'todo/',
                 method: 'POST',
-                body: toDo
+                body: toDo,
+                headers: {'Content-type': 'application/json; charset=UTF-8' },
             })
         }),
         //the second type argument for query I THINK refers to the type 
