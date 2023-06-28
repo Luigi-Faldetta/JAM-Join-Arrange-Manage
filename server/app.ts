@@ -1,22 +1,23 @@
 import 'dotenv/config'
 import express from 'express';
 import cors from 'cors';
-import router from './router.js';
 import session from 'express-session'
+import router from './router.js';
+import { __prod__ } from './constants.js';
 
 const app = express();
 
-const sessionOptions = {
-  // name: 'sid',
+const sessionOptions: session.SessionOptions = {
+  name: 'sid',
   cookie: {
     httpOnly: false,
-    secure: false,
-    // sameSite: true,
+    secure: __prod__,
+    sameSite: true,
     maxAge: 1000 * 60 * 60, // 1 hour
   },
   secret: process.env.SECRET || 'hack_me_now',
-  // resave: false,
-  // saveUninitialized: false,
+  resave: false,
+  saveUninitialized: false,
 }
 
 const corsOptions = {
