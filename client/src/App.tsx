@@ -1,11 +1,15 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
-import CreateEventForm from "./Components/CreateEventForm";
-import CreateUserForm from "./Components/CreateUserForm";
-
-function App() {
-  return <div className="App"></div>;
-}
+import './App.css';
+import Navbar from './Components/Navbar';
+import { Outlet } from 'react-router-dom';
+const App = () => {
+  return (
+    <>
+      <Navbar />
+      <div>
+        <Outlet />
+      </div>
+    </>
+  );
+};
 
 export default App;
