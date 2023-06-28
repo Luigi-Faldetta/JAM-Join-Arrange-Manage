@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { Request, Response } from "express";
-import { User, UserEvents } from "../models/associations";
+import { User, UserEvent } from "../models/associations";
 
 // Needs body with at least {"name", "email", "password"}
 const newUser = async (req: Request, res: Response) => {
@@ -87,6 +87,30 @@ const getUser = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
 
   try {
+    const userExists = await User.findOne({ where: { userId: req.params.userid } })
+    if (!userExists) {
+      return res.status(400)
+        .json({
+          success: false,
+          error: "400",
+          data: null,
+          message: "Wrong user id"
+        })
+
+    }
+    if (req.body.email) {
+      const user = await User.findOne({ where: { email: req.body.email } })
+      if (user) {
+        return res.status(409)
+          .json({
+            success: false,
+            error: "409",
+            data: null,
+            message: "Email already exists"
+          })
+      }
+    }
+
     let updatedUser = {}
     if (req.body.password) {
       const hash = await bcrypt.hash(req.body.password, 10)
@@ -95,7 +119,7 @@ export const updateUser = async (req: Request, res: Response) => {
           where: { userId: req.params.userid },
           returning: true
         })
-        
+
     } else {
       updatedUser = await User.update(req.body, {
         where: { userId: req.params.userid },
@@ -124,6 +148,19 @@ export const updateUser = async (req: Request, res: Response) => {
 export const deleteUser = async (req: Request, res: Response) => {
 
   try {
+    const userExists = await User.findOne(
+      { where: { userId: req.params.userid } })
+
+    if (!userExists) {
+      return res.status(400)
+        .json({
+          success: false,
+          error: 400,
+          data: null,
+          message: "Wrong user id",
+        });
+    }
+
     const deletedUser = await User.destroy({
       where: { userId: req.params.userid }
     })
@@ -147,7 +184,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 const getAllUsers = async (req: Request, res: Response) => {
 
   try {
-    const userIds = await UserEvents.findAll({
+    const userIds = await UserEvent.findAll({
       where: { eventId: req.params.eventid }
     });
 
@@ -170,7 +207,7 @@ const getAllUsers = async (req: Request, res: Response) => {
         });
 
     } else {
-      throw new Error("No users where found");
+      throw new Error("No users were found");
     }
 
   } catch (err: any) {

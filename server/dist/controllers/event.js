@@ -91,9 +91,17 @@ const updateEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 // Needs req.params.eventid
 const deleteEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const deletedEvent = yield associations_1.Event.destroy({
-            where: { eventId: req.params.eventid }
-        });
+        const eventExists = yield associations_1.Event.findOne({ where: { eventId: req.params.eventid } });
+        if (!eventExists) {
+            return res.status(400)
+                .json({
+                success: false,
+                error: 400,
+                data: null,
+                message: "Wrong event id",
+            });
+        }
+        const deletedEvent = yield associations_1.Event.destroy({ where: { eventId: req.params.eventid } });
         res.status(200)
             .json({
             success: true,
@@ -111,7 +119,7 @@ const deleteEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 // Needs req.params.userid
 const getUserEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const eventIds = yield associations_1.UserEvents.findAll({
+        const eventIds = yield associations_1.UserEvent.findAll({
             where: { userId: req.params.userid }
         });
         if (eventIds.length) {

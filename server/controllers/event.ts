@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { Event, UserEvents } from '../models/associations'
+import { Event, UserEvent } from '../models/associations'
 
 // Needs body with at least {"title"} 
 const newEvent = async (req: Request, res: Response) => {
 
-  if (!req.body.title ) {
+  if (!req.body.title) {
     return res.status(400)
       .json({
         success: false,
@@ -92,10 +92,21 @@ const updateEvent = async (req: Request, res: Response) => {
 const deleteEvent = async (req: Request, res: Response) => {
 
   try {
+    const eventExists = await Event.findOne(
+      { where: { eventId: req.params.eventid } })
+
+    if (!eventExists) {
+      return res.status(400)
+        .json({
+          success: false,
+          error: 400,
+          data: null,
+          message: "Wrong event id",
+        });
+    }
+
     const deletedEvent = await Event.destroy(
-      {
-        where: { eventId: req.params.eventid }
-      })
+      { where: { eventId: req.params.eventid } })
 
     res.status(200)
       .json({
@@ -116,7 +127,7 @@ const deleteEvent = async (req: Request, res: Response) => {
 const getUserEvents = async (req: Request, res: Response) => {
 
   try {
-    const eventIds = await UserEvents.findAll({
+    const eventIds = await UserEvent.findAll({
       where: { userId: req.params.userid }
     })
 

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import UserEvents from '../models/userEvent';
 
+// Needs body with at least {"userId", "eventId"}
 const joinEvent = async (req: Request, res: Response) => {
 
   try {
@@ -20,6 +21,7 @@ const joinEvent = async (req: Request, res: Response) => {
   }
 };
 
+// Needs body with {"userId", "eventId"}
 const leaveEvent = async (req: Request, res: Response) => {
 
   try {

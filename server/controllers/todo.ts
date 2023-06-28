@@ -24,28 +24,25 @@ const newToDo = async (req: Request, res: Response) => {
 // Needs req.params.todoid
 // Needs body with info
 const updateToDo = async function (req: Request, res: Response) {
+
   try {
-
-    let todo = await Todo.findByPk(req.params.todoid);
-    if (!todo) {
-      return res.status(404).json({
-        success: false,
-        data: null,
-        message: 'ToDo item not found.',
+    const updatedTodo = await Todo.update(req.body,
+      {
+        where: { id: req.params.todoid },
+        returning: true
+      })
+    res.status(200)
+      .json({
+        success: true,
+        error: null,
+        data: updatedTodo[1][0],
+        message: 'Todo updated',
       });
-    }
-    let todoUpdated = {}
-    todoUpdated = await todo.update(req.body);
-
-    res.status(200).json({
-      success: true,
-      data: todoUpdated,
-      message: 'ToDo item updated successfully.',
-    });
 
   } catch (error: any) {
     process.env.NODE_ENV !== 'test' && console.error(error);
-    res.status(500).json({ message: error.message });
+    res.status(500)
+      .json({ message: error.message });
   }
 };
 
@@ -53,28 +50,27 @@ const updateToDo = async function (req: Request, res: Response) {
 const deleteToDo = async function (req: Request, res: Response,) {
 
   try {
-    const todo = await Todo.findOne({where: { id: req.params.todoid}})
-    if (!todo) {
-      res.status(400)
+    const todoExists = await Todo.findOne({ where: { id: req.params.todoid } })
+    if (!todoExists) {
+      return res.status(400)
         .json({
           success: false,
           error: 400,
           data: null,
           message: "Wrong todo id",
         });
-
-    } else {
-      let todo = await Todo.destroy(
-        { where: { id: req.params.todoid } });
-
-      res.status(201)
-        .json({
-          success: true,
-          error: null,
-          data: todo,
-          message: "Todo deleted",
-        });
     }
+
+    let todo = await Todo.destroy(
+      { where: { id: req.params.todoid } });
+
+    res.status(201)
+      .json({
+        success: true,
+        error: null,
+        data: todo,
+        message: "Todo deleted",
+      });
 
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.error(err);

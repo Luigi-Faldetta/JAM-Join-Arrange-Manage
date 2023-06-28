@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const userEvent_1 = __importDefault(require("../models/userEvent"));
+// Needs body with at least {"userId", "eventId"}
 const joinEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield userEvent_1.default.create(req.body);
@@ -30,6 +31,7 @@ const joinEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             .json({ message: err.message });
     }
 });
+// Needs body with {"userId", "eventId"}
 const leaveEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield userEvent_1.default.destroy({

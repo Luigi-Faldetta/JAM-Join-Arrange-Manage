@@ -102,6 +102,28 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 // Needs body with the changes 
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const userExists = yield associations_1.User.findOne({ where: { userId: req.params.userid } });
+        if (!userExists) {
+            return res.status(400)
+                .json({
+                success: false,
+                error: "400",
+                data: null,
+                message: "Wrong user id"
+            });
+        }
+        if (req.body.email) {
+            const user = yield associations_1.User.findOne({ where: { email: req.body.email } });
+            if (user) {
+                return res.status(409)
+                    .json({
+                    success: false,
+                    error: "409",
+                    data: null,
+                    message: "Email already exists"
+                });
+            }
+        }
         let updatedUser = {};
         if (req.body.password) {
             const hash = yield bcrypt_1.default.hash(req.body.password, 10);
@@ -136,6 +158,16 @@ exports.updateUser = updateUser;
 // Needs req.params.userid
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const userExists = yield associations_1.User.findOne({ where: { userId: req.params.userid } });
+        if (!userExists) {
+            return res.status(400)
+                .json({
+                success: false,
+                error: 400,
+                data: null,
+                message: "Wrong user id",
+            });
+        }
         const deletedUser = yield associations_1.User.destroy({
             where: { userId: req.params.userid }
         });
@@ -157,7 +189,7 @@ exports.deleteUser = deleteUser;
 // Needs req.params.eventid
 const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const userIds = yield associations_1.UserEvents.findAll({
+        const userIds = yield associations_1.UserEvent.findAll({
             where: { eventId: req.params.eventid }
         });
         if (userIds.length) {
@@ -177,7 +209,7 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             });
         }
         else {
-            throw new Error("No users where found");
+            throw new Error("No users were found");
         }
     }
     catch (err) {
