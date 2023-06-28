@@ -27,9 +27,12 @@ export const thesisDbApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: 'https://codeworks-thesis-4063bceaa74a.herokuapp.com/' }),
     tagTypes: ['EventState', 'ExpenseState', 'ToDoState', 'UserState'], //for tracking what will be referenced from the cache
     endpoints: (build) => ({
+
+        //Posts
+
         // build.mutation has two type parameters, the first is response type the second is parameter type.
         // partial sets all properties to optional for parameter, pick selects which properties should be required for parameter
-        addEvent: build.mutation<ApiResponse<EventState>, Partial<EventState> & Pick<EventState, 'title'>>({
+        addEvent: build.mutation<ApiResponse<EventState>, Partial<EventState> & Pick<EventState, 'eventName'  >>({
             query:(event) => ({
                 url: 'newevent/',
                 method: 'POST',
@@ -66,10 +69,12 @@ export const thesisDbApi = createApi({
             })
         }),
        
+        //Gets
+
         //for more complete code and better error handling, refer back to the 
-            //and implement the transformErrorResponse, providesTags, OnQueryStarted,
-            //transformResponse and OnCacheEntryStarted, 
-            //https://redux-toolkit.js.org/rtk-query/usage/queries
+        //and implement the transformErrorResponse, providesTags, OnQueryStarted,
+        //transformResponse and OnCacheEntryStarted, 
+        //https://redux-toolkit.js.org/rtk-query/usage/queries
 
         getEvents: build.query<ApiResponse<EventState[]>, string>({
             query: (userId) => ({url:`events/${userId}`}),
@@ -94,6 +99,9 @@ export const thesisDbApi = createApi({
         getTodos: build.query<ApiResponse<ToDoState[]>, string>({
             query: (eventId) => ({url:`todos/${eventId}`}),
         }),
+
+        
+
     }),
   })
 
