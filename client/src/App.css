@@ -1,1 +1,17 @@
+h1 {
+  font-size: x-large;
+}
 
+.navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 2rem;
+  background-color: aquamarine;
+  color: blue;
+}
+
+.navbar nav {
+  display: flex;
+  gap: 2rem;
+}

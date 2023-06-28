@@ -70,8 +70,37 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(400).send({ error: "400", message: "Bad user request" });
     }
 });
+<<<<<<< HEAD
+// Needs req.params.eventId*
+const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userIds = yield associations_1.UserEvents.findAll({
+            where: { eventId: req.params.eventid },
+        });
+        // console.log(userIds)
+        if (userIds) {
+            const usersArray = [];
+            for (const user of userIds) {
+                usersArray.push(user.dataValues.userId);
+            }
+            const users = yield associations_1.User.findAll({ where: { userId: usersArray } });
+            res.status(200).json(users);
+        }
+        else {
+            throw "No users where found";
+        }
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ message: err.message });
+    }
+});
+// Needs req.params.userId*
+//needs body with info
+=======
 // Needs req.params.userid
 // Needs body with info
+>>>>>>> 4e9092a317cf45a21dbf7e96bbf9f07bde05e3a7
 const editUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.userid;
     const info = req.body;

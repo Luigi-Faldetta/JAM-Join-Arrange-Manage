@@ -8,7 +8,11 @@ const router = express_1.default.Router();
 require("./models/modelDB");
 const index_1 = require("./controllers/index");
 router.get('/health', (_req, res) => {
+<<<<<<< HEAD
+    res.send({ health: 'server runnning!!' });
+=======
     res.send({ health: 'Server runnning!! =)' });
+>>>>>>> 4e9092a317cf45a21dbf7e96bbf9f07bde05e3a7
 });
 // User
 router.post('/register', index_1.user.newUser);
