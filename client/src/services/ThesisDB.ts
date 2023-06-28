@@ -100,7 +100,34 @@ export const thesisDbApi = createApi({
             query: (eventId) => ({url:`todos/${eventId}`}),
         }),
 
+        //Patches
+
+        updateEvent: build.mutation<ApiResponse<EventState>, Partial<EventState> & Pick<EventState, 'eventId'>>({
+            query:({eventId, ...patch}) => ({
+                url: `event/${eventId}`,
+                method: 'PATCH',
+                body: patch,
+                headers: {'Content-type': 'application/json; charset=UTF-8' },
+            })
+        }),
+
+        updateUser: build.mutation<ApiResponse<UserState>, Partial<UserState> & Pick<UserState, 'id'>>({
+            query:({id, ...patch}) => ({
+                url: 'register/',
+                method: 'PATCH',
+                body: patch,
+                headers: {'Content-type': 'application/json; charset=UTF-8' },
+            }),
+        }),
         
+        updateTodo: build.mutation<ApiResponse<ToDoState>, Partial<ToDoState> & Pick<ToDoState, 'id'>>({
+            query:({id, ...patch}) => ({
+                url: 'register/',
+                method: 'PATCH',
+                body: patch,
+                headers: {'Content-type': 'application/json; charset=UTF-8' },
+            }),
+        }),
 
     }),
   })
