@@ -16,13 +16,18 @@ const userEvent_1 = __importDefault(require("../models/userEvent"));
 const joinEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield userEvent_1.default.create(req.body);
-        res.status(201).json({
+        res.status(201)
+            .json({
             success: true,
+            error: null,
+            data: null,
             message: 'User joined the activity.',
         });
     }
     catch (err) {
-        res.status(500).json({ message: err.message });
+        process.env.NODE_ENV !== 'test' && console.log(err);
+        res.status(500)
+            .json({ message: err.message });
     }
 });
 const leaveEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -30,14 +35,18 @@ const leaveEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         yield userEvent_1.default.destroy({
             where: req.body,
         });
-        res.status(200).json({
+        res.status(200)
+            .json({
             success: true,
+            error: null,
+            data: null,
             message: 'User left the activity.',
         });
     }
     catch (err) {
-        console.log(err);
-        res.status(400).json({ message: err.message });
+        process.env.NODE_ENV !== 'test' && console.log(err);
+        res.status(400)
+            .json({ message: err.message });
     }
 });
 exports.default = { joinEvent, leaveEvent };

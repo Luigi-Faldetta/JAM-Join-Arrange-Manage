@@ -13,39 +13,39 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const todo_1 = __importDefault(require("../models/todo"));
-//needs req.body {title, isDone, creatorId, eventId}
-const postToDo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+// Needs body with {"title", "isDone", "creatorId", "eventId"} 
+const newToDo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const newtodo = yield todo_1.default.create(Object.assign({}, req.body));
-        res.status(201).json({
+        const newTodo = yield todo_1.default.create(req.body);
+        res.status(201)
+            .json({
             success: true,
-            data: newtodo,
-            message: "newtodo created",
+            error: null,
+            data: newTodo,
+            message: "Todo created",
         });
     }
-    catch (error) {
-        console.log(error);
-        res.status(500).json({ message: error.message });
+    catch (err) {
+        process.env.NODE_ENV !== 'test' && console.error(err);
+        res.status(500)
+            .json({ message: err.message });
     }
 });
-// Needs req.params.todoId
+// Needs req.params.todoid
 // Needs body with info
-const updateToDo = function (req, res, next) {
+const updateToDo = function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { id } = req.params;
-            const info = req.body;
-            let todo = yield todo_1.default.findByPk(id);
+            let todo = yield todo_1.default.findByPk(req.params.todoid);
             if (!todo) {
-                res.status(404).json({
+                return res.status(404).json({
                     success: false,
                     data: null,
                     message: 'ToDo item not found.',
                 });
-                return next();
             }
             let todoUpdated = {};
-            todoUpdated = yield todo.update(info);
+            todoUpdated = yield todo.update(req.body);
             res.status(200).json({
                 success: true,
                 data: todoUpdated,
@@ -53,58 +53,66 @@ const updateToDo = function (req, res, next) {
             });
         }
         catch (error) {
-            console.log(error);
+            process.env.NODE_ENV !== 'test' && console.error(error);
             res.status(500).json({ message: error.message });
         }
     });
 };
-// Needs req.params.todoId*
+// Needs req.params.todoid
 const deleteToDo = function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const id = req.params.id;
-            if (!id)
-                res.status(400).json({
+            const todo = yield todo_1.default.findOne({ where: { id: req.params.todoid } });
+            if (!todo) {
+                res.status(400)
+                    .json({
                     success: false,
-                    data: id,
-                    message: "wrong id",
+                    error: 400,
+                    data: null,
+                    message: "Wrong todo id",
                 });
-            let todo = yield todo_1.default.destroy({ where: { id: id } });
-            res.status(201).json({
-                success: true,
-                data: todo,
-                message: "todo deleted",
-            });
-        }
-        catch (error) {
-            console.log(error);
-            res.status(400).send(error.message);
-        }
-    });
-};
-// Needs req.params.eventId
-const getToDos = function (req, res, next) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const todosIds = yield todo_1.default.findAll({
-                where: { eventId: req.params.eventid },
-            });
-            if (todosIds) {
-                const todosArray = [];
-                for (const todo of todosIds) {
-                    todosArray.push(todo.dataValues.id);
-                }
-                const todos = yield todo_1.default.findAll({ where: { id: todosArray } });
-                res.status(200).json(todos);
             }
             else {
-                throw new Error("No todos where found");
+                let todo = yield todo_1.default.destroy({ where: { id: req.params.todoid } });
+                res.status(201)
+                    .json({
+                    success: true,
+                    error: null,
+                    data: todo,
+                    message: "Todo deleted",
+                });
             }
         }
         catch (err) {
-            console.error(err);
-            res.status(500).json({ message: err.message });
+            process.env.NODE_ENV !== 'test' && console.error(err);
+            res.status(400)
+                .json(err.message);
         }
     });
 };
-exports.default = { postToDo, updateToDo, deleteToDo, getToDos };
+// Needs req.params.eventid
+const getToDos = function (req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const todos = yield todo_1.default.findAll({ where: { eventId: req.params.eventid } });
+            if (todos.length) {
+                res.status(200)
+                    .json({
+                    success: true,
+                    error: null,
+                    data: todos,
+                    message: 'Expenses fetched',
+                });
+            }
+            else {
+                throw new Error("No todos were found");
+            }
+        }
+        catch (err) {
+            process.env.NODE_ENV !== 'test' && console.error(err);
+            res.status(500)
+                .json({ message: err.message });
+        }
+    });
+};
+exports.default = { newToDo, updateToDo, deleteToDo, getToDos };

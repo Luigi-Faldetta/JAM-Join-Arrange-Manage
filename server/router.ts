@@ -23,14 +23,14 @@ router.delete('/event/:eventid', event.deleteEvent)
 router.get('/events/:userid', event.getUserEvents)
 
 // Todo
-router.post('/todo', todo.postToDo)
-router.patch('/todo/:id', todo.updateToDo)
-router.delete('/todo/:id', todo.deleteToDo)
+router.post('/todo', todo.newToDo)
+router.patch('/todo/:todoid', todo.updateToDo)
+router.delete('/todo/:todoid', todo.deleteToDo)
 router.get('/todos/:eventid', todo.getToDos)
 
 // Expense
 router.post('/expense', expense.newExpense)
-router.delete('/expense/:id', expense.deleteExpense)
+router.delete('/expense/:expenseid', expense.deleteExpense)
 router.get('/expenses/:eventid', expense.getExpenses)
 
 // User events

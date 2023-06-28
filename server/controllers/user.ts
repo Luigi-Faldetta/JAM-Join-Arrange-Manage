@@ -54,6 +54,7 @@ const getUser = async (req: Request, res: Response) => {
     const user = await User.findOne({
       where: { userId: req.params.userid }
     });
+
     if (!user) {
       return res.status(404)
         .json({
@@ -94,6 +95,7 @@ export const updateUser = async (req: Request, res: Response) => {
           where: { userId: req.params.userid },
           returning: true
         })
+        
     } else {
       updatedUser = await User.update(req.body, {
         where: { userId: req.params.userid },

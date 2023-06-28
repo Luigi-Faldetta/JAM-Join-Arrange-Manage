@@ -4,8 +4,7 @@ import { Event, UserEvents } from '../models/associations'
 // Needs body with at least {"title"} 
 const newEvent = async (req: Request, res: Response) => {
 
-  const { title, host } = req.body;
-  if (!title || !host) {
+  if (!req.body.title ) {
     return res.status(400)
       .json({
         success: false,
@@ -39,15 +38,15 @@ const getEvent = async (req: Request, res: Response) => {
     const event = await Event.findOne({
       where: { eventId: req.params.eventid }
     })
-    // if (!event) {
-    //   return res.status(404)
-    //     .json({
-    //       success: false,
-    //       error: "404",
-    //       data: null,
-    //       message: "No event found"
-    //     })
-    // }
+    if (!event) {
+      return res.status(404)
+        .json({
+          success: false,
+          error: "404",
+          data: null,
+          message: "No event found"
+        })
+    }
 
     res.status(200)
       .json({

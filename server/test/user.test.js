@@ -1,19 +1,19 @@
 'use strict';
 
-const request = require('supertest');
-const { default: User } = require('../dist/models/user');
-const { default: app } = require('../dist/app.js');
-const { default: sequelize } = require('../dist/models/modelDB');
-const userMocks = require('./mocks/userMocks')
+// const request = require('supertest');
+// const { default: User } = require('../dist/models/user');
+// const { default: app } = require('../dist/app.js');
+// const { default: sequelize } = require('../dist/models/modelDB');
+// const userMocks = require('./mocks/userMocks')
 
-beforeAll(async () => {
-  await sequelize.authenticate();
-});
+// beforeAll(async () => {
+//   await sequelize.authenticate();
+// });
 
-afterAll(async () => {
-  await User.destroy({ where: {} });
-  await sequelize.close();
-});
+// afterAll(async () => {
+//   await User.destroy({ where: {} });
+//   await sequelize.close();
+// });
 
 describe('User controller tests', () => {
   //

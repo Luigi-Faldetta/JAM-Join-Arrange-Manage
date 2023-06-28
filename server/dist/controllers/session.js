@@ -14,11 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const associations_1 = require("../models/associations");
-// type MyRequest = Request & {
-//   session: Request["session"] & {
-//     uid: string,
-//   }
-// }
 const logIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield associations_1.User.findOne({ where: { email: req.body.email } });
@@ -35,16 +30,16 @@ const logIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (err) {
         console.log(err);
-        res.status(401).send({ message: err.message });
+        res.status(401).json({ message: err.message });
     }
 });
 const logOut = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     req.session.destroy((error) => {
         if (error) {
-            res.status(500).send({ error, message: 'Log out went wrong' });
+            res.status(500).json({ error, message: 'Log out went wrong' });
         }
         else {
-            res.clearCookie('sid').status(200).send({ message: 'Logged out successfully' });
+            res.clearCookie('sid').status(200).json({ message: 'Logged out successfully' });
         }
     });
 });

@@ -23,7 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.editUser = void 0;
+exports.deleteUser = exports.updateUser = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const associations_1 = require("../models/associations");
 // Needs body with at least {"name", "email", "password"}
@@ -100,15 +100,21 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 // Needs req.params.userid
 // Needs body with the changes 
-const editUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let updatedUser = {};
         if (req.body.password) {
             const hash = yield bcrypt_1.default.hash(req.body.password, 10);
-            updatedUser = yield associations_1.User.update(Object.assign(Object.assign({}, req.body), { password: hash }), { where: { userId: req.params.userid }, returning: true });
+            updatedUser = yield associations_1.User.update(Object.assign(Object.assign({}, req.body), { password: hash }), {
+                where: { userId: req.params.userid },
+                returning: true
+            });
         }
         else {
-            updatedUser = yield associations_1.User.update(req.body, { where: { userId: req.params.userid }, returning: true });
+            updatedUser = yield associations_1.User.update(req.body, {
+                where: { userId: req.params.userid },
+                returning: true
+            });
         }
         // @ts-ignore
         const _c = Object.assign({}, updatedUser[1][0].dataValues), { password } = _c, safeUpdatedUser = __rest(_c, ["password"]);
@@ -126,11 +132,13 @@ const editUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             .json({ message: err.message });
     }
 });
-exports.editUser = editUser;
+exports.updateUser = updateUser;
 // Needs req.params.userid
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const deletedUser = yield associations_1.User.destroy({ where: { userId: req.params.userid } });
+        const deletedUser = yield associations_1.User.destroy({
+            where: { userId: req.params.userid }
+        });
         res.status(200)
             .json({
             success: true,
@@ -157,7 +165,9 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             for (const user of userIds) {
                 usersArray.push(user.dataValues.userId);
             }
-            const users = yield associations_1.User.findAll({ where: { userId: usersArray } });
+            const users = yield associations_1.User.findAll({
+                where: { userId: usersArray }
+            });
             res.status(200)
                 .json({
                 success: true,
@@ -176,4 +186,4 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             .json({ message: err.message });
     }
 });
-exports.default = { newUser, getUser, editUser: exports.editUser, deleteUser: exports.deleteUser, getAllUsers };
+exports.default = { newUser, getUser, updateUser: exports.updateUser, deleteUser: exports.deleteUser, getAllUsers };

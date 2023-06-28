@@ -2,12 +2,6 @@ import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import { User } from "../models/associations";
 
-// type MyRequest = Request & {
-//   session: Request["session"] & {
-//     uid: string,
-//   }
-// }
-
 const logIn = async (req: Request, res: Response) => {
   try {
     const user = await User.findOne({ where: { email: req.body.email } });
@@ -24,16 +18,16 @@ const logIn = async (req: Request, res: Response) => {
 
   } catch (err: any) {
     console.log(err);
-    res.status(401).send({ message: err.message });
+    res.status(401).json({ message: err.message });
   }
 }
 
 const logOut = async (req: Request, res: Response) => {
   req.session.destroy((error) => {
     if (error) {
-      res.status(500).send({ error, message: 'Log out went wrong' });
+      res.status(500).json({ error, message: 'Log out went wrong' });
     } else {
-      res.clearCookie('sid').status(200).send({ message: 'Logged out successfully' });
+      res.clearCookie('sid').status(200).json({ message: 'Logged out successfully' });
     }
   });
 }
