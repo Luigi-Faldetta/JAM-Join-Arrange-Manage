@@ -7,11 +7,14 @@ const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 require("./models/modelDB");
 const index_1 = require("./controllers/index");
+router.get('/health', (_req, res) => {
+    res.send({ health: 'Server runnning!! =)' });
+});
 // User
-router.post('/register', index_1.user.postUser);
-router.get('/user/:id', index_1.user.getUserInfo);
-router.patch('/user/:id', index_1.user.editUser);
-router.delete('/user/:id', index_1.user.deleteUser);
+router.post('/register', index_1.user.newUser);
+router.get('/user/:userid', index_1.user.getUser);
+router.patch('/user/:userid', index_1.user.updateUser);
+router.delete('/user/:userid', index_1.user.deleteUser);
 router.get('/users/:eventid', index_1.user.getAllUsers);
 // Event
 router.post('/newevent', index_1.event.newEvent);
@@ -20,15 +23,18 @@ router.patch('/event/:eventid', index_1.event.updateEvent);
 router.delete('/event/:eventid', index_1.event.deleteEvent);
 router.get('/events/:userid', index_1.event.getUserEvents);
 // Todo
-router.post('/todo', index_1.todo.postToDo);
-router.patch('/todo/:id', index_1.todo.updateToDo);
-router.delete('/todo/:id', index_1.todo.deleteToDo);
+router.post('/todo', index_1.todo.newToDo);
+router.patch('/todo/:todoid', index_1.todo.updateToDo);
+router.delete('/todo/:todoid', index_1.todo.deleteToDo);
 router.get('/todos/:eventid', index_1.todo.getToDos);
 // Expense
 router.post('/expense', index_1.expense.newExpense);
-router.delete('/expense/:id', index_1.expense.deleteExpense);
+router.delete('/expense/:expenseid', index_1.expense.deleteExpense);
 router.get('/expenses/:eventid', index_1.expense.getExpenses);
-//UserEvents
-router.post('/useractivity', index_1.eventActivity.joinEvent);
-router.delete('/useractivity', index_1.eventActivity.leaveEvent);
+// User events
+router.post('/useractivity', index_1.userEvent.joinEvent);
+router.delete('/useractivity', index_1.userEvent.leaveEvent);
+// Session
+router.post('/userlogin', index_1.session.logIn);
+router.get('/userlogout', index_1.session.logOut);
 exports.default = router;

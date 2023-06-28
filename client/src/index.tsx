@@ -6,16 +6,48 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import store from './reduxFiles/store';
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from 'react-router-dom';
+import LandingAbout from './pages/LandingAbout';
+import LandingFaqs from './pages/LandingFaqs';
+import LandingPage from './pages/LandingPage';
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route
+      path='/'
+      element={<App />}
+    >
+      <Route
+        index={true}
+        path='/'
+        element={<LandingPage/>}
+      />
+      <Route
+        path='/about'
+        element={<LandingAbout />}
+      />
+      <Route
+        path='/faqs'
+        element={<LandingFaqs />}
+      />
+    </Route>
+  )
+);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>
+  <Provider store={store}>
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
+  </Provider>
 );
 
 // If you want your app to work offline and load faster, you can change

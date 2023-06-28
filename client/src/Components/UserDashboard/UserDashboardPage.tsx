@@ -11,11 +11,15 @@ function UserDashboardPage() {
 
   return (
     <>
-      <div className="flex flex-row">
-        <div className="m-5 w-1/2 h-full flex flex-col gap-5">
+      <div className="flex flex-col justify-center items-center">
+        <div className="m-5 h-full p-5 flex flex-col items-center gap-5">
+          <CreateEventForm></CreateEventForm>
+        </div>
+
+        <div className=" h-full p-5 flex flex-col items-center gap-5">
           {/* {eventList ? (
             eventList.map((event) => {
-              return <EventTile></EventTile>;
+              return <EventTile event={event}></EventTile>;
             })
           ) : (
             <h3>No Upcoming Events</h3>
@@ -23,12 +27,6 @@ function UserDashboardPage() {
 
           <EventTile></EventTile>
           <EventTile></EventTile>
-        </div>
-        <div className="m-5 w-1/2 aspect-w-1 aspect-h-1">
-          <div className="mb-5 flex justify-end">
-            <CreateEventForm></CreateEventForm>
-          </div>
-          {/* <div className="bg-green-500 h-64">empty</div> */}
         </div>
       </div>
     </>

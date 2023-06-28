@@ -1,93 +1,109 @@
-import { Response, Request, NextFunction } from "express";
+import { Response, Request } from "express";
 import Todo from "../models/todo"
 
-//needs req.body {title, isDone, creatorId, eventId}
-const postToDo = async (req: Request, res: Response) => {
+// Needs body with {"title", "isDone", "creatorId", "eventId"} 
+const newToDo = async (req: Request, res: Response) => {
+
   try {
-    const newtodo = await Todo.create({ ...req.body });
-    res.status(201).json({
-      success: true,
-      data: newtodo,
-      message: "newtodo created",
-    });
-  } catch (error: any) {
-    console.log(error);
-    res.status(500).json({ message: error.message });
+    const newTodo = await Todo.create(req.body);
+    res.status(201)
+      .json({
+        success: true,
+        error: null,
+        data: newTodo,
+        message: "Todo created",
+      });
+
+  } catch (err: any) {
+    process.env.NODE_ENV !== 'test' && console.error(err);
+    res.status(500)
+      .json({ message: err.message });
   }
 }
 
-// Needs req.params.todoId
+// Needs req.params.todoid
 // Needs body with info
-const updateToDo = async function (req: Request, res: Response, next: NextFunction) {
-  try {
-    const { id } = req.params;
-    const info = req.body;
-    let todo = await Todo.findByPk(id);
-    if (!todo) {
-      res.status(404).json({
-        success: false,
-        data: null,
-        message: 'ToDo item not found.',
-      });
-      return next();
-    }
-    let todoUpdated = {}
-    todoUpdated = await todo.update(info);
+const updateToDo = async function (req: Request, res: Response) {
 
-    res.status(200).json({
-      success: true,
-      data: todoUpdated,
-      message: 'ToDo item updated successfully.',
-    });
+  try {
+    const updatedTodo = await Todo.update(req.body,
+      {
+        where: { id: req.params.todoid },
+        returning: true
+      })
+    res.status(200)
+      .json({
+        success: true,
+        error: null,
+        data: updatedTodo[1][0],
+        message: 'Todo updated',
+      });
+
   } catch (error: any) {
-    console.log(error);
-    res.status(500).json({ message: error.message });
+    process.env.NODE_ENV !== 'test' && console.error(error);
+    res.status(500)
+      .json({ message: error.message });
   }
 };
 
-// Needs req.params.todoId*
+// Needs req.params.todoid
 const deleteToDo = async function (req: Request, res: Response,) {
-  try {
-    const id = req.params.id;
-    if (!id)
-      res.status(400).json({
-        success: false,
-        data: id,
-        message: "wrong id",
-      });
-    let todo = await Todo.destroy({ where: { id: id } });
-    res.status(201).json({
-      success: true,
-      data: todo,
-      message: "todo deleted",
-    });
-  } catch (error: any) {
-    console.log(error);
-    res.status(400).send(error.message);
-  }
-};
 
-
-// Needs req.params.eventId
-const getToDos = async function (req: Request, res: Response, next: NextFunction) {
   try {
-    const todosIds = await Todo.findAll({
-      where: { eventId: req.params.eventid },
-    });
-    if (todosIds) {
-      const todosArray = [];
-      for (const todo of todosIds) {
-        todosArray.push(todo.dataValues.id);
-      }
-      const todos = await Todo.findAll({ where: { id: todosArray } });
-      res.status(200).json(todos);
-    } else {
-      throw new Error("No todos where found");
+    const todoExists = await Todo.findOne({ where: { id: req.params.todoid } })
+    if (!todoExists) {
+      return res.status(400)
+        .json({
+          success: false,
+          error: 400,
+          data: null,
+          message: "Wrong todo id",
+        });
     }
+
+    let todo = await Todo.destroy(
+      { where: { id: req.params.todoid } });
+
+    res.status(201)
+      .json({
+        success: true,
+        error: null,
+        data: todo,
+        message: "Todo deleted",
+      });
+
   } catch (err: any) {
-    console.error(err);
-    res.status(500).json({ message: err.message });
+    process.env.NODE_ENV !== 'test' && console.error(err);
+    res.status(400)
+      .json(err.message);
   }
 };
 
-export default { postToDo, updateToDo, deleteToDo, getToDos }
+// Needs req.params.eventid
+const getToDos = async function (req: Request, res: Response) {
+
+  try {
+    const todos = await Todo.findAll(
+      { where: { eventId: req.params.eventid } });
+
+    if (todos.length) {
+      res.status(200)
+        .json({
+          success: true,
+          error: null,
+          data: todos,
+          message: 'Expenses fetched',
+        });
+
+    } else {
+      throw new Error("No todos were found");
+    }
+
+  } catch (err: any) {
+    process.env.NODE_ENV !== 'test' && console.error(err);
+    res.status(500)
+      .json({ message: err.message });
+  }
+};
+
+export default { newToDo, updateToDo, deleteToDo, getToDos }

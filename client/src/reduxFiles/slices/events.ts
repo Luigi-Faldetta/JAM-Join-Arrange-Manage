@@ -3,6 +3,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface EventState {
   //update interface once types are declared
+  eventId?: string;
   eventName: string;
   eventDateAndTime: Date | null;
   eventLocation: string | null;

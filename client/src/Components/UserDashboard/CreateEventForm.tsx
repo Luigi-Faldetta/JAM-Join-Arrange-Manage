@@ -59,6 +59,7 @@ function CreateEventForm() {
               type="eventName"
               id="eventName"
               name="eventName"
+              maxLength={30}
               className="shadow-sm 
               
                           bg-gray-50 border border-gray-300 

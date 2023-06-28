@@ -13,38 +13,42 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const userEvent_1 = __importDefault(require("../models/userEvent"));
+// Needs body with at least {"userId", "eventId"}
 const joinEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { userId, eventId } = req.body;
-        yield userEvent_1.default.create({ userId, eventId });
-        res.status(201).json({
+        yield userEvent_1.default.create(req.body);
+        res.status(201)
+            .json({
             success: true,
+            error: null,
             data: null,
             message: 'User joined the activity.',
         });
     }
     catch (err) {
-        res.status(500).json({ message: err.message });
+        process.env.NODE_ENV !== 'test' && console.log(err);
+        res.status(500)
+            .json({ message: err.message });
     }
 });
+// Needs body with {"userId", "eventId"}
 const leaveEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { userId, eventId } = req.body;
         yield userEvent_1.default.destroy({
-            where: {
-                userId: userId,
-                activityId: eventId,
-            },
+            where: req.body,
         });
-        res.status(200).json({
+        res.status(200)
+            .json({
             success: true,
+            error: null,
             data: null,
             message: 'User left the activity.',
         });
     }
     catch (err) {
-        console.log(err);
-        res.status(400).json({ message: err.message });
+        process.env.NODE_ENV !== 'test' && console.log(err);
+        res.status(400)
+            .json({ message: err.message });
     }
 });
 exports.default = { joinEvent, leaveEvent };
