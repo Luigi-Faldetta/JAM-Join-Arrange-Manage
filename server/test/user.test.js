@@ -69,13 +69,22 @@ describe('User controller tests', () => {
       expect(parsedRes.data.name).toBe(userMocks.user01.name);
       expect(parsedRes.data.email).toBe(userMocks.user01.email)
     });
-    // TO BE DONE
-    // it('Fetch fails with wrong id', async () => {
-    //   const res = await request(app)
-    //     .get('/user/' + 'banana')
-    //   const parsedRes = JSON.parse(res.text);
-    //   expect(res.status).toBe(400);
-    // });
+    //
+    it('Fetch fails with wrong uuid', async () => {
+      const res = await request(app)
+        .get('/user/' + userMocks.randomUUID)
+      const parsedRes = JSON.parse(res.text);
+      expect(res.status).toBe(409);
+      expect(parsedRes.message).toBe('No user found');
+    });
+    //
+    it('Fetch fails with wrong request', async () => {
+      const res = await request(app)
+        .get('/user/patata')
+      const parsedRes = JSON.parse(res.text);
+      expect(res.status).toBe(400);
+      expect(parsedRes.message).toBe('Bad user request');
+    });
     //
   });
   describe('Update user', () => {

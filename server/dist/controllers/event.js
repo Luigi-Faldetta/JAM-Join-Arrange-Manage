@@ -36,9 +36,7 @@ const getEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const event = yield associations_1.Event.findOne({
             where: { eventId: req.params.eventid }
         });
-        if (!event) {
-            console.log('hello there');
-        }
+        // if (!event) { console.log('hello there') }
         res.status(200).json({
             success: true,
             data: event,
@@ -84,7 +82,9 @@ const deleteEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 // Needs req.params.userid
 const getUserEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const eventIds = yield associations_1.UserEvents.findAll({ where: { userId: req.params.userid } });
+        const eventIds = yield associations_1.UserEvents.findAll({
+            where: { userId: req.params.userid }
+        });
         if (eventIds.length) {
             const eventsArray = [];
             for (const event of eventIds) {

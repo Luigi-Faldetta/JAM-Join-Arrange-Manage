@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import { Request, Response } from "express";
 import { User, UserEvents } from "../models/associations";
 
@@ -16,8 +17,11 @@ const newUser = async (req: Request, res: Response) => {
     return res.status(409)
       .send({ error: "409", message: "User already exists" });
 
+  const inputPassword = password;
+
   try {
-    const user = await User.create(req.body);
+    const hash = await bcrypt.hash(inputPassword, 10)
+    const user = await User.create({ ...req.body, password: hash });
 
     // @ts-ignore
     const { password, ...safeUser } = { ...user.dataValues }
@@ -37,12 +41,13 @@ const newUser = async (req: Request, res: Response) => {
 const getUser = async (req: Request, res: Response) => {
   try {
     const user = await User.findOne({
-      where: { userId: req.params.userid } 
+      where: { userId: req.params.userid }
     });
 
-    // if (!user) {
-    //   return res.status(409).send({ error: "409", message: "No user found" })
-    // }
+    if (!user) {
+      return res.status(409)
+        .send({ error: "409", message: "No user found" })
+    }
 
     // @ts-ignore
     const { password, ...safeUser } = { ...user.dataValues }
@@ -54,38 +59,28 @@ const getUser = async (req: Request, res: Response) => {
     });
   } catch (err: any) {
     console.error(err);
-    res.status(400).send({ error: "400", message: "Bad user request" });
+    res.status(400).json({ message: err.message });
   }
 };
-
 
 // Needs req.params.userid
 // Needs body with info
 export const editUser = async (req: Request, res: Response) => {
-  const id = req.params.userid;
-  const info = req.body;
   try {
-    const user = await User.findByPk(id);
-    if (!user) {
-      res.status(404).json({
-        success: false,
-        data: null,
-        message: "User not found.",
-      });
-      return;
-    }
+    let updatedUser = {}
 
-    let userUpdated = {};
-
-    if (info.password) {
-      userUpdated = await user.update({ ...info });
+    if (req.body.password) {
+      const hash = await bcrypt.hash(req.body.password, 10)
+      updatedUser = await User.update({ ...req.body, password: hash }, { where: { userId: req.params.userid }, returning: true })
     } else {
-      userUpdated = await user.update(info);
+      updatedUser = await User.update(req.body, { where: { userId: req.params.userid }, returning: true })
     }
 
+    // @ts-ignore
+    const { password, ...safeUpdatedUser } = { ...updatedUser[1][0].dataValues }
     res.status(200).json({
       success: true,
-      data: userUpdated,
+      data: safeUpdatedUser,
       message: "User updated",
     });
   } catch (err: any) {
@@ -106,7 +101,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 
   } catch (err: any) {
     console.log(err);
-    res.status(400).send({ error: "400", message: "Bad user request" });
+    res.status(400).send({ message: err.message });
   }
 };
 
@@ -114,19 +109,22 @@ export const deleteUser = async (req: Request, res: Response) => {
 const getAllUsers = async (req: Request, res: Response) => {
   try {
     const userIds = await UserEvents.findAll({
-      where: { eventId: req.params.eventid },
+      where: { eventId: req.params.eventid }
     });
-    // console.log(userIds)
-    if (userIds) {
+    if (userIds.length) {
       const usersArray = [];
       for (const user of userIds) {
         usersArray.push(user.dataValues.userId);
       }
 
       const users = await User.findAll({ where: { userId: usersArray } });
-      res.status(200).json(users);
+      res.status(200).json({
+        success: true,
+        data: users,
+        message: 'Event users fetched',
+      });
     } else {
-      throw "No users where found";
+      throw new Error("No users where found");
     }
   } catch (err: any) {
     console.error(err);
