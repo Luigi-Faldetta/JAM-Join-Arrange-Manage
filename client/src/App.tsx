@@ -2,9 +2,9 @@ import './App.css';
 import Navbar from './Components/Navbar/Navbar';
 import './App.css';
 // import { Outlet } from 'react-router-dom';
-
-import LoginScreen from './pages/LoginScreen';
-import RegisterScreen from './pages/RegisterScreen';
+import LandingPage from './pages/LandingPage';
+import LandingAbout from './pages/LandingAbout';
+import LandingFaqs from './pages/LandingFaqs';
 
 function App() {
   return (
@@ -12,8 +12,9 @@ function App() {
       <div className='App'>
         <Navbar></Navbar>
         {/* <Outlet /> */}
-        <LoginScreen/>
-        <RegisterScreen/>
+        <LandingPage/>
+        <LandingAbout/>
+        <LandingFaqs/>
       </div>
     </>
   );

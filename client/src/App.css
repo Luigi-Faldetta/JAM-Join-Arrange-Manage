@@ -11,7 +11,35 @@ h1 {
   color: blue;
 }
 
+.navbar-container {
+  position: sticky;
+  top: 0;
+}
+
 .navbar nav {
   display: flex;
   gap: 2rem;
+}
+
+.about-page {
+  width: 100vw;
+  height: 100vh;
+}
+
+.about-text {
+  margin-left: 5rem;
+  background-color: aqua;
+}
+
+
+.faqs-page {
+  height: 100vh;
+  background-color: bisque;
+  margin: 5rem;
+  box-sizing: border-box;
+  padding: 5rem;
+}
+
+.landing-page {
+  height: 100vh;
 }

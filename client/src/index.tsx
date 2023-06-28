@@ -12,9 +12,8 @@ import {
   Route,
   RouterProvider,
 } from 'react-router-dom';
-import LoginScreen from './pages/LoginScreen';
-import RegisterScreen from './pages/RegisterScreen';
-import ProfileScreen from './pages/ProfileScreen';
+import LandingAbout from './pages/LandingAbout';
+import LandingFaqs from './pages/LandingFaqs';
 import LandingPage from './pages/LandingPage';
 
 const router = createBrowserRouter(
@@ -30,15 +29,11 @@ const router = createBrowserRouter(
       />
       <Route
         path='/about'
-        element={<LoginScreen />}
+        element={<LandingAbout />}
       />
       <Route
         path='/faqs'
-        element={<RegisterScreen />}
-      />
-      <Route
-        path='/profile'
-        element={<ProfileScreen />}
+        element={<LandingFaqs />}
       />
     </Route>
   )
