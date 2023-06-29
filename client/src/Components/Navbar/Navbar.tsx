@@ -58,9 +58,9 @@ function Navbar() {
             >
               <span className="sr-only">Open user menu</span>
               <img
-                className="profile-pic w-8 h-8 rounded-full"
-                src="/docs/images/people/profile-picture-3.jpg"
-                alt="user photo"
+                className='profile-pic w-8 h-8 rounded-full'
+                src='/docs/images/people/profile-picture-3.jpg'
+                alt=''
               />
             </button>
             {showDropdown && (
