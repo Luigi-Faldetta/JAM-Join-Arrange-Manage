@@ -1,5 +1,7 @@
 .navbar-container {
-    position: relative;
+    position: sticky;
+    z-index: 100;
+    border-bottom: 1px solid #ccc;
   }
   
   .dropdown-menu {
