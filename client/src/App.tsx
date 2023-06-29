@@ -1,20 +1,20 @@
-import './App.css';
-import Navbar from './Components/Navbar/Navbar';
-import './App.css';
-// import { Outlet } from 'react-router-dom';
-import LandingPage from './pages/LandingPage/LandingPage';
-import LandingAbout from './pages/LandingAbout/LandingAbout';
-import LandingFaqs from './pages/LandingFaqs/LandingFaqs';
+import "./App.css";
+import Navbar from "./Components/Navbar/Navbar";
+import "./App.css";
+import { Outlet } from "react-router-dom";
+// import LandingPage from "./pages/LandingPage";
+// import LandingAbout from "./pages/LandingAbout";
+// import LandingFaqs from "./pages/LandingFaqs";
 
 function App() {
   return (
     <>
-      <div className='App'>
+      <div className="App">
         <Navbar />
-        {/* <Outlet /> */}
-        <LandingPage/>
-        <LandingAbout/>
-        <LandingFaqs/>
+        <Outlet />
+        {/* <LandingPage /> */}
+        {/* <LandingAbout />
+        <LandingFaqs /> */}
       </div>
     </>
   );

@@ -1,8 +1,8 @@
-import CreateEventForm from "./CreateEventForm";
-import EventTile from "./EventTile";
-import { createEventList } from "../../reduxFiles/slices/events";
+import CreateEventForm from "../Components/UserDashboard/CreateEventForm";
+import EventTile from "../Components/UserDashboard/EventTile";
+import { createEventList } from "../reduxFiles/slices/events";
 import { useSelector } from "react-redux";
-import { RootState } from "../../reduxFiles/store";
+import { RootState } from "../reduxFiles/store";
 
 function UserDashboardPage() {
   const eventList = useSelector((state: RootState) => state.eventListReducer);
