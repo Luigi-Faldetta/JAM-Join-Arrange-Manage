@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
 import { Link as Scroll } from "react-scroll";
+import Logout from "../Logout";
 function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showDropdownMobile, setDropdownMobile] = useState(false);
@@ -18,6 +19,12 @@ function Navbar() {
       setShowDropdown(false);
     }
   };
+  const handleSignOut = () => {
+    console.log('helpoo')
+    // return ( <>
+    //     <Logout></Logout>
+    // </>)
+  }
   return (
     <div className="navbar-container">
       <nav className="bg-white border-gray-200 dark:bg-gray-900">
@@ -51,9 +58,9 @@ function Navbar() {
             >
               <span className="sr-only">Open user menu</span>
               <img
-                className="profile-pic w-8 h-8 rounded-full"
-                src="/docs/images/people/profile-picture-3.jpg"
-                alt="user photo"
+                className='profile-pic w-8 h-8 rounded-full'
+                src='/docs/images/people/profile-picture-3.jpg'
+                alt=''
               />
             </button>
             {showDropdown && (
@@ -70,9 +77,9 @@ function Navbar() {
                     </Link>
                   </li>
                   <li>
-                    <a href="#" className="dropdown-item">
-                      Sign out
-                    </a>
+                  <button onClick={() => handleSignOut()} className="dropdown-item">
+              Sign out
+            </button>
                   </li>
                 </ul>
               </div>

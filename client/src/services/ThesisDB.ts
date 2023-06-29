@@ -22,6 +22,11 @@ import { ApiResponse } from "./ApiResponseType";
 // someReturn
 // {error ? console.log({error}) : isLoading ? <p>loading...</p> : data ? <h3>{data.data.name}</h3> : <p>couldn't fetch</p>}
 
+//for more complete code and better error handling, refer back to the
+//and implement the transformErrorResponse, providesTags, OnQueryStarted,
+//transformResponse and OnCacheEntryStarted,
+//https://redux-toolkit.js.org/rtk-query/usage/queries
+
 export const thesisDbApi = createApi({
   reducerPath: "thesisDbApi",
   baseQuery: fetchBaseQuery({
@@ -29,13 +34,14 @@ export const thesisDbApi = createApi({
   }),
   tagTypes: ["EventState", "ExpenseState", "ToDoState", "UserState"], //for tracking what will be referenced from the cache
   endpoints: (build) => ({
-    //Posts
-
     // build.mutation has two type parameters, the first is response type the second is parameter type.
     // partial sets all properties to optional for parameter, pick selects which properties should be required for parameter
+
+    //Events
+
     addEvent: build.mutation<
       ApiResponse<EventState>,
-      Partial<EventState> & Pick<EventState, "title">
+      Partial<EventState> & Pick<EventState, "eventName">
     >({
       query: (event) => ({
         url: "newevent/",
@@ -44,6 +50,35 @@ export const thesisDbApi = createApi({
         headers: { "Content-type": "application/json; charset=UTF-8" },
       }),
     }),
+
+    getEvents: build.query<ApiResponse<EventState[]>, string>({
+      query: (userId) => ({ url: `events/${userId}` }),
+    }),
+
+    getEvent: build.query<ApiResponse<EventState>, string>({
+      query: (eventId) => ({ url: `event/${eventId}` }),
+    }),
+
+    updateEvent: build.mutation<
+      ApiResponse<EventState>,
+      Partial<EventState> & Pick<EventState, "eventId">
+    >({
+      query: ({ eventId, ...patch }) => ({
+        url: `event/${eventId}`,
+        method: "PATCH",
+        body: patch,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+    }),
+
+    deleteEvent: build.mutation<ApiResponse<number>, string>({
+      query: (id) => ({
+        url: `event/${id}`,
+        method: "DELETE",
+      }),
+    }),
+
+    // Users
 
     addUser: build.mutation<
       ApiResponse<UserState>,
@@ -58,101 +93,12 @@ export const thesisDbApi = createApi({
       invalidatesTags: ["UserState"],
     }),
 
-    addExpense: build.mutation<
-      ApiResponse<ExpenseState>,
-      Partial<ExpenseState> & Pick<ExpenseState, "value">
-    >({
-      query: (expense) => ({
-        url: "expense/",
-        method: "POST",
-        body: expense,
-        headers: { "Content-type": "application/json; charset=UTF-8" },
-      }),
-    }),
-
-    addToDo: build.mutation<
-      ApiResponse<ToDoState>,
-      Partial<ToDoState> & Pick<ToDoState, "value">
-    >({
-      query: (toDo) => ({
-        url: "todo/",
-        method: "POST",
-        body: toDo,
-        headers: { "Content-type": "application/json; charset=UTF-8" },
-      }),
-    }),
-
-    joinActivity: build.mutation<
-      ApiResponse<null>,
-      { userId: string; eventId: string }
-    >({
-      query: (ids) => ({
-        url: "useractivity/",
-        method: "POST",
-        body: ids,
-        headers: { "Content-type": "application/json; charset=UTF-8" },
-      }),
-    }),
-
-    logIn: build.mutation<
-      ApiResponse<null>,
-      { email: string; password: string }
-    >({
-      query: (credentials) => ({
-        url: "userLogin/",
-        method: "POST",
-        body: credentials,
-        headers: { "Content-type": "application/json; charset=UTF-8" },
-      }),
-    }),
-
-    //Gets
-
-    //for more complete code and better error handling, refer back to the
-    //and implement the transformErrorResponse, providesTags, OnQueryStarted,
-    //transformResponse and OnCacheEntryStarted,
-    //https://redux-toolkit.js.org/rtk-query/usage/queries
-
-    getEvents: build.query<ApiResponse<EventState[]>, string>({
-      query: (userId) => ({ url: `events/${userId}` }),
-    }),
-
-    getEvent: build.query<ApiResponse<EventState>, string>({
-      query: (eventId) => ({ url: `event/${eventId}` }),
-    }),
-
     getUsers: build.query<ApiResponse<UserState[]>, string>({
       query: (eventId) => ({ url: `users/${eventId}` }),
     }),
 
     getUser: build.query<ApiResponse<UserState>, string>({
       query: (userId) => ({ url: `user/${userId}` }),
-    }),
-
-    getExpenses: build.query<ApiResponse<ExpenseState[]>, string>({
-      query: (eventId) => ({ url: `expenses/${eventId}` }),
-    }),
-
-    getToDos: build.query<ApiResponse<ToDoState[]>, string>({
-      query: (eventId) => ({ url: `todos/${eventId}` }),
-    }),
-
-    logOut: build.query<ApiResponse<null>, null>({
-      query: () => ({ url: `userlogout` }),
-    }),
-
-    //Patches
-
-    updateEvent: build.mutation<
-      ApiResponse<EventState>,
-      Partial<EventState> & Pick<EventState, "eventId">
-    >({
-      query: ({ eventId, ...patch }) => ({
-        url: `event/${eventId}`,
-        method: "PATCH",
-        body: patch,
-        headers: { "Content-type": "application/json; charset=UTF-8" },
-      }),
     }),
 
     updateUser: build.mutation<
@@ -167,6 +113,68 @@ export const thesisDbApi = createApi({
       }),
     }),
 
+    deleteUser: build.mutation<ApiResponse<number>, string>({
+      query: (id) => ({
+        url: `user/${id}`,
+        method: "DELETE",
+      }),
+    }),
+
+    //Expenses
+
+    addExpense: build.mutation<
+      ApiResponse<ExpenseState>,
+      Partial<ExpenseState> & Pick<ExpenseState, "value">
+    >({
+      query: (expense) => ({
+        url: "expense/",
+        method: "POST",
+        body: expense,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+    }),
+
+    calculateExpenses: build.mutation<
+      ApiResponse<ExpenseState>,
+      Partial<ExpenseState> & Pick<ExpenseState, "value">
+    >({
+      query: (expense) => ({
+        url: "expense/",
+        method: "POST",
+        body: expense,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+    }),
+
+    getExpenses: build.query<ApiResponse<ExpenseState[]>, string>({
+      query: (eventId) => ({ url: `expenses/${eventId}` }),
+    }),
+
+    deleteExpense: build.mutation<ApiResponse<number>, string>({
+      query: (id) => ({
+        url: `expense/${id}`,
+        method: "DELETE",
+      }),
+    }),
+
+    //Todos
+
+    addToDo: build.mutation<
+      ApiResponse<ToDoState>,
+      Partial<ToDoState> & Pick<ToDoState, "value">
+    >({
+      query: (toDo) => ({
+        url: "todo/",
+        method: "POST",
+        body: toDo,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+    }),
+
+    getToDos: build.query<ApiResponse<ToDoState[]>, string>({
+      query: (eventId) => ({ url: `todos/${eventId}` }),
+    }),
+
     updateToDo: build.mutation<
       ApiResponse<ToDoState>,
       Partial<ToDoState> & Pick<ToDoState, "id">
@@ -179,22 +187,6 @@ export const thesisDbApi = createApi({
       }),
     }),
 
-    //Deletes
-
-    deleteEvent: build.mutation<ApiResponse<number>, string>({
-      query: (id) => ({
-        url: `event/${id}`,
-        method: "DELETE",
-      }),
-    }),
-
-    deleteUser: build.mutation<ApiResponse<number>, string>({
-      query: (id) => ({
-        url: `user/${id}`,
-        method: "DELETE",
-      }),
-    }),
-
     deleteToDo: build.mutation<ApiResponse<number>, string>({
       query: (id) => ({
         url: `todo/${id}`,
@@ -202,10 +194,17 @@ export const thesisDbApi = createApi({
       }),
     }),
 
-    deleteExpense: build.mutation<ApiResponse<number>, string>({
-      query: (id) => ({
-        url: `expense/${id}`,
-        method: "DELETE",
+    //Activity participation
+
+    joinActivity: build.mutation<
+      ApiResponse<null>,
+      { userId: string; eventId: string }
+    >({
+      query: (ids) => ({
+        url: "useractivity/",
+        method: "POST",
+        body: ids,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
       }),
     }),
 
@@ -219,6 +218,24 @@ export const thesisDbApi = createApi({
         body: ids,
         headers: { "Content-type": "application/json; charset=UTF-8" },
       }),
+    }),
+
+    //Session
+
+    logIn: build.mutation<
+      ApiResponse<null>,
+      { email: string; password: string }
+    >({
+      query: (credentials) => ({
+        url: "userLogin/",
+        method: "POST",
+        body: credentials,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+    }),
+
+    logOut: build.query<ApiResponse<null>, null>({
+      query: () => ({ url: `userlogout` }),
     }),
   }),
 });
@@ -243,4 +260,6 @@ export const {
   useLeaveActivityMutation,
   useDeleteToDoMutation,
   useDeleteUserMutation,
+  useLogInMutation,
+  useLogOutQuery,
 } = thesisDbApi;

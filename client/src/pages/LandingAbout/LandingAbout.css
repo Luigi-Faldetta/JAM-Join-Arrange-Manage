@@ -1,12 +1,11 @@
 .about-page {
-    width: 100vw;
-    height: 100vh;
+    margin-top: 2rem;
+    height: 100%;
   }
   
   .about-text {
     margin: 2rem;
     box-sizing: border-box;
-    /* background-color: aqua; */
   }
   
   .container {
