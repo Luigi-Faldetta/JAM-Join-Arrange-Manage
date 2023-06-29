@@ -2,6 +2,7 @@ import { createEventList } from "../../reduxFiles/slices/events";
 
 function EventTile(/*{event}*/) {
   const img = "./Screenshot-friends.png";
+
   return (
     <>
       {/* <div className="card card-side bg-base-100 shadow-xl">

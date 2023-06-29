@@ -4,20 +4,21 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 export interface EventState {
   //update interface once types are declared
   eventId?: string;
-  eventName: string;
-  eventDateAndTime: Date | null;
-  eventLocation: string | null;
-  eventDescription: string | null;
+  title: string;
+  date: Date | null;
+  location: string | null;
+  description: string | null;
   eventHost: string;
   eventAttendees: string[];
+  coverPic?: string;
 }
 
 const initialEventState: EventState = {
   //   value: {
-  eventName: "",
-  eventDateAndTime: null,
-  eventLocation: "",
-  eventDescription: "",
+  title: "",
+  date: null,
+  location: "",
+  description: "",
   eventHost: "",
   eventAttendees: [],
   //   },
@@ -57,6 +58,10 @@ export const eventListSlice = createSlice({
     },
     updateEventList: (state) => {
       state = [];
+    },
+    setEventList: (_state, action) => {
+      console.log(action);
+      return action.payload;
     },
   },
 });
