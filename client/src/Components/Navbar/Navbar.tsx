@@ -3,9 +3,13 @@ import "./Navbar.css";
 import { Link } from "react-router-dom";
 import { Link as Scroll } from "react-scroll";
 import Logout from "../Logout";
+import { useAppDispatch } from "../../reduxFiles/store";
+import { openLogout } from "../../reduxFiles/slices/logout";
 function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showDropdownMobile, setDropdownMobile] = useState(false);
+
+  const dispatch = useAppDispatch()
 
   const handleAvatarClick = () => {
     setShowDropdown(!showDropdown);
@@ -21,6 +25,7 @@ function Navbar() {
   };
   const handleSignOut = () => {
     console.log('helpoo')
+    dispatch(openLogout());
     // return ( <>
     //     <Logout></Logout>
     // </>)

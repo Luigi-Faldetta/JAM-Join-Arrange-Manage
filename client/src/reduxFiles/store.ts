@@ -6,10 +6,12 @@ import userReducers from "./slices/users";
 // import { setupListeners } from '@reduxjs/toolkit/query'
 import { thesisDbApi } from "../services/ThesisDB";
 import { useDispatch } from "react-redux";
+import { logoutReducer } from "./slices/logout";
 
 
 const store = configureStore({
   reducer: {
+    logoutReducer,
     eventListReducer: eventReducers.eventListReducer,
     eventReducer: eventReducers.eventReducer,
     userListReducer: userReducers.userListReducer,
