@@ -68,6 +68,24 @@ export const thesisDbApi = createApi({
                 headers: {'Content-type': 'application/json; charset=UTF-8' },
             })
         }),
+        
+        joinActivity: build.mutation<ApiResponse<null>, {userId: string, eventId: string}>({
+            query:(ids) => ({
+                url: 'useractivity/',
+                method: 'POST',
+                body: ids,
+                headers: {'Content-type': 'application/json; charset=UTF-8' },
+            })
+        }),
+        
+        logIn: build.mutation<ApiResponse<null>, {email: string, password: string}>({
+            query:(credentials) => ({
+                url: 'userLogin/',
+                method: 'POST',
+                body: credentials,
+                headers: {'Content-type': 'application/json; charset=UTF-8' },
+            })
+        }),
        
         //Gets
 
@@ -98,6 +116,10 @@ export const thesisDbApi = createApi({
 
         getToDos: build.query<ApiResponse<ToDoState[]>, string>({
             query: (eventId) => ({url:`todos/${eventId}`}),
+        }),
+        
+        logOut: build.query<ApiResponse<null>, null>({
+            query: () => ({url:`userlogout`}),
         }),
 
         //Patches
@@ -159,9 +181,9 @@ export const thesisDbApi = createApi({
             }),
         }),
         
-        deleteJoinedActivity: build.mutation<ApiResponse<null>, {userId:string,eventId:string}>({
+        leaveActivity: build.mutation<ApiResponse<null>, {userId:string,eventId:string}>({
             query:(ids) => ({
-                url: `userActivity/`,
+                url: `useractivity/`,
                 method: 'DELETE',
                 body: ids,
                 headers: {'Content-type': 'application/json; charset=UTF-8' },
@@ -176,6 +198,7 @@ export const thesisDbApi = createApi({
     useAddExpenseMutation,
     useAddToDoMutation,
     useAddUserMutation,
+    useJoinActivityMutation,
     useGetEventQuery,
     useGetEventsQuery,
     useGetExpensesQuery,
@@ -187,7 +210,7 @@ export const thesisDbApi = createApi({
     useUpdateToDoMutation,
     useDeleteEventMutation,
     useDeleteExpenseMutation,
-    useDeleteJoinedActivityMutation,
+    useLeaveActivityMutation,
     useDeleteToDoMutation,
     useDeleteUserMutation,
 } = thesisDbApi;

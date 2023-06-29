@@ -49,17 +49,25 @@ function CreateUserForm() {
       setType("password");
     }
   };
- 
+
   return (
     <>
-      <button className="text-blue-700 hover:text-blue-800 text-sm font-medium underline mt-2" onClick={() => setOpen(true)}>
-        Sign Up
-      </button>
+      <div className="flex items-center justify-center mt-2">
+        <div className="text-black-700 text-sm font-medium">
+          Don't have an account yet?
+        </div>
+        <button
+          className="text-blue-700 hover:text-blue-800 text-sm font-medium underline ml-2"
+          onClick={() => setOpen(true)}
+        >
+          Sign Up
+        </button>
+      </div>
       <dialog id="my_modal_3" className="modal" open={open}>
         <form method="dialog" className="modal-box" onSubmit={handleFormSubmit}>
           <div
             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            onClick={() =>  setOpen(false)}
+            onClick={() => setOpen(false)}
           >
             ✕
           </div>

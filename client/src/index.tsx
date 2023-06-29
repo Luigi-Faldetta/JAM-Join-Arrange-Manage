@@ -12,9 +12,9 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import LandingAbout from "./pages/LandingAbout";
-import LandingFaqs from "./pages/LandingFaqs";
-import LandingPage from "./pages/LandingPage";
+import LandingAbout from "./pages/LandingAbout/LandingAbout";
+import LandingFaqs from "./pages/LandingFaqs/LandingFaqs";
+import LandingPage from "./pages/LandingPage/LandingPage";
 import UserDashboardPage from "./pages/UserDashboardPage";
 
 const router = createBrowserRouter(
