@@ -1,5 +1,5 @@
-import EventMini from "../Components/EventDashboard/EventMini";
-import ToggleButton from "../Components/EventDashboard/ToggleButton";
+import EventMini from "../EventDashboard/EventMini";
+import ToggleButton from "../EventDashboard/ToggleButton";
 
 export default function Event () {
     return (

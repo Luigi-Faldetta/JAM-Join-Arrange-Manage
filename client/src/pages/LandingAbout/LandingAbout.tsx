@@ -1,3 +1,5 @@
+import './LandingAbout.css';
+
 const LandingAbout = () => {
   return (
     <div className="about-page" id="about">

@@ -1,6 +1,6 @@
-import LoginForm from '../Components/LandingDashboard/LoginForm';
-import CreateUserForm from '../Components/LandingDashboard/CreateUserForm';
-
+import LoginForm from '../../Components/LandingDashboard/LoginForm';
+import CreateUserForm from '../../Components/LandingDashboard/CreateUserForm';
+import './LandingPage.css';
 import { useState } from 'react';
 
 const LandingPage = () => {

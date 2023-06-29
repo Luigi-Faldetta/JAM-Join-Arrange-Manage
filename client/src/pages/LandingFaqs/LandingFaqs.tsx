@@ -1,3 +1,5 @@
+import './LandingFaqs.css';
+
 const LandingFaqs = () => {
   return (
     <div className='faqs-page' id="faqs">
