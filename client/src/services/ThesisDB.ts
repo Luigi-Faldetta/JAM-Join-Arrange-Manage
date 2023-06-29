@@ -120,6 +120,15 @@ export const thesisDbApi = createApi({
                 headers: {'Content-type': 'application/json; charset=UTF-8' },
             })
         }),
+        
+        calculateExpenses: build.mutation<ApiResponse<ExpenseState>, Partial<ExpenseState> & Pick<ExpenseState, 'value'>>({
+            query:(expense) => ({
+                url: 'expense/',
+                method: 'POST',
+                body: expense,
+                headers: {'Content-type': 'application/json; charset=UTF-8' },
+            })
+        }),
 
         getExpenses: build.query<ApiResponse<ExpenseState[]>, string>({
             query: (eventId) => ({url:`expenses/${eventId}`}),
@@ -197,6 +206,8 @@ export const thesisDbApi = createApi({
         logOut: build.query<ApiResponse<null>, null>({
             query: () => ({url:`userlogout`}),
         }),
+
+
     }),
   })
 
@@ -220,4 +231,6 @@ export const thesisDbApi = createApi({
     useLeaveActivityMutation,
     useDeleteToDoMutation,
     useDeleteUserMutation,
+    useLogInMutation,
+    useLogOutQuery,
 } = thesisDbApi;

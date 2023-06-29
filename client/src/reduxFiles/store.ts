@@ -3,8 +3,9 @@ import eventReducers from "./slices/events";
 import expenseReducers from "./slices/expenses";
 import toDoReducers from "./slices/toDos";
 import userReducers from "./slices/users";
-import { setupListeners } from '@reduxjs/toolkit/query'
+// import { setupListeners } from '@reduxjs/toolkit/query'
 import { thesisDbApi } from "../services/ThesisDB";
+import { useDispatch } from "react-redux";
 
 
 const store = configureStore({
@@ -30,5 +31,6 @@ const store = configureStore({
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch: () => AppDispatch = useDispatch
 
 export default store;
