@@ -1,7 +1,18 @@
 
 .faqs-page {
-    margin: 2rem;
     height: 100vh;
     box-sizing: border-box;
+    margin: 0.9rem; 
+  }
+  .faq {
+    margin: 0.9rem; 
+    display: flex;
+    justify-content: start;
+    width: 85vw
   }
   
+  .faq-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
