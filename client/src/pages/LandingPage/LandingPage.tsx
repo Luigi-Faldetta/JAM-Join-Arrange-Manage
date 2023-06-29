@@ -1,6 +1,6 @@
-import LoginForm from '../Components/LandingDashboard/LoginForm';
-import CreateUserForm from '../Components/LandingDashboard/CreateUserForm';
-
+import LoginForm from '../../Components/LandingDashboard/LoginForm';
+import CreateUserForm from '../../Components/LandingDashboard/CreateUserForm';
+import './LandingPage.css';
 import { useState } from 'react';
 
 const LandingPage = () => {
@@ -42,7 +42,7 @@ const LandingPage = () => {
         <div className={`lg:col-span-5 ${loginFormActive ? 'active' : ''}`}>
           <div className='lg:flex lg:flex-col'>
             <LoginForm />
-            <CreateUserForm />
+           <CreateUserForm />
           </div>
         </div>
       </div>
