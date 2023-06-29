@@ -1,6 +1,6 @@
 import { createEventList } from "../../reduxFiles/slices/events";
 
-function EventTile(/*{event}*/) {
+function EventTile({ event }: { event: any }) {
   const img = "./Screenshot-friends.png";
 
   return (
@@ -24,15 +24,13 @@ function EventTile(/*{event}*/) {
       >
         <div className="flex flex-col w-3/5 pr-3 justify-between">
           <div>
-            <h3 className="text-red-500 text-xs lg:text-base">
-              Sat, 5th Never @ 9:00 PM{" "}
-            </h3>
+            <h3 className="text-red-500 text-xs lg:text-base">{event.date}</h3>
             <h3 className="text-xs lg:text-base text-gray-500">
-              12345, Rainbow Lane
+              {event.location}
             </h3>
           </div>
           <h2 className=" text-lg lg:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            Really cool event!!!
+            {event.title}
           </h2>
           <h2 className=" text-[10px] lg:text-sm tracking-tight text-gray-500 dark:text-white">
             👤 12 going ⋆ You are hosting
@@ -46,7 +44,14 @@ function EventTile(/*{event}*/) {
         </div>
 
         <div className=" min-w-lg w-2/5 rounded-lg overflow-hidden">
-          <img className="object-cover w-full h-full" src={img}></img>
+          {event.coverPic ? (
+            <img
+              className="object-cover w-full h-full"
+              src={event.coverPic}
+            ></img>
+          ) : (
+            <img className="object-cover w-full h-full" src={img}></img>
+          )}
         </div>
       </a>
     </>

@@ -67,8 +67,12 @@ export const eventListSlice = createSlice({
 });
 
 export const { createEvent, updateEvent, deleteEvent } = eventSlice.actions;
-export const { createEventList, updateEventList, deleteEventList } =
-  eventListSlice.actions;
+export const {
+  createEventList,
+  updateEventList,
+  deleteEventList,
+  setEventList,
+} = eventListSlice.actions;
 
 const eventReducer = eventSlice.reducer;
 const eventListReducer = eventListSlice.reducer;
