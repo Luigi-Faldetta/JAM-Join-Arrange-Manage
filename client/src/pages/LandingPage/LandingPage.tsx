@@ -42,7 +42,7 @@ const LandingPage = () => {
         <div className={`lg:col-span-5 ${loginFormActive ? 'active' : ''}`}>
           <div className='lg:flex lg:flex-col'>
             <LoginForm />
-            <CreateUserForm />
+           <CreateUserForm />
           </div>
         </div>
       </div>
