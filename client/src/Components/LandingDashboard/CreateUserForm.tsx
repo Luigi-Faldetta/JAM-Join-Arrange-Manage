@@ -32,11 +32,11 @@ function CreateUserForm() {
     };
 
     console.log(userFormData);
-    dispatch(createUser(userFormData));
+    // dispatch(createUser(userFormData));
     setOpen(false);
     setPasswordMatch(true);
+    nameInputRef.current!.value = "";
     emailInputRef.current!.value = "";
-    phoneInputRef.current!.value = "";
     passwordInputRef.current!.value = "";
     repeatPasswordInputRef.current!.value = "";
   };
@@ -49,6 +49,7 @@ function CreateUserForm() {
       setType("password");
     }
   };
+ 
   return (
     <>
       <button className="text-blue-700 hover:text-blue-800 text-sm font-medium underline mt-2" onClick={() => setOpen(true)}>
@@ -58,7 +59,7 @@ function CreateUserForm() {
         <form method="dialog" className="modal-box" onSubmit={handleFormSubmit}>
           <div
             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            onClick={() => setOpen(false)}
+            onClick={() =>  setOpen(false)}
           >
             ✕
           </div>

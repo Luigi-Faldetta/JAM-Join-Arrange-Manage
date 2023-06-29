@@ -96,7 +96,7 @@ export const thesisDbApi = createApi({
             query: (eventId) => ({url:`expenses/${eventId}`}),
         }),
 
-        getTodos: build.query<ApiResponse<ToDoState[]>, string>({
+        getToDos: build.query<ApiResponse<ToDoState[]>, string>({
             query: (eventId) => ({url:`todos/${eventId}`}),
         }),
 
@@ -120,11 +120,50 @@ export const thesisDbApi = createApi({
             }),
         }),
         
-        updateTodo: build.mutation<ApiResponse<ToDoState>, Partial<ToDoState> & Pick<ToDoState, 'id'>>({
+        updateToDo: build.mutation<ApiResponse<ToDoState>, Partial<ToDoState> & Pick<ToDoState, 'id'>>({
             query:({id, ...patch}) => ({
                 url: `todo/${id}`,
                 method: 'PATCH',
                 body: patch,
+                headers: {'Content-type': 'application/json; charset=UTF-8' },
+            }),
+        }),
+
+        //Deletes
+
+        deleteEvent: build.mutation<ApiResponse<number>, string>({
+            query:(id) => ({
+                url: `event/${id}`,
+                method: 'DELETE',
+            })
+        }),
+
+        deleteUser: build.mutation<ApiResponse<number>, string>({
+            query:(id) => ({
+                url: `user/${id}`,
+                method: 'DELETE',
+            }),
+        }),
+        
+        deleteToDo: build.mutation<ApiResponse<number>, string>({
+            query:(id) => ({
+                url: `todo/${id}`,
+                method: 'DELETE',
+            }),
+        }),
+        
+        deleteExpense: build.mutation<ApiResponse<number>, string>({
+            query:(id) => ({
+                url: `expense/${id}`,
+                method: 'DELETE',
+            }),
+        }),
+        
+        deleteJoinedActivity: build.mutation<ApiResponse<null>, {userId:string,eventId:string}>({
+            query:(ids) => ({
+                url: `userActivity/`,
+                method: 'DELETE',
+                body: ids,
                 headers: {'Content-type': 'application/json; charset=UTF-8' },
             }),
         }),
@@ -140,10 +179,15 @@ export const thesisDbApi = createApi({
     useGetEventQuery,
     useGetEventsQuery,
     useGetExpensesQuery,
-    useGetTodosQuery,
+    useGetToDosQuery,
     useGetUserQuery,
     useGetUsersQuery,
     useUpdateUserMutation,
     useUpdateEventMutation,
-    useUpdateTodoMutation,
+    useUpdateToDoMutation,
+    useDeleteEventMutation,
+    useDeleteExpenseMutation,
+    useDeleteJoinedActivityMutation,
+    useDeleteToDoMutation,
+    useDeleteUserMutation,
 } = thesisDbApi;

@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import sequelize from './modelDB.js';
 import Sequelize from 'sequelize';
 
-const UserEvents = sequelize.define(
+const UserEvent = sequelize.define(
   'UserEvents',
   {
     userId: {
@@ -23,4 +23,4 @@ const UserEvents = sequelize.define(
   }, { timestamps: false }
 );
 
-export default UserEvents;
+export default UserEvent;

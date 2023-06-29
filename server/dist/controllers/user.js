@@ -19,33 +19,52 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.editUser = void 0;
+exports.deleteUser = exports.updateUser = void 0;
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const associations_1 = require("../models/associations");
 // Needs body with at least {"name", "email", "password"}
 const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
         return res.status(409)
-            .send({ error: "409", message: "Missing input data" });
+            .json({
+            success: false,
+            error: "409",
+            data: null,
+            message: "Missing input data"
+        });
     }
     const user = yield associations_1.User.findOne({ where: { email } });
     if (user)
         return res.status(409)
-            .send({ error: "409", message: "User already exists" });
+            .json({
+            success: false,
+            error: "409",
+            data: null,
+            message: "User already exists"
+        });
+    const inputPassword = password;
     try {
-        const user = yield associations_1.User.create(req.body);
+        const hash = yield bcrypt_1.default.hash(inputPassword, 10);
+        const user = yield associations_1.User.create(Object.assign(Object.assign({}, req.body), { password: hash }));
         // @ts-ignore
         const _a = Object.assign({}, user.dataValues), { password } = _a, safeUser = __rest(_a, ["password"]);
-        res.status(201).json({
+        res.status(201)
+            .json({
             success: true,
+            error: null,
             data: safeUser,
             message: "User created",
         });
     }
     catch (err) {
-        console.error(err);
-        res.status(500).json({ message: err.message });
+        process.env.NODE_ENV !== 'test' && console.error(err);
+        res.status(500)
+            .json({ message: err.message });
     }
 });
 // Needs req.params.userid
@@ -54,94 +73,149 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const user = yield associations_1.User.findOne({
             where: { userId: req.params.userid }
         });
-        // if (!user) {
-        //   return res.status(409).send({ error: "409", message: "No user found" })
-        // }
+        if (!user) {
+            return res.status(404)
+                .json({
+                success: false,
+                error: "404",
+                data: null,
+                message: "No user found"
+            });
+        }
         // @ts-ignore
         const _b = Object.assign({}, user.dataValues), { password } = _b, safeUser = __rest(_b, ["password"]);
-        res.status(200).json({
+        res.status(200)
+            .json({
             success: true,
+            error: null,
             data: safeUser,
             message: "User fetched",
         });
     }
     catch (err) {
-        console.error(err);
-        res.status(400).send({ error: "400", message: "Bad user request" });
+        process.env.NODE_ENV !== 'test' && console.error(err);
+        res.status(400)
+            .json({ message: err.message });
     }
 });
 // Needs req.params.userid
-// Needs body with info
-const editUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = req.params.userid;
-    const info = req.body;
+// Needs body with the changes 
+const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = yield associations_1.User.findByPk(id);
-        if (!user) {
-            res.status(404).json({
+        const userExists = yield associations_1.User.findOne({ where: { userId: req.params.userid } });
+        if (!userExists) {
+            return res.status(400)
+                .json({
                 success: false,
+                error: "400",
                 data: null,
-                message: "User not found.",
+                message: "Wrong user id"
             });
-            return;
         }
-        let userUpdated = {};
-        if (info.password) {
-            userUpdated = yield user.update(Object.assign({}, info));
+        if (req.body.email) {
+            const user = yield associations_1.User.findOne({ where: { email: req.body.email } });
+            if (user) {
+                return res.status(409)
+                    .json({
+                    success: false,
+                    error: "409",
+                    data: null,
+                    message: "Email already exists"
+                });
+            }
+        }
+        let updatedUser = {};
+        if (req.body.password) {
+            const hash = yield bcrypt_1.default.hash(req.body.password, 10);
+            updatedUser = yield associations_1.User.update(Object.assign(Object.assign({}, req.body), { password: hash }), {
+                where: { userId: req.params.userid },
+                returning: true
+            });
         }
         else {
-            userUpdated = yield user.update(info);
+            updatedUser = yield associations_1.User.update(req.body, {
+                where: { userId: req.params.userid },
+                returning: true
+            });
         }
-        res.status(200).json({
+        // @ts-ignore
+        const _c = Object.assign({}, updatedUser[1][0].dataValues), { password } = _c, safeUpdatedUser = __rest(_c, ["password"]);
+        res.status(200)
+            .json({
             success: true,
-            data: userUpdated,
+            error: null,
+            data: safeUpdatedUser,
             message: "User updated",
         });
     }
     catch (err) {
-        console.error(err);
-        res.status(500).json({ message: err.message });
+        process.env.NODE_ENV !== 'test' && console.error(err);
+        res.status(500)
+            .json({ message: err.message });
     }
 });
-exports.editUser = editUser;
+exports.updateUser = updateUser;
 // Needs req.params.userid
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const deletedUser = yield associations_1.User.destroy({ where: { userId: req.params.userid } });
-        res.status(200).json({
+        const userExists = yield associations_1.User.findOne({ where: { userId: req.params.userid } });
+        if (!userExists) {
+            return res.status(400)
+                .json({
+                success: false,
+                error: 400,
+                data: null,
+                message: "Wrong user id",
+            });
+        }
+        const deletedUser = yield associations_1.User.destroy({
+            where: { userId: req.params.userid }
+        });
+        res.status(200)
+            .json({
             success: true,
+            error: null,
             data: deletedUser,
             message: 'User deleted',
         });
     }
     catch (err) {
-        console.log(err);
-        res.status(400).send({ error: "400", message: "Bad user request" });
+        process.env.NODE_ENV !== 'test' && console.error(err);
+        res.status(400)
+            .json({ message: err.message });
     }
 });
 exports.deleteUser = deleteUser;
 // Needs req.params.eventid
 const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const userIds = yield associations_1.UserEvents.findAll({
-            where: { eventId: req.params.eventid },
+        const userIds = yield associations_1.UserEvent.findAll({
+            where: { eventId: req.params.eventid }
         });
-        // console.log(userIds)
-        if (userIds) {
+        if (userIds.length) {
             const usersArray = [];
             for (const user of userIds) {
                 usersArray.push(user.dataValues.userId);
             }
-            const users = yield associations_1.User.findAll({ where: { userId: usersArray } });
-            res.status(200).json(users);
+            const users = yield associations_1.User.findAll({
+                where: { userId: usersArray }
+            });
+            res.status(200)
+                .json({
+                success: true,
+                error: null,
+                data: users,
+                message: 'Event users fetched',
+            });
         }
         else {
-            throw "No users where found";
+            throw new Error("No users were found");
         }
     }
     catch (err) {
-        console.error(err);
-        res.status(500).json({ message: err.message });
+        process.env.NODE_ENV !== 'test' && console.error(err);
+        res.status(500)
+            .json({ message: err.message });
     }
 });
-exports.default = { newUser, getUser, editUser: exports.editUser, deleteUser: exports.deleteUser, getAllUsers };
+exports.default = { newUser, getUser, updateUser: exports.updateUser, deleteUser: exports.deleteUser, getAllUsers };

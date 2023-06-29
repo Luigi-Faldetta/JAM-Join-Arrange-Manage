@@ -23,7 +23,7 @@ function EventTile(/*{event}*/) {
       >
         <div className="flex flex-col w-3/5 pr-3 justify-between">
           <div>
-            <h3 className="text-pink-500 text-xs lg:text-base">
+            <h3 className="text-red-500 text-xs lg:text-base">
               Sat, 5th Never @ 9:00 PM{" "}
             </h3>
             <h3 className="text-xs lg:text-base text-gray-500">
