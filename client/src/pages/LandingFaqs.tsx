@@ -1,8 +1,8 @@
 const LandingFaqs = () => {
   return (
-    <div className='faqs-page' id="faqs">
+    <div className='faqs-page flex justify-center'  id="faqs">
       <p 
-    className='about-text max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400'
+    className='about-text max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400 text-center'
     >
       <details>
   <summary>How do I create a new event?</summary>

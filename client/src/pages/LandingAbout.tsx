@@ -1,8 +1,10 @@
 const LandingAbout = () => {
   return (
-    <div className="about-page" id="about">
+    <div className="about-page flex items-center justify-center text-center" id="about">
+      <div className="container">
       <p 
-      className='about-text max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400'
+         className="about-text mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400"
+         style={{ textAlign: 'justify' }}
       >
         {/* <h1>About</h1> */}
         J.A.M. - Join, Arrange, Manage is an all-in-one application designed to
@@ -24,6 +26,7 @@ const LandingAbout = () => {
         conference, J.A.M. simplifies the process, enhances collaboration, and
         ensures a seamless event experience for all involved.
       </p>
+      </div>
     </div>
   );
 };

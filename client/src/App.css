@@ -27,7 +27,7 @@ h1 {
 }
 
 .about-text {
-  margin: 20rem;
+  margin: 10rem;
   box-sizing: border-box;
   /* background-color: aqua; */
 }
@@ -47,5 +47,9 @@ h1 {
 
 .active {
   transform: scale(1.2);
-  transition: transform 0.3s ease;
+  transition: transform 0.8s ease;
+}
+.container {
+  display: flex;
+  justify-content: center;
 }
