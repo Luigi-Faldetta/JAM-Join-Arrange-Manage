@@ -13,16 +13,15 @@ const Todo = modelDB_1.default.define('Todo', {
     },
     isDone: {
         type: sequelize_1.DataTypes.BOOLEAN,
+        defaultValue: false,
         allowNull: false,
     },
     creatorId: {
         type: sequelize_2.default.UUID,
-        defaultValue: sequelize_2.default.UUIDV4,
         allowNull: false,
     },
     eventId: {
         type: sequelize_2.default.UUID,
-        defaultValue: sequelize_2.default.UUIDV4,
         allowNull: false,
     },
 }, { timestamps: false });

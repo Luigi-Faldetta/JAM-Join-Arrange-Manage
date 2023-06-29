@@ -4,26 +4,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
-const modelDB_js_1 = __importDefault(require("./modelDB.js"));
+const modelDB_1 = __importDefault(require("./modelDB"));
 const sequelize_2 = __importDefault(require("sequelize"));
-const UserEvent = modelDB_js_1.default.define('UserEvents', {
-    userId: {
-        type: sequelize_2.default.UUID,
-        allowNull: false,
-    },
+const closedExpense = modelDB_1.default.define('ClosedExpenses', {
     eventId: {
         type: sequelize_2.default.UUID,
         allowNull: false,
     },
-    isHost: {
-        type: sequelize_1.DataTypes.BOOLEAN,
-        defaultValue: false,
+    userId: {
+        type: sequelize_2.default.UUID,
         allowNull: false,
     },
-    isGoing: {
-        type: sequelize_1.DataTypes.BOOLEAN,
-        defaultValue: false,
+    spent: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false,
+    },
+    target: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false,
+    },
+    difference: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false,
+    },
+    total: {
+        type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
     }
 }, { timestamps: false });
-exports.default = UserEvent;
+exports.default = closedExpense;

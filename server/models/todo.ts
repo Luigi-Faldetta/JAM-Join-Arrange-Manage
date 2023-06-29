@@ -9,16 +9,15 @@ const Todo = sequelize.define('Todo', {
   },
   isDone: {
     type: DataTypes.BOOLEAN,
+    defaultValue: false,
     allowNull: false,
   },
   creatorId: {
     type: Sequelize.UUID,
-    defaultValue: Sequelize.UUIDV4,
     allowNull: false,
   },
   eventId: {
     type: Sequelize.UUID,
-    defaultValue: Sequelize.UUIDV4,
     allowNull: false,
   },
 }, { timestamps: false });
