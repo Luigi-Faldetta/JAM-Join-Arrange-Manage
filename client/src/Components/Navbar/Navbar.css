@@ -1,7 +1,6 @@
   .navbar-container {
     position: sticky;
     z-index: 100;
-    /* border-bottom: 1px solid #ccc; */
     top: 0;
     border-bottom: 2px solid transparent;
     border-image: linear-gradient(0.25turn, rgb(255, 255, 255), rgb(140, 140, 140), rgb(255, 255, 255));

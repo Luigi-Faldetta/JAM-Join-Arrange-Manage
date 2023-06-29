@@ -16,6 +16,7 @@ import LandingAbout from "./pages/LandingAbout/LandingAbout";
 import LandingFaqs from "./pages/LandingFaqs/LandingFaqs";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import UserDashboardPage from "./pages/UserDashboardPage";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,6 +25,7 @@ const router = createBrowserRouter(
       <Route path="/about" element={<LandingAbout />} />
       <Route path="/faqs" element={<LandingFaqs />} />
       <Route path="/user-dashboard" element={<UserDashboardPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
     </Route>
   )
 );
