@@ -9,3 +9,7 @@
     /* background-color: aqua; */
   }
   
+  .container {
+    display: flex;
+    justify-content: center;
+  }
