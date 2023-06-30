@@ -10,7 +10,6 @@ function DeleteEvent({ setDeleteModalOpen }: DeleteEventProps) {
 
   function handleCancelDelete() {
     setDeleteModalOpen(false);
-    // dispatch(closeLogout());
   }
 
   function handleDelete() {
@@ -92,4 +91,26 @@ function DeleteEvent({ setDeleteModalOpen }: DeleteEventProps) {
   );
 }
 
-export default DeleteEvent;
+export default function DeleteEventButton() {
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const openDeleteModal = () => {
+    setDeleteModalOpen(true);
+    console.log("event delete button clicked");
+  };
+
+  return (
+    <>
+      <button
+        onClick={() => openDeleteModal()}
+        className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300  hover:bg-red-800 hover:text-white sm:mt-0 sm:w-auto"
+      >
+        Delete
+      </button>
+
+      {deleteModalOpen && (
+        <DeleteEvent setDeleteModalOpen={setDeleteModalOpen} />
+      )}
+    </>
+  );
+}
