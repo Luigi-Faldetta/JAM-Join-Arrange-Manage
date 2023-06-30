@@ -1,12 +1,29 @@
 import CreateEventForm from "../Components/UserDashboard/CreateEventForm";
 import EventTile from "../Components/UserDashboard/EventTile";
-import { createEventList } from "../reduxFiles/slices/events";
+import { EventState, createEventList } from "../reduxFiles/slices/events";
 import { useSelector } from "react-redux";
-import { RootState } from "../reduxFiles/store";
+import { RootState, useAppDispatch } from "../reduxFiles/store";
+import { useGetEventsQuery } from "../services/ThesisDB";
+import { useEffect } from "react";
+import { setEventList } from "../reduxFiles/slices/events";
 
 function UserDashboardPage() {
+  const dispatch = useAppDispatch();
   const eventList = useSelector((state: RootState) => state.eventListReducer);
+  const { data, error, isLoading } = useGetEventsQuery(
+    "57cb0816-b2f3-43f2-86d4-71cfa16ad6ad"
+  );
 
+  useEffect(() => {
+    if (!isLoading && !error) {
+      console.log("event list ==> ", data?.data);
+      dispatch(setEventList(data?.data));
+    }
+  }, [isLoading, error]);
+
+  useEffect(() => {
+    console.log("Event list has changed ==> ", eventList);
+  }, [eventList]);
   // add fetch to get all the events
 
   return (
@@ -17,16 +34,13 @@ function UserDashboardPage() {
         </div>
 
         <div className=" h-full p-5 flex flex-col items-center gap-5">
-          {/* {eventList ? (
-            eventList.map((event) => {
+          {eventList ? (
+            eventList.map((event: EventState) => {
               return <EventTile event={event}></EventTile>;
             })
           ) : (
             <h3>No Upcoming Events</h3>
-          )} */}
-
-          <EventTile></EventTile>
-          <EventTile></EventTile>
+          )}
         </div>
       </div>
     </>

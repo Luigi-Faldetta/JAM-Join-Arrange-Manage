@@ -1,42 +1,48 @@
 import { ChangeEvent, useState } from "react";
-import { Cloudinary } from "@cloudinary/url-gen";
+// import { Cloudinary } from "@cloudinary/url-gen";
 
-function PictureUpload() {
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+function PictureUpload({
+  eventFile,
+  setEventFile,
+}: {
+  eventFile: File | null;
+  setEventFile: React.Dispatch<React.SetStateAction<File | null>>;
+}) {
+  // const [imageUrl, setImageUrl] = useState<string | null>(null);
 
-  const cld = new Cloudinary({ cloud: { cloudName: "de4bu4ijj" } });
+  // const cld = new Cloudinary({ cloud: { cloudName: "de4bu4ijj" } });
 
-  const handleImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const data = new FormData();
-      data.append("file", file);
-      data.append("upload_preset", "tdzb6v4z");
-      data.append("cloud_name", "de4bu4ijj");
+  // const handleImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (file) {
+  //     const data = new FormData();
+  //     data.append("file", file);
+  //     data.append("upload_preset", "tdzb6v4z");
+  //     data.append("cloud_name", "de4bu4ijj");
 
-      try {
-        const res = await fetch(
-          "https://api.cloudinary.com/v1_1/de4bu4ijj/image/upload",
-          {
-            method: "post",
-            body: data,
-          }
-        );
+  //     try {
+  //       const res = await fetch(
+  //         "https://api.cloudinary.com/v1_1/de4bu4ijj/image/upload",
+  //         {
+  //           method: "post",
+  //           body: data,
+  //         }
+  //       );
 
-        const uploadedImage = await res.json();
+  //       const uploadedImage = await res.json();
 
-        setImageUrl(uploadedImage.url);
+  //       setImageUrl(uploadedImage.url);
 
-        // Send the url to the backend to update the post
+  //       // Send the url to the backend to update the post
 
-        console.log("Image form cloudinary ==> ", uploadedImage);
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      return;
-    }
-  };
+  //       console.log("Image form cloudinary ==> ", uploadedImage);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   } else {
+  //     return;
+  //   }
+  // };
 
   return (
     <div className="flex items-center justify-center w-full rounded-full">
@@ -45,9 +51,9 @@ function PictureUpload() {
         className="flex flex-col items-center justify-center w-52 h-52 border-2 border-gray-300 border-dashed rounded-full cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
       >
         <div className="flex flex-col items-center justify-center w-52 h-52 rounded-full overflow-hidden">
-          {imageUrl ? (
+          {eventFile ? (
             <img
-              src={`${imageUrl}`}
+              src={`${eventFile}`}
               width="100"
               height="100"
               className="object-cover w-full h-full "
@@ -75,12 +81,12 @@ function PictureUpload() {
             </div>
           )}
         </div>
-        <input
+        {/* <input
           id="dropzone-file"
           type="file"
           className="hidden"
-          onChange={handleImageUpload}
-        />
+          onChange={(e) => setFile(e.target.files?.[0]!)}
+        /> */}
       </label>
     </div>
   );

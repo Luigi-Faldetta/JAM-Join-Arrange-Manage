@@ -3,15 +3,15 @@ import { useAppDispatch } from "../reduxFiles/store";
 import { useNavigate } from "react-router-dom";
 function Logout() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   function handleCloseLogout() {
     dispatch(closeLogout());
   }
- function signOut () {
-    navigate('/')
+  function signOut() {
+    navigate("/");
     dispatch(closeLogout());
- }
+  }
   return (
     <>
       <div
@@ -60,9 +60,9 @@ function Logout() {
               </div>
               <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                 <button
-                onClick={signOut}
+                  onClick={signOut}
                   type="button"
-                  className=" inline-flex w-full justify-center rounded-md bg-white-600 px-3 py-2 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:ml-3 sm:w-auto"
+                  className=" inline-flex w-full justify-center bg-white-600 px-3 py-2 rounded-md bg-white text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:ml-3 sm:w-auto"
                 >
                   Sign out
                 </button>
@@ -83,6 +83,5 @@ function Logout() {
 }
 export default Logout;
 function useNavagite() {
-    throw new Error("Function not implemented.");
+  throw new Error("Function not implemented.");
 }
-
