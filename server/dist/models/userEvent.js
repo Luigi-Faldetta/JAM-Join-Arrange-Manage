@@ -9,18 +9,19 @@ const sequelize_2 = __importDefault(require("sequelize"));
 const UserEvent = modelDB_js_1.default.define('UserEvents', {
     userId: {
         type: sequelize_2.default.UUID,
-        defaultValue: sequelize_2.default.UUIDV4,
         allowNull: false,
     },
     eventId: {
         type: sequelize_2.default.UUID,
-        defaultValue: sequelize_2.default.UUIDV4,
         allowNull: false,
     },
     isHost: {
         type: sequelize_1.DataTypes.BOOLEAN,
         defaultValue: false,
-        allowNull: false,
+    },
+    isGoing: {
+        type: sequelize_1.DataTypes.BOOLEAN,
+        defaultValue: false,
     }
 }, { timestamps: false });
 exports.default = UserEvent;

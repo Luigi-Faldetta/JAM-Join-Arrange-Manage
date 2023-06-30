@@ -13,7 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const associations_1 = require("../models/associations");
+const constants_js_1 = require("../constants.js");
 // Needs body with {"email", "password"} 
 const logIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!req.body.email || !req.body.password) {
@@ -34,7 +36,13 @@ const logIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!validatedPass)
             throw new Error('Incorrect email/password');
         // @ts-ignore
-        req.session.uid = user.userId;
+        const token = jsonwebtoken_1.default.sign({ userId: user.userId }, process.env.TOKEN_SECRET, { expiresIn: '30d' });
+        res.cookie('jwt', token, {
+            httpOnly: false,
+            secure: constants_js_1.__prod__,
+            sameSite: 'strict',
+            maxAge: 1000 * 60 * 60 * 24 * 30 // 30d
+        });
         res.status(200)
             .json({
             success: true,
@@ -51,21 +59,31 @@ const logIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 const logOut = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    req.session.destroy((error) => {
-        if (error) {
-            res.status(500)
-                .json({ error, message: 'Log out went wrong' });
-        }
-        else {
-            res.clearCookie('sid')
-                .status(200)
-                .json({
-                success: false,
-                error: null,
-                data: null,
-                message: 'Logged out successfully'
-            });
-        }
+    res.cookie('jwt', '', {
+        httpOnly: false,
+        expires: new Date(0)
     });
+    res.status(200)
+        .json({
+        success: true,
+        error: null,
+        data: null,
+        message: 'Logged out successfully'
+    });
+    // req.session.destroy((error) => {
+    //   if (error) {
+    //     res.status(500)
+    //       .json({ error, message: 'Log out went wrong' });
+    //   } else {
+    //     res.clearCookie('sid')
+    //       .status(200)
+    //       .json({
+    //         success: false,
+    //         error: null,
+    //         data: null,
+    //         message: 'Logged out successfully'
+    //       });
+    //   }
+    // });
 });
 exports.default = { logIn, logOut };
