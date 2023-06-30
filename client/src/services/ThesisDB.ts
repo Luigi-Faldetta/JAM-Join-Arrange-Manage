@@ -41,7 +41,7 @@ export const thesisDbApi = createApi({
 
     addEvent: build.mutation<
       ApiResponse<EventState>,
-      Partial<EventState> & Pick<EventState, "eventName">
+      Partial<EventState> & Pick<EventState, "title">
     >({
       query: (event) => ({
         url: "newevent/",

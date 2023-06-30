@@ -37,10 +37,6 @@ function CreateEventForm() {
 
         const uploadedImage = await res.json();
 
-        console.log(uploadedImage.url);
-
-        // Send the url to the backend to update the post
-
         console.log("Image form cloudinary ==> ", uploadedImage);
         return uploadedImage;
       } catch (error) {
@@ -54,28 +50,31 @@ function CreateEventForm() {
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); //removed as it was preventing modal from closing
 
-    const eventFormData: EventState = {
+    const eventFormData: Partial<EventState> &
+      Pick<EventState, "title" | "date" | "location" | "description"> = {
       title: event.currentTarget.eventName.value,
       date: eventDate,
       location: event.currentTarget.eventLocation.value,
       description: null,
-      // eventImage: image.url,
       // eventHost and eventAttendees need to be updated to
       // reflect hostID after login.
-      eventHost: "hostId",
-      eventAttendees: ["hostId"],
+      // eventHost: "hostId",
+      // eventAttendees: ["hostId"],
     };
-
+    // set cloudinary url to form object before sending to db
     const image = await handleImageUpload();
     console.log(image);
-
     eventFormData.coverPic = image.url;
+
     console.log("in component", eventFormData);
 
     const eventCreated = await addEvent(eventFormData);
-    console.log("event created == > ", eventCreated);
+    console.log("event created in DB== > ", eventCreated);
     dispatch(createEvent((eventCreated as ApiResponse<EventState>).data));
     setOpen(false);
+
+    // eventCreated brings an eventID
+    // Send another request with eventID, userID (host), isHost (true)
   };
 
   function createModal() {
