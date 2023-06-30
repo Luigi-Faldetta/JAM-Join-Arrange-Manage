@@ -18,12 +18,10 @@ const UserEvent = modelDB_js_1.default.define('UserEvents', {
     isHost: {
         type: sequelize_1.DataTypes.BOOLEAN,
         defaultValue: false,
-        allowNull: false,
     },
     isGoing: {
         type: sequelize_1.DataTypes.BOOLEAN,
         defaultValue: false,
-        allowNull: false,
     }
 }, { timestamps: false });
 exports.default = UserEvent;

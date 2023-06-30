@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import UserEvents from '../models/userEvent';
+import UserEvent from '../models/userEvent';
 
 // Needs body with at least {"userId", "eventId"}
 const joinEvent = async (req: Request, res: Response) => {
 
   try {
-    await UserEvents.create(req.body);
+    await UserEvent.create(req.body);
     res.status(201)
       .json({
         success: true,
@@ -25,7 +25,7 @@ const joinEvent = async (req: Request, res: Response) => {
 const updateEvent = async (req: Request, res: Response) => {
 
   try {
-    const updatedEvent = await UserEvents.update(req.body,
+    const updatedEvent = await UserEvent.update(req.body,
       {
         where: { userId: req.body.userId, eventId: req.body.eventId },
         returning: true
@@ -51,7 +51,7 @@ const updateEvent = async (req: Request, res: Response) => {
 const leaveEvent = async (req: Request, res: Response) => {
 
   try {
-    await UserEvents.destroy({
+    await UserEvent.destroy({
       where: req.body,
     });
     res.status(200)
