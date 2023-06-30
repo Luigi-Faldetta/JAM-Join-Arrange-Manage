@@ -6,7 +6,8 @@ import { RootState } from "../reduxFiles/store";
 
 function UserDashboardPage() {
   const eventList = useSelector((state: RootState) => state.eventListReducer);
-
+  const uid = localStorage.getItem('token')
+  console.log(uid)
   // add fetch to get all the events
 
   return (

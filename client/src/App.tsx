@@ -5,9 +5,9 @@ import { Outlet } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { RootState } from "./reduxFiles/store";
 import Logout from "./Components/Logout";
-// import LandingPage from "./pages/LandingPage";
-// import LandingAbout from "./pages/LandingAbout";
-// import LandingFaqs from "./pages/LandingFaqs";
+import LandingPage from "./pages/LandingPage/LandingPage";
+import LandingAbout from "./pages/LandingAbout/LandingAbout";
+import LandingFaqs from "./pages/LandingFaqs/LandingFaqs";
 
 function App() {
   const logoutState = useSelector((state: RootState) => state.logoutReducer.valueOf())
@@ -18,10 +18,10 @@ function App() {
       <div className="App">
         <Navbar />
         {logoutState ? <Logout /> : null}
-        <Outlet />
-        {/* <LandingPage /> */}
-        {/* <LandingAbout />
-        <LandingFaqs /> */}
+        {/* <Outlet /> */}
+         <LandingPage /> 
+        <LandingAbout />
+        <LandingFaqs /> 
       </div>
     </>
   );

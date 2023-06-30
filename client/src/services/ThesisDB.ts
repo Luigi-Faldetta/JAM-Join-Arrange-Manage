@@ -194,7 +194,7 @@ export const thesisDbApi = createApi({
 
         //Session
 
-        logIn: build.mutation<ApiResponse<null>, {email: string, password: string}>({
+        logIn: build.mutation<ApiResponse<null | string>, {email: string, password: string}>({
             query:(credentials) => ({
                 url: 'userLogin/',
                 method: 'POST',
