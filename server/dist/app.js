@@ -6,28 +6,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv/config");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const express_session_1 = __importDefault(require("express-session"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const router_js_1 = __importDefault(require("./router.js"));
-const constants_js_1 = require("./constants.js");
 const app = (0, express_1.default)();
-const sessionOptions = {
-    name: 'sid',
-    cookie: {
-        httpOnly: false,
-        secure: constants_js_1.__prod__,
-        sameSite: true,
-        maxAge: 1000 * 60 * 60, // 1 hour
-    },
-    secret: process.env.SECRET || 'hack_me_now',
-    resave: false,
-    saveUninitialized: false,
-};
 const corsOptions = {
     origin: true,
     credentials: true,
 };
-app.use((0, express_session_1.default)(sessionOptions));
 app.use((0, cors_1.default)(corsOptions));
 app.use(express_1.default.json());
+app.use((0, cookie_parser_1.default)());
 app.use(router_js_1.default);
 exports.default = app;

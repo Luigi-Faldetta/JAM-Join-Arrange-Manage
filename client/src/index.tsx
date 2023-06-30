@@ -1,46 +1,38 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import reportWebVitals from './reportWebVitals';
-import { Provider } from 'react-redux';
-import store from './reduxFiles/store';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import reportWebVitals from "./reportWebVitals";
+import { Provider } from "react-redux";
+import store from "./reduxFiles/store";
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
   RouterProvider,
-} from 'react-router-dom';
-import LandingAbout from './pages/LandingAbout';
-import LandingFaqs from './pages/LandingFaqs';
-import LandingPage from './pages/LandingPage';
+} from "react-router-dom";
+import LandingAbout from "./pages/LandingAbout/LandingAbout";
+import LandingFaqs from "./pages/LandingFaqs/LandingFaqs";
+import LandingPage from "./pages/LandingPage/LandingPage";
+import UserDashboardPage from "./pages/UserDashboardPage";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import Landing from "./pages/Landing/Landing";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route
-      path='/'
-      element={<App />}
-    >
-      <Route
-        index={true}
-        path='/'
-        element={<LandingPage/>}
-      />
-      <Route
-        path='/about'
-        element={<LandingAbout />}
-      />
-      <Route
-        path='/faqs'
-        element={<LandingFaqs />}
-      />
+    <Route path="/" element={<App />}>
+      <Route index={true} path="/" element={<Landing />} />
+      <Route path="/about" element={<LandingAbout />} />
+      <Route path="/faqs" element={<LandingFaqs />} />
+      <Route path="/user-dashboard" element={<UserDashboardPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
     </Route>
   )
 );
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 root.render(
   <Provider store={store}>

@@ -33,8 +33,8 @@ export const userSlice = createSlice({
     deleteUser: (state) => {
       state = state;
     },
-    updateUser: (state) => {
-      state = state;
+    updateUserState: (state: UserState, action) => {
+      state = action.payload;
     },
   },
 });
@@ -56,7 +56,7 @@ export const userListSlice = createSlice({
   },
 });
 
-export const { createUser, updateUser, deleteUser } = userSlice.actions;
+export const { createUser, updateUserState, deleteUser } = userSlice.actions;
 export const { createUserList, updateUserList, deleteUserList } =
   userListSlice.actions;
 

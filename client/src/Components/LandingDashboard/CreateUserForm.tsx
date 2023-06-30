@@ -2,6 +2,9 @@ import { useRef, useState } from "react";
 import { UserState, createUser } from "../../reduxFiles/slices/users";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useDispatch } from "react-redux";
+import { useAddUserMutation } from "../../services/ThesisDB";
+import { ApiResponse } from "../../services/ApiResponseType";
+import { useNavigate } from "react-router-dom";
 
 function CreateUserForm() {
   const [open, setOpen] = useState(false);
@@ -9,12 +12,13 @@ function CreateUserForm() {
   const [password, setPassword] = useState("");
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(<FaEyeSlash />);
-  const dispatch = useDispatch();
   const nameInputRef = useRef<HTMLInputElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
   const phoneInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const repeatPasswordInputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate()
+  const [addNewUser] = useAddUserMutation();
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -30,15 +34,22 @@ function CreateUserForm() {
       email: emailInputRef.current?.value || "",
       password: passwordInputRef.current?.value || "",
     };
-
-    console.log(userFormData);
-    dispatch(createUser(userFormData));
+    registerUser(userFormData);
     setOpen(false);
     setPasswordMatch(true);
+    nameInputRef.current!.value = "";
     emailInputRef.current!.value = "";
-    phoneInputRef.current!.value = "";
     passwordInputRef.current!.value = "";
     repeatPasswordInputRef.current!.value = "";
+  };
+  const registerUser = async (userFormData: any) => {
+    try {
+      const res = await addNewUser(userFormData);
+      console.log((res as { data: ApiResponse<UserState> }).data.data.name);
+      navigate('/user-dashboard')
+    } catch (error) {
+      console.error(error)
+    }
   };
   const handleToggle = () => {
     if (type === "password") {
@@ -49,11 +60,20 @@ function CreateUserForm() {
       setType("password");
     }
   };
+
   return (
     <>
-      <button className="text-blue-700 hover:text-blue-800 text-sm font-medium underline mt-2" onClick={() => setOpen(true)}>
-        Sign Up
-      </button>
+      <div className="flex items-center justify-center mt-2">
+        <div className="text-black-700 text-sm font-medium">
+          Don't have an account yet?
+        </div>
+        <button
+          className="text-blue-700 hover:text-blue-800 text-sm font-medium underline ml-2"
+          onClick={() => setOpen(true)}
+        >
+          Sign Up
+        </button>
+      </div>
       <dialog id="my_modal_3" className="modal" open={open}>
         <form method="dialog" className="modal-box" onSubmit={handleFormSubmit}>
           <div

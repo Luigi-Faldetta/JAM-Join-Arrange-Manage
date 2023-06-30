@@ -1,0 +1,24 @@
+.about-page {
+    margin-top: 2rem;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* border: 1px solid black; */
+  }
+  
+  .about-text {
+    margin: 2rem;
+    box-sizing: border-box;
+    /* width: 60%; */
+    /* border: 1px solid red; */
+  }
+  
+  .container {
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+   /* width: 70%; */
+    /* border: 1px solid green; */
+  }
