@@ -1,8 +1,6 @@
 import { useState, useRef } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
-import { useDispatch } from "react-redux";
 import { UserState, createUser } from "../../reduxFiles/slices/users";
-import CreateUserForm from "./CreateUserForm";
 import { useLogInMutation } from "../../services/ThesisDB";
 import { ApiResponse } from "../../services/ApiResponseType";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +12,7 @@ import { useNavigate } from "react-router-dom";
   const [icon, setIcon] = useState(<FaEyeSlash />);
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
-  const [addNewUser] = useLogInMutation();
+  const [loginUser] = useLogInMutation();
   const navigate = useNavigate()
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,9 +27,11 @@ import { useNavigate } from "react-router-dom";
   };
   const onLogIn = async (userFormData: { email: string; password: string; }) => {
     try {
-      const res = await addNewUser(userFormData);
-      console.log((res as { data : ApiResponse<null>}).data.message)
-      if('data' in res && res.data.success) {
+      const res = await loginUser(userFormData);
+      // console.log((res as { data : ApiResponse<null>}).data)
+      console.log(res)
+      if( 'data' in res && res.data.data) {
+        localStorage.setItem('token', res.data.data)
         navigate('/user-dashboard')
         setPasswordMatch(true);
       } 
@@ -97,7 +97,7 @@ import { useNavigate } from "react-router-dom";
             
           </div>
           {!passwordMatch && (
-             <p className="text-red-500 text-xs mt-1">
+             <p className="text-red-500 text-xm mt-1">
             Invalid email or password.
            </p>
             )}

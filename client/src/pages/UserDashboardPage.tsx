@@ -20,7 +20,8 @@ function UserDashboardPage() {
       dispatch(setEventList(data?.data));
     }
   }, [isLoading, error]);
-
+  const uid = localStorage.getItem('token')
+  console.log(uid)
   useEffect(() => {
     console.log("Event list has changed ==> ", eventList);
   }, [eventList]);

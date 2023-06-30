@@ -2,7 +2,7 @@ import './LandingAbout.css';
 
 const LandingAbout = () => {
   return (
-<div className="about-page flex items-center justify-center text-center" id="about">
+<div className="about-page " id="about">
   <div className="container">
     <div>
     <div className="text-left ml-8">

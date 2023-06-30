@@ -223,7 +223,7 @@ export const thesisDbApi = createApi({
     //Session
 
     logIn: build.mutation<
-      ApiResponse<null>,
+      ApiResponse<null | string>,
       { email: string; password: string }
     >({
       query: (credentials) => ({
