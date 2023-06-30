@@ -1,8 +1,11 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, Model } from 'sequelize';
 import Sequelize from 'sequelize';
 import sequelize from './modelDB';
+import { BeUser } from '../utils';
 
-const User = sequelize.define('User', {
+interface UserModel extends Model, BeUser {}
+
+const User = sequelize.define<UserModel>('User', {
   userId: {
     type: Sequelize.UUID,
     defaultValue: Sequelize.UUIDV4,
