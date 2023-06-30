@@ -1,13 +1,49 @@
 import { useState } from 'react';
 import './ProfilePage.css';
+import {
+  useUpdateUserMutation,
+  useDeleteUserMutation,
+} from '../../services/ThesisDB';
+import { ApiResponse } from '../../services/ApiResponseType';
+import { UserState, updateUserState } from '../../reduxFiles/slices/users';
+import { useDispatch } from 'react-redux';
+
 const ProfilePage = (): any => {
+  const dispatch = useDispatch();
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [updateUser] = useUpdateUserMutation();
 
+  const handleSubmitChanges = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
 
-  
+    // const userId = {
+    //somthing from cookie
+    // }
+
+    const userFormData: Partial<UserState> &
+      Pick<UserState, 'id' | 'name' | 'email' | 'password'> = {
+      //  id: '', // change for logged in user id
+      //token: userId,
+      // data: {
+      name: event.currentTarget.username.value,
+      email: event.currentTarget.email.value,
+      password: event.currentTarget.password.value,
+    };
+    //}
+    console.log(userFormData);
+
+    const userUpdated = await updateUser(userFormData);
+    dispatch(updateUserState(userUpdated as ApiResponse<UserState>));
+
+    console.log(userUpdated);
+  };
+
   return (
     <div className='profile-container'>
       <div className='w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
@@ -21,14 +57,15 @@ const ProfilePage = (): any => {
           <h5 className='mb-1 text-xl font-medium text-gray-900 dark:text-white'>
             Profile User
           </h5>
-          <span className='text-sm text-gray-500 dark:text-gray-400'>
-            Some info
-          </span>
-          <form className='edit-profile-form'>
+          <form
+            className='edit-profile-form'
+            onSubmit={handleSubmitChanges}
+          >
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
               type='text'
+              name='username'
               placeholder='Name'
               className='input input-bordered w-full max-w-xs'
             />
@@ -36,6 +73,7 @@ const ProfilePage = (): any => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               type='text'
+              name='email'
               placeholder='Email'
               className='input input-bordered w-full max-w-xs'
             />
@@ -43,6 +81,7 @@ const ProfilePage = (): any => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               type='password'
+              name='password'
               placeholder='Enter Password'
               className='input input-bordered w-full max-w-xs'
             />
@@ -50,17 +89,18 @@ const ProfilePage = (): any => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               type='password'
+              name='confirmpassword'
               placeholder='Confirm Password'
               className='input input-bordered w-full max-w-xs'
             />
-          </form>
-          <div className='flex mt-4 space-x-3 md:mt-6'>
             <button
               type='submit'
               className='btn btn-info'
             >
               Save Changes
             </button>
+          </form>
+          <div className='flex mt-4 space-x-3 md:mt-6'>
             <button
               type='submit'
               className='btn btn-error'
