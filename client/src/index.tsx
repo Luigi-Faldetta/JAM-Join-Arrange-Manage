@@ -17,11 +17,12 @@ import LandingFaqs from "./pages/LandingFaqs/LandingFaqs";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import UserDashboardPage from "./pages/UserDashboardPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import Landing from "./pages/Landing/Landing";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      <Route index={true} path="/" element={<LandingPage />} />
+      <Route index={true} path="/" element={<Landing />} />
       <Route path="/about" element={<LandingAbout />} />
       <Route path="/faqs" element={<LandingFaqs />} />
       <Route path="/user-dashboard" element={<UserDashboardPage />} />

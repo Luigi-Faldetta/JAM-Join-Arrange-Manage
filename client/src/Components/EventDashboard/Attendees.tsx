@@ -1,7 +1,7 @@
 // import React, { useState } from 'react';
 
 // export default function Attendees () {
-  
+
 //     return (
 //         <div className="carousel rounded-box w-3/5 mx-auto absolute bottom-6 left-0 right-0">
 //         <div className="carousel-item m-4">
@@ -61,7 +61,7 @@
 //           />
 //         </div>
 //       </div>
-      
+
 //     )
 // }
 

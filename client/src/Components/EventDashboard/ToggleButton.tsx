@@ -1,4 +1,4 @@
-
+//@ts-nocheck
 import React, { useState } from 'react';
 import Todos from './Todos';
 import Expenses from './Expenses';
@@ -13,10 +13,10 @@ export default function ToggleButton() {
 
   return (
     <div>
-      <button onClick={handleToggle} className='absolute top-20 right-20 btn btn-primary'>
+      <button onClick={handleToggle} className='absolute top-28 right-24 btn btn-primary'>
         {showTodos ? 'Expenses' : 'Todos'}
       </button>
-      {showTodos ? <> <Todos /> < Attendees /> </>  : <Expenses />}
+      {showTodos ? <> <Todos /> < Attendees /> </> : <Expenses />}
     </div>
   );
 }

@@ -223,7 +223,7 @@ export const thesisDbApi = createApi({
     //Session
 
     logIn: build.mutation<
-      ApiResponse<null>,
+      ApiResponse<null | string>,
       { email: string; password: string }
     >({
       query: (credentials) => ({
@@ -241,25 +241,30 @@ export const thesisDbApi = createApi({
 });
 
 export const {
+  //add
   useAddEventMutation,
   useAddExpenseMutation,
   useAddToDoMutation,
   useAddUserMutation,
   useJoinActivityMutation,
+  //get
   useGetEventQuery,
   useGetEventsQuery,
   useGetExpensesQuery,
   useGetToDosQuery,
   useGetUserQuery,
   useGetUsersQuery,
-  useUpdateUserMutation,
+  //update
+  useUpdateUserMutation,  
   useUpdateEventMutation,
   useUpdateToDoMutation,
+  //delete
   useDeleteEventMutation,
   useDeleteExpenseMutation,
   useLeaveActivityMutation,
   useDeleteToDoMutation,
   useDeleteUserMutation,
+  //login & logout
   useLogInMutation,
   useLogOutQuery,
 } = thesisDbApi;

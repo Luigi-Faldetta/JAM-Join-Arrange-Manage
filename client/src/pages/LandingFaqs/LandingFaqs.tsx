@@ -2,8 +2,9 @@ import './LandingFaqs.css';
 
 const LandingFaqs = () => {
   return (
+    
     <div className="faq-wrapper">
-    <div className='faqs-page flex justify-center' id='faqs'>
+    <div className='faqs-page mr-auto place-self-center lg:col-span-7' id='faqs'>
       <div>
       <h1 className='ml-3 mb-5 text-3xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-4xl dark:text-white'>
         Frequently asked question:

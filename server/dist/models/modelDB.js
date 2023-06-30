@@ -26,9 +26,10 @@ const sequelize = __HEROKU__
             port: 5432,
             logging: false,
         });
-(() => __awaiter(void 0, void 0, void 0, function* () {
+NODE_ENV !== 'test' && (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield sequelize.sync();
+        // await sequelize.sync();
+        yield sequelize.sync({ alter: true });
         console.log(`Connected to database '${NODE_ENV === 'test' ? process.env.TEST_DB : process.env.DB_NAME}'`);
     }
     catch (error) {
