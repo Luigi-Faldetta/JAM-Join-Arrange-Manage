@@ -17,12 +17,10 @@ const Expense = modelDB_1.default.define('Expense', {
     },
     purchaserId: {
         type: sequelize_2.default.UUID,
-        defaultValue: sequelize_2.default.UUIDV4,
         allowNull: false,
     },
     eventId: {
         type: sequelize_2.default.UUID,
-        defaultValue: sequelize_2.default.UUIDV4,
         allowNull: false,
     },
 }, { timestamps: false });

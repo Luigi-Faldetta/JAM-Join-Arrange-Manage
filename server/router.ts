@@ -2,7 +2,7 @@ import routes from 'express';
 const router = routes.Router();
 
 import './models/modelDB'
-import { user, event, todo, expense, userEvent, session } from './controllers/index'
+import { user, event, todo, expense, userEvent, session, calculation } from './controllers/index'
 
 router.get('/health', (_req, res) => {
     res.send({ health: 'Server runnning!! =)'})
@@ -35,10 +35,14 @@ router.get('/expenses/:eventid', expense.getExpenses)
 
 // User events
 router.post('/useractivity', userEvent.joinEvent)
+router.patch('/useractivity', userEvent.updateEvent)
 router.delete('/useractivity', userEvent.leaveEvent)
 
 // Session
 router.post('/userlogin', session.logIn);
 router.get('/userlogout', session.logOut);
+
+// Calculations
+router.get('/calculate/:eventid', calculation.splitEqual)
 
 export default router;

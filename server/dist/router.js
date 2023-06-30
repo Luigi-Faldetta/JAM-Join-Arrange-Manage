@@ -33,6 +33,7 @@ router.delete('/expense/:expenseid', index_1.expense.deleteExpense);
 router.get('/expenses/:eventid', index_1.expense.getExpenses);
 // User events
 router.post('/useractivity', index_1.userEvent.joinEvent);
+router.patch('/useractivity', index_1.userEvent.updateEvent);
 router.delete('/useractivity', index_1.userEvent.leaveEvent);
 // Session
 router.post('/userlogin', index_1.session.logIn);

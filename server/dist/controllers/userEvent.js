@@ -31,6 +31,29 @@ const joinEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             .json({ message: err.message });
     }
 });
+// Needs body with at least {"userId", "eventId"} and "isHost" and/or "isGoing"
+const updateEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const updatedEvent = yield userEvent_1.default.update(req.body, {
+            where: { userId: req.body.userId, eventId: req.body.eventId },
+            returning: true
+        });
+        console.log('req.body', req.body);
+        console.log(updatedEvent);
+        res.status(200)
+            .json({
+            success: true,
+            error: null,
+            data: updatedEvent[1][0],
+            message: 'Event updated',
+        });
+    }
+    catch (err) {
+        process.env.NODE_ENV !== 'test' && console.error(err);
+        res.status(500)
+            .json({ message: err.message });
+    }
+});
 // Needs body with {"userId", "eventId"}
 const leaveEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -51,4 +74,4 @@ const leaveEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             .json({ message: err.message });
     }
 });
-exports.default = { joinEvent, leaveEvent };
+exports.default = { joinEvent, updateEvent, leaveEvent };
