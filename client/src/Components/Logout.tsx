@@ -1,6 +1,7 @@
 import { closeLogout } from "../reduxFiles/slices/logout";
 import { useAppDispatch } from "../reduxFiles/store";
 import { useNavigate } from "react-router-dom";
+import { useLogOutQuery } from "../services/ThesisDB";
 function Logout() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -10,7 +11,11 @@ function Logout() {
   }
   function signOut() {
     navigate("/");
+    console.log(localStorage.getItem('token'))
+    localStorage.removeItem('token');
+    console.log(localStorage.getItem('token'))
     dispatch(closeLogout());
+    
   }
   return (
     <>
@@ -82,6 +87,4 @@ function Logout() {
   );
 }
 export default Logout;
-function useNavagite() {
-  throw new Error("Function not implemented.");
-}
+

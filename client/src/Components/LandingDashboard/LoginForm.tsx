@@ -29,12 +29,14 @@ import { useNavigate } from "react-router-dom";
     try {
       const res = await loginUser(userFormData);
       // console.log((res as { data : ApiResponse<null>}).data)
-      console.log(res)
       if( 'data' in res && res.data.data) {
         localStorage.setItem('token', res.data.data)
         navigate('/user-dashboard')
         setPasswordMatch(true);
-      } 
+      } else if ('error' in res && res.error) {
+        console.error(res.error);
+        setPasswordMatch(false);
+      }
     } catch (error) {
       setPasswordMatch(false);
       console.error(error)
