@@ -7,6 +7,7 @@ import {
 import { ApiResponse } from '../../services/ApiResponseType';
 import { UserState, updateUserState } from '../../reduxFiles/slices/users';
 import { useDispatch, useSelector } from 'react-redux';
+import { useAuth } from '../../utils/useAuth';
 
 const ProfilePage = (): any => {
   const [name, setName] = useState('');
@@ -16,7 +17,7 @@ const ProfilePage = (): any => {
   const [updateUser] = useUpdateUserMutation();
 
   const dispatch = useDispatch();
-
+  useAuth()
   //@ts-ignore
   // const { userInfo } = useSelector((state) => state.user);
 
