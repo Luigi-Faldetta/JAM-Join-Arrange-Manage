@@ -6,16 +6,21 @@ import {
 } from '../../services/ThesisDB';
 import { ApiResponse } from '../../services/ApiResponseType';
 import { UserState, updateUserState } from '../../reduxFiles/slices/users';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const ProfilePage = (): any => {
-  const dispatch = useDispatch();
-
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [updateUser] = useUpdateUserMutation();
+
+  const dispatch = useDispatch();
+
+  //@ts-ignore
+  // const { userInfo } = useSelector((state) => state.user);
+
+  // console.log(userInfo)
 
   const handleSubmitChanges = async (
     event: React.FormEvent<HTMLFormElement>
