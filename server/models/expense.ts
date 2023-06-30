@@ -1,11 +1,16 @@
-import { DataTypes, Model, ModelAttributes } from 'sequelize';
+import { BuildOptions, DataTypes, Model, ModelAttributes } from 'sequelize';
 import sequelize from './modelDB';
 import Sequelize from 'sequelize';
-import { BeExpense, BeUser } from '../utils';
+import { BeExpense} from '../utils';
 
-interface ExpenseModel extends Model, BeExpense {}
+interface ExpenseModel extends Model<BeExpense>, BeExpense {}
+export class ExpenseClass extends Model<ExpenseModel, BeExpense> {}
 
-const Expense = sequelize.define<ExpenseModel>('Expense', {
+export type ExpenseStatic = typeof Model & {
+  new(values?:object, options?: BuildOptions):ExpenseModel
+}
+
+const Expense = <ExpenseStatic>sequelize.define('Expense', {
   item: {
     type: DataTypes.STRING,
     allowNull: false,

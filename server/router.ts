@@ -43,6 +43,6 @@ router.post('/userlogin', session.logIn);
 router.get('/userlogout', session.logOut);
 
 // Calculations
-router.get('/calculate/:eventid', calculation.splitEqual)
+router.get('/calculate/:eventid', calculation.expenseSheet)
 
 export default router;
