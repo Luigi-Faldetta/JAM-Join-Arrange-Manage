@@ -24,11 +24,7 @@ function Navbar() {
     }
   };
   const handleSignOut = () => {
-    console.log('helpoo')
     dispatch(openLogout());
-    // return ( <>
-    //     <Logout></Logout>
-    // </>)
   }
   return (
     <div className="navbar-container">
