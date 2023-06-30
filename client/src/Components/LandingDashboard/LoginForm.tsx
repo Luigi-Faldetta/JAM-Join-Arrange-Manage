@@ -3,34 +3,42 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { UserState, createUser } from "../../reduxFiles/slices/users";
 import CreateUserForm from "./CreateUserForm";
+import { useLogInMutation } from "../../services/ThesisDB";
+import { ApiResponse } from "../../services/ApiResponseType";
+import { useNavigate } from "react-router-dom";
 
-function LoginForm() {
+ function LoginForm() {
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [password, setPassword] = useState("");
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(<FaEyeSlash />);
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
-  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const [addNewUser] = useLogInMutation();
+  const navigate = useNavigate()
+  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const userFormData: UserState = {
       email: emailInputRef.current?.value || "",
       password: passwordInputRef.current?.value || "",
     };
-    setPasswordMatch(true);
+    await onLogIn(userFormData)
     emailInputRef.current!.value = "";
     passwordInputRef.current!.value = "";
-    // const [addNewUser] = useAddUserMutation()
-
-// const onSubmit = async () => {
-//   try {
-//     const res = await addNewUser({name: "Xavi3", email: "xavi3@email.com", password: "xavi3"});
-//     // console.log((res as { data : ApiResponse<UserState>}).data.data.name)
-//   } catch (error) {
-//     // console.error(error)
-//   }
-// }
-
+    
+  };
+  const onLogIn = async (userFormData: { email: string; password: string; }) => {
+    try {
+      const res = await addNewUser(userFormData);
+      console.log((res as { data : ApiResponse<null>}).data.message)
+      if('data' in res && res.data.success) {
+        navigate('/user-dashboard')
+        setPasswordMatch(true);
+      } 
+    } catch (error) {
+      setPasswordMatch(false);
+      console.error(error)
+    }
   };
   const handleToggle = () => {
     if (type === "password") {
@@ -86,7 +94,13 @@ function LoginForm() {
             >
               {icon}
             </span>
+            
           </div>
+          {!passwordMatch && (
+             <p className="text-red-500 text-xs mt-1">
+            Invalid email or password.
+           </p>
+            )}
         </div>
         <button
           type="submit"
