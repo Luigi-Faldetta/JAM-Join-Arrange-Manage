@@ -7,8 +7,6 @@ import { useGetEventsQuery } from "../services/ThesisDB";
 import { useEffect, useState } from "react";
 import { setEventList } from "../reduxFiles/slices/events";
 
-import Event from "../Components/Event/Event";
-
 function UserDashboardPage() {
   const dispatch = useAppDispatch();
   const eventList = useSelector((state: RootState) => state.eventListReducer);
@@ -30,8 +28,6 @@ function UserDashboardPage() {
 
   return (
     <>
-      <Event></Event>
-
       <div className="flex flex-col justify-center items-center">
         <div className="m-5 h-full p-5 flex flex-col items-center gap-5">
           <CreateEventForm></CreateEventForm>

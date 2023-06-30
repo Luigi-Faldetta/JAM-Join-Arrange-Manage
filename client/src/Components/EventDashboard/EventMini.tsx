@@ -68,7 +68,6 @@ export default function EventMini() {
             ) : (
               <DeleteEventButton></DeleteEventButton>
             )}
-
             {/* DELETE BUTTON FROM THE ELSE, ONLY NEEDED SINCE WE DONT HAVE USER TOKEN YET */}
           </div>
         </>
