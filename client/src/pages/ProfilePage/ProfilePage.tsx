@@ -6,6 +6,8 @@ const ProfilePage = (): any => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+
+  
   return (
     <div className='profile-container'>
       <div className='w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
@@ -58,6 +60,12 @@ const ProfilePage = (): any => {
               className='btn btn-info'
             >
               Save Changes
+            </button>
+            <button
+              type='submit'
+              className='btn btn-error'
+            >
+              Delete Account
             </button>
           </div>
         </div>
