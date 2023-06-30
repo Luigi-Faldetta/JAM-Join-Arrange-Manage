@@ -7,6 +7,7 @@ import {
 import { ApiResponse } from '../../services/ApiResponseType';
 import { UserState, updateUserState } from '../../reduxFiles/slices/users';
 import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../reduxFiles/store';
 
 const ProfilePage = (): any => {
   const [name, setName] = useState('');
@@ -17,30 +18,22 @@ const ProfilePage = (): any => {
 
   const dispatch = useDispatch();
 
-  //@ts-ignore
-  // const { userInfo } = useSelector((state) => state.user);
-
-  // console.log(userInfo)
+  const  userInfo  = useSelector((state: RootState) => {
+    return state.userReducer
+  });
+  console.log(userInfo.name)
 
   const handleSubmitChanges = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
-
-    // const userId = {
-    //somthing from cookie
-    // }
-
+    
     const userFormData: Partial<UserState> &
       Pick<UserState, 'id' | 'name' | 'email' | 'password'> = {
-      //  id: '', // change for logged in user id
-      //token: userId,
-      // data: {
       name: event.currentTarget.username.value,
       email: event.currentTarget.email.value,
       password: event.currentTarget.password.value,
     };
-    //}
     console.log(userFormData);
 
     const userUpdated = await updateUser(userFormData);

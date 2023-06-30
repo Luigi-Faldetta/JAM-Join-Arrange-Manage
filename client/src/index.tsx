@@ -14,7 +14,6 @@ import {
 } from "react-router-dom";
 import LandingAbout from "./pages/LandingAbout/LandingAbout";
 import LandingFaqs from "./pages/LandingFaqs/LandingFaqs";
-import LandingPage from "./pages/LandingPage/LandingPage";
 import UserDashboardPage from "./pages/UserDashboardPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import Landing from "./pages/Landing/Landing";
