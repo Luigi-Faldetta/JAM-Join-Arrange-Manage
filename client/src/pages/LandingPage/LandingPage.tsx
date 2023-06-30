@@ -2,9 +2,12 @@ import LoginForm from "../../Components/LandingDashboard/LoginForm";
 import CreateUserForm from "../../Components/LandingDashboard/CreateUserForm";
 import "./LandingPage.css";
 import { useState } from "react";
+import { useIsLoggedIn } from "../../utils/useIsLoggedIn";
 
 const LandingPage = () => {
   const [loginFormActive, setLoginFormActive] = useState(false);
+
+  const isLoggedIn = useIsLoggedIn();
 
   const handleGetStartedClick = () => {
     setLoginFormActive(!loginFormActive);
@@ -44,11 +47,17 @@ const LandingPage = () => {
           </button>
         </div>
         <div className={`lg:col-span-5 ${loginFormActive ? "active" : ""}`}>
-          <div className="login-form  lg:flex lg:flex-col ">
-            <LoginForm />
-            <CreateUserForm />
-          </div>
-        </div>
+  {!isLoggedIn ? (
+    <div className="login-form  lg:flex lg:flex-col">
+      <LoginForm />
+      <CreateUserForm />
+    </div>
+  ) : (
+    <div className="image-container">
+      <img src="https://hips.hearstapps.com/hmg-prod/images/delish-190605-raspberry-jam-031-landscape-pf-1560443834.jpg?crop=0.888532477947073xw:1xh;center,top&resize=1200:*" alt="Your Image" />
+    </div>
+  )}
+</div>
       </div>
     </section>
   );

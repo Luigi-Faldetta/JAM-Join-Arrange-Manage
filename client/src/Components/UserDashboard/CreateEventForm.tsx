@@ -10,8 +10,10 @@ import {
 // import PictureUpload from "../PictureUpload";
 import { useAddEventMutation } from "../../services/ThesisDB";
 import { ApiResponse } from "../../services/ApiResponseType";
+import { useAuth } from "../../utils/useAuth";
 
 function CreateEventForm() {
+  useAuth()
   const dispatch = useDispatch();
 
   const [eventDate, setEventDate] = useState<Date | null>(null);

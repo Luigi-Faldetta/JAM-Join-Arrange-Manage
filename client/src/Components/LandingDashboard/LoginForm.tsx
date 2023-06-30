@@ -21,8 +21,6 @@ import { useNavigate } from "react-router-dom";
       password: passwordInputRef.current?.value || "",
     };
     await onLogIn(userFormData)
-    emailInputRef.current!.value = "";
-    passwordInputRef.current!.value = "";
     
   };
   const onLogIn = async (userFormData: { email: string; password: string; }) => {
@@ -33,12 +31,13 @@ import { useNavigate } from "react-router-dom";
         localStorage.setItem('token', res.data.data)
         navigate('/user-dashboard')
         setPasswordMatch(true);
+        emailInputRef.current!.value = "";
+        passwordInputRef.current!.value = "";
       } else if ('error' in res && res.error) {
         console.error(res.error);
         setPasswordMatch(false);
       }
     } catch (error) {
-      setPasswordMatch(false);
       console.error(error)
     }
   };
@@ -65,7 +64,7 @@ import { useNavigate } from "react-router-dom";
           </label>
           <input
             type="email"
-            id="email"
+            id="email-input"
             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
             placeholder="Your email"
             required
@@ -82,7 +81,7 @@ import { useNavigate } from "react-router-dom";
           <div className="relative">
             <input
               type={type}
-              id="password"
+              id="password-input"
               placeholder="Your password"
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
               required
