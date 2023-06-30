@@ -16,12 +16,10 @@ const UserEvent = sequelize.define(
     isHost: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
-      allowNull: false,
     },
     isGoing: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
-      allowNull: false,
     }
   }, { timestamps: false }
 );

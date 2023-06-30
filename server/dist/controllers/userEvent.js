@@ -22,7 +22,7 @@ const joinEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             success: true,
             error: null,
             data: null,
-            message: 'User joined the activity.',
+            message: 'User joined the activity',
         });
     }
     catch (err) {
@@ -38,14 +38,12 @@ const updateEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             where: { userId: req.body.userId, eventId: req.body.eventId },
             returning: true
         });
-        console.log('req.body', req.body);
-        console.log(updatedEvent);
         res.status(200)
             .json({
             success: true,
             error: null,
             data: updatedEvent[1][0],
-            message: 'Event updated',
+            message: 'User event properties updated',
         });
     }
     catch (err) {
@@ -65,7 +63,7 @@ const leaveEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             success: true,
             error: null,
             data: null,
-            message: 'User left the activity.',
+            message: 'User left the activity',
         });
     }
     catch (err) {
