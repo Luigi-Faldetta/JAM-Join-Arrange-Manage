@@ -1,17 +1,16 @@
 import { useState } from 'react';
 import './ProfilePage.css';
 import { useGetUserQuery } from '../../services/ThesisDB';
-import { UserState } from '../../reduxFiles/slices/users';
+import { UserState, updateUserState } from '../../reduxFiles/slices/users';
 import { useAuth } from '../../utils/useAuth';
 
 const ProfilePage = (): any => {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const uid = localStorage.getItem('token');
-  useAuth()
+  useAuth();
   //@ts-ignore
   const { data } = useGetUserQuery(uid);
   //@ts-ignore
@@ -26,10 +25,9 @@ const ProfilePage = (): any => {
     } else {
       try {
         const userFormData: Partial<UserState> &
-          Pick<UserState, 'id' | 'name' | 'email' | 'password'> = {
+          Pick<UserState, 'id' | 'name' | 'password'> = {
           id: data?.data.id,
           name: event.currentTarget.username.value,
-          email: event.currentTarget.email.value,
           password: event.currentTarget.password.value,
         };
         console.log(userFormData);
@@ -37,6 +35,10 @@ const ProfilePage = (): any => {
         console.error('Error: ', error);
       }
     }
+
+    setName('');
+    setPassword('');
+    setConfirmPassword('');
   };
 
   return (
@@ -58,6 +60,7 @@ const ProfilePage = (): any => {
           >
             <input
               type='file'
+              name='profilePic'
               className='file-input file-input-bordered w-full max-w-xs'
             />
             <input
@@ -66,14 +69,6 @@ const ProfilePage = (): any => {
               type='text'
               name='username'
               placeholder='Name'
-              className='input input-bordered w-full max-w-xs'
-            />
-            <input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              type='text'
-              name='email'
-              placeholder='Email'
               className='input input-bordered w-full max-w-xs'
             />
             <input
