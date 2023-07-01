@@ -60,8 +60,8 @@ function CreateEventForm() {
       description: null,
       // eventHost and eventAttendees need to be updated to
       // reflect hostID after login.
-      // eventHost: "hostId",
-      // eventAttendees: ["hostId"],
+      // eventHost: "hostId", are we sending host id or not?
+      // eventAttendees: ["hostId"], set hostid to attendees?
     };
     // set cloudinary url to form object before sending to db
     const image = await handleImageUpload();
@@ -76,6 +76,9 @@ function CreateEventForm() {
     setOpen(false);
 
     // eventCreated brings an eventID
+    //eventCreated.eventId + userToken
+    // const userEventRelationship = await //sendRelationCall(eventCreated.id, userToken, true)
+
     // Send another request with eventID, userID (host), isHost (true)
   };
 
