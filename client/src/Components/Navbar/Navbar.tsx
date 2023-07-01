@@ -6,14 +6,15 @@ import Logout from "../Logout";
 import { useAppDispatch } from "../../reduxFiles/store";
 import { openLogout } from "../../reduxFiles/slices/logout";
 import { useIsLoggedIn } from "../../utils/useIsLoggedIn";
+import { useLocation } from "react-router-dom";
 function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showDropdownMobile, setDropdownMobile] = useState(false);
   const isLoggedIn = useIsLoggedIn();
 
   const dispatch = useAppDispatch();
-  const dropdownRef = useRef<HTMLDivElement>(null);
- 
+  const location = useLocation();
+
   const handleAvatarClick = () => {
     setShowDropdown(!showDropdown);
     if (showDropdownMobile) {
@@ -33,14 +34,7 @@ function Navbar() {
     <div className="navbar-container">
       <nav className="bg-white border-gray-200 dark:bg-gray-900">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <Scroll
-            to="/"
-            spy={true}
-            smooth={true}
-            offset={50}
-            duration={500}
-            className="flex items-center"
-          >
+          <Link to="/" className="flex items-center">
             <img
               src="https://flowbite.com/docs/images/logo.svg"
               className="h-8 mr-3"
@@ -49,7 +43,7 @@ function Navbar() {
             <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
               J.A.M.
             </span>
-          </Scroll>
+          </Link>
           <div className="flex items-center md:order-2">
             <button
               type="button"
@@ -120,51 +114,53 @@ function Navbar() {
             }`}
             id="mobile-menu-2"
           >
-            <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-              <li>
-                {/* <Link to="/" className="dropdown-item"> */}
-                <Scroll
-                  to="hero"
-                  spy={true}
-                  smooth={true}
-                  offset={50}
-                  duration={500}
-                  className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                  aria-current="page"
-                >
-                  Home
-                </Scroll>
-                {/* </Link> */}
-              </li>
-              <li>
-                {/* <Link to="/about" className="dropdown-item"> */}
-                <Scroll
-                  to="about"
-                  spy={true}
-                  smooth={true}
-                  offset={50}
-                  duration={500}
-                  className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                >
-                  About
-                </Scroll>
-                {/* </Link> */}
-              </li>
-              <li>
-                {/* <Link to="/faqs" className="dropdown-item"> */}
-                <Scroll
-                  to="faqs"
-                  spy={true}
-                  smooth={true}
-                  offset={50}
-                  duration={500}
-                  className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                >
-                  FAQs
-                </Scroll>
-                {/* </Link> */}
-              </li>
-            </ul>
+            {location.pathname === "/" ? (
+              <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                <li>
+                  {/* <Link to="/" className="dropdown-item"> */}
+                  <Scroll
+                    to="hero"
+                    spy={true}
+                    smooth={true}
+                    offset={50}
+                    duration={500}
+                    className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                    aria-current="page"
+                  >
+                    Home
+                  </Scroll>
+                  {/* </Link> */}
+                </li>
+                <li>
+                  {/* <Link to="/about" className="dropdown-item"> */}
+                  <Scroll
+                    to="about"
+                    spy={true}
+                    smooth={true}
+                    offset={50}
+                    duration={500}
+                    className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                  >
+                    About
+                  </Scroll>
+                  {/* </Link> */}
+                </li>
+                <li>
+                  {/* <Link to="/faqs" className="dropdown-item"> */}
+                  <Scroll
+                    to="faqs"
+                    spy={true}
+                    smooth={true}
+                    offset={50}
+                    duration={500}
+                    className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                  >
+                    FAQs
+                  </Scroll>
+                  {/* </Link> */}
+                </li>
+              </ul>
+            ) : null}
           </div>
         </div>
       </nav>
