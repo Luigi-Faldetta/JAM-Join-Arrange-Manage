@@ -5,7 +5,7 @@ import './models/modelDB'
 import { user, event, todo, expense, userEvent, session, calculation } from './controllers/index'
 
 router.get('/health', (_req, res) => {
-    res.send({ health: 'Server runnning!! =)'})
+    res.send({ health: 'Server runnning!! =)' })
 })
 
 // User
@@ -44,5 +44,9 @@ router.get('/userlogout', session.logOut);
 
 // Calculations
 router.get('/calculate/:eventid', calculation.splitEqual)
+
+// @ts-ignore
+router.get('/test1', (req, res) => { res.send('All good') })
+router.get('/test2', session.authorize, (req, res) => { res.send('All good') })
 
 export default router;
