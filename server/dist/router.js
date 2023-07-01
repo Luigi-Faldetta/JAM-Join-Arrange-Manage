@@ -39,5 +39,5 @@ router.delete('/useractivity', index_1.userEvent.leaveEvent);
 router.post('/userlogin', index_1.session.logIn);
 router.get('/userlogout', index_1.session.logOut);
 // Calculations
-router.get('/calculate/:eventid', index_1.calculation.splitEqual);
+router.get('/calculate/:eventid', index_1.calculation.expenseSheet);
 exports.default = router;
