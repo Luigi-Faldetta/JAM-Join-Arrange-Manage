@@ -3,9 +3,9 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { UserState, createUser } from "../../reduxFiles/slices/users";
 import { useLogInMutation } from "../../services/ThesisDB";
 import { ApiResponse } from "../../services/ApiResponseType";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
- function LoginForm() {
+function LoginForm() {
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [password, setPassword] = useState("");
   const [type, setType] = useState("password");
@@ -13,32 +13,37 @@ import { useNavigate } from "react-router-dom";
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const [loginUser] = useLogInMutation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const location = useLocation();
+  const currentRoute = location.pathname;
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const userFormData: UserState = {
       email: emailInputRef.current?.value || "",
       password: passwordInputRef.current?.value || "",
     };
-    await onLogIn(userFormData)
-    
+    await onLogIn(userFormData);
   };
-  const onLogIn = async (userFormData: { email: string; password: string; }) => {
+  const onLogIn = async (userFormData: { email: string; password: string }) => {
     try {
       const res = await loginUser(userFormData);
       // console.log((res as { data : ApiResponse<null>}).data)
-      if( 'data' in res && res.data.data) {
-        localStorage.setItem('token', res.data.data)
-        navigate('/user-dashboard')
+      if ("data" in res && res.data.data) {
+        localStorage.setItem("token", res.data.data);
         setPasswordMatch(true);
         emailInputRef.current!.value = "";
         passwordInputRef.current!.value = "";
-      } else if ('error' in res && res.error) {
+        if (currentRoute === "/") {
+          navigate("/user-dashboard");
+        } else {
+          window.location.reload();
+        }
+      } else if ("error" in res && res.error) {
         console.error(res.error);
         setPasswordMatch(false);
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   };
   const handleToggle = () => {
@@ -95,13 +100,12 @@ import { useNavigate } from "react-router-dom";
             >
               {icon}
             </span>
-            
           </div>
           {!passwordMatch && (
-             <p className="text-red-500 text-xm mt-1">
-            Invalid email or password.
-           </p>
-            )}
+            <p className="text-red-500 text-xm mt-1">
+              Invalid email or password.
+            </p>
+          )}
         </div>
         <button
           type="submit"
