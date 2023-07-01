@@ -21,7 +21,7 @@ function CreateUserForm() {
   const location = useLocation();
   const [addNewUser] = useAddUserMutation();
 
-  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const password = passwordInputRef.current?.value || "";
     const repeatPassword = repeatPasswordInputRef.current?.value || "";
@@ -42,11 +42,19 @@ function CreateUserForm() {
     passwordInputRef.current!.value = "";
     repeatPasswordInputRef.current!.value = "";
   };
+
   const registerUser = async (userFormData: any) => {
     try {
       const currentRoute = location.pathname;
       const res = await addNewUser(userFormData);
-      console.log((res as { data: ApiResponse<UserState> }).data.data.name);
+
+      if ("data" in res && res.data.data ) {
+        //@ts-ignore
+        localStorage.setItem("token", res.data.data.userId);
+      } else if ("error" in res && res.error) {
+        console.error(res.error);
+      }
+
       if (currentRoute === "/") {
         navigate("/user-dashboard");
       } else {
