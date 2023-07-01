@@ -26,7 +26,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.updateUser = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const associations_1 = require("../models/associations");
-// TEST IF ALL IS WORKING, CAUGHT ERRORS TOO
 //@ts-ignore
 const resBody = (success, error, data, message) => { return { success, error, data, message }; };
 /**

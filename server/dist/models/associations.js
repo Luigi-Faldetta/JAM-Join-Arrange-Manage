@@ -12,9 +12,6 @@ const todo_1 = __importDefault(require("./todo"));
 const expense_1 = __importDefault(require("./expense"));
 const userEvent_1 = __importDefault(require("./userEvent"));
 exports.UserEvent = userEvent_1.default;
-event_1.default.belongsTo(user_1.default, {
-    foreignKey: 'host',
-});
 event_1.default.belongsToMany(user_1.default, {
     through: userEvent_1.default,
     foreignKey: 'eventId',
