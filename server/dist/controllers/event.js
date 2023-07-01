@@ -50,8 +50,19 @@ const newEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
  */
 const getEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        // const event = await Event.findOne({
+        //   where: { eventId: req.params.eventid }
+        // })
         const event = yield associations_1.Event.findOne({
-            where: { eventId: req.params.eventid }
+            where: { eventId: req.params.eventid },
+            include: [{
+                    model: associations_1.UserEvent,
+                    attributes: ['userId', 'isHost', 'isGoing'],
+                    include: [{
+                            model: associations_1.User,
+                            attributes: ['name', 'profilePic']
+                        }]
+                }]
         });
         if (!event) {
             return res.status(404)
@@ -110,7 +121,7 @@ const deleteEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 const getUserEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const eventIds = yield associations_1.UserEvent.findAll({
-            where: { userId: req.params.userid }
+            where: { userId: req.params.userid },
         });
         if (eventIds.length) {
             const eventsArray = [];
@@ -118,7 +129,11 @@ const getUserEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 eventsArray.push(event.dataValues.eventId);
             }
             const events = yield associations_1.Event.findAll({
-                where: { eventId: eventsArray }
+                where: { eventId: eventsArray },
+                include: {
+                    model: associations_1.UserEvent,
+                    attributes: ['isHost', 'isGoing']
+                }
             });
             res.status(200)
                 .json(resBody(true, null, events, 'User events fetched'));

@@ -20,6 +20,15 @@ user_1.default.belongsToMany(event_1.default, {
     through: userEvent_1.default,
     foreignKey: 'userId',
 });
+event_1.default.hasMany(userEvent_1.default, {
+    foreignKey: 'eventId'
+});
+user_1.default.hasMany(userEvent_1.default, {
+    foreignKey: 'userId'
+});
+userEvent_1.default.belongsTo(user_1.default, {
+    foreignKey: 'userId'
+});
 todo_1.default.belongsTo(event_1.default, {
     foreignKey: 'eventId',
 });

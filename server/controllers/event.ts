@@ -50,8 +50,19 @@ const newEvent = async (req: Request, res: Response) => {
 const getEvent = async (req: Request, res: Response) => {
 
   try {
+    // const event = await Event.findOne({
+    //   where: { eventId: req.params.eventid }
+    // })
     const event = await Event.findOne({
-      where: { eventId: req.params.eventid }
+      where: { eventId: req.params.eventid },
+      include: [{
+        model: UserEvent,
+        attributes: ['userId', 'isHost', 'isGoing'],
+        include: [{
+          model: User,
+          attributes: ['name', 'profilePic']
+        }]
+      }]
     })
     if (!event) {
       return res.status(404)
@@ -123,7 +134,7 @@ const getUserEvents = async (req: Request, res: Response) => {
 
   try {
     const eventIds = await UserEvent.findAll({
-      where: { userId: req.params.userid }
+      where: { userId: req.params.userid },
     })
 
     if (eventIds.length) {
@@ -133,7 +144,11 @@ const getUserEvents = async (req: Request, res: Response) => {
       }
 
       const events = await Event.findAll({
-        where: { eventId: eventsArray }
+        where: { eventId: eventsArray },
+        include: {
+          model: UserEvent,
+          attributes: ['isHost', 'isGoing']
+        }
       })
 
       res.status(200)
