@@ -103,10 +103,10 @@ export const thesisDbApi = createApi({
 
     updateUser: build.mutation<
       ApiResponse<UserState>,
-      Partial<UserState> & Pick<UserState, "id">
+      Partial<UserState> & Pick<UserState, "userId">
     >({
-      query: ({ id, ...patch }) => ({
-        url: `user/${id}`,
+      query: ({ userId, ...patch }) => ({
+        url: `user/${userId}`,
         method: "PATCH",
         body: patch,
         headers: { "Content-type": "application/json; charset=UTF-8" },

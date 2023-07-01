@@ -2,11 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
 import { Link as Scroll } from "react-scroll";
-import Logout from "../Logout";
+import { useAuth } from "../../utils/useAuth";
 import { useAppDispatch } from "../../reduxFiles/store";
 import { openLogout } from "../../reduxFiles/slices/logout";
 import { useIsLoggedIn } from "../../utils/useIsLoggedIn";
 import { useLocation } from "react-router-dom";
+import { useGetUserQuery } from '../../services/ThesisDB';
+
+
 
 function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -31,6 +34,13 @@ function Navbar() {
   const handleSignOut = () => {
     dispatch(openLogout());
   };
+
+
+  const uid = localStorage.getItem('token');
+  useAuth();
+  //@ts-ignore
+  const { data } = useGetUserQuery(uid);
+  
   return (
     <div className="navbar-container">
       <nav className="bg-white border-gray-200 dark:bg-gray-900">
@@ -58,7 +68,7 @@ function Navbar() {
               <span className="sr-only">Open user menu</span>
               <img
                 className="profile-pic w-8 h-8 rounded-full"
-                src="https://images.pexels.com/photos/1170986/pexels-photo-1170986.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                src={data?.data.profilePic}
                 alt=""
               />
             </button>
