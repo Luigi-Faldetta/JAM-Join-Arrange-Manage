@@ -70,7 +70,10 @@ function CreateEventForm() {
 
     console.log("in component", eventFormData);
 
-    const eventCreated = await addEvent(eventFormData);
+    const eventCreated = await addEvent({
+      token: userToken as string,
+      event: eventFormData,
+    });
     console.log("event created in DB== > ", eventCreated);
     dispatch(createEvent((eventCreated as ApiResponse<EventState>).data));
     setOpen(false);

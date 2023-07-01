@@ -1,12 +1,18 @@
 import { createEventList } from "../../reduxFiles/slices/events";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 function EventTile({ event }: { event: any }) {
-  const img = "./Screenshot-friends.png";
+  const userToken = localStorage.getItem("token");
 
+  const img = "./friends-placeholder.png";
+  console.log(event);
+
+  // if userToken === event
   return (
     <>
-      <Link to="/event-dashboard">
+      `
+      <Link to={`/event-dashboard/${event.eventId}`}>
         {/* <div className="card card-side bg-base-100 shadow-xl">
         <figure>
           <img src={img} alt="Movie" />
@@ -26,19 +32,36 @@ function EventTile({ event }: { event: any }) {
         >
           <div className="flex flex-col w-3/5 pr-3 justify-between">
             <div>
-              <h3 className="text-red-500 text-xs lg:text-base">
-                {event.date}
-              </h3>
-              <h3 className="text-xs lg:text-base text-gray-500">
-                {event.location}
-              </h3>
+              {event.date ? (
+                <h3 className="text-red-500 text-xs lg:text-base">
+                  {moment(event.date).format("ddd, Do MMM - h:mm a")}{" "}
+                </h3>
+              ) : (
+                <h3 className="text-red-500 text-xs lg:text-base">Date TBC</h3>
+              )}
+              {event.location ? (
+                <h3 className="text-xs lg:text-base text-gray-500">
+                  {event.location}
+                </h3>
+              ) : (
+                <h3 className="text-xs lg:text-base text-gray-500">
+                  Location TBC
+                </h3>
+              )}
             </div>
             <h2 className=" text-lg lg:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
               {event.title}
             </h2>
-            <h2 className=" text-[10px] lg:text-sm tracking-tight text-gray-500 dark:text-white">
-              👤 12 going ⋆ You are hosting
-            </h2>
+            <div className="flex flex-row">
+              <p className=" text-[10px] lg:text-sm tracking-tight text-gray-500 dark:text-white">
+                👤 {event.attendees || event.host} going
+              </p>
+              {event.UserEvents[0].isHost === true && (
+                <p className=" text-[10px] lg:text-sm tracking-tight text-gray-500 dark:text-white">
+                  ⋆ You are hosting
+                </p>
+              )}
+            </div>
             {/* {event.host === user.id ? <p>You are hosting</p>}*/}
             {/* {event.attendees.length > 1 ? <p>{`${event.attendees.length} going`}</p>}*/}
 

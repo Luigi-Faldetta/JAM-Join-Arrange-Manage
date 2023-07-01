@@ -41,12 +41,12 @@ export const thesisDbApi = createApi({
 
     addEvent: build.mutation<
       ApiResponse<EventState>,
-      Partial<EventState> & Pick<EventState, "title">
+      { token: string; event: Partial<EventState> & Pick<EventState, "title"> }
     >({
-      query: (event) => ({
-        url: "newevent/",
+      query: (info) => ({
+        url: `newevent/${info.token}`,
         method: "POST",
-        body: event,
+        body: info.event,
         headers: { "Content-type": "application/json; charset=UTF-8" },
       }),
     }),
@@ -255,7 +255,7 @@ export const {
   useGetUserQuery,
   useGetUsersQuery,
   //update
-  useUpdateUserMutation,  
+  useUpdateUserMutation,
   useUpdateEventMutation,
   useUpdateToDoMutation,
   //delete

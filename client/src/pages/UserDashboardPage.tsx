@@ -9,10 +9,12 @@ import { setEventList } from "../reduxFiles/slices/events";
 
 function UserDashboardPage() {
   const dispatch = useAppDispatch();
+  const userToken = localStorage.getItem("token");
+
+  console.log(userToken);
+
   const eventList = useSelector((state: RootState) => state.eventListReducer);
-  const { data, error, isLoading } = useGetEventsQuery(
-    "57cb0816-b2f3-43f2-86d4-71cfa16ad6ad"
-  );
+  const { data, error, isLoading } = useGetEventsQuery(userToken as string);
 
   useEffect(() => {
     if (!isLoading && !error) {
