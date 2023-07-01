@@ -85,6 +85,7 @@ function Navbar() {
                 </ul>
               </div>
             )}
+              {location.pathname === "/" && (
             <button
               data-collapse-toggle="mobile-menu-2"
               type="button"
@@ -108,6 +109,7 @@ function Navbar() {
                 ></path>
               </svg>
             </button>
+            )}
           </div>
           <div
             className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${
