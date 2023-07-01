@@ -4,10 +4,6 @@ import Todo from './todo';
 import Expense from './expense';
 import UserEvent from './userEvent';
 
-Event.belongsTo(User, {
-  foreignKey: 'host',
-});
-
 Event.belongsToMany(User, {
   through: UserEvent,
   foreignKey: 'eventId',
@@ -16,6 +12,18 @@ Event.belongsToMany(User, {
 User.belongsToMany(Event, {
   through: UserEvent,
   foreignKey: 'userId',
+});
+
+Event.hasMany(UserEvent ,{
+  foreignKey: 'eventId'
+});
+
+User.hasMany(UserEvent ,{
+  foreignKey: 'userId'
+});
+
+UserEvent.belongsTo(User,{
+  foreignKey: 'userId'
 });
 
 Todo.belongsTo(Event, {

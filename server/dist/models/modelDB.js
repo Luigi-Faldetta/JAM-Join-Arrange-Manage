@@ -30,6 +30,7 @@ NODE_ENV !== 'test' && (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // await sequelize.sync();
         yield sequelize.sync({ alter: true });
+        // await sequelize.sync({force: true});
         console.log(`Connected to database '${NODE_ENV === 'test' ? process.env.TEST_DB : process.env.DB_NAME}'`);
     }
     catch (error) {

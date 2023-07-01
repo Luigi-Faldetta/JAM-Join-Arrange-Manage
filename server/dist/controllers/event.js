@@ -10,64 +10,76 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const associations_1 = require("../models/associations");
-// Needs body with at least {"title"} 
+const uuid_1 = require("uuid");
+//@ts-ignore
+const resBody = (success, error, data, message) => { return { success, error, data, message }; };
+/**
+ * @param req needs body with at least {"title"}
+ */
 const newEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!(0, uuid_1.validate)(req.params.userid)) {
+        return res.status(400)
+            .json(resBody(false, "400", null, "Wrong uuid"));
+    }
+    const user = yield associations_1.User.findOne({
+        where: { userId: req.params.userid }
+    });
+    if (!user) {
+        return res.status(400)
+            .json(resBody(false, "400", null, "Wrong host id"));
+    }
     if (!req.body.title) {
         return res.status(400)
-            .json({
-            success: false,
-            error: "400",
-            data: null,
-            message: "Missing input data"
-        });
+            .json(resBody(false, "400", null, "Missing input data"));
     }
     try {
         const event = yield associations_1.Event.create(req.body);
+        //@ts-ignore
+        yield associations_1.UserEvent.create({ userId: req.params.userid, eventId: event.eventId, isHost: true });
         res.status(201)
-            .json({
-            success: true,
-            error: null,
-            data: event,
-            message: 'Event created',
-        });
+            .json(resBody(true, null, event, 'Event created and linked to host'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
         res.status(500)
-            .json({ message: err.message });
+            .json(resBody(false, "500", null, err.message));
     }
 });
-// Needs req.params.eventid
+/**
+ * @param req needs req.params.eventid
+ */
 const getEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        // const event = await Event.findOne({
+        //   where: { eventId: req.params.eventid }
+        // })
         const event = yield associations_1.Event.findOne({
-            where: { eventId: req.params.eventid }
+            where: { eventId: req.params.eventid },
+            include: [{
+                    model: associations_1.UserEvent,
+                    attributes: ['userId', 'isHost', 'isGoing'],
+                    include: [{
+                            model: associations_1.User,
+                            attributes: ['name', 'profilePic']
+                        }]
+                }]
         });
         if (!event) {
             return res.status(404)
-                .json({
-                success: false,
-                error: "404",
-                data: null,
-                message: "No event found"
-            });
+                .json(resBody(false, "404", null, "No event found"));
         }
         res.status(200)
-            .json({
-            success: true,
-            error: null,
-            data: event,
-            message: 'Event fetched',
-        });
+            .json(resBody(true, null, event, 'Event fetched'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
         res.status(500)
-            .json({ message: err.message });
+            .json(resBody(false, "500", null, err.message));
     }
 });
-// Needs req.params.eventid
-// Needs body with the changes 
+/**
+ * @param req needs req.params.eventid and body with what has changed
+ */
 const updateEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const updatedEvent = yield associations_1.Event.update(req.body, {
@@ -75,52 +87,41 @@ const updateEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             returning: true
         });
         res.status(200)
-            .json({
-            success: true,
-            error: null,
-            data: updatedEvent[1][0],
-            message: 'Event updated',
-        });
+            .json(resBody(true, null, updatedEvent[1][0], 'Event updated'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
         res.status(500)
-            .json({ message: err.message });
+            .json(resBody(false, "500", null, err.message));
     }
 });
-// Needs req.params.eventid
+/**
+ * @param req needs req.params.eventid
+ */
 const deleteEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const eventExists = yield associations_1.Event.findOne({ where: { eventId: req.params.eventid } });
         if (!eventExists) {
             return res.status(400)
-                .json({
-                success: false,
-                error: 400,
-                data: null,
-                message: "Wrong event id",
-            });
+                .json(resBody(false, '400', null, "Wrong event id"));
         }
         const deletedEvent = yield associations_1.Event.destroy({ where: { eventId: req.params.eventid } });
         res.status(200)
-            .json({
-            success: true,
-            error: null,
-            data: deletedEvent,
-            message: 'Event deleted',
-        });
+            .json(resBody(true, null, deletedEvent, 'Event deleted'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
         res.status(400)
-            .json({ message: err.message });
+            .json(resBody(false, "500", null, err.message));
     }
 });
-// Needs req.params.userid
+/**
+ * @param req needs req.params.userid
+ */
 const getUserEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const eventIds = yield associations_1.UserEvent.findAll({
-            where: { userId: req.params.userid }
+            where: { userId: req.params.userid },
         });
         if (eventIds.length) {
             const eventsArray = [];
@@ -128,14 +129,14 @@ const getUserEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 eventsArray.push(event.dataValues.eventId);
             }
             const events = yield associations_1.Event.findAll({
-                where: { eventId: eventsArray }
+                where: { eventId: eventsArray },
+                include: {
+                    model: associations_1.UserEvent,
+                    attributes: ['isHost', 'isGoing']
+                }
             });
-            res.status(200).json({
-                success: true,
-                error: null,
-                data: events,
-                message: 'User events fetched',
-            });
+            res.status(200)
+                .json(resBody(true, null, events, 'User events fetched'));
         }
         else {
             throw new Error('No events where found');
@@ -143,7 +144,8 @@ const getUserEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
-        res.status(500).json({ message: err.message });
+        res.status(500)
+            .json(resBody(false, "500", null, err.message));
     }
 });
 exports.default = { newEvent, getEvent, updateEvent, deleteEvent, getUserEvents };

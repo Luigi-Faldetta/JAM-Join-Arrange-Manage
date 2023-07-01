@@ -5,7 +5,7 @@ import './models/modelDB'
 import { user, event, todo, expense, userEvent, session, calculation } from './controllers/index'
 
 router.get('/health', (_req, res) => {
-    res.send({ health: 'Server runnning!! =)'})
+    res.send({ health: 'Server runnning!! =)' })
 })
 
 // User
@@ -16,7 +16,7 @@ router.delete('/user/:userid', user.deleteUser)
 router.get('/users/:eventid', user.getAllUsers)
 
 // Event
-router.post('/newevent', event.newEvent)
+router.post('/newevent/:userid', event.newEvent)
 router.get('/event/:eventid', event.getEvent)
 router.patch('/event/:eventid', event.updateEvent)
 router.delete('/event/:eventid', event.deleteEvent)
@@ -43,6 +43,10 @@ router.post('/userlogin', session.logIn);
 router.get('/userlogout', session.logOut);
 
 // Calculations
-router.get('/calculate/:eventid', calculation.splitEqual)
+router.get('/calculate/:eventid', calculation.expenseSheet)
+
+// @ts-ignore
+router.get('/test1', (req, res) => { res.send('All good') })
+router.get('/test2', session.authorize, (req, res) => { res.send('All good') })
 
 export default router;

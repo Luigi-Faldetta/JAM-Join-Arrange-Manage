@@ -26,7 +26,7 @@ const router = createBrowserRouter(
       <Route path="/about" element={<LandingAbout />} />
       <Route path="/faqs" element={<LandingFaqs />} />
       <Route path="/user-dashboard" element={<UserDashboardPage />} />
-      <Route path="/event-dashboard" element={<Event />} />
+      <Route path="/event-dashboard/:eventid" element={<Event />} />
       <Route path="/profile" element={<ProfilePage />} />
     </Route>
   )

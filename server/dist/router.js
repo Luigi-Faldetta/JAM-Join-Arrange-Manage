@@ -17,7 +17,7 @@ router.patch('/user/:userid', index_1.user.updateUser);
 router.delete('/user/:userid', index_1.user.deleteUser);
 router.get('/users/:eventid', index_1.user.getAllUsers);
 // Event
-router.post('/newevent', index_1.event.newEvent);
+router.post('/newevent/:userid', index_1.event.newEvent);
 router.get('/event/:eventid', index_1.event.getEvent);
 router.patch('/event/:eventid', index_1.event.updateEvent);
 router.delete('/event/:eventid', index_1.event.deleteEvent);
@@ -39,5 +39,8 @@ router.delete('/useractivity', index_1.userEvent.leaveEvent);
 router.post('/userlogin', index_1.session.logIn);
 router.get('/userlogout', index_1.session.logOut);
 // Calculations
-router.get('/calculate/:eventid', index_1.calculation.splitEqual);
+router.get('/calculate/:eventid', index_1.calculation.expenseSheet);
+// @ts-ignore
+router.get('/test1', (req, res) => { res.send('All good'); });
+router.get('/test2', index_1.session.authorize, (req, res) => { res.send('All good'); });
 exports.default = router;
