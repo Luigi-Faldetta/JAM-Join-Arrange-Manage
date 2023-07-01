@@ -43,7 +43,6 @@ export default function ToggleButton({data}: any) {
   const onJoin = async (userId: string, eventId: string) => {
     try {
       const res = await joinActivity({ userId, eventId });
-      console.log("joiningggg", res);
     } catch (error) {
       console.error(error);
     }
@@ -55,7 +54,6 @@ export default function ToggleButton({data}: any) {
   const onLeave = async (userId: string, eventId: string) => {
     try {
       const res = await leaveActivity({ userId, eventId });
-      console.log("leavingg", res);
     } catch (error) {
       console.error(error);
     }
