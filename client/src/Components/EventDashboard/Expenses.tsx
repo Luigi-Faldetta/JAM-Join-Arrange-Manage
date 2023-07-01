@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 
 interface Expense {
     item: string;
-    cost: number;
+    cost: string;
     eventId: string;
-    id: string;
+    id?: number;
 }
 
 const eventId = "0db2d486-6f41-4833-9856-8ea7c94fae6c";
@@ -14,28 +14,43 @@ const purchaserId = "57cb0816-b2f3-43f2-86d4-71cfa16ad6ad";
 
 export default function Expenses() {
     const [expenses, setExpenses] = useState<Expense[]>([]);
-    const [newExpense, setNewExpense] = useState<Expense>({ item: "", cost: 0, eventId: "", id: "" });
+    const [newExpense, setNewExpense] = useState<Expense>({ item: "", cost: "", eventId: "", id: 0 });
     const [total, setTotal] = useState<number>(0);
+
+    // useEffect(() => {
+    //     fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/expenses/${eventId}`)
+    //         .then((response) => {
+    //             console.log(response)
+    //             return response.json()
+    //         })
+    //         .then((fetchedExpenses) => {
+    //             console.log(fetchedExpenses);
+    //             setExpenses(fetchedExpenses.data);
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error fetching expenses:', error);
+    //         });
+    // }, []);
 
     useEffect(() => {
         fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/expenses/${eventId}`)
-            .then((response) => {
-                console.log(response)
-                return response.json()
-            })
-            .then((fetchedExpenses) => {
+            .then((response) => response.json())
+            .then((responseData) => {
+                const fetchedExpenses = responseData.data; // Adjust the property name if needed
                 console.log(fetchedExpenses);
-                setExpenses(fetchedExpenses.data);
+                setExpenses(fetchedExpenses);
             })
             .catch((error) => {
                 console.error('Error fetching expenses:', error);
             });
     }, []);
 
+
+
     useEffect(() => {
         const calculateTotal = () => {
             const totalPrice = expenses.reduce((accumulator, expense) => {
-                return accumulator + expense.cost;
+                return accumulator + Number(expense?.cost || 0);
             }, 0);
             setTotal(totalPrice);
         };
@@ -44,17 +59,17 @@ export default function Expenses() {
 
 
     const handleAddClick = () => {
-        if (newExpense.item.trim() !== "") {
+        console.log(newExpense);
+
+        if (newExpense.item !== "") {
+            console.log("HERE")
             const expenseToAdd = {
                 item: newExpense.item,
-                cost: newExpense.cost,
-                purchaserId: purchaserId,
+                cost: Number(newExpense.cost),
                 eventId: eventId,
-                // id: newExpense.id
+                purchaserId: purchaserId,
             };
-
-            console.log(newExpense);
-
+            console.log(expenseToAdd);
             fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/expense`, {
                 method: "POST",
                 headers: {
@@ -63,9 +78,11 @@ export default function Expenses() {
                 body: JSON.stringify(expenseToAdd),
             })
                 .then((response) => response.json())
-                .then((createdExpense) => {
+                .then((responseData) => {
+                    console.log(responseData)
+                    const createdExpense = responseData.data; // Adjust the property name if needed
                     setExpenses((prevExpenses) => [...prevExpenses, createdExpense]);
-                    setNewExpense({ item: "", cost: 0, eventId: "", id: "" });
+                    setNewExpense({ item: "", cost: "", eventId: "", id: 0 });
                 })
                 .catch((error) => {
                     console.error("Error creating expense:", error);
@@ -73,15 +90,67 @@ export default function Expenses() {
         }
     };
 
-
-
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setNewExpense((prevExpense) => ({
-            ...prevExpense,
-            [name]: value
-        }));
+
+        if (name === 'cost' && value === '0') {
+            setNewExpense((prevExpense) => ({
+                ...prevExpense,
+                [name]: '',
+            }));
+        } else {
+            setNewExpense((prevExpense) => ({
+                ...prevExpense,
+                [name]: value,
+            }));
+        }
     };
+
+
+
+
+    // const handleAddClick = () => {
+    //     if (newExpense.item.trim() !== "") {
+    //         const expenseToAdd = {
+    //             item: newExpense.item,
+    //             cost: newExpense.cost,
+    //             purchaserId: purchaserId,
+    //             eventId: eventId,
+    //             // id: newExpense.id
+    //         };
+
+    //         console.log(newExpense);
+
+    //         fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/expense`, {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //             },
+    //             body: JSON.stringify(expenseToAdd),
+    //         })
+    //             .then((response) => response.json())
+    //             .then((createdExpense) => {
+    //                 setExpenses((prevExpenses) => [...prevExpenses, createdExpense]);
+    //                 setNewExpense({ item: "", cost: 0, eventId: "", id: "" });
+    //             })
+    //             .catch((error) => {
+    //                 console.error("Error creating expense:", error);
+    //             });
+    //     }
+    // };
+
+
+
+    // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const { name, value } = e.target;
+    //     setNewExpense((prevExpense) => ({
+    //         ...prevExpense,
+    //         [name]: value
+    //     }));
+    // };
+
+
+
 
     const handleDeleteClick = (expenseId: string) => {
         fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/expense/${expenseId}`, {
@@ -92,7 +161,7 @@ export default function Expenses() {
                 console.log(response)
                 if (response.ok) {
                     setExpenses((prevExpenses) => {
-                        return prevExpenses.filter((expense) => expense.id !== expenseId);
+                        return prevExpenses.filter((expense) => String(expense.id) !== expenseId);
                     });
                 } else {
                     console.error("Failed to delete expense:", response.statusText);
@@ -126,21 +195,21 @@ export default function Expenses() {
                         value={newExpense.cost}
                         onChange={handleInputChange}
                         type="number"
-                        placeholder="cost"
+                        placeholder="0"
                         className="w-20 h-10 ml-3"
                     />
                     <button onClick={handleAddClick} className="ml-3 p-1 w-8 text-lg rounded-md border border-slate-50">&#10133;</button>
                 </div>
                 {expenses.map((expense) => (
-                    <div className="flex items-center" key={expense.id}>
+                    <div className="flex items-center" key={expense?.id}>
                         <button
                             className="text-white rounded-md text-xl"
-                            onClick={() => handleDeleteClick(expense.id)}
+                            onClick={() => handleDeleteClick(String(expense?.id))}
                         >
                             ❌
                         </button>
                         <h3 className="text-white border border-slate-50 m-4 rounded-md text-center w-60 h-8">
-                            {expense.item} (${expense.cost})
+                            {expense?.item} (${expense?.cost})
                         </h3>
                     </div>
                 ))}
