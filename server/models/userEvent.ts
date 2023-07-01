@@ -1,8 +1,16 @@
-import { DataTypes } from 'sequelize';
+import { BuildOptions, DataTypes, Model } from 'sequelize';
 import sequelize from './modelDB.js';
 import Sequelize from 'sequelize';
+import { BeUserEvent } from '../utils.js';
 
-const UserEvent = sequelize.define(
+interface UserEventModel extends Model<BeUserEvent>, BeUserEvent {}
+export class UserEventClass extends Model<UserEventModel, BeUserEvent> {}
+
+export type UserEventStatic = typeof Model & {
+  new(values?:object, options?: BuildOptions):UserEventModel
+}
+
+const UserEvent = sequelize.define<UserEventModel>(
   'UserEvents',
   {
     userId: {

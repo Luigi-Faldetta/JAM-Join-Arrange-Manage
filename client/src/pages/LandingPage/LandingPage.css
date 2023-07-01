@@ -1,0 +1,18 @@
+.landing-page {
+    height: 100%
+  }
+  .landing-page .active {
+    transform: scale(1.2);
+    transition: transform 0.8s ease;
+    animation-name: jam-animation;
+    animation-duration: 4s;
+    animation-delay: 0s;
+  }
+  
+  @keyframes jam-animation {
+    0%   { background-color: red; left: 0px; top: 0px; }
+    25%  { background-color: yellow; left: 200px; top: 0px; }
+    50%  { background-color: blue; left: 200px; top: 200px; }
+    75%  { background-color: green; left: 0px; top: 200px; }
+    100% { background-color: red; left: 0px; top: 0px; }
+  }

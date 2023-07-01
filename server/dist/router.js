@@ -39,7 +39,7 @@ router.delete('/useractivity', index_1.userEvent.leaveEvent);
 router.post('/userlogin', index_1.session.logIn);
 router.get('/userlogout', index_1.session.logOut);
 // Calculations
-router.get('/calculate/:eventid', index_1.calculation.splitEqual);
+router.get('/calculate/:eventid', index_1.calculation.expenseSheet);
 // @ts-ignore
 router.get('/test1', (req, res) => { res.send('All good'); });
 router.get('/test2', index_1.session.authorize, (req, res) => { res.send('All good'); });

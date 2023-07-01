@@ -1,0 +1,14 @@
+.about-page {
+    margin-top: 2rem;
+    height: 100%;
+  }
+  
+  .about-text {
+    margin: 2rem;
+    box-sizing: border-box;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: center;
+  }

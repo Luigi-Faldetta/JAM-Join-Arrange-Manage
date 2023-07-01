@@ -43,7 +43,7 @@ router.post('/userlogin', session.logIn);
 router.get('/userlogout', session.logOut);
 
 // Calculations
-router.get('/calculate/:eventid', calculation.splitEqual)
+router.get('/calculate/:eventid', calculation.expenseSheet)
 
 // @ts-ignore
 router.get('/test1', (req, res) => { res.send('All good') })
