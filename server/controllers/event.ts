@@ -2,17 +2,17 @@ import { Request, Response } from 'express';
 import { Event, User, UserEvent } from '../models/associations'
 import { validate as uuidValidate } from 'uuid';
 
-// Needs body with at least {"title"} 
+//@ts-ignore
+const resBody = (success, error, data, message) => { return { success, error, data, message } }
+
+/**
+ * @param req needs body with at least {"title"}
+ */
 const newEvent = async (req: Request, res: Response) => {
 
   if (!uuidValidate(req.params.userid)) {
     return res.status(400)
-      .json({
-        success: false,
-        error: "400",
-        data: null,
-        message: "Wrong uuid"
-      })
+      .json(resBody(false, "400", null, "Wrong uuid"))
   }
 
   const user = await User.findOne({
@@ -21,22 +21,12 @@ const newEvent = async (req: Request, res: Response) => {
 
   if (!user) {
     return res.status(400)
-      .json({
-        success: false,
-        error: "400",
-        data: null,
-        message: "Wrong host id"
-      })
+      .json(resBody(false, "400", null, "Wrong host id"))
   }
 
   if (!req.body.title) {
     return res.status(400)
-      .json({
-        success: false,
-        error: "400",
-        data: null,
-        message: "Missing input data"
-      })
+      .json(resBody(false, "400", null, "Missing input data"))
   }
 
   try {
@@ -45,21 +35,18 @@ const newEvent = async (req: Request, res: Response) => {
     await UserEvent.create({ userId: req.params.userid, eventId: event.eventId, isHost: true })
 
     res.status(201)
-      .json({
-        success: true,
-        error: null,
-        data: event,
-        message: 'Event created and linked to host',
-      });
+      .json(resBody(true, null, event, 'Event created and linked to host'));
 
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.error(err);
     res.status(500)
-      .json({ message: err.message });
+      .json(resBody(false, "500", null, err.message));
   }
 }
 
-// Needs req.params.eventid
+/**
+ * @param req needs req.params.eventid
+ */
 const getEvent = async (req: Request, res: Response) => {
 
   try {
@@ -68,31 +55,22 @@ const getEvent = async (req: Request, res: Response) => {
     })
     if (!event) {
       return res.status(404)
-        .json({
-          success: false,
-          error: "404",
-          data: null,
-          message: "No event found"
-        })
+        .json(resBody(false, "404", null, "No event found"))
     }
 
     res.status(200)
-      .json({
-        success: true,
-        error: null,
-        data: event,
-        message: 'Event fetched',
-      });
+      .json(resBody(true, null, event, 'Event fetched'));
 
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.error(err);
     res.status(500)
-      .json({ message: err.message });
+      .json(resBody(false, "500", null, err.message));
   }
 }
 
-// Needs req.params.eventid
-// Needs body with the changes 
+/**
+ * @param req needs req.params.eventid and body with what has changed
+ */
 const updateEvent = async (req: Request, res: Response) => {
 
   try {
@@ -102,21 +80,18 @@ const updateEvent = async (req: Request, res: Response) => {
         returning: true
       })
     res.status(200)
-      .json({
-        success: true,
-        error: null,
-        data: updatedEvent[1][0],
-        message: 'Event updated',
-      });
+      .json(resBody(true, null, updatedEvent[1][0], 'Event updated'));
 
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.error(err);
     res.status(500)
-      .json({ message: err.message });
+      .json(resBody(false, "500", null, err.message));
   }
 }
 
-// Needs req.params.eventid
+/**
+ * @param req needs req.params.eventid
+ */
 const deleteEvent = async (req: Request, res: Response) => {
 
   try {
@@ -125,33 +100,25 @@ const deleteEvent = async (req: Request, res: Response) => {
 
     if (!eventExists) {
       return res.status(400)
-        .json({
-          success: false,
-          error: 400,
-          data: null,
-          message: "Wrong event id",
-        });
+        .json(resBody(false, '400', null, "Wrong event id"));
     }
 
     const deletedEvent = await Event.destroy(
       { where: { eventId: req.params.eventid } })
 
     res.status(200)
-      .json({
-        success: true,
-        error: null,
-        data: deletedEvent,
-        message: 'Event deleted',
-      });
+      .json(resBody(true, null, deletedEvent, 'Event deleted'));
 
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.error(err);
     res.status(400)
-      .json({ message: err.message });
+      .json(resBody(false, "500", null, err.message));
   }
 }
 
-// Needs req.params.userid
+/**
+ * @param req needs req.params.userid
+ */
 const getUserEvents = async (req: Request, res: Response) => {
 
   try {
@@ -169,12 +136,8 @@ const getUserEvents = async (req: Request, res: Response) => {
         where: { eventId: eventsArray }
       })
 
-      res.status(200).json({
-        success: true,
-        error: null,
-        data: events,
-        message: 'User events fetched',
-      });
+      res.status(200)
+        .json(resBody(true, null, events, 'User events fetched'));
 
     } else {
       throw new Error('No events where found')
@@ -182,7 +145,8 @@ const getUserEvents = async (req: Request, res: Response) => {
 
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.error(err);
-    res.status(500).json({ message: err.message });
+    res.status(500)
+      .json(resBody(false, "500", null, err.message));
   }
 }
 
