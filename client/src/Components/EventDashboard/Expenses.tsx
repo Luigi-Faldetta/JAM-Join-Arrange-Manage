@@ -17,21 +17,6 @@ export default function Expenses() {
     const [newExpense, setNewExpense] = useState<Expense>({ item: "", cost: "", eventId: "", id: 0 });
     const [total, setTotal] = useState<number>(0);
 
-    // useEffect(() => {
-    //     fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/expenses/${eventId}`)
-    //         .then((response) => {
-    //             console.log(response)
-    //             return response.json()
-    //         })
-    //         .then((fetchedExpenses) => {
-    //             console.log(fetchedExpenses);
-    //             setExpenses(fetchedExpenses.data);
-    //         })
-    //         .catch((error) => {
-    //             console.error('Error fetching expenses:', error);
-    //         });
-    // }, []);
-
     useEffect(() => {
         fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/expenses/${eventId}`)
             .then((response) => response.json())
@@ -105,50 +90,6 @@ export default function Expenses() {
             }));
         }
     };
-
-
-
-
-    // const handleAddClick = () => {
-    //     if (newExpense.item.trim() !== "") {
-    //         const expenseToAdd = {
-    //             item: newExpense.item,
-    //             cost: newExpense.cost,
-    //             purchaserId: purchaserId,
-    //             eventId: eventId,
-    //             // id: newExpense.id
-    //         };
-
-    //         console.log(newExpense);
-
-    //         fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/expense`, {
-    //             method: "POST",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //             },
-    //             body: JSON.stringify(expenseToAdd),
-    //         })
-    //             .then((response) => response.json())
-    //             .then((createdExpense) => {
-    //                 setExpenses((prevExpenses) => [...prevExpenses, createdExpense]);
-    //                 setNewExpense({ item: "", cost: 0, eventId: "", id: "" });
-    //             })
-    //             .catch((error) => {
-    //                 console.error("Error creating expense:", error);
-    //             });
-    //     }
-    // };
-
-
-
-    // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const { name, value } = e.target;
-    //     setNewExpense((prevExpense) => ({
-    //         ...prevExpense,
-    //         [name]: value
-    //     }));
-    // };
-
 
 
 

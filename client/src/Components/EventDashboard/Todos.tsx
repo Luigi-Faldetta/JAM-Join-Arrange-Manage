@@ -1,10 +1,11 @@
-//@ts-nocheck
 import { useEffect, useState } from "react";
 
 interface toDo {
   title: string;
   isDone: boolean;
   id: string;
+  creatorId: string;
+  eventId: string;
 }
 
 const eventId = "0db2d486-6f41-4833-9856-8ea7c94fae6c";
@@ -12,7 +13,13 @@ const creatorId = "57cb0816-b2f3-43f2-86d4-71cfa16ad6ad";
 
 export default function Todos() {
   const [toDos, setToDos] = useState<toDo[]>([]);
-  const [newToDo, setNewToDo] = useState<toDo>();
+  const [newToDo, setNewToDo] = useState<toDo>({
+    title: "",
+    isDone: false,
+    id: "",
+    creatorId: creatorId,
+    eventId: eventId,
+  });
   const [doneToDos, setDoneToDos] = useState<toDo[]>([]);
 
   useEffect(() => {
@@ -21,8 +28,8 @@ export default function Todos() {
       .then((fetchedTodos) => {
         console.log(fetchedTodos);
         const allToDos = fetchedTodos.data;
-        const doneToDos = allToDos.filter((toDo) => toDo.isDone);
-        const pendingToDos = allToDos.filter((toDo) => !toDo.isDone);
+        const doneToDos = allToDos.filter((toDo: toDo) => toDo.isDone);
+        const pendingToDos = allToDos.filter((toDo: toDo) => !toDo.isDone);
         setToDos(pendingToDos);
         setDoneToDos(doneToDos);
       })
@@ -32,7 +39,8 @@ export default function Todos() {
   }, []);
 
   const handleAddClick = () => {
-    if (newToDo.trim() !== "") {
+    console.log(newToDo);
+    if (String(newToDo) !== "") {
       const newToDoItem = {
         title: newToDo,
         isDone: false,
@@ -56,23 +64,20 @@ export default function Todos() {
           console.error("Error creating todo:", error);
         });
 
-      setNewToDo("");
+      setNewToDo({
+        title: "",
+        isDone: false,
+        id: "",
+        creatorId: creatorId,
+        eventId: eventId,
+      });
     }
   };
-
 
   const handleInputChange = (e: any) => {
     setNewToDo(e.target.value);
     console.log(newToDo)
   };
-
-  // const handleDeleteClick = (index: number) => {
-  //   setToDos((prevToDos) => {
-  //     const updatedToDos = [...prevToDos];
-  //     updatedToDos.splice(index, 1);
-  //     return updatedToDos;
-  //   });
-  // };
 
   const handleDeleteClick = (index: number) => {
     const todoId = toDos[index].id;
@@ -111,7 +116,7 @@ export default function Todos() {
   };
 
 
-  const handleMoveToTodosClick = (index) => {
+  const handleMoveToTodosClick = (index: number) => {
     setDoneToDos((prevDoneToDos) => {
       const updatedDoneToDos = [...prevDoneToDos];
       const doneToDo = updatedDoneToDos.splice(index, 1);
@@ -127,7 +132,7 @@ export default function Todos() {
       <div className="w-2/5 h-96 mx-20 bg-blue-500 rounded-lg flex mt-36 flex-col items-center overflow-y-scroll">
         <h1 className="p-6 text-2xl text-white">Todos</h1>
         <div className="ml-11">
-          <input type="text" placeholder="Add a new todo..." className="w-60 h-10" value={newToDo}
+          <input type="text" placeholder="Add a new todo..." className="w-60 h-10" value={newToDo.title}
             onChange={handleInputChange}></input>
           <button onClick={handleAddClick} className="ml-3 p-1 w-8 text-lg rounded-md border border-slate-50">&#10133;</button>
         </div>

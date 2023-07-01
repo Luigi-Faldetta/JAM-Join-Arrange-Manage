@@ -1,11 +1,10 @@
-//@ts-nocheck
 import React, { useState } from 'react';
 import Todos from './Todos';
 import Expenses from './Expenses';
 import Attendees from './Attendees';
 
 export default function ToggleButton() {
-  const [showTodos, setShowTodos] = useState(true);
+  const [showTodos, setShowTodos] = useState<boolean>(true);
 
   const handleToggle = () => {
     setShowTodos((prevShowTodos) => !prevShowTodos);
@@ -20,3 +19,4 @@ export default function ToggleButton() {
     </div>
   );
 }
+
