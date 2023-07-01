@@ -6,6 +6,7 @@
 // ) => {success, data, message, error}
 
 export interface BeExpense {
+    id: number,
     item: string,
     cost: number,
     purchaserId: string,
