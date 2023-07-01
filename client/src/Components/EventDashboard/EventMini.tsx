@@ -13,7 +13,7 @@ interface Event {
   title: string;
 }
 
-export default function EventMini() {
+export default function EventMini({data}: any) {
   const [eventDetails, setEventDetails] = useState<Event>({
     coverPic: "",
     date: "",

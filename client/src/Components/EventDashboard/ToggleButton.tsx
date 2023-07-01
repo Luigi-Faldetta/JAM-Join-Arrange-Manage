@@ -1,18 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Todos from "./Todos";
 import Expenses from "./Expenses";
 import Attendees from "./Attendees";
 import { useParams } from "react-router-dom";
 import { useJoinActivityMutation, useLeaveActivityMutation } from "../../services/ThesisDB";
 
-export default function ToggleButton() {
+export default function ToggleButton({data}: any) {
+  const userId = localStorage.getItem("token");
   const [showTodos, setShowTodos] = useState<boolean>(true);
   const [isJoined, setIsJoined] = useState<boolean>(false);
   const { eventid } = useParams();
   const [joinActivity] = useJoinActivityMutation();
   const [leaveActivity] = useLeaveActivityMutation();
-  const userId = localStorage.getItem("token");
   const eventId = eventid;
+
+  useEffect(() => {
+    if (!data || !data?.data || !data?.data?.UserEvents.length) {
+      setIsJoined(false);
+      return;
+    }
+
+    const isJoinedCheck = data.data.UserEvents.reduce((acc: any, cur: any) => {
+      if (cur.userId === userId) {
+        return true;
+      }
+    }, false);
+
+    if (isJoinedCheck !== isJoined) {
+      (setIsJoined(isJoinedCheck));
+    }
+  },[data, setIsJoined]);
+
 
   const handleToggle = () => {
     setShowTodos((prevShowTodos) => !prevShowTodos);
