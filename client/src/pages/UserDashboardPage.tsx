@@ -8,9 +8,6 @@ import { useEffect, useState } from "react";
 import { setEventList } from "../reduxFiles/slices/events";
 
 function UserDashboardPage() {
-  const userToken = localStorage.getItem("token");
-  console.log(userToken);
-
   const dispatch = useAppDispatch();
   const eventList = useSelector((state: RootState) => state.eventListReducer);
   const { data, error, isLoading } = useGetEventsQuery(

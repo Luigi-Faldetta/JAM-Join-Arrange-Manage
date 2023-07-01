@@ -10,11 +10,11 @@ import {
 // import PictureUpload from "../PictureUpload";
 import { useAddEventMutation } from "../../services/ThesisDB";
 import { ApiResponse } from "../../services/ApiResponseType";
-import { useAuth } from "../../utils/useAuth";
+import PictureUpload from "../PictureUpload";
 
 function CreateEventForm() {
-  useAuth()
   const dispatch = useDispatch();
+  const userToken = localStorage.getItem("token");
 
   const [eventDate, setEventDate] = useState<Date | null>(null);
   const [open, setOpen] = useState(false);
