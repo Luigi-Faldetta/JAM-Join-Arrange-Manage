@@ -80,7 +80,7 @@ export default function ToggleButton({data}: any) {
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <button
           onClick={isJoined ? handleLeave : handleJoin}
-          className="btn btn-secondary m-10"
+          className="btn btn-primary m-10"
         >
           {isJoined ? "Leave" : "Join"}
         </button>
