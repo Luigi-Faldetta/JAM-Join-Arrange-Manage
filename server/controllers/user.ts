@@ -2,29 +2,25 @@ import bcrypt from 'bcrypt';
 import { Request, Response } from "express";
 import { User, UserEvent } from "../models/associations";
 
-// Needs body with at least {"name", "email", "password"}
+//@ts-ignore
+const resBody = (success, error, data, message) => { return { success, error, data, message } }
+
+/**
+ * @param req needs body with at least {"name", "email", "password"}
+ */
 const newUser = async (req: Request, res: Response) => {
 
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
     return res.status(409)
-      .json({
-        success: false,
-        error: "409",
-        data: null,
-        message: "Missing input data"
-      })
+      .json(resBody(false, "409", null, "Missing input data"))
   }
 
   const user = await User.findOne({ where: { email } });
   if (user)
     return res.status(409)
-      .json({
-        success: false,
-        error: "409",
-        data: null,
-        message: "User already exists"
-      });
+      .json(resBody(false, "409", null, "User already exists"));
+
   const inputPassword = password;
 
   try {
@@ -33,21 +29,19 @@ const newUser = async (req: Request, res: Response) => {
     // @ts-ignore
     const { password, ...safeUser } = { ...user.dataValues }
     res.status(201)
-      .json({
-        success: true,
-        error: null,
-        data: safeUser,
-        message: "User created",
-      });
+      .json(resBody(true, null, safeUser, "User created"));
 
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.error(err);
     res.status(500)
-      .json({ message: err.message });
+      .json(resBody(false, "500", null, err.message));
   }
 };
 
-// Needs req.params.userid
+
+/**
+ * @param req needs req.params.userid
+ */
 const getUser = async (req: Request, res: Response) => {
 
   try {
@@ -57,57 +51,38 @@ const getUser = async (req: Request, res: Response) => {
 
     if (!user) {
       return res.status(404)
-        .json({
-          success: false,
-          error: "404",
-          data: null,
-          message: "No user found"
-        })
+        .json(resBody(false, "404", null, "No user found"))
     }
 
     // @ts-ignore
     const { password, ...safeUser } = { ...user.dataValues }
     res.status(200)
-      .json({
-        success: true,
-        error: null,
-        data: safeUser,
-        message: "User fetched",
-      });
+      .json(resBody(true, null, safeUser, "User fetched"));
 
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.error(err);
     res.status(400)
-      .json({ message: err.message });
+      .json(resBody(false, "400", null, err.message));
   }
 };
 
-// Needs req.params.userid
-// Needs body with the changes 
+/**
+ * @param req needs req.params.userid and a body with any change
+ */
 export const updateUser = async (req: Request, res: Response) => {
 
   try {
     const userExists = await User.findOne({ where: { userId: req.params.userid } })
     if (!userExists) {
       return res.status(400)
-        .json({
-          success: false,
-          error: "400",
-          data: null,
-          message: "Wrong user id"
-        })
+        .json(resBody(false, "400", null, "Wrong user id"))
 
     }
     if (req.body.email) {
       const user = await User.findOne({ where: { email: req.body.email } })
       if (user) {
         return res.status(409)
-          .json({
-            success: false,
-            error: "409",
-            data: null,
-            message: "Email already exists"
-          })
+          .json(resBody(false, "409", null, "Email already exists"))
       }
     }
 
@@ -130,21 +105,18 @@ export const updateUser = async (req: Request, res: Response) => {
     // @ts-ignore
     const { password, ...safeUpdatedUser } = { ...updatedUser[1][0].dataValues }
     res.status(200)
-      .json({
-        success: true,
-        error: null,
-        data: safeUpdatedUser,
-        message: "User updated",
-      });
+      .json(resBody(true, null, safeUpdatedUser, "User updated"));
 
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.error(err);
     res.status(500)
-      .json({ message: err.message });
+      .json(resBody(false, "500", null, err.message));
   }
 };
 
-// Needs req.params.userid
+/**
+ * @param req needs req.params.userid
+ */
 export const deleteUser = async (req: Request, res: Response) => {
 
   try {
@@ -153,12 +125,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 
     if (!userExists) {
       return res.status(400)
-        .json({
-          success: false,
-          error: 400,
-          data: null,
-          message: "Wrong user id",
-        });
+        .json(resBody(false, '400', null, "Wrong user id"));
     }
 
     const deletedUser = await User.destroy({
@@ -166,21 +133,18 @@ export const deleteUser = async (req: Request, res: Response) => {
     })
 
     res.status(200)
-      .json({
-        success: true,
-        error: null,
-        data: deletedUser,
-        message: 'User deleted',
-      });
+      .json(resBody(true, null, deletedUser, 'User deleted'));
 
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.error(err);
     res.status(400)
-      .json({ message: err.message });
+      .json(resBody(false, "400", null, err.message));
   }
 };
 
-// Needs req.params.eventid
+/**
+ * @param req needs req.params.eventid
+ */
 const getAllUsers = async (req: Request, res: Response) => {
 
   try {
@@ -199,12 +163,7 @@ const getAllUsers = async (req: Request, res: Response) => {
       });
 
       res.status(200)
-        .json({
-          success: true,
-          error: null,
-          data: users,
-          message: 'Event users fetched',
-        });
+        .json(resBody(true, null, users, 'Event users fetched'));
 
     } else {
       throw new Error("No users were found");
@@ -213,7 +172,7 @@ const getAllUsers = async (req: Request, res: Response) => {
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.error(err);
     res.status(500)
-      .json({ message: err.message });
+      .json(resBody(false, "500", null, err.message));
   }
 };
 
