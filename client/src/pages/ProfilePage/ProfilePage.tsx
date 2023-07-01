@@ -1,12 +1,7 @@
 import { useState } from 'react';
 import './ProfilePage.css';
-import {
-  useUpdateUserMutation,
-  useDeleteUserMutation,
-} from '../../services/ThesisDB';
-import { ApiResponse } from '../../services/ApiResponseType';
-import { UserState, updateUserState } from '../../reduxFiles/slices/users';
-import { useDispatch, useSelector } from 'react-redux';
+import { useGetUserQuery } from '../../services/ThesisDB';
+import { UserState } from '../../reduxFiles/slices/users';
 import { useAuth } from '../../utils/useAuth';
 
 const ProfilePage = (): any => {
@@ -14,40 +9,34 @@ const ProfilePage = (): any => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [updateUser] = useUpdateUserMutation();
 
-  const dispatch = useDispatch();
+  const uid = localStorage.getItem('token');
   useAuth()
   //@ts-ignore
-  // const { userInfo } = useSelector((state) => state.user);
-
-  // console.log(userInfo)
+  const { data } = useGetUserQuery(uid);
+  //@ts-ignore
+  console.log('data: ', data);
 
   const handleSubmitChanges = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
-
-    // const userId = {
-    //somthing from cookie
-    // }
-
-    const userFormData: Partial<UserState> &
-      Pick<UserState, 'id' | 'name' | 'email' | 'password'> = {
-      //  id: '', // change for logged in user id
-      //token: userId,
-      // data: {
-      name: event.currentTarget.username.value,
-      email: event.currentTarget.email.value,
-      password: event.currentTarget.password.value,
-    };
-    //}
-    console.log(userFormData);
-
-    const userUpdated = await updateUser(userFormData);
-    dispatch(updateUserState(userUpdated as ApiResponse<UserState>));
-
-    console.log(userUpdated);
+    if (password !== confirmPassword) {
+      console.error('Password do not match');
+    } else {
+      try {
+        const userFormData: Partial<UserState> &
+          Pick<UserState, 'id' | 'name' | 'email' | 'password'> = {
+          id: data?.data.id,
+          name: event.currentTarget.username.value,
+          email: event.currentTarget.email.value,
+          password: event.currentTarget.password.value,
+        };
+        console.log(userFormData);
+      } catch (error) {
+        console.error('Error: ', error);
+      }
+    }
   };
 
   return (
@@ -57,16 +46,20 @@ const ProfilePage = (): any => {
         <div className='flex flex-col items-center pb-10'>
           <img
             className='w-24 h-25 mb-3 rounded-full shadow-lg'
-            src='https://media.istockphoto.com/id/501778507/es/foto/divertidos-sonriendo-desagradable-maullar-mascota-peque%C3%B1os.jpg?s=2048x2048&w=is&k=20&c=o4nXxbpCGvGSw8i8-tGEkw2hKRBXUQDt8GCGmst--Sk='
+            src={data?.data.profilePic}
             alt='user img'
           />
           <h5 className='mb-1 text-xl font-medium text-gray-900 dark:text-white'>
-            Profile User
+            {data?.data.name}
           </h5>
           <form
             className='edit-profile-form'
             onSubmit={handleSubmitChanges}
           >
+            <input
+              type='file'
+              className='file-input file-input-bordered w-full max-w-xs'
+            />
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
