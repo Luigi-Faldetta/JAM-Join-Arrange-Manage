@@ -40,6 +40,7 @@ const ProfilePage = (): any => {
   const [userPhoto, setUserPhoto] = useState<File | null | string>(null);
   const [photoUrl, setPhotoUrl] = useState<string>('');
   const [updateStatus, setUpdateStatus] = useState('');
+  const [open, setOpen] = useState(false)
 
   const uid = localStorage.getItem('token');
   useAuth();
@@ -128,6 +129,11 @@ const ProfilePage = (): any => {
     setConfirmPassword('');
   };
 
+  const handleDelete = () => {
+    setOpen(true)
+    console.log(open)
+  }
+
   return (
     <div className='profile-container bg-gray-100 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8'>
       <div className='w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
@@ -203,10 +209,13 @@ const ProfilePage = (): any => {
             <button
               type='submit'
               className='btn btn-error'
+              onClick={handleDelete}
             >
               Delete Account
             </button>
-
+            {open ? ( <Delete setOpen={setOpen}/>
+                 ) : (
+                null  )}
           </div>
         </div>
       </div>

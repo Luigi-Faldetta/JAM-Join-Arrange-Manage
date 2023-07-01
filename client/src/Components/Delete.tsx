@@ -1,10 +1,28 @@
-function Delete() {
-  // const dispatch = useAppDispatch()
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../reduxFiles/store';
+import { useDeleteUserMutation } from '../services/ThesisDB';
 
-  // function handleCloseLogout () {
-  //     console.log('hello')
-  //     dispatch(closeLogout())
-  // }
+function Delete({ setOpen }: { setOpen: (open: boolean) => void }) {
+  const dispatch = useAppDispatch();
+  const [deleteUser] = useDeleteUserMutation();
+  const navigate = useNavigate();
+  function handleCloseDelete() {
+    setOpen(false);
+    console.log('delete account');
+  }
+  async function handleDelete() {
+    console.log('here')
+    const userId = localStorage.getItem('token');
+    try {
+      const res = await deleteUser(userId as string);
+      console.log(res);
+      localStorage.removeItem('token');
+      navigate('/')
+      window.location.reload(); 
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <>
@@ -56,12 +74,19 @@ function Delete() {
               </div>
               <div className='bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6'>
                 <button
+                  onClick={handleDelete}
                   type='button'
                   className='inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto'
                 >
                   Delete
                 </button>
-                {/* <button onClick={handleCloseLogout} type="button" className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button> */}
+                <button
+                  onClick={handleCloseDelete}
+                  type='button'
+                  className='mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto'
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </div>
@@ -70,6 +95,5 @@ function Delete() {
     </>
   );
 }
-
 
 export default Delete;
