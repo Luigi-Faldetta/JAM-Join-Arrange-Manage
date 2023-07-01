@@ -1,8 +1,9 @@
 import { useState, useRef } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { UserState, createUser } from "../../reduxFiles/slices/users";
-import { useLogInMutation } from "../../services/ThesisDB";
-import { ApiResponse } from "../../services/ApiResponseType";
+import {
+  useLogInMutation,
+} from "../../services/ThesisDB";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function LoginForm() {
@@ -27,7 +28,6 @@ function LoginForm() {
   const onLogIn = async (userFormData: { email: string; password: string }) => {
     try {
       const res = await loginUser(userFormData);
-      // console.log((res as { data : ApiResponse<null>}).data)
       if ("data" in res && res.data.data) {
         localStorage.setItem("token", res.data.data);
         setPasswordMatch(true);
@@ -46,6 +46,7 @@ function LoginForm() {
       console.error(error);
     }
   };
+
   const handleToggle = () => {
     if (type === "password") {
       setIcon(<FaEye />);
