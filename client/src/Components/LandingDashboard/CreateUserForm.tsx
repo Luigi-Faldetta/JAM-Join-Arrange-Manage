@@ -4,7 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { useAddUserMutation } from "../../services/ThesisDB";
 import { ApiResponse } from "../../services/ApiResponseType";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function CreateUserForm() {
   const [open, setOpen] = useState(false);
@@ -18,13 +18,13 @@ function CreateUserForm() {
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const repeatPasswordInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate()
+  const location = useLocation();
   const [addNewUser] = useAddUserMutation();
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const password = passwordInputRef.current?.value || "";
     const repeatPassword = repeatPasswordInputRef.current?.value || "";
-
     if (password !== repeatPassword) {
       setPasswordMatch(false);
       return;
@@ -44,9 +44,14 @@ function CreateUserForm() {
   };
   const registerUser = async (userFormData: any) => {
     try {
+      const currentRoute = location.pathname;
       const res = await addNewUser(userFormData);
       console.log((res as { data: ApiResponse<UserState> }).data.data.name);
-      navigate('/user-dashboard')
+      if (currentRoute === "/") {
+        navigate("/user-dashboard");
+      } else {
+        window.location.reload();
+      }
     } catch (error) {
       console.error(error)
     }
