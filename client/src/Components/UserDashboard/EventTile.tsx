@@ -3,12 +3,9 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 
 function EventTile({ event }: { event: any }) {
-  const userToken = localStorage.getItem("token");
-
   const img = "./friends-placeholder.png";
   console.log(event);
 
-  // if userToken === event
   return (
     <>
       `
@@ -49,16 +46,20 @@ function EventTile({ event }: { event: any }) {
                 </h3>
               )}
             </div>
-            <h2 className=" text-lg lg:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+            <h2 className=" text-lg md:text-2xl lg:text-[34px] font-bold tracking-tight text-gray-900 dark:text-white">
               {event.title}
             </h2>
             <div className="flex flex-row">
-              <p className=" text-[10px] lg:text-sm tracking-tight text-gray-500 dark:text-white">
+              {/* <p className=" text-[10px] lg:text-sm tracking-tight text-gray-500 dark:text-white">
                 👤 {event.attendees || event.host} going
-              </p>
-              {event.UserEvents[0].isHost === true && (
-                <p className=" text-[10px] lg:text-sm tracking-tight text-gray-500 dark:text-white">
+              </p> */}
+              {event.UserEvents[0].isHost === true ? (
+                <p className=" text-[12px] md:text-sm lg:text-md tracking-tight text-gray-500 dark:text-white">
                   ⋆ You are hosting
+                </p>
+              ) : (
+                <p className=" text-[10px] lg:text-sm tracking-tight text-gray-500 dark:text-white">
+                  ⋆ You are a guest
                 </p>
               )}
             </div>

@@ -35,7 +35,7 @@ function UserDashboardPage() {
           <CreateEventForm></CreateEventForm>
         </div>
 
-        <div className=" h-full p-5 flex flex-col items-center gap-5">
+        <div className=" h-full p-5 flex flex-col items-center gap-1">
           {eventList ? (
             eventList.map((event: EventState) => {
               return <EventTile event={event}></EventTile>;
