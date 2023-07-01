@@ -17,7 +17,7 @@ router.patch('/user/:userid', index_1.user.updateUser);
 router.delete('/user/:userid', index_1.user.deleteUser);
 router.get('/users/:eventid', index_1.user.getAllUsers);
 // Event
-router.post('/newevent', index_1.event.newEvent);
+router.post('/newevent/:userid', index_1.event.newEvent);
 router.get('/event/:eventid', index_1.event.getEvent);
 router.patch('/event/:eventid', index_1.event.updateEvent);
 router.delete('/event/:eventid', index_1.event.deleteEvent);

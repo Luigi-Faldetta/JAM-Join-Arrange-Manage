@@ -1,8 +1,33 @@
 import { Request, Response } from 'express';
-import { Event, UserEvent } from '../models/associations'
+import { Event, User, UserEvent } from '../models/associations'
+import { validate as uuidValidate } from 'uuid';
 
 // Needs body with at least {"title"} 
 const newEvent = async (req: Request, res: Response) => {
+
+  if (!uuidValidate(req.params.userid)) {
+    return res.status(400)
+      .json({
+        success: false,
+        error: "400",
+        data: null,
+        message: "Wrong uuid"
+      })
+  }
+
+  const user = await User.findOne({
+    where: { userId: req.params.userid }
+  })
+
+  if (!user) {
+    return res.status(400)
+      .json({
+        success: false,
+        error: "400",
+        data: null,
+        message: "Wrong host id"
+      })
+  }
 
   if (!req.body.title) {
     return res.status(400)
@@ -16,12 +41,15 @@ const newEvent = async (req: Request, res: Response) => {
 
   try {
     const event = await Event.create(req.body)
+    //@ts-ignore
+    await UserEvent.create({ userId: req.params.userid, eventId: event.eventId, isHost: true })
+
     res.status(201)
       .json({
         success: true,
         error: null,
         data: event,
-        message: 'Event created',
+        message: 'Event created and linked to host',
       });
 
   } catch (err: any) {

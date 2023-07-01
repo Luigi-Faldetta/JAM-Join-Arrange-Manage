@@ -10,8 +10,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const associations_1 = require("../models/associations");
+// import { v4 as uuidv4 } from 'uuid'
+const uuid_1 = require("uuid");
 // Needs body with at least {"title"} 
 const newEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('eo', (0, uuid_1.validate)(req.params.userid));
+    if (!(0, uuid_1.validate)(req.params.userid)) {
+        return res.status(400)
+            .json({
+            success: false,
+            error: "400",
+            data: null,
+            message: "Wrong uuid"
+        });
+    }
+    const user = yield associations_1.User.findOne({
+        where: { userId: req.params.userid }
+    });
+    if (!user) {
+        return res.status(400)
+            .json({
+            success: false,
+            error: "400",
+            data: null,
+            message: "Wrong host id"
+        });
+    }
     if (!req.body.title) {
         return res.status(400)
             .json({
@@ -23,12 +47,14 @@ const newEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     try {
         const event = yield associations_1.Event.create(req.body);
+        //@ts-ignore
+        yield associations_1.UserEvent.create({ userId: req.params.userid, eventId: event.eventId, isHost: true });
         res.status(201)
             .json({
             success: true,
             error: null,
             data: event,
-            message: 'Event created',
+            message: 'Event created and linked to host',
         });
     }
     catch (err) {

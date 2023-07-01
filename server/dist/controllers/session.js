@@ -80,16 +80,12 @@ const authorize = (req, res, next) => __awaiter(void 0, void 0, void 0, function
                 .json(resBody(false, "403", null, 'Some error happenedd during the token verification 1'));
         }
         // @ts-ignore
-        console.log('userId', payload.userId);
-        // @ts-ignore
         const user = yield associations_1.User.findByPk(payload.userId);
         if (!user) {
             return res.status(403)
                 .json(resBody(false, "403", null, 'Some error happenedd during the token verification 2'));
         }
         console.log('Success, user verified');
-        // @ts-ignore
-        console.log('a mandar', user.userId);
         // @ts-ignore
         req.userId = user.userId;
         return next();
