@@ -6,7 +6,6 @@
 // ) => {success, data, message, error}
 
 export interface BeExpense {
-    id: number;
     item: string,
     cost: number,
     purchaserId: string,
@@ -15,7 +14,7 @@ export interface BeExpense {
 
 export interface BeUser {
     name: string,
-    userId: string,
+    userId?: string,
     email: string,
     phone: string,
     profilePic: string,
