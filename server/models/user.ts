@@ -1,8 +1,16 @@
-import { DataTypes } from 'sequelize';
+import { BuildOptions, DataTypes, Model } from 'sequelize';
 import Sequelize from 'sequelize';
 import sequelize from './modelDB';
+import { BeUser } from '../utils';
 
-const User = sequelize.define('User', {
+interface UserModel extends Model<BeUser>, BeUser {}
+export class UserClass extends Model<UserModel, BeUser> {}
+
+export type UserStatic = typeof Model & {
+  new(values?:object, options?: BuildOptions):UserModel
+}
+
+const User = <UserStatic>sequelize.define<UserModel>('User', {
   userId: {
     type: Sequelize.UUID,
     defaultValue: Sequelize.UUIDV4,

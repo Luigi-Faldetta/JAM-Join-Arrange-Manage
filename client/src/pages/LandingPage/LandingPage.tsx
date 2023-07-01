@@ -27,6 +27,7 @@ const LandingPage = () => {
             From splitting bills and organizing todos to planning all your
             events.
           </p>
+          {!isLoggedIn ? (
           <button
             onClick={handleGetStartedClick}
             className="hidden lg:inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-black rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
@@ -45,6 +46,7 @@ const LandingPage = () => {
               ></path>
             </svg>
           </button>
+          ) : null}
         </div>
         <div className={`lg:col-span-5 ${loginFormActive ? "active" : ""}`}>
   {!isLoggedIn ? (
