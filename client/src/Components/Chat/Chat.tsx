@@ -6,10 +6,27 @@ import { RootState, useAppDispatch } from "../../reduxFiles/store";
 import { setEventList } from "../../reduxFiles/slices/events";
 import ChatContainer from "./ChatContainer";
 import { openChat } from "../../reduxFiles/slices/chat";
+interface Event {
+  coverPic: string;
+  date: string;
+  description?: string;
+  eventId: string;
+  host?: string;
+  location: string;
+  title: string;
+}
 
 function Chat() {
   const [chatDropdown, setChatDropdown] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState(null); // State to track the selected event
+  const [selectedEvent, setSelectedEvent] = useState<Event>({
+    coverPic: "",
+    date: "",
+    description: "",
+    eventId: "",
+    host: "",
+    location: "",
+    title: "",
+  });
   const userToken = localStorage.getItem("token");
   const eventList = useSelector((state: RootState) => state.eventListReducer);
   const { data, error, isLoading } = useGetEventsQuery(userToken as string);
@@ -32,8 +49,10 @@ function Chat() {
   const handleEventClick = (event: any) => {
     setSelectedEvent(event);
     dispatch(openChat());
-    //@ts-ignore
-  console.log(selectedEvent.eventId)
+    if(selectedEvent) {
+      console.log(selectedEvent.eventId)
+    }
+    setChatDropdown(false);
   };
 
 
@@ -56,7 +75,7 @@ function Chat() {
           <ul>
             {eventList.map((event) => (
               <li
-                // key={event.eventId}
+                key={event.eventId}
                 onClick={() => handleEventClick(event)}
                 className="event-item"
               >

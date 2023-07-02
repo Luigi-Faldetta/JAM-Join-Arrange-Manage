@@ -1,109 +1,82 @@
 import { closeChat } from '../../reduxFiles/slices/chat';
 import { useAppDispatch } from '../../reduxFiles/store';
+import { useAuth } from '../../utils/useAuth';
 import './chatContainer.css'
 
-function ChatContainer (event: any) {
+function ChatContainer () {
     const dispatch = useAppDispatch();
+    useAuth();
 return (
-    // <div className="modal">
-    //      <div className="modal-content">
-    <div className="flex flex-col items-center justify-center w-screen min-h-screen bg-gray-100 text-gray-800 p-10">
-    <span className="close" onClick={() => dispatch(closeChat())}>
-          &times;
-        </span>
-	<div className="flex flex-col flex-grow w-full max-w-xl bg-white shadow-xl rounded-lg overflow-hidden">
-		<div className="flex flex-col flex-grow h-0 p-4 overflow-auto">
-			<div className="flex w-full mt-2 space-x-3 max-w-xs">
-				<div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
-				<div>
-					<div className="bg-gray-300 p-3 rounded-r-lg rounded-bl-lg">
-						<p className="text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-					</div>
-					<span className="text-xs text-gray-500 leading-none">2 min ago</span>
-				</div>
-			</div>
-			<div className="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
-				<div>
-					<div className="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg">
-						<p className="text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.</p>
-					</div>
-					<span className="text-xs text-gray-500 leading-none">2 min ago</span>
-				</div>
-				<div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
-			</div>
-			<div className="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
-				<div>
-					<div className="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg">
-						<p className="text-sm">Lorem ipsum dolor sit amet.</p>
-					</div>
-					<span className="text-xs text-gray-500 leading-none">2 min ago</span>
-				</div>
-				<div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
-			</div>
-			<div className="flex w-full mt-2 space-x-3 max-w-xs">
-				<div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
-				<div>
-					<div className="bg-gray-300 p-3 rounded-r-lg rounded-bl-lg">
-						<p className="text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-					</div>
-					<span className="text-xs text-gray-500 leading-none">2 min ago</span>
-				</div>
-			</div>
-			<div className="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
-				<div>
-					<div className="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg">
-						<p className="text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-					</div>
-					<span className="text-xs text-gray-500 leading-none">2 min ago</span>
-				</div>
-				<div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
-			</div>
-			<div className="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
-				<div>
-					<div className="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg">
-						<p className="text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
-					</div>
-					<span className="text-xs text-gray-500 leading-none">2 min ago</span>
-				</div>
-				<div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
-			</div>
-			<div className="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
-				<div>
-					<div className="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg">
-						<p className="text-sm">Lorem ipsum dolor sit amet.</p>
-					</div>
-					<span className="text-xs text-gray-500 leading-none">2 min ago</span>
-				</div>
-				<div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
-			</div>
-			<div className="flex w-full mt-2 space-x-3 max-w-xs">
-				<div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
-				<div>
-					<div className="bg-gray-300 p-3 rounded-r-lg rounded-bl-lg">
-						<p className="text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-					</div>
-					<span className="text-xs text-gray-500 leading-none">2 min ago</span>
-				</div>
-			</div>
-			<div className="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
-				<div>
-					<div className="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg">
-						<p className="text-sm">Lorem ipsum dolor sit.</p>
-					</div>
-					<span className="text-xs text-gray-500 leading-none">2 min ago</span>
-				</div>
-				<div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
-			</div>
-		</div>
-		
-		<div className="bg-gray-300 p-4">
-			<input className="flex items-center h-10 w-full rounded px-3 text-sm" type="text" placeholder="Type your message…"/>
-		</div>
-	</div>
 
+<div className="chat-container">
+	<div className="border border-black h-full" style={{ backgroundColor: 'white' }}>
+    <div className="px-5 flex flex-col justify-between">
+      <div className="flex flex-col mt-5">
+        <div className="close" onClick={() => dispatch(closeChat())}>
+        ×
+        </div>
+        <div className="flex justify-end mb-4">
+          <div className="mr-2 py-3 px-4 bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white">
+            Welcome to the group everyone!
+          </div>
+          <img
+            src="https://source.unsplash.com/vpOeXr5wmR4/600x600"
+            className="object-cover h-8 w-8 rounded-full"
+            alt=""
+          />
+        </div>
+        <div className="flex justify-start mb-4">
+          <img
+            src="https://source.unsplash.com/vpOeXr5wmR4/600x600"
+            className="object-cover h-8 w-8 rounded-full"
+            alt=""
+          />
+          <div className="ml-2 py-3 px-4 bg-gray-400 rounded-br-3xl rounded-tr-3xl rounded-tl-xl text-white">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat at
+            praesentium, aut ullam delectus odio error sit rem. Architecto nulla
+            doloribus laborum illo rem enim dolor odio saepe, consequatur quas?
+          </div>
+        </div>
+        <div className="flex justify-end mb-4">
+          <div>
+            <div className="mr-2 py-3 px-4 bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white">
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magnam,
+              repudiandae.
+            </div>
+
+            <div className="mt-4 mr-2 py-3 px-4 bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis,
+              reiciendis!
+            </div>
+          </div>
+          <img
+            src="https://source.unsplash.com/vpOeXr5wmR4/600x600"
+            className="object-cover h-8 w-8 rounded-full"
+            alt=""
+          />
+        </div>
+        <div className="flex justify-start mb-4">
+          <img
+            src="https://source.unsplash.com/vpOeXr5wmR4/600x600"
+            className="object-cover h-8 w-8 rounded-full"
+            alt=""
+          />
+          <div className="ml-2 py-3 px-4 bg-gray-400 rounded-br-3xl rounded-tr-3xl rounded-tl-xl text-white">
+            Happy holidays, guys!
+          </div>
+        </div>
+      </div>
+      <div className="py-5">
+        <input
+          className="w-full bg-gray-300 py-5 px-3 rounded-xl"
+          type="text"
+          placeholder="Type your message here..."
+        />
+      </div>
+    </div>
+  </div>
 </div>
-// </div>
-// </div>
+
 )
 }
 
