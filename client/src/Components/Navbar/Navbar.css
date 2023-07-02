@@ -45,3 +45,26 @@
     border-radius: 50%;
     position: relative;
   }
+  .event-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .avatar-wrapper {
+    width: 32px;
+    height: 32px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .avatar {
+    width: 100%;
+    height: auto;
+  }
+  
+  .event-title {
+    font-size: 14px;
+  }

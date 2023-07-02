@@ -7,10 +7,12 @@ import userReducers from "./slices/users";
 import { thesisDbApi } from "../services/ThesisDB";
 import { useDispatch } from "react-redux";
 import { logoutReducer } from "./slices/logout";
+import { chatReducer } from "./slices/chat";
 
 
 const store = configureStore({
   reducer: {
+    chatReducer,
     logoutReducer,
     eventListReducer: eventReducers.eventListReducer,
     eventReducer: eventReducers.eventReducer,
