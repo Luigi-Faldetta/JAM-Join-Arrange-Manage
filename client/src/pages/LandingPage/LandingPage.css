@@ -1,6 +1,6 @@
 .landing-page {
   padding-top: 5rem;
-  height: calc(100vh - 5rem)
+  height: calc(100vh - 15rem)
   }
   .landing-page .active {
     transform: scale(1.2);

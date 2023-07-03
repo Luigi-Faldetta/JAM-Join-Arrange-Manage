@@ -185,7 +185,7 @@ const ProfilePage = (): any => {
               onChange={(e) => setPhone(e.target.value)}
               type='text'
               name='phone'
-              placeholder='Phone number'
+              placeholder={data?.data.phone}
               className='input input-bordered w-full max-w-xs'
             />
             <input
