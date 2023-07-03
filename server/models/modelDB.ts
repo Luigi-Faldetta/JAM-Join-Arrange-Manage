@@ -20,8 +20,7 @@ const sequelize = __HEROKU__
 NODE_ENV !=='test' && (async () => {
   try {
     // await sequelize.sync();
-    // await sequelize.sync({alter: true});
-    await sequelize.sync({force: true});
+    await sequelize.sync({alter: true});
     console.log(`Connected to database '${NODE_ENV === 'test' ? process.env.TEST_DB : process.env.DB_NAME}'`);
   } catch (error) {
     console.error('Failed to connect with Database =(', error);

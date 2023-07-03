@@ -1,9 +1,7 @@
-import bcrypt from 'bcrypt';
 import { Request, Response } from "express";
 import { User, UserEvent } from "../models/associations";
-
-//@ts-ignore
-const resBody = (success, error, data, message) => { return { success, error, data, message } }
+import { resBody } from '../utils'
+import bcrypt from 'bcrypt';
 
 /**
  * @param req needs body with at least {"name", "email", "password"}
@@ -26,7 +24,6 @@ const newUser = async (req: Request, res: Response) => {
   try {
     const hash = await bcrypt.hash(inputPassword, 10)
     const user = await User.create({ ...req.body, password: hash });
-    // @ts-ignore
     const { password, ...safeUser } = { ...user.dataValues }
     res.status(201)
       .json(resBody(true, null, safeUser, "User created"));
@@ -37,7 +34,6 @@ const newUser = async (req: Request, res: Response) => {
       .json(resBody(false, "500", null, err.message));
   }
 };
-
 
 /**
  * @param req needs req.params.userid
@@ -54,7 +50,6 @@ const getUser = async (req: Request, res: Response) => {
         .json(resBody(false, "404", null, "No user found"))
     }
 
-    // @ts-ignore
     const { password, ...safeUser } = { ...user.dataValues }
     res.status(200)
       .json(resBody(true, null, safeUser, "User fetched"));
@@ -86,7 +81,7 @@ export const updateUser = async (req: Request, res: Response) => {
       }
     }
 
-    let updatedUser = {}
+    let updatedUser = []
     if (req.body.password) {
       const hash = await bcrypt.hash(req.body.password, 10)
       updatedUser = await User.update({ ...req.body, password: hash },
@@ -102,7 +97,6 @@ export const updateUser = async (req: Request, res: Response) => {
       })
     }
 
-    // @ts-ignore
     const { password, ...safeUpdatedUser } = { ...updatedUser[1][0].dataValues }
     res.status(200)
       .json(resBody(true, null, safeUpdatedUser, "User updated"));

@@ -3,7 +3,7 @@ import Sequelize from 'sequelize';
 import sequelize from './modelDB';
 import { BeUser } from '../utils';
 
-interface UserModel extends Model<BeUser>, BeUser {}
+export interface UserModel extends Model<BeUser>, BeUser {}
 export class UserClass extends Model<UserModel, BeUser> {}
 
 export type UserStatic = typeof Model & {
