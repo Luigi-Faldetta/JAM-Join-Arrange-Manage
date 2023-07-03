@@ -41,6 +41,8 @@ router.delete('/useractivity', userEvent.leaveEvent)
 // Session
 router.post('/userlogin', session.logIn);
 router.get('/userlogout', session.logOut);
+// @ts-ignore
+router.get('/me', session.authorize, (req, res) => { res.send(req.user) })
 
 // Calculations
 router.get('/calculate/:eventid', calculation.expenseSheet)
@@ -50,11 +52,6 @@ router.get('/chat/:eventid', eventChat.getChat)
 router.post('/chat/', eventChat.newMessage)
 
 // Email
-router.get('/passwordreset/:userid', email.resetPassword)
-
-// Authorization temp test endpoint
-// @ts-ignore
-router.get('/test1', (req, res) => { res.send('All good') })
-router.get('/test2', session.authorize, (req, res) => { res.send('All good') })
+router.get('/passwordreset/:email', email.resetPassword)
 
 export default router;

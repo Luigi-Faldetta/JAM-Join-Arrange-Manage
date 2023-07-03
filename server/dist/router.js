@@ -44,7 +44,7 @@ router.get('/calculate/:eventid', index_1.calculation.expenseSheet);
 router.get('/chat/:eventid', index_1.eventChat.getChat);
 router.post('/chat/', index_1.eventChat.newMessage);
 // Email
-router.get('/passwordreset/:userid', index_1.email.resetPassword);
+router.get('/passwordreset/:email', index_1.email.resetPassword);
 // Authorization temp test endpoint
 // @ts-ignore
 router.get('/test1', (req, res) => { res.send('All good'); });

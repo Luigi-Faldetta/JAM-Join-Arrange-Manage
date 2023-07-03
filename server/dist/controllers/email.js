@@ -8,7 +8,78 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const associations_1 = require("../models/associations");
+const uuid_1 = require("uuid");
+const nodemailer_1 = __importDefault(require("nodemailer"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
+//@ts-ignore
+const resBody = (success, error, data, message) => { return { success, error, data, message }; };
+const transporter = nodemailer_1.default.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.JAM_EMAIL,
+        pass: process.env.JAM_PW,
+    },
+});
+function sendEmail(user, pw) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const mailOptions = {
+            from: `"JAM - IT Department" <${process.env.JAM_EMAIL}>`,
+            to: user.email,
+            subject: `Password reset requested`,
+            html: `<p>Hi ${user.name}, here is your new temporary password</p><code>${pw}</code><p>Please log in and change it now</p>`,
+        };
+        try {
+            yield transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.log(error);
+                }
+                else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });
+        }
+        catch (error) {
+            console.log(error);
+        }
+    });
+}
 const resetPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (!req.params.email) {
+            return res.status(400)
+                .json(resBody(false, "400", null, "Missing input email"));
+        }
+        const user = yield associations_1.User.findOne({
+            where: { email: req.params.email }
+        });
+        if (!user) {
+            return res.status(400)
+                .json(resBody(false, "400", null, "Something went wrong..."));
+        }
+        const newPassword = (0, uuid_1.v4)().slice(0, 8);
+        console.log(newPassword);
+        const hash = yield bcrypt_1.default.hash(newPassword, 10);
+        const updatedUser = yield associations_1.User.update(Object.assign(Object.assign({}, user), { password: hash }), {
+            where: { email: req.params.email },
+        });
+        yield sendEmail(user, newPassword);
+        res.status(201)
+            .json({
+            success: true,
+            error: null,
+            data: null,
+            message: 'Email sent',
+        });
+    }
+    catch (err) {
+        process.env.NODE_ENV !== 'test' && console.error(err);
+        res.status(500)
+            .json({ message: err.message });
+    }
 });
 exports.default = { resetPassword };

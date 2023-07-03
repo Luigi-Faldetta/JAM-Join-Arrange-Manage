@@ -89,8 +89,13 @@ const authorize = async (req: Request, res: Response, next: NextFunction) => {
 
     console.log('Success, user verified')
 
+    console.log(user);
+    
+
     // @ts-ignore
-    req.userId = user.userId
+    req.user = user;
+    // get user
+
     return next()
   })
 }
