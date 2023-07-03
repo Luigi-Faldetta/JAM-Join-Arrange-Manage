@@ -2,24 +2,26 @@ import { useEffect, useState } from "react";
 import { useGetToDosQuery } from "../../services/ThesisDB";
 import { ToDoState } from "../../reduxFiles/slices/toDos";
 import { useAddToDoMutation } from "../../services/ThesisDB";
+import { useParams } from "react-router-dom";
 
+// const eventId = "d2913de4-1ef3-4f3a-b885-9e2a8120611b";
 
-const eventId = "d2913de4-1ef3-4f3a-b885-9e2a8120611b";
 const creatorId = "ddad6a7d-d18c-4fd4-96b3-e6814cd3a3e7";
 
 export default function Todos(): JSX.Element {
+  const { eventId } = useParams();
+
   const [toDos, setToDos] = useState<ToDoState[]>([]);
   const [newToDo, setNewToDo] = useState<ToDoState>({
     title: "",
     isDone: false,
     id: "",
     creatorId: creatorId,
-    eventId: eventId,
+    eventId: eventId as string,
   });
   const [doneToDos, setDoneToDos] = useState<ToDoState[]>([]);
 
-  const { data, error, isLoading } = useGetToDosQuery(eventId);
-
+  const { data, error, isLoading } = useGetToDosQuery(eventId as string);
 
   useEffect(() => {
     if (data) {
@@ -50,7 +52,9 @@ export default function Todos(): JSX.Element {
         .then((createdToDo) => {
           if (createdToDo.success) {
             setToDos((prevToDos) => [...prevToDos, createdToDo.data]);
-          } else { alert(createdToDo.message) }
+          } else {
+            alert(createdToDo.message);
+          }
         })
         .catch((error) => {
           console.error("Error creating todo:", error);
@@ -60,7 +64,7 @@ export default function Todos(): JSX.Element {
         isDone: false,
         id: "",
         creatorId: creatorId,
-        eventId: eventId,
+        eventId: eventId as string,
       });
     }
   };
@@ -72,15 +76,18 @@ export default function Todos(): JSX.Element {
       creatorId: creatorId,
       eventId: eventId,
     };
-    setNewToDo(newToDo);
+    setNewToDo(newToDo as any);
   };
 
   const handleDeleteClick = (index: number) => {
     const todoId = toDos[index].id;
 
-    fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/todo/${todoId}`, {
-      method: "DELETE",
-    })
+    fetch(
+      `https://codeworks-thesis-4063bceaa74a.herokuapp.com/todo/${todoId}`,
+      {
+        method: "DELETE",
+      }
+    )
       .then((response) => response.json())
       .then((deletedTodo) => {
         setToDos((prevToDos) => {
@@ -98,13 +105,16 @@ export default function Todos(): JSX.Element {
     const todoId = toDos[index].id;
 
     // Update the isDone property of the todo in the database
-    fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/todo/${todoId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ isDone: true }),
-    })
+    fetch(
+      `https://codeworks-thesis-4063bceaa74a.herokuapp.com/todo/${todoId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isDone: true }),
+      }
+    )
       .then((response) => response.json())
       .then((updatedTodo) => {
         setToDos((prevToDos) => {
@@ -123,13 +133,16 @@ export default function Todos(): JSX.Element {
     const doneToDo = doneToDos[index];
     const todoId = doneToDo.id;
 
-    fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/todo/${todoId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ isDone: false }),
-    })
+    fetch(
+      `https://codeworks-thesis-4063bceaa74a.herokuapp.com/todo/${todoId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isDone: false }),
+      }
+    )
       .then((response) => response.json())
       .then((updatedTodo) => {
         setDoneToDos((prevDoneToDos) => {
@@ -193,9 +206,7 @@ export default function Todos(): JSX.Element {
         <div className="mt-4 text-xl">
           {doneToDos.map((doneToDo, index) => (
             <div className="flex items-center" key={index}>
-              <h3
-                className="text-white border border-slate-50 m-4 rounded-md text-center w-60 h-8"
-              >
+              <h3 className="text-white border border-slate-50 m-4 rounded-md text-center w-60 h-8">
                 {doneToDo.title}
               </h3>
               <button
@@ -210,5 +221,4 @@ export default function Todos(): JSX.Element {
       </div>
     </div>
   );
-
 }

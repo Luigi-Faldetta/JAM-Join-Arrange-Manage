@@ -9,7 +9,7 @@ export interface EventState {
   location: string | null;
   description: string | null;
   eventHost: string;
-  eventAttendees: string[];
+  UserEvents: any[];
   coverPic?: string;
 }
 
@@ -20,7 +20,7 @@ const initialEventState: EventState = {
   location: "",
   description: "",
   eventHost: "",
-  eventAttendees: [],
+  UserEvents: [],
   //   },
 };
 
@@ -34,7 +34,7 @@ export const eventSlice = createSlice({
       action: PayloadAction<EventState>
     ) => {
       state = action.payload;
-      console.log("state test", state);
+      // console.log("state test", state);
     },
     deleteEvent: (state) => {
       state = state;
@@ -60,7 +60,7 @@ export const eventListSlice = createSlice({
       state = [];
     },
     setEventList: (_state, action) => {
-      console.log(action);
+      // console.log(action);
       return action.payload;
     },
   },

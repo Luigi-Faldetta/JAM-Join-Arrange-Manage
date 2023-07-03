@@ -3,7 +3,10 @@ import Todos from "./Todos";
 import Expenses from "./Expenses";
 import Attendees from "./Attendees";
 import { useParams } from "react-router-dom";
-import { useJoinActivityMutation, useLeaveActivityMutation } from "../../services/ThesisDB";
+import {
+  useJoinActivityMutation,
+  useLeaveActivityMutation,
+} from "../../services/ThesisDB";
 import EventLink from "./EventLink";
 
 export default function ToggleButton({ data }: any) {
@@ -14,6 +17,7 @@ export default function ToggleButton({ data }: any) {
   const [joinActivity] = useJoinActivityMutation();
   const [leaveActivity] = useLeaveActivityMutation();
   const eventId = eventid;
+
   useEffect(() => {
     if (!data || !data?.data || !data?.data?.UserEvents.length) {
       setIsJoined(false);
@@ -27,15 +31,15 @@ export default function ToggleButton({ data }: any) {
     }, false);
 
     if (isJoinedCheck !== isJoined) {
-      (setIsJoined(isJoinedCheck));
+      setIsJoined(isJoinedCheck);
     }
   }, [data, setIsJoined]);
-
 
   const handleToggle = () => {
     setShowTodos((prevShowTodos) => !prevShowTodos);
   };
 
+  //JOIN / LEAVE
   const handleJoin = () => {
     onJoin(userId as string, eventId as string).then(() => setIsJoined(true));
   };
@@ -49,7 +53,7 @@ export default function ToggleButton({ data }: any) {
   };
 
   const handleLeave = () => {
-    onLeave(userId as string, eventId as string).then(() => setIsJoined(false))
+    onLeave(userId as string, eventId as string).then(() => setIsJoined(false));
   };
   const onLeave = async (userId: string, eventId: string) => {
     try {
@@ -58,6 +62,8 @@ export default function ToggleButton({ data }: any) {
       console.error(error);
     }
   };
+
+  // JOIN / LEAVE
 
   return (
     <div>
@@ -75,6 +81,7 @@ export default function ToggleButton({ data }: any) {
       ) : (
         <Expenses />
       )}
+
       <EventLink eventid={eventid} />
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <button

@@ -17,7 +17,7 @@ import LandingFaqs from "./pages/LandingFaqs/LandingFaqs";
 import UserDashboardPage from "./pages/UserDashboardPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import Landing from "./pages/Landing/Landing";
-import Event from "./Components/Event/Event";
+import EventDashboard from "./Components/Event/EventDashboard";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,7 +26,7 @@ const router = createBrowserRouter(
       <Route path="/about" element={<LandingAbout />} />
       <Route path="/faqs" element={<LandingFaqs />} />
       <Route path="/user-dashboard" element={<UserDashboardPage />} />
-      <Route path="/event-dashboard/:eventid" element={<Event />} />
+      <Route path="/event-dashboard/:eventid" element={<EventDashboard />} />
       <Route path="/profile" element={<ProfilePage />} />
     </Route>
   )
