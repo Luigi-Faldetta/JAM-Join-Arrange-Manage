@@ -21,7 +21,7 @@ export default function Event() {
   const isLoggedIn = useIsLoggedIn();
   const { eventid } = useParams();
 
-  console.log("eventid in Event comp ==> ", eventid);
+  console.log("eventid in Event comp ===> ", eventid);
 
   const {
     data: eventData,
