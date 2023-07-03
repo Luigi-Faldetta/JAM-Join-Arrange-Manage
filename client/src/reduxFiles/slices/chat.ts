@@ -1,19 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 
-const initialState: Boolean = false;
+const initialState: {
+    isOpen: boolean,
+    eventId: string
+} = {
+    isOpen: false,
+    eventId: ""
+};
 
 const chatSlice = createSlice({
     name: 'chat',
     initialState,
     reducers: {
-        toggleChat: (state) => !state,
-        resetChat: () => false,
-        openChat: () => true,
-        closeChat: () => false
+        toggleChat: (state) =>( {...state, isOpen: !state.isOpen}),
+        resetChat:() =>initialState,
+        openChat: (state) =>( {...state, isOpen: true}),
+        closeChat:  (state) =>( {...state, isOpen: false}),
+        openWithEventId: (_, action) => ({eventId: action.payload, isOpen: true})
     }
 })
 
-export const { toggleChat, resetChat, openChat, closeChat } = chatSlice.actions;
+export const { toggleChat, resetChat, openChat, closeChat, openWithEventId } = chatSlice.actions;
 
 export const chatReducer = chatSlice.reducer;

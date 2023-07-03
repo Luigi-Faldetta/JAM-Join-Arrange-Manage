@@ -33,7 +33,7 @@ router.post('/expense', expense.newExpense)
 router.delete('/expense/:expenseid', expense.deleteExpense)
 router.get('/expenses/:eventid', expense.getExpenses)
 
-// User events
+// User event
 router.post('/useractivity', userEvent.joinEvent)
 router.patch('/useractivity', userEvent.updateEvent)
 router.delete('/useractivity', userEvent.leaveEvent)
@@ -41,8 +41,9 @@ router.delete('/useractivity', userEvent.leaveEvent)
 // Session
 router.post('/userlogin', session.logIn);
 router.get('/userlogout', session.logOut);
+router.get('/me', session.authorize, session.getUserInfo)
 
-// Calculations
+// Calculation
 router.get('/calculate/:eventid', calculation.expenseSheet)
 
 // Event chat
@@ -50,11 +51,6 @@ router.get('/chat/:eventid', eventChat.getChat)
 router.post('/chat/', eventChat.newMessage)
 
 // Email
-router.get('/passwordreset/:userid', email.resetPassword)
-
-// Authorization temp test endpoint
-// @ts-ignore
-router.get('/test1', (req, res) => { res.send('All good') })
-router.get('/test2', session.authorize, (req, res) => { res.send('All good') })
+router.get('/passwordreset/:email', email.resetPassword)
 
 export default router;

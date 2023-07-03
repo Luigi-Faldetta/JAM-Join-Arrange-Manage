@@ -1,7 +1,6 @@
 .landing-page {
-  padding-top: 5rem;
-  height: calc(100vh - 5rem)
-  }
+  height: calc(100vh);
+}
   .landing-page .active {
     transform: scale(1.2);
     transition: transform 0.8s ease;

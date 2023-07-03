@@ -1,28 +1,27 @@
 import { Response, Request } from "express";
+import { resBody } from '../utils'
 import Todo from "../models/todo"
 
-// Needs body with {"title", "isDone", "creatorId", "eventId"} 
+/**
+ * @param req needs body with at least {"title", "isDone", "creatorId", "eventId"} 
+ */
 const newToDo = async (req: Request, res: Response) => {
 
   try {
     const newTodo = await Todo.create(req.body);
     res.status(201)
-      .json({
-        success: true,
-        error: null,
-        data: newTodo,
-        message: "Todo created",
-      });
+      .json(resBody(true, null, newTodo, "Todo created"));
 
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.error(err);
     res.status(500)
-      .json({ message: err.message });
+      .json(resBody(false, null, null, err.message));
   }
 }
 
-// Needs req.params.todoid
-// Needs body with info
+/**
+ * @param req needs req.params.todoid and body with updated info {"title", "isDone"} 
+ */
 const updateToDo = async function (req: Request, res: Response) {
 
   try {
@@ -32,54 +31,43 @@ const updateToDo = async function (req: Request, res: Response) {
         returning: true
       })
     res.status(200)
-      .json({
-        success: true,
-        error: null,
-        data: updatedTodo[1][0],
-        message: 'Todo updated',
-      });
+      .json(resBody(true, null, updatedTodo[1][0], 'Todo updated'));
 
-  } catch (error: any) {
-    process.env.NODE_ENV !== 'test' && console.error(error);
+  } catch (err: any) {
+    process.env.NODE_ENV !== 'test' && console.error(err);
     res.status(500)
-      .json({ message: error.message });
+      .json(resBody(false, null, null, err.message));
   }
 };
 
-// Needs req.params.todoid
+/**
+ * @param req needs req.params.todoid
+ */
 const deleteToDo = async function (req: Request, res: Response,) {
 
   try {
     const todoExists = await Todo.findOne({ where: { id: req.params.todoid } })
     if (!todoExists) {
       return res.status(400)
-        .json({
-          success: false,
-          error: 400,
-          data: null,
-          message: "Wrong todo id",
-        });
+        .json(resBody(false, '400', null, "Wrong todo id"));
     }
 
     let todo = await Todo.destroy(
       { where: { id: req.params.todoid } });
 
     res.status(201)
-      .json({
-        success: true,
-        error: null,
-        data: todo,
-        message: "Todo deleted",
-      });
+      .json(resBody(true, null, todo, "Todo deleted"));
 
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.error(err);
     res.status(400)
-      .json(err.message);
+      .json(resBody(false, null, null, err.message));
   }
 };
 
-// Needs req.params.eventid
+/**
+ * @param req needs req.params.eventid
+ */
 const getToDos = async function (req: Request, res: Response) {
 
   try {
@@ -88,12 +76,7 @@ const getToDos = async function (req: Request, res: Response) {
 
     if (todos.length) {
       res.status(200)
-        .json({
-          success: true,
-          error: null,
-          data: todos,
-          message: 'Expenses fetched',
-        });
+        .json(resBody(true, null, todos, 'Expenses fetched'));
 
     } else {
       throw new Error("No todos were found");
@@ -102,7 +85,7 @@ const getToDos = async function (req: Request, res: Response) {
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.error(err);
     res.status(500)
-      .json({ message: err.message });
+      .json(resBody(false, null, null, err.message));
   }
 };
 

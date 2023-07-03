@@ -143,7 +143,6 @@ const ProfilePage = (): any => {
   return (
     <div className='profile-container bg-gray-100 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8'>
       <div className='w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
-        <div className='flex justify-end px-4 pt-4'></div>
         <div className='flex flex-col items-center pb-10'>
           {previewUrl || userPhoto ? (
             <img
@@ -185,7 +184,7 @@ const ProfilePage = (): any => {
               onChange={(e) => setPhone(e.target.value)}
               type='text'
               name='phone'
-              placeholder='Phone number'
+              placeholder={data?.data.phone}
               className='input input-bordered w-full max-w-xs'
             />
             <input
@@ -204,23 +203,25 @@ const ProfilePage = (): any => {
               placeholder='Confirm Password'
               className='input input-bordered w-full max-w-xs'
             />
-            <button
-              type='submit'
-              className='btn btn-success'
-            >
-              Save Changes
-            </button>
+            <div className='profile-buttons'>
+              <button
+                type='submit'
+                className='btn btn-success'
+              >
+                Save Changes
+              </button>
+              <div>
+                <button
+                  type='submit'
+                  className='btn btn-error'
+                  onClick={handleDelete}
+                >
+                  Delete Account
+                </button>
+                {open ? <Delete setOpen={setOpen} /> : null}
+              </div>
+            </div>
           </form>
-          <div className='flex mt-4 space-x-3 md:mt-6'>
-            <button
-              type='submit'
-              className='btn btn-error'
-              onClick={handleDelete}
-            >
-              Delete Account
-            </button>
-            {open ? <Delete setOpen={setOpen} /> : null}
-          </div>
         </div>
       </div>
     </div>

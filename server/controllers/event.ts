@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
 import { Event, User, UserEvent } from '../models/associations'
 import { validate as uuidValidate } from 'uuid';
-
-//@ts-ignore
-const resBody = (success, error, data, message) => { return { success, error, data, message } }
+import { resBody } from '../utils'
 
 /**
  * @param req needs body with at least {"title"}
@@ -31,7 +29,6 @@ const newEvent = async (req: Request, res: Response) => {
 
   try {
     const event = await Event.create(req.body)
-    //@ts-ignore
     await UserEvent.create({ userId: req.params.userid, eventId: event.eventId, isHost: true })
 
     res.status(201)
