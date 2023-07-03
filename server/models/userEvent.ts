@@ -11,7 +11,7 @@ export type UserEventStatic = typeof Model & {
 }
 
 const UserEvent = sequelize.define<UserEventModel>(
-  'UserEvents',
+  'UserEvent',
   {
     userId: {
       type: Sequelize.UUID,

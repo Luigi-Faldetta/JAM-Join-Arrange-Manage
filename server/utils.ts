@@ -29,6 +29,13 @@ export interface BeUserEvent {
     isGoing: boolean,
 }
 
+export interface BeEventChat {
+    userId: string,
+    eventId: string,
+    message: string,
+    date: string,
+}
+
 export interface IndExpense {
     name: string,
     owes: number,
