@@ -17,6 +17,7 @@ beforeAll(async () => {
   // const u02 = user02.dataValues.userId;
   // const u03 = user03.dataValues.userId;
   // const e01 = event01.dataValues.eventId;
+  // WHY THE HECK THIS IS NOT WORKING
   // await UserEvent.create({ userId: u02, eventId: e01 })
   // await UserEvent.create({ userId: u03, eventId: e01 })
   // await Event.create(eventMocks.event02)
