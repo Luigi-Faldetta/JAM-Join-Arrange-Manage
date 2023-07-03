@@ -1,54 +1,53 @@
-import React, { useEffect, useMemo, useState } from "react";
-
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   useJoinActivityMutation,
   useLeaveActivityMutation,
 } from "../../services/ThesisDB";
+import { ColorRing } from  'react-loader-spinner'
 
-export default function ToggleButton({ data }: any) {
-  const userId = localStorage.getItem("token");
-  const [isJoined, setIsJoined] = useState<boolean>(false);
+
+interface ToggleButton {
+  isJoined: boolean;
+  loggedUser: string | null;
+  setIsJoined: (isJoined: boolean) => void;
+  isLoading: boolean;
+}
+
+export default function ToggleButton({
+  isJoined,
+  loggedUser,
+  setIsJoined,
+  isLoading,
+}: ToggleButton) {
   const { eventid } = useParams();
   const [joinActivity] = useJoinActivityMutation();
   const [leaveActivity] = useLeaveActivityMutation();
   const eventId = eventid;
 
-  useEffect(() => {
-    if (!data || !data?.data || !data?.data?.UserEvents.length) {
-      setIsJoined(false);
-      return;
-    }
-
-    const isJoinedCheck = data.data.UserEvents.reduce((acc: any, cur: any) => {
-      if (cur.userId === userId) {
-        return true;
-      }
-    }, false);
-
-    if (isJoinedCheck !== isJoined) {
-      setIsJoined(isJoinedCheck);
-    }
-  }, [data, setIsJoined]);
-
   const handleJoin = () => {
-    onJoin(userId as string, eventId as string).then(() => setIsJoined(true));
+    onJoin(loggedUser as string, eventId as string).then(() =>
+      setIsJoined(true)
+    );
   };
 
   const onJoin = async (userId: string, eventId: string) => {
     try {
-      const res = await joinActivity({ userId, eventId });
+      await joinActivity({ userId, eventId });
     } catch (error) {
       console.error(error);
     }
   };
 
   const handleLeave = () => {
-    onLeave(userId as string, eventId as string).then(() => setIsJoined(false));
+    onLeave(loggedUser as string, eventId as string).then(() =>
+      setIsJoined(false)
+    );
   };
+
   const onLeave = async (userId: string, eventId: string) => {
     try {
-      const res = await leaveActivity({ userId, eventId });
+      await leaveActivity({ userId, eventId });
     } catch (error) {
       console.error(error);
     }
@@ -63,7 +62,21 @@ export default function ToggleButton({ data }: any) {
           onClick={isJoined ? handleLeave : handleJoin}
           className="btn btn-primary m-10"
         >
-          {isJoined ? "Leave" : "Join"}
+          {isLoading ? (
+            <ColorRing
+              visible={true}
+              height="100%"
+              width="100%"
+              ariaLabel="blocks-loading"
+              wrapperStyle={{}}
+              wrapperClass="blocks-wrapper"
+              colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+            />
+          ) : isJoined ? (
+            "Leave"
+          ) : (
+            "Join"
+          )}
         </button>
       </div>
     </div>

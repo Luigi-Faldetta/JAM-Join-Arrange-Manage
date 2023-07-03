@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import EventMini from "../EventDashboard/EventMini";
 import ToggleButton from "../EventDashboard/ToggleButton";
 import { useParams } from "react-router-dom";
@@ -6,24 +6,21 @@ import Todos from "../EventDashboard/Todos";
 import Expenses from "../EventDashboard/Expenses";
 import Attendees from "../EventDashboard/Attendees";
 import { useGetEventQuery } from "../../services/ThesisDB";
-import { useAuth } from "../../utils/useAuth";
 import { useIsLoggedIn } from "../../utils/useIsLoggedIn";
-import LandingPage from "../../pages/LandingPage/LandingPage";
 import { EventState } from "../../reduxFiles/slices/events";
 import EventLink from "../EventDashboard/EventLink";
 
 // Test for merging
 
 export default function Event() {
-  const [userIsHost, setUserIsHost] = useState(false);
+  const [userIsHost, setUserIsHost] = useState<boolean>(false);
   const [showTodos, setShowTodos] = useState<boolean>(true);
+  const [isJoined, setIsJoined] = useState<boolean>(false);
 
   const loggedUser = localStorage.getItem("token");
 
   const isLoggedIn = useIsLoggedIn();
   const { eventid } = useParams();
-
-  console.log("eventid in Event comp ===> ", eventid);
 
   const {
     data: eventData,
@@ -36,17 +33,32 @@ export default function Event() {
       (user: EventState["UserEvents"][0]) => user.isHost
     );
     setUserIsHost(hostUser?.userId === loggedUser ? true : false);
-  }, [eventData]);
 
-  // useEffect(() => {
-  //   console.log("ishost?=>", userIsHost);
-  // }, [userIsHost]);
+    if (!eventData || !eventData?.data || !eventData?.data?.UserEvents.length) {
+      if (isJoined) {
+        setIsJoined(false);
+      }
+      return;
+    }
+
+    const isJoinedCheck = eventData.data.UserEvents.reduce((acc: any, cur: any) => {
+      if (cur.userId === loggedUser) {
+        return true;
+      } else {
+        return acc;
+      }
+    }, false);
+
+    if (isJoinedCheck !== isJoined) {
+      setIsJoined(isJoinedCheck);
+    }
+  }, [eventData, loggedUser]);
 
   const handleToggle = () => {
     setShowTodos((prevShowTodos) => !prevShowTodos);
   };
 
-  console.log("eventdata==>", eventData);
+  console.log("____________________________________eventdata==>", eventData);
 
   return (
     <>
@@ -76,7 +88,12 @@ export default function Event() {
           <Expenses />
         )}
 
-        <ToggleButton eventData={eventData} />
+        <ToggleButton 
+          isJoined={isJoined} 
+          loggedUser={loggedUser}
+          setIsJoined={setIsJoined}
+          isLoading={isLoading}
+        />
         <EventLink eventid={eventid} />
       </div>
     </>

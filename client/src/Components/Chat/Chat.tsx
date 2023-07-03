@@ -37,17 +37,16 @@ function Chat() {
       dispatch(setEventList(data?.data));
     }
   }, [isLoading, error]);
-
-//   useEffect(() => {
-//     console.log("Event list has changed ==> ", eventList);
-//   }, [eventList]);
-
-  const handleChatClick = () => {
-    setChatDropdown(!chatDropdown);
-  };
-
-  const handleEventClick = (event: any) => {
-    setSelectedEvent(event);
+  //   useEffect(() => {
+    //     console.log("Event list has changed ==> ", eventList);
+    //   }, [eventList]);
+    
+    const handleChatClick = () => {
+      setChatDropdown(!chatDropdown);
+    };
+    
+    const handleEventClick = (event: any) => {
+      setSelectedEvent(event);
     if (event.eventId) {
       dispatch(openWithEventId(selectedEvent.eventId))
     }
