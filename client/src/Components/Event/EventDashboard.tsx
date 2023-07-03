@@ -8,11 +8,13 @@ import { useIsLoggedIn } from "../../utils/useIsLoggedIn";
 import LandingPage from "../../pages/LandingPage/LandingPage";
 import { EventState } from "../../reduxFiles/slices/events";
 
+// Test for merging
+
 export default function Event() {
   const isLoggedIn = useIsLoggedIn();
   const { eventid } = useParams();
 
-  console.log("eventid in Event comp ==> ", eventid);
+  console.log("eventid in Event comp ===> ", eventid);
 
   const {
     data: eventData,
