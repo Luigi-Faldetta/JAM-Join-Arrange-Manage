@@ -44,7 +44,7 @@ function ChatContainer() {
   };
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      console.log('here')
+      console.log("here");
       event.preventDefault();
       handleMessageSubmit(message);
     }
@@ -74,12 +74,18 @@ function ChatContainer() {
               <div className="flex justify-end mb-4">
                 {/* Welcome to the group everyone! */}
                 <div className="message-container" ref={messagesRef}>
-                  {query.isSuccess && data?.map((messageData: any) => (
-                    <div key={messageData.id} className="relative ml-8 text-sm bg-blue-400  py-2 px-4 shadow rounded-xl m-1">
-                      <div className="message">{messageData.message}</div>
-                      <div className="time">{moment(messageData.date).calendar()}{" "}</div>
-                    </div>
-                  ))}
+                  {query.isSuccess &&
+                    data?.map((messageData: any) => (
+                      <div
+                        key={messageData.id}
+                        className="relative ml-8 text-sm bg-blue-400  py-2 px-4 shadow rounded-xl m-1"
+                      >
+                        <div className="message">{messageData.message}</div>
+                        <div className="time">
+                          {moment(messageData.date).calendar()}{" "}
+                        </div>
+                      </div>
+                    ))}
                 </div>
                 <img
                   src="https://source.unsplash.com/vpOeXr5wmR4/600x600"

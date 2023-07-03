@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 export default function Todos(): JSX.Element {
   const { eventid } = useParams();
   console.log(eventid);
-  const creatorId = localStorage.getItem('token');
+  const creatorId = localStorage.getItem("token");
   const [toDos, setToDos] = useState<ToDoState[]>([]);
   const [newToDo, setNewToDo] = useState<ToDoState>({
     title: "",
@@ -42,7 +42,7 @@ export default function Todos(): JSX.Element {
         creatorId: creatorId,
         eventId: eventid,
       };
-      console.log(newToDoItem)
+      console.log(newToDoItem);
       fetch("https://codeworks-thesis-4063bceaa74a.herokuapp.com/todo", {
         method: "POST",
         headers: {
@@ -65,8 +65,8 @@ export default function Todos(): JSX.Element {
         title: "",
         isDone: false,
         id: "",
-        creatorId: "",
-        eventId: eventid as string,
+        creatorId: creatorId,
+        eventId: eventId as string,
       });
     }
   };
