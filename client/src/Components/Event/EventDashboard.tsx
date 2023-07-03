@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import EventMini from "../EventDashboard/EventMini";
 import ToggleButton from "../EventDashboard/ToggleButton";
 import { useParams } from "react-router-dom";
@@ -11,7 +11,6 @@ import { useIsLoggedIn } from "../../utils/useIsLoggedIn";
 import LandingPage from "../../pages/LandingPage/LandingPage";
 import { EventState } from "../../reduxFiles/slices/events";
 import EventLink from "../EventDashboard/EventLink";
-import DeleteEventButton from "../Event/DeleteEvent";
 
 export default function Event() {
   const [userIsHost, setUserIsHost] = useState(false);
@@ -37,17 +36,14 @@ export default function Event() {
     setUserIsHost(hostUser?.userId === loggedUser ? true : false);
   }, [eventData]);
 
-  useEffect(() => {
-    console.log("ishost?=>", userIsHost);
-  }, [userIsHost]);
+  // useEffect(() => {
+  //   console.log("ishost?=>", userIsHost);
+  // }, [userIsHost]);
 
   const handleToggle = () => {
     setShowTodos((prevShowTodos) => !prevShowTodos);
   };
 
-  // console.log({ error, eventData });
-
-  // const eventData = data?.data;
   console.log("eventdata==>", eventData);
 
   return (

@@ -31,7 +31,6 @@ export default function ToggleButton({ data }: any) {
     }
   }, [data, setIsJoined]);
 
-  //JOIN / LEAVE
   const handleJoin = () => {
     onJoin(userId as string, eventId as string).then(() => setIsJoined(true));
   };
@@ -54,8 +53,6 @@ export default function ToggleButton({ data }: any) {
       console.error(error);
     }
   };
-
-  // JOIN / LEAVE
 
   return (
     <div>
