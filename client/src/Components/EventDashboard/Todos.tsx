@@ -65,8 +65,8 @@ export default function Todos(): JSX.Element {
         title: "",
         isDone: false,
         id: "",
-        creatorId: creatorId,
-        eventId: eventId as string,
+        creatorId: "",
+        eventId: eventid as string,
       });
     }
   };
