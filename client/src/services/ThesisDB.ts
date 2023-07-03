@@ -4,6 +4,7 @@ import { ExpenseState } from "../reduxFiles/slices/expenses";
 import { ToDoState } from "../reduxFiles/slices/toDos";
 import { UserState } from "../reduxFiles/slices/users";
 import { ApiResponse } from "./ApiResponseType";
+import { MsgState } from "../reduxFiles/slices/msg";
 
 // const {data, error, isLoading} = useGetUserQuery("f099247b-189d-4025-81eb-1a53c1e9c332")
 // const [addNewUser] = useAddUserMutation()
@@ -193,6 +194,22 @@ export const thesisDbApi = createApi({
         method: "DELETE",
       }),
     }),
+    //Messages:
+    addMsg: build.mutation<
+      ApiResponse<MsgState>,
+      Partial<MsgState> & Pick<MsgState,  "userId" | "eventId" | "message">
+    >({
+      query: (msg) => ({
+        url: "chat/",
+        method: "POST",
+        body: msg,
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+      }),
+    }),
+    getMsgs: build.query<ApiResponse<MsgState[]>, string>({
+      query: (eventId) => ({ url: `chat/${eventId}` }),
+    }),
+
 
     //Activity participation
 
@@ -267,4 +284,7 @@ export const {
   //login & logout
   useLogInMutation,
   useLogOutQuery,
+  //msg
+  useAddMsgMutation,
+  useGetMsgsQuery
 } = thesisDbApi;
