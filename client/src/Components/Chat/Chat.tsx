@@ -48,16 +48,11 @@ function Chat() {
 
   const handleEventClick = (event: any) => {
     setSelectedEvent(event);
+    if (event.eventId) {
+      dispatch(openWithEventId(selectedEvent.eventId))
+    }
     setChatDropdown(false);
   };
-  
-  useEffect(() => {
-    console.log("selected Event ==> ", selectedEvent)
-    if(selectedEvent.eventId) {
-      dispatch(openWithEventId(selectedEvent.eventId))
-    } 
-  }, [selectedEvent])
-
 
   return (
     <div className="flex items-center md:order-2">
