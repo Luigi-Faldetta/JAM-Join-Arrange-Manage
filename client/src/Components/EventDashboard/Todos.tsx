@@ -6,22 +6,23 @@ import { useParams } from "react-router-dom";
 
 // const eventId = "d2913de4-1ef3-4f3a-b885-9e2a8120611b";
 
-const creatorId = "ddad6a7d-d18c-4fd4-96b3-e6814cd3a3e7";
+// const creatorId = "ddad6a7d-d18c-4fd4-96b3-e6814cd3a3e7";
 
 export default function Todos(): JSX.Element {
-  const { eventId } = useParams();
-
+  const { eventid } = useParams();
+  console.log(eventid);
+  const creatorId = localStorage.getItem('token');
   const [toDos, setToDos] = useState<ToDoState[]>([]);
   const [newToDo, setNewToDo] = useState<ToDoState>({
     title: "",
     isDone: false,
     id: "",
-    creatorId: creatorId,
-    eventId: eventId as string,
+    creatorId: "",
+    eventId: "",
   });
   const [doneToDos, setDoneToDos] = useState<ToDoState[]>([]);
 
-  const { data, error, isLoading } = useGetToDosQuery(eventId as string);
+  const { data, error, isLoading } = useGetToDosQuery(eventid as string);
 
   useEffect(() => {
     if (data) {
@@ -39,8 +40,9 @@ export default function Todos(): JSX.Element {
         title: newToDo.title,
         isDone: false,
         creatorId: creatorId,
-        eventId: eventId,
+        eventId: eventid,
       };
+      console.log(newToDoItem)
       fetch("https://codeworks-thesis-4063bceaa74a.herokuapp.com/todo", {
         method: "POST",
         headers: {
@@ -63,8 +65,8 @@ export default function Todos(): JSX.Element {
         title: "",
         isDone: false,
         id: "",
-        creatorId: creatorId,
-        eventId: eventId as string,
+        creatorId: "",
+        eventId: eventid as string,
       });
     }
   };
@@ -74,7 +76,7 @@ export default function Todos(): JSX.Element {
       title: e.target.value,
       isDone: false,
       creatorId: creatorId,
-      eventId: eventId,
+      eventId: eventid,
     };
     setNewToDo(newToDo as any);
   };

@@ -63,7 +63,7 @@ function ChatContainer() {
     <div className="chat-container">
       <div
         className="border rounded-lg h-full"
-        style={{backgroundColor: "#F8F8FF", borderColor: "#D3D3D3" }}
+        style={{ backgroundColor: "#F8F8FF", borderColor: "#D3D3D3" }}
       >
         <div className="flex flex-col mt-2 chat-messages">
           <div className="px-5 flex flex-col justify-between">
@@ -72,15 +72,15 @@ function ChatContainer() {
                 ×
               </div>
               <div className="flex justify-end mb-4">
-                  {/* Welcome to the group everyone! */}
-              <div className="message-container" ref={messagesRef}>
-              {query.isSuccess && data?.map((messageData: any) => (
-  <div key={messageData.id} className="relative ml-8 text-sm bg-blue-400  py-2 px-4 shadow rounded-xl m-1">
-    <div className="message">{messageData.message}</div>
-    <div className="time">{moment(messageData.date).calendar()}{" "}</div>
-  </div>
-))}
-            </div>
+                {/* Welcome to the group everyone! */}
+                <div className="message-container" ref={messagesRef}>
+                  {query.isSuccess && data?.map((messageData: any) => (
+                    <div key={messageData.id} className="relative ml-8 text-sm bg-blue-400  py-2 px-4 shadow rounded-xl m-1">
+                      <div className="message">{messageData.message}</div>
+                      <div className="time">{moment(messageData.date).calendar()}{" "}</div>
+                    </div>
+                  ))}
+                </div>
                 <img
                   src="https://source.unsplash.com/vpOeXr5wmR4/600x600"
                   className="object-cover h-8 w-8 rounded-full"
@@ -95,19 +95,19 @@ function ChatContainer() {
           /> */}
               {/* </div> */}
             </div>
-            </div>
-        </div>
-            <div className="input-container">
-              <input
-                className="flex w-full bg-gray-300 py-3 px-3 rounded-xl xl-2 pr-2 mb-0"
-                type="text"
-                placeholder="Type your message here..."
-                value={message}
-                onChange={(event) => setMessage(event.target.value)}
-                onKeyDown={handleKeyDown}
-                name="message"
-              />
           </div>
+        </div>
+        <div className="input-container">
+          <input
+            className="flex w-full bg-gray-300 py-3 px-3 rounded-xl xl-2 pr-2 mb-0"
+            type="text"
+            placeholder="Type your message here..."
+            value={message}
+            onChange={(event) => setMessage(event.target.value)}
+            onKeyDown={handleKeyDown}
+            name="message"
+          />
+        </div>
       </div>
     </div>
   );

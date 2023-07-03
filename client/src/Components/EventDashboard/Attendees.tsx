@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useGetUsersQuery } from "../../services/ThesisDB";
 import { UserState } from "../../reduxFiles/slices/users";
+import { useParams } from "react-router-dom";
 
 interface User {
   userId: string;
@@ -12,14 +13,14 @@ interface User {
 }
 
 export default function Attendees() {
+  const { eventid } = useParams();
   const [activeIndex, setActiveIndex] = useState(0);
   const imagesPerSlide = 5;
-  const eventId = "e9d175f7-c56b-422e-9b69-1ca19f5bf729";
-  const apiUrl = `https://codeworks-thesis-4063bceaa74a.herokuapp.com/users/${eventId}`;
+  const apiUrl = `https://codeworks-thesis-4063bceaa74a.herokuapp.com/users/${eventid}`;
 
   const [attendees, setAttendees] = useState<UserState[]>([]);
 
-  const { data, error, isLoading } = useGetUsersQuery(eventId);
+  const { data, error, isLoading } = useGetUsersQuery(eventid as string);
 
   useEffect(() => {
     if (data) {
