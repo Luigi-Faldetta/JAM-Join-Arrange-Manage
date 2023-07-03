@@ -47,7 +47,7 @@ function Navbar() {
         <div className="max-w-screen-xl flex flex-wrap items-center justify-around mx-auto p-4">
           <Link to="/" className="flex items-center">
             <img
-              src="./logo-jam.png"
+              src="logo-jam.png"
               className="h-12 mr-3"
               alt="Flowbite Logo"
             />
