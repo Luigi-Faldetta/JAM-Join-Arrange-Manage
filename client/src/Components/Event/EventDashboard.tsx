@@ -12,6 +12,8 @@ import LandingPage from "../../pages/LandingPage/LandingPage";
 import { EventState } from "../../reduxFiles/slices/events";
 import EventLink from "../EventDashboard/EventLink";
 
+// Test for merging
+
 export default function Event() {
   const [userIsHost, setUserIsHost] = useState(false);
   const [showTodos, setShowTodos] = useState<boolean>(true);
