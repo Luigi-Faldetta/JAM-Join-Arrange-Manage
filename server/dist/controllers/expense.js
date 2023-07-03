@@ -12,23 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const utils_1 = require("../utils");
 const expense_1 = __importDefault(require("../models/expense"));
 // Needs body with {"item", "cost", "purchaserId", "eventId" }
 const newExpense = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const expense = yield expense_1.default.create(req.body);
         res.status(201)
-            .json({
-            success: true,
-            error: null,
-            data: expense,
-            message: 'Expense created',
-        });
+            .json((0, utils_1.resBody)(true, null, expense, 'Expense created'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
         res.status(500)
-            .json({ message: err.message });
+            .json((0, utils_1.resBody)(false, null, null, err.message));
     }
 });
 // Needs req.params.expenseid
@@ -36,17 +32,12 @@ const deleteExpense = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const deletedExpense = yield expense_1.default.destroy({ where: { id: req.params.expenseid } });
         res.status(201)
-            .json({
-            success: true,
-            error: null,
-            data: deletedExpense,
-            message: 'Expense deleted',
-        });
+            .json((0, utils_1.resBody)(true, null, deletedExpense, 'Expense deleted'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
         res.status(500)
-            .json({ message: err.message });
+            .json((0, utils_1.resBody)(false, null, null, err.message));
     }
 });
 // Needs req.params.eventid
@@ -55,12 +46,7 @@ const getExpenses = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         const expenses = yield expense_1.default.findAll({ where: { eventId: req.params.eventid } });
         if (expenses.length) {
             res.status(200)
-                .json({
-                success: true,
-                error: null,
-                data: expenses,
-                message: 'Expenses fetched',
-            });
+                .json((0, utils_1.resBody)(true, null, expenses, 'Expenses fetched'));
         }
         else {
             throw new Error("No expenses were found");
@@ -69,7 +55,7 @@ const getExpenses = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
         res.status(500)
-            .json({ message: err.message });
+            .json((0, utils_1.resBody)(false, null, null, err.message));
     }
 });
 exports.default = { newExpense, deleteExpense, getExpenses };

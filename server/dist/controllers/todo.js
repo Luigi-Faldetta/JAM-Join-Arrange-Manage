@@ -12,27 +12,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const utils_1 = require("../utils");
 const todo_1 = __importDefault(require("../models/todo"));
-// Needs body with {"title", "isDone", "creatorId", "eventId"} 
+/**
+ * @param req needs body with at least {"title", "isDone", "creatorId", "eventId"}
+ */
 const newToDo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newTodo = yield todo_1.default.create(req.body);
         res.status(201)
-            .json({
-            success: true,
-            error: null,
-            data: newTodo,
-            message: "Todo created",
-        });
+            .json((0, utils_1.resBody)(true, null, newTodo, "Todo created"));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
         res.status(500)
-            .json({ message: err.message });
+            .json((0, utils_1.resBody)(false, null, null, err.message));
     }
 });
-// Needs req.params.todoid
-// Needs body with info
+/**
+ * @param req needs req.params.todoid and body with updated info {"title", "isDone"}
+ */
 const updateToDo = function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -41,63 +40,47 @@ const updateToDo = function (req, res) {
                 returning: true
             });
             res.status(200)
-                .json({
-                success: true,
-                error: null,
-                data: updatedTodo[1][0],
-                message: 'Todo updated',
-            });
+                .json((0, utils_1.resBody)(true, null, updatedTodo[1][0], 'Todo updated'));
         }
-        catch (error) {
-            process.env.NODE_ENV !== 'test' && console.error(error);
+        catch (err) {
+            process.env.NODE_ENV !== 'test' && console.error(err);
             res.status(500)
-                .json({ message: error.message });
+                .json((0, utils_1.resBody)(false, null, null, err.message));
         }
     });
 };
-// Needs req.params.todoid
+/**
+ * @param req needs req.params.todoid
+ */
 const deleteToDo = function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const todoExists = yield todo_1.default.findOne({ where: { id: req.params.todoid } });
             if (!todoExists) {
                 return res.status(400)
-                    .json({
-                    success: false,
-                    error: 400,
-                    data: null,
-                    message: "Wrong todo id",
-                });
+                    .json((0, utils_1.resBody)(false, '400', null, "Wrong todo id"));
             }
             let todo = yield todo_1.default.destroy({ where: { id: req.params.todoid } });
             res.status(201)
-                .json({
-                success: true,
-                error: null,
-                data: todo,
-                message: "Todo deleted",
-            });
+                .json((0, utils_1.resBody)(true, null, todo, "Todo deleted"));
         }
         catch (err) {
             process.env.NODE_ENV !== 'test' && console.error(err);
             res.status(400)
-                .json(err.message);
+                .json((0, utils_1.resBody)(false, null, null, err.message));
         }
     });
 };
-// Needs req.params.eventid
+/**
+ * @param req needs req.params.eventid
+ */
 const getToDos = function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const todos = yield todo_1.default.findAll({ where: { eventId: req.params.eventid } });
             if (todos.length) {
                 res.status(200)
-                    .json({
-                    success: true,
-                    error: null,
-                    data: todos,
-                    message: 'Expenses fetched',
-                });
+                    .json((0, utils_1.resBody)(true, null, todos, 'Expenses fetched'));
             }
             else {
                 throw new Error("No todos were found");
@@ -106,7 +89,7 @@ const getToDos = function (req, res) {
         catch (err) {
             process.env.NODE_ENV !== 'test' && console.error(err);
             res.status(500)
-                .json({ message: err.message });
+                .json((0, utils_1.resBody)(false, null, null, err.message));
         }
     });
 };

@@ -29,7 +29,6 @@ const newEvent = async (req: Request, res: Response) => {
 
   try {
     const event = await Event.create(req.body)
-    //@ts-ignore
     await UserEvent.create({ userId: req.params.userid, eventId: event.eventId, isHost: true })
 
     res.status(201)

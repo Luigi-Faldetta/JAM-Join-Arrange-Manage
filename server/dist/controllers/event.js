@@ -33,7 +33,6 @@ const newEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     try {
         const event = yield associations_1.Event.create(req.body);
-        //@ts-ignore
         yield associations_1.UserEvent.create({ userId: req.params.userid, eventId: event.eventId, isHost: true });
         res.status(201)
             .json((0, utils_1.resBody)(true, null, event, 'Event created and linked to host'));

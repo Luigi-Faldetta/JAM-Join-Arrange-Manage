@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import { User } from '../models/associations';
 import { v4 as uuidv4 } from 'uuid';
+import { User } from '../models/associations';
+import { resBody } from '../utils'
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcrypt';
-import { resBody } from '../utils'
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -15,10 +15,10 @@ const transporter = nodemailer.createTransport({
 
 async function sendEmail(user: any, pw: string) {
   const mailOptions = {
-    from: `"JAM - IT Department" <${process.env.JAM_EMAIL}>`,
+    from: `"J.A.M. - IT Department" <${process.env.JAM_EMAIL}>`,
     to: user.email,
     subject: `Password reset requested`,
-    html: `<p>Hi ${user.name}, here is your new temporary password</p><code>${pw}</code><p>Please log in and change it now</p>`,
+    html: `<p>Hi ${user.name}, here you can find your new temporary password:</p><code style="border:1px solid lightgrey; padding: 5px">${pw}</code><p>Please <a href="https://youtu.be/dQw4w9WgXcQ">log in now</a> and update it</p><p>J.A.M.</p>`,
   };
 
   try {

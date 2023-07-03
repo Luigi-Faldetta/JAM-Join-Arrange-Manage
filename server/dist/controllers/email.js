@@ -12,11 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const associations_1 = require("../models/associations");
 const uuid_1 = require("uuid");
+const associations_1 = require("../models/associations");
+const utils_1 = require("../utils");
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const utils_1 = require("../utils");
 const transporter = nodemailer_1.default.createTransport({
     service: 'gmail',
     auth: {
@@ -27,10 +27,10 @@ const transporter = nodemailer_1.default.createTransport({
 function sendEmail(user, pw) {
     return __awaiter(this, void 0, void 0, function* () {
         const mailOptions = {
-            from: `"JAM - IT Department" <${process.env.JAM_EMAIL}>`,
+            from: `"J.A.M. - IT Department" <${process.env.JAM_EMAIL}>`,
             to: user.email,
             subject: `Password reset requested`,
-            html: `<p>Hi ${user.name}, here is your new temporary password</p><code>${pw}</code><p>Please log in and change it now</p>`,
+            html: `<p>Hi ${user.name}, here you can find your new temporary password:</p><code style="border:1px solid lightgrey; padding: 5px">${pw}</code><p>Please <a href="https://youtu.be/dQw4w9WgXcQ">log in now</a> and update it</p><p>J.A.M.</p>`,
         };
         try {
             yield transporter.sendMail(mailOptions, function (error, info) {
