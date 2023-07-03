@@ -6,11 +6,7 @@ import { useAuth } from '../../utils/useAuth';
 import { useUpdateUserMutation } from '../../services/ThesisDB';
 import Delete from '../../Components/Delete';
 
-const ImageUploader = ({
-  onImageSelect,
-}: {
-  onImageSelect: (file: File) => void;
-}) => {
+const ImageUploader = ({ onImageSelect }: {onImageSelect: (file: File) => void}) => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length) {
       onImageSelect(e.target.files[0]);
