@@ -13,7 +13,7 @@ interface Event {
   title: string;
 }
 
-export default function EventMini({data}: any) {
+export default function EventMini({ data }: any) {
   const [eventDetails, setEventDetails] = useState<Event>({
     coverPic: "",
     date: "",
@@ -26,7 +26,7 @@ export default function EventMini({data}: any) {
 
   useEffect(() => {
     fetch(
-      "https://codeworks-thesis-4063bceaa74a.herokuapp.com/event/73ad298d-0a34-415b-bd7d-cec1578cf1d4"
+      "https://codeworks-thesis-4063bceaa74a.herokuapp.com/event/d2913de4-1ef3-4f3a-b885-9e2a8120611b"
     )
       .then((response) => response.json())
       .then((fetchedEvent) => {

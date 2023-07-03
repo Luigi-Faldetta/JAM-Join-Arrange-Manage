@@ -161,7 +161,7 @@ export const thesisDbApi = createApi({
 
     addToDo: build.mutation<
       ApiResponse<ToDoState>,
-      Partial<ToDoState> & Pick<ToDoState, "value">
+      Partial<ToDoState> & Pick<ToDoState, "title">
     >({
       query: (toDo) => ({
         url: "todo/",

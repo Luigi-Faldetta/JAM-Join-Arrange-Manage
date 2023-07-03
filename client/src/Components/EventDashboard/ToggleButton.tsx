@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { useJoinActivityMutation, useLeaveActivityMutation } from "../../services/ThesisDB";
 import EventLink from "./EventLink";
 
-export default function ToggleButton({data}: any) {
+export default function ToggleButton({ data }: any) {
   const userId = localStorage.getItem("token");
   const [showTodos, setShowTodos] = useState<boolean>(true);
   const [isJoined, setIsJoined] = useState<boolean>(false);
@@ -29,7 +29,7 @@ export default function ToggleButton({data}: any) {
     if (isJoinedCheck !== isJoined) {
       (setIsJoined(isJoinedCheck));
     }
-  },[data, setIsJoined]);
+  }, [data, setIsJoined]);
 
 
   const handleToggle = () => {
@@ -74,8 +74,8 @@ export default function ToggleButton({data}: any) {
         </>
       ) : (
         <Expenses />
-        )}
-        <EventLink eventid={eventid}/>
+      )}
+      <EventLink eventid={eventid} />
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <button
           onClick={isJoined ? handleLeave : handleJoin}
