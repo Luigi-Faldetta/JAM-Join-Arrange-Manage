@@ -23,7 +23,6 @@ export default function Expenses() {
 
 
     const { data, error, isLoading } = useGetExpensesQuery(eventId);
-    console.log(data);
 
     useEffect(() => {
         if (data) setExpenses(data.data);

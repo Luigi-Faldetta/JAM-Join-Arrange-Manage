@@ -22,7 +22,13 @@ export default function Todos(): JSX.Element {
 
 
   useEffect(() => {
-    if (data) setToDos(data.data);
+    if (data) {
+      const fetchedToDos = data.data;
+      const todos = fetchedToDos.filter((todo) => !todo.isDone);
+      const doneTodos = fetchedToDos.filter((todo) => todo.isDone);
+      setToDos(todos);
+      setDoneToDos(doneTodos);
+    }
   }, [data]);
 
   const handleAddClick = () => {
