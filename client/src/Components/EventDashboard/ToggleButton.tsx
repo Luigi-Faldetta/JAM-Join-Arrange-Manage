@@ -1,17 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
-import Todos from "./Todos";
-import Expenses from "./Expenses";
-import Attendees from "./Attendees";
+
 import { useParams } from "react-router-dom";
 import {
   useJoinActivityMutation,
   useLeaveActivityMutation,
 } from "../../services/ThesisDB";
-import EventLink from "./EventLink";
 
 export default function ToggleButton({ data }: any) {
   const userId = localStorage.getItem("token");
-  const [showTodos, setShowTodos] = useState<boolean>(true);
   const [isJoined, setIsJoined] = useState<boolean>(false);
   const { eventid } = useParams();
   const [joinActivity] = useJoinActivityMutation();
@@ -34,10 +30,6 @@ export default function ToggleButton({ data }: any) {
       setIsJoined(isJoinedCheck);
     }
   }, [data, setIsJoined]);
-
-  const handleToggle = () => {
-    setShowTodos((prevShowTodos) => !prevShowTodos);
-  };
 
   //JOIN / LEAVE
   const handleJoin = () => {
@@ -67,22 +59,6 @@ export default function ToggleButton({ data }: any) {
 
   return (
     <div>
-      <button
-        onClick={handleToggle}
-        className="absolute top-28 right-24 btn btn-primary"
-      >
-        {showTodos ? "Expenses" : "Todos"}
-      </button>
-      {showTodos ? (
-        <>
-          {" "}
-          <Todos /> <Attendees />{" "}
-        </>
-      ) : (
-        <Expenses />
-      )}
-
-      <EventLink eventid={eventid} />
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <button
           onClick={isJoined ? handleLeave : handleJoin}
