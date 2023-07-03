@@ -4,55 +4,29 @@ import { ApiResponse } from "../../services/ApiResponseType";
 import { EventState } from "../../reduxFiles/slices/events";
 import moment from "moment";
 
-const userToken = "test";
-
-// interface Event {
-//   coverPic: string;
-//   date: string;
-//   description?: string;
-//   eventId: string;
-//   host?: string;
-//   location: string;
-//   title: string;
-// }
-
 export default function EventMini({
   eventData,
 }: {
   eventData: ApiResponse<EventState>;
 }) {
-  // const [eventDetails, setEventDetails] = useState<EventState>({
-  //   coverPic: "",
-  //   date: new Date(),
-  //   description: "",
-  //   eventId: "",
-  //   host: "",
-  //   location: "",
-  //   title: "",
-  // });
+  const loggedUser = localStorage.getItem("token");
+
+  const [userIsHost, setUserIsHost] = useState(false);
 
   useEffect(() => {
     console.log("Data recieved in event mini ==> ", eventData);
+
+    const hostUser = eventData?.data.UserEvents.find(
+      (user) => user.userId === loggedUser
+    );
+
+    setUserIsHost(hostUser?.userId === loggedUser ? true : false);
+
+    console.log("hostuser", hostUser);
   }, [eventData]);
 
-  // useEffect(() => {
-  //   fetch(
-  //     "https://codeworks-thesis-4063bceaa74a.herokuapp.com/event/73ad298d-0a34-415b-bd7d-cec1578cf1d4"
-  //   )
-  //     .then((response) => response.json())
-  //     .then((fetchedEvent) => {
-  //       console.log(fetchedEvent);
-  //       console.log(fetchedEvent.data);
-  //       setEventDetails(fetchedEvent.data);
-  //       console.log(eventDetails);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching event:", error);
-  //     });
-  // }, []);
-
   return (
-    <div className="absolute left-20 top-24 grid grid-cols-2 grid-rows-3 text-white">
+    <div className="absolute left-20 top-24 grid grid-cols-2 grid-rows-3">
       {eventData && (
         <>
           <h3 className="text-2xl col-span-2">{eventData.data.title}</h3>
@@ -64,11 +38,16 @@ export default function EventMini({
           </h4>
           {/* <h4 className="text-lg row-span-2 mt-2">{eventData.description}</h4> */}
           <div>
-            {/* {eventData.data.host === userToken ? (
+            {userIsHost ? (
               <DeleteEventButton></DeleteEventButton>
             ) : (
-              <DeleteEventButton></DeleteEventButton>
-            )} */}
+              <h2>not host</h2>
+            )}
+            {/* {eventData ? (eventData.data.UserEvents.map((user)=>{
+              if (user.userID === userToken && user.isHost === true ) return 
+            })   : ( */}
+            {/* <h2> SOMETHING </h2> */}
+            {/* )} */}
             {/* DELETE BUTTON FROM THE ELSE, ONLY NEEDED SINCE WE DONT HAVE USER TOKEN YET */}
           </div>
         </>
