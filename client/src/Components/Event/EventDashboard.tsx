@@ -20,10 +20,10 @@ export default function Event() {
     isLoading,
   } = useGetEventQuery(eventid as string);
 
-  console.log({ error, eventData });
+  // console.log({ error, eventData });
 
   // const eventData = data?.data;
-  console.log(eventData);
+  console.log("eventdata==>", eventData);
 
   return (
     <>
