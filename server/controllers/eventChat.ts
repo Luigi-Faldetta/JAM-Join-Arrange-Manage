@@ -25,6 +25,11 @@ const getChat = async (req: Request, res: Response) => {
   try {
     const chat = await EventChat.findAll({
       where: { eventId: req.params.eventid },
+      attributes: {exclude: ['eventId']},
+      include: [{
+        model: User,
+        attributes: ['name', 'profilePic'],
+      }]
     })
 
     res.status(200)
@@ -35,7 +40,6 @@ const getChat = async (req: Request, res: Response) => {
     res.status(500)
       .json(resBody(false, "500", null, err.message));
   }
-
 }
 
 /**

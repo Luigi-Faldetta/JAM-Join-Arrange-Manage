@@ -30,6 +30,11 @@ const getChat = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const chat = yield associations_1.EventChat.findAll({
             where: { eventId: req.params.eventid },
+            attributes: { exclude: ['eventId'] },
+            include: [{
+                    model: associations_1.User,
+                    attributes: ['name', 'profilePic'],
+                }]
         });
         res.status(200)
             .json((0, utils_1.resBody)(true, null, chat, 'Chat fetched'));
