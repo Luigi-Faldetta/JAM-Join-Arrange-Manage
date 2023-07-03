@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState} from 'react';
 import './ProfilePage.css';
 import { useGetUserQuery } from '../../services/ThesisDB';
 import { UserState } from '../../reduxFiles/slices/users';
@@ -40,6 +40,7 @@ const ProfilePage = (): any => {
   };
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [userPhoto, setUserPhoto] = useState<File | null | string>(null);
@@ -53,7 +54,6 @@ const ProfilePage = (): any => {
   //@ts-ignore
   const { data } = useGetUserQuery(uid);
   //@ts-ignore
-  console.log('data===>> ', data);
 
   const [updateUser] = useUpdateUserMutation();
 
@@ -111,6 +111,9 @@ const ProfilePage = (): any => {
       if (phone) {
         userFormData.phone = phone;
       }
+      if (email) {
+        userFormData.email = email;
+      }
 
       const image = await handleImageUpload();
       if (image && image.url) {
@@ -131,6 +134,7 @@ const ProfilePage = (): any => {
 
     setName('');
     setPhone('');
+    setEmail('');
     setPassword('');
     setConfirmPassword('');
   };
@@ -177,6 +181,14 @@ const ProfilePage = (): any => {
               type='text'
               name='username'
               placeholder={data?.data.name}
+              className='input input-bordered w-full max-w-xs'
+            />
+            <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              type='text'
+              name='email'
+              placeholder={data?.data.email}
               className='input input-bordered w-full max-w-xs'
             />
             <input
