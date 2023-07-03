@@ -41,7 +41,7 @@ export default function EventMini({ data }: any) {
   }, []);
 
   return (
-    <div className="absolute left-20 top-24 grid grid-cols-2 grid-rows-3 text-white">
+    <div className="absolute left-20 top-24 grid grid-cols-2 grid-rows-3 text-red-500">
       {eventDetails && (
         <>
           <h3 className="text-2xl col-span-2">{eventDetails.title}</h3>
