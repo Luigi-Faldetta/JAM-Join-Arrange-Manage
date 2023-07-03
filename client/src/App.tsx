@@ -13,16 +13,19 @@ function App() {
     state.logoutReducer.valueOf()
   );
   const chatState = useSelector((state: RootState) =>
-    state.chatReducer.valueOf()
-  );
+  state.chatReducer.valueOf()
+  ) as { isOpen: boolean, eventId: string};
 
-  // console.log("logout state ==> ", chatState);
+  useEffect(() => {
+    console.log("logout state ==> ", chatState);
+  }, [chatState])
+
   return (
     <>
       <div className="App">
         <Navbar />
         {logoutState ? <Logout /> : null}
-        {chatState ? <ChatContainer /> : null}
+        {chatState.isOpen ? <ChatContainer /> : null}
         <Outlet />
       </div>
     </>
