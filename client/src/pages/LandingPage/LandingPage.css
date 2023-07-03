@@ -1,7 +1,6 @@
 .landing-page {
-    height: 100%;
-    /* margin-top: 50px */
-  }
+  height: calc(100vh);
+}
   .landing-page .active {
     transform: scale(1.2);
     transition: transform 0.8s ease;

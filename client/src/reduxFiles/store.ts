@@ -3,6 +3,7 @@ import eventReducers from "./slices/events";
 import expenseReducers from "./slices/expenses";
 import toDoReducers from "./slices/toDos";
 import userReducers from "./slices/users";
+import msgReducers from './slices/msg'
 // import { setupListeners } from '@reduxjs/toolkit/query'
 import { thesisDbApi } from "../services/ThesisDB";
 import { useDispatch } from "react-redux";
@@ -14,6 +15,8 @@ const store = configureStore({
   reducer: {
     chatReducer,
     logoutReducer,
+    msgListReducer: msgReducers.msgListReducer, 
+    msgReducer: msgReducers.msgReducer,
     eventListReducer: eventReducers.eventListReducer,
     eventReducer: eventReducers.eventReducer,
     userListReducer: userReducers.userListReducer,

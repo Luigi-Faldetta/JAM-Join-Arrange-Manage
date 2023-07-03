@@ -4,11 +4,17 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 export interface ToDoState {
     //update interface once types are declared
     id?: string;
-    value: string;
+    title: string;
+    isDone: boolean;
+    creatorId: string;
+    eventId: string;
 }
 
-const initialToDoState:ToDoState = {
-    value: ""
+const initialToDoState: ToDoState = {
+    title: "",
+    isDone: false,
+    creatorId: "",
+    eventId: "",
 }
 
 export const toDoSlice = createSlice({
@@ -16,9 +22,9 @@ export const toDoSlice = createSlice({
     initialState: initialToDoState,
     reducers: {
         //state type will be ToDo when the type is created.
-        createToDo: (state) => { state.value = ""},
-        deleteToDo: (state) => { state.value = ""},
-        updateToDo: (state) => { state.value = ""},
+        createToDo: (state) => { state.title = "" },
+        deleteToDo: (state) => { state.title = "" },
+        updateToDo: (state) => { state.title = "" },
     }
 })
 
@@ -27,9 +33,9 @@ export const toDoListSlice = createSlice({
     initialState: [] as ToDoState[],
     reducers: {
         //state type will be ToDo when the type is created.
-        createToDoList: (state) => { state = []},
-        deleteToDoList: (state) => { state = []},
-        updateToDoList: (state) => { state = []},
+        createToDoList: (state) => { state = [] },
+        deleteToDoList: (state) => { state = [] },
+        updateToDoList: (state) => { state = [] },
     }
 })
 
@@ -39,4 +45,4 @@ export const { createToDoList, updateToDoList, deleteToDoList } = toDoListSlice.
 const toDoReducer = toDoSlice.reducer
 const toDoListReducer = toDoListSlice.reducer
 
-export default {toDoListReducer, toDoReducer}
+export default { toDoListReducer, toDoReducer }

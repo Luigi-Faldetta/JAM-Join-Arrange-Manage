@@ -1,34 +1,32 @@
 import { useEffect, useState } from "react";
+import { useGetExpensesQuery } from "../../services/ThesisDB";
+import { ExpenseState } from "../../reduxFiles/slices/expenses";
+import { useAddExpenseMutation } from "../../services/ThesisDB";
 
 interface Expense {
     item: string;
     cost: string;
     eventId: string;
-    id?: number;
+    id?: string;
 }
 
-const eventId = "0db2d486-6f41-4833-9856-8ea7c94fae6c";
-const purchaserId = "57cb0816-b2f3-43f2-86d4-71cfa16ad6ad";
+
+const eventId = "d2913de4-1ef3-4f3a-b885-9e2a8120611b";
+const purchaserId = "ddad6a7d-d18c-4fd4-96b3-e6814cd3a3e7";
 
 
 
 export default function Expenses() {
-    const [expenses, setExpenses] = useState<Expense[]>([]);
-    const [newExpense, setNewExpense] = useState<Expense>({ item: "", cost: "", eventId: "", id: 0 });
+    const [expenses, setExpenses] = useState<ExpenseState[]>([]);
+    const [newExpense, setNewExpense] = useState<ExpenseState>({ item: "", cost: "", eventId: "", id: "" });
     const [total, setTotal] = useState<number>(0);
 
+
+    const { data, error, isLoading } = useGetExpensesQuery(eventId);
+
     useEffect(() => {
-        fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/expenses/${eventId}`)
-            .then((response) => response.json())
-            .then((responseData) => {
-                const fetchedExpenses = responseData.data; // Adjust the property name if needed
-                console.log(fetchedExpenses);
-                setExpenses(fetchedExpenses);
-            })
-            .catch((error) => {
-                console.error('Error fetching expenses:', error);
-            });
-    }, []);
+        if (data) setExpenses(data.data);
+    }, [data]);
 
 
 
@@ -67,7 +65,7 @@ export default function Expenses() {
                     console.log(responseData)
                     const createdExpense = responseData.data; // Adjust the property name if needed
                     setExpenses((prevExpenses) => [...prevExpenses, createdExpense]);
-                    setNewExpense({ item: "", cost: "", eventId: "", id: 0 });
+                    setNewExpense({ item: "", cost: "", eventId: "", id: "" });
                 })
                 .catch((error) => {
                     console.error("Error creating expense:", error);

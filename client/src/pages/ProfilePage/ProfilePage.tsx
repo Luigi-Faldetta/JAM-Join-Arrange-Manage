@@ -4,35 +4,40 @@ import { useGetUserQuery } from '../../services/ThesisDB';
 import { UserState } from '../../reduxFiles/slices/users';
 import { useAuth } from '../../utils/useAuth';
 import { useUpdateUserMutation } from '../../services/ThesisDB';
-import { useDispatch } from 'react-redux';
 import Delete from '../../Components/Delete';
 
-const ImageUploader = ({
-  onImageSelect,
-}: {
-  onImageSelect: (file: File) => void;
-}) => {
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.length) {
-      onImageSelect(e.target.files[0]);
-    }
-  };
-
-  return (
-    <div className='upload-btn mb-3'>
-      <input
-        id='profilePic'
-        type='file'
-        name='profilePic'
-        accept='image/*'
-        className="file-input file-input-bordered file-input w-full max-w-xs"
-        onChange={handleImageChange}
-      />
-    </div>
-  );
-};
-
 const ProfilePage = (): any => {
+  const ImageUploader = ({
+    onImageSelect,
+  }: {
+    onImageSelect: (file: File) => void;
+  }) => {
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files?.length) {
+        const selectedFile = e.target.files[0];
+        onImageSelect(selectedFile);
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          setPreviewUrl(reader.result as string);
+        };
+        reader.readAsDataURL(selectedFile);
+      }
+    };
+
+    return (
+      <div className='upload-btn mb-3'>
+        <input
+          id='profilePic'
+          type='file'
+          name='profilePic'
+          accept='image/*'
+          className='file-input-bordered file-input w-full max-w-xs'
+          onChange={handleImageChange}
+        />
+      </div>
+    );
+  };
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
@@ -40,7 +45,8 @@ const ProfilePage = (): any => {
   const [userPhoto, setUserPhoto] = useState<File | null | string>(null);
   const [photoUrl, setPhotoUrl] = useState<string>('');
   const [updateStatus, setUpdateStatus] = useState('');
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
 
   const uid = localStorage.getItem('token');
   useAuth();
@@ -130,26 +136,25 @@ const ProfilePage = (): any => {
   };
 
   const handleDelete = () => {
-    setOpen(true)
-    console.log(open)
-  }
+    setOpen(true);
+    console.log(open);
+  };
 
   return (
     <div className='profile-container bg-gray-100 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8'>
       <div className='w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
-        <div className='flex justify-end px-4 pt-4'></div>
         <div className='flex flex-col items-center pb-10'>
-          {userPhoto ? (
+          {previewUrl || userPhoto ? (
             <img
               className='img-container w-24 h-25 mb-3 rounded-full shadow-lg'
-              src={photoUrl}
-              alt='user img'
+              src={previewUrl ? previewUrl : photoUrl}
+              alt=''
             />
           ) : (
             <img
               className='img-container w-24 h-25 mb-3 rounded-full shadow-lg'
-              src={data?.data.profilePic}
-              alt='user img'
+              src={data?.data.profilePic || './no-profile-picture-icon.png'}
+              alt=''
             />
           )}
           <h5 className='mb-1 text-xl font-medium text-gray-900 dark:text-white'>
@@ -179,7 +184,7 @@ const ProfilePage = (): any => {
               onChange={(e) => setPhone(e.target.value)}
               type='text'
               name='phone'
-              placeholder='Phone number'
+              placeholder={data?.data.phone}
               className='input input-bordered w-full max-w-xs'
             />
             <input
@@ -198,25 +203,25 @@ const ProfilePage = (): any => {
               placeholder='Confirm Password'
               className='input input-bordered w-full max-w-xs'
             />
-            <button
-              type='submit'
-              className='btn btn-success'
-            >
-              Save Changes
-            </button>
+            <div className='profile-buttons'>
+              <button
+                type='submit'
+                className='btn btn-success'
+              >
+                Save Changes
+              </button>
+              <div>
+                <button
+                  type='submit'
+                  className='btn btn-error'
+                  onClick={handleDelete}
+                >
+                  Delete Account
+                </button>
+                {open ? <Delete setOpen={setOpen} /> : null}
+              </div>
+            </div>
           </form>
-          <div className='flex mt-4 space-x-3 md:mt-6'>
-            <button
-              type='submit'
-              className='btn btn-error'
-              onClick={handleDelete}
-            >
-              Delete Account
-            </button>
-            {open ? ( <Delete setOpen={setOpen}/>
-                 ) : (
-                null  )}
-          </div>
         </div>
       </div>
     </div>

@@ -1,27 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useGetUsersQuery } from "../../services/ThesisDB";
+import { UserState } from "../../reduxFiles/slices/users";
+
+interface User {
+  userId: string;
+  name: string;
+  email: string;
+  phone?: string | null;
+  profilePic?: string | undefined;
+  password: string;
+}
 
 export default function Attendees() {
   const [activeIndex, setActiveIndex] = useState(0);
   const imagesPerSlide = 5;
+  const eventId = "e9d175f7-c56b-422e-9b69-1ca19f5bf729";
+  const apiUrl = `https://codeworks-thesis-4063bceaa74a.herokuapp.com/users/${eventId}`;
 
-  const attendees = [
-    "https://www.purina.co.uk/sites/default/files/styles/square_medium_440x440/public/2022-06/Bengal-Cat.jpg?itok=-n4U6Hsa",
-    "https://cdn.britannica.com/91/181391-050-1DA18304/cat-toes-paw-number-paws-tiger-tabby.jpg",
-    "https://images.unsplash.com/flagged/photo-1557427161-4701a0fa2f42?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8fA%3D%3D&w=1000&q=80",
-    "https://d3544la1u8djza.cloudfront.net/APHI/Blog/2022/02-11/gray+stripe+domestic+shortahair+tabby+cat+resting+in+a+maroon+cat+tree+bed-min.jpg",
-    "https://media.istockphoto.com/id/1361394182/photo/funny-british-shorthair-cat-portrait-looking-shocked-or-surprised.jpg?s=612x612&w=0&k=20&c=6yvVxdufrNvkmc50nCLCd8OFGhoJd6vPTNotl90L-vo=",
-    "https://cnr.ncsu.edu/news/wp-content/uploads/sites/10/2019/07/07182019-leopard-tree-unsplash-facebook.jpg",
-    "https://www.comfortzone.com/-/media/Project/OneWeb/ComfortZone/Images/Blog/bringing-new-kitten-home.jpg",
-    "https://as2.ftcdn.net/v2/jpg/03/99/33/85/1000_F_399338584_CGn2KUHUzcxoFgyRr4MZWTNW81L61Sd4.jpg"
-  ];
+  const [attendees, setAttendees] = useState<UserState[]>([]);
+
+  const { data, error, isLoading } = useGetUsersQuery(eventId);
+
+  useEffect(() => {
+    if (data) {
+      const fetchedToDos = data.data;
+      setAttendees(fetchedToDos);
+    }
+  }, [data]);
 
   const handlePrevious = () => {
-    setActiveIndex((prevIndex) => prevIndex > 0 ? prevIndex - 1 : 0);
+    setActiveIndex(prevIndex => (prevIndex > 0 ? prevIndex - 1 : 0));
   };
 
   const handleNext = () => {
     const lastIndex = Math.max(attendees.length - imagesPerSlide, 0);
-    setActiveIndex((prevIndex) => prevIndex < lastIndex ? prevIndex + 1 : prevIndex);
+    setActiveIndex(prevIndex => (prevIndex < lastIndex ? prevIndex + 1 : prevIndex));
   };
 
   const renderImages = () => {
@@ -33,7 +46,7 @@ export default function Attendees() {
       renderedImages.push(
         <div key={i} className="carousel-item m-4">
           <img
-            src={attendees[i]}
+            src={attendees[i].profilePic}
             alt={`User${i + 1}`}
             className="rounded-full w-24 h-24 object-cover"
           />

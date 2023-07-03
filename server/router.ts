@@ -2,7 +2,7 @@ import routes from 'express';
 const router = routes.Router();
 
 import './models/modelDB'
-import { user, event, todo, expense, userEvent, session, calculation } from './controllers/index'
+import { user, event, todo, expense, userEvent, session, calculation, eventChat, email } from './controllers/index'
 
 router.get('/health', (_req, res) => {
     res.send({ health: 'Server runnning!! =)' })
@@ -33,7 +33,7 @@ router.post('/expense', expense.newExpense)
 router.delete('/expense/:expenseid', expense.deleteExpense)
 router.get('/expenses/:eventid', expense.getExpenses)
 
-// User events
+// User event
 router.post('/useractivity', userEvent.joinEvent)
 router.patch('/useractivity', userEvent.updateEvent)
 router.delete('/useractivity', userEvent.leaveEvent)
@@ -41,12 +41,16 @@ router.delete('/useractivity', userEvent.leaveEvent)
 // Session
 router.post('/userlogin', session.logIn);
 router.get('/userlogout', session.logOut);
+router.get('/me', session.authorize, session.getUserInfo)
 
-// Calculations
+// Calculation
 router.get('/calculate/:eventid', calculation.expenseSheet)
 
-// @ts-ignore
-router.get('/test1', (req, res) => { res.send('All good') })
-router.get('/test2', session.authorize, (req, res) => { res.send('All good') })
+// Event chat
+router.get('/chat/:eventid', eventChat.getChat)
+router.post('/chat/', eventChat.newMessage)
+
+// Email
+router.get('/passwordreset/:email', email.resetPassword)
 
 export default router;

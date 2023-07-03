@@ -11,7 +11,7 @@ function UserDashboardPage() {
   const dispatch = useAppDispatch();
   const userToken = localStorage.getItem("token");
 
-  console.log(userToken);
+  // console.log(userToken);
 
   const eventList = useSelector((state: RootState) => state.eventListReducer);
   const { data, error, isLoading } = useGetEventsQuery(userToken as string);
