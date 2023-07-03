@@ -5,14 +5,14 @@ export interface ExpenseState {
     //update interface once types are declared
     // item: string
     item: string;
-    cost: string;
+    cost: number;
     eventId: string;
     id?: string;
 }
 
 const initialExpenseState: ExpenseState = {
     item: "",
-    cost: "",
+    cost: 0,
     eventId: "",
     id: "",
 }

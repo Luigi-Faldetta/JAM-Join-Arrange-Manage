@@ -1,75 +1,87 @@
 import { useEffect, useState } from "react";
-import { useGetExpensesQuery } from "../../services/ThesisDB";
 import { ExpenseState } from "../../reduxFiles/slices/expenses";
-import { useAddExpenseMutation } from "../../services/ThesisDB";
+import { useAddExpenseMutation, useCalculateExpensesQuery, useDeleteExpenseMutation } from "../../services/ThesisDB";
+import { useParams } from "react-router-dom";
+import { ExpenseSheet } from "../../services/ApiResponseType";
 
-interface Expense {
-    item: string;
-    cost: string;
-    eventId: string;
-    id?: string;
-}
-
-
-const eventId = "d2913de4-1ef3-4f3a-b885-9e2a8120611b";
-const purchaserId = "ddad6a7d-d18c-4fd4-96b3-e6814cd3a3e7";
 
 
 
 export default function Expenses() {
-    const [expenses, setExpenses] = useState<ExpenseState[]>([]);
-    const [newExpense, setNewExpense] = useState<ExpenseState>({ item: "", cost: "", eventId: "", id: "" });
-    const [total, setTotal] = useState<number>(0);
+    const { eventid } = useParams();
+    const purchaserId = localStorage.getItem("token")
+    const [deleteExpense] = useDeleteExpenseMutation()
+    const [addExpense] = useAddExpenseMutation()
+
+    const [expenseSheet, setExpenseSheet] = useState<ExpenseSheet>({
+        expenses:[],
+        attendees:[],
+        total:0,
+        perPerson:0,
+        indExpenses:[]
+    });
+
+    //it might be easier if we can make the use state type ExpenseState, but for now I needed it to work.
+    const [newExpenseForm, setNewExpenseForm] = useState<{item:string, cost:string, eventId:string, id:string}>({ item: "", cost: "", eventId: "", id: "" });
+    //is below necessary? cant it just be sent to the BE and we append the response to the array above?
+    // const [total, setTotal] = useState<number>(0);
 
 
-    const { data, error, isLoading } = useGetExpensesQuery(eventId);
+    const { data, error, isLoading } = useCalculateExpensesQuery(eventid as string);
 
     useEffect(() => {
-        if (data) setExpenses(data.data);
+        if (data) {
+            setExpenseSheet(data.data);
+        }
     }, [data]);
 
 
 
-    useEffect(() => {
-        const calculateTotal = () => {
-            const totalPrice = expenses.reduce((accumulator, expense) => {
-                return accumulator + Number(expense?.cost || 0);
-            }, 0);
-            setTotal(totalPrice);
-        };
-        calculateTotal();
-    }, [expenses]);
+    // useEffect(() => {
+    //     const calculateTotal = () => {
+    //         const totalPrice = expenses.reduce((accumulator, expense) => {
+    //             return accumulator + Number(expense?.cost || 0);
+    //         }, 0);
+    //         setTotal(totalPrice);
+    //     };
+    //     calculateTotal();
+    // }, [expenses]);
 
 
-    const handleAddClick = () => {
-        console.log(newExpense);
+    const handleAddClick = async () => {
+        console.log(newExpenseForm);
 
-        if (newExpense.item !== "") {
-            console.log("HERE")
+        if (newExpenseForm.item !== "") {
             const expenseToAdd = {
-                item: newExpense.item,
-                cost: Number(newExpense.cost),
-                eventId: eventId,
+                item: newExpenseForm.item,
+                cost: +newExpenseForm.cost,
+                eventId: eventid as string,
                 purchaserId: purchaserId,
             };
-            console.log(expenseToAdd);
-            fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/expense`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(expenseToAdd),
-            })
-                .then((response) => response.json())
-                .then((responseData) => {
-                    console.log(responseData)
-                    const createdExpense = responseData.data; // Adjust the property name if needed
-                    setExpenses((prevExpenses) => [...prevExpenses, createdExpense]);
-                    setNewExpense({ item: "", cost: "", eventId: "", id: "" });
-                })
-                .catch((error) => {
-                    console.error("Error creating expense:", error);
-                });
+            await addExpense(expenseToAdd as ExpenseState)
+            const {data, error, isLoading} = useCalculateExpensesQuery(eventid as string);
+            if(error) console.log(error)
+            if(isLoading) {
+                while(isLoading){}
+            }
+            if(data) setExpenseSheet(data.data);
+            // fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/expense`, {
+            //     method: "POST",
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //     },
+            //     body: JSON.stringify(expenseToAdd),
+            // })
+            //     .then((response) => response.json())
+            //     .then((responseData) => {
+            //         console.log(responseData)
+            //         const createdExpense = responseData.data; // Adjust the property name if needed
+            //         setExpenses((prevExpenses) => [...prevExpenses, createdExpense]);
+            //         setNewExpense({ item: "", cost: "", eventId: "", id: "" });
+            //     })
+            //     .catch((error) => {
+            //         console.error("Error creating expense:", error);
+            //     });
         }
     };
 
@@ -77,12 +89,12 @@ export default function Expenses() {
         const { name, value } = e.target;
 
         if (name === 'cost' && value === '0') {
-            setNewExpense((prevExpense) => ({
+            setNewExpenseForm((prevExpense) => ({
                 ...prevExpense,
                 [name]: '',
             }));
         } else {
-            setNewExpense((prevExpense) => ({
+            setNewExpenseForm((prevExpense) => ({
                 ...prevExpense,
                 [name]: value,
             }));
@@ -91,24 +103,31 @@ export default function Expenses() {
 
 
 
-    const handleDeleteClick = (expenseId: string) => {
-        fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/expense/${expenseId}`, {
-            method: "DELETE"
-        })
-            .then((response) => {
-                console.log(expenseId)
-                console.log(response)
-                if (response.ok) {
-                    setExpenses((prevExpenses) => {
-                        return prevExpenses.filter((expense) => String(expense.id) !== expenseId);
-                    });
-                } else {
-                    console.error("Failed to delete expense:", response.statusText);
-                }
-            })
-            .catch((error) => {
-                console.error("Error deleting expense:", error);
-            });
+    const handleDeleteClick = async (expenseId: string) => {
+        await deleteExpense(expenseId);
+        const {data, error, isLoading} = useCalculateExpensesQuery(eventid as string);
+        if(error) return error;
+        while(isLoading){
+
+        };
+        if (data) setExpenseSheet(data.data)
+        // fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/expense/${expenseId}`, {
+        //     method: "DELETE"
+        // })
+        //     .then((response) => {
+        //         console.log(expenseId)
+        //         console.log(response)
+        //         if (response.ok) {
+        //             setExpenses((prevExpenses) => {
+        //                 return prevExpenses.filter((expense) => String(expense.id) !== expenseId);
+        //             });
+        //         } else {
+        //             console.error("Failed to delete expense:", response.statusText);
+        //         }
+        //     })
+        //     .catch((error) => {
+        //         console.error("Error deleting expense:", error);
+        //     });
     };
 
 
@@ -119,11 +138,11 @@ export default function Expenses() {
         <div className="flex justify-center">
             <div className="w-4/5 mx-20 relative bg-blue-500 rounded-lg flex flex-col items-center mt-36 h-[460px]">
                 <h1 className="p-6 text-2xl text-white">Expenses</h1>
-                <div className="absolute top-6 right-6 text-2xl text-red-600">Total: ${total}</div>
-                <div className="flex items-center" key={newExpense.id}>
+                <div className="absolute top-6 right-6 text-2xl text-red-600">Total: ${data?.data.total}</div>
+                <div className="flex items-center" key={newExpenseForm.id}>
                     <input
                         name="item"
-                        value={newExpense.item}
+                        value={newExpenseForm.item}
                         onChange={handleInputChange}
                         type="text"
                         placeholder="Expense item"
@@ -131,7 +150,7 @@ export default function Expenses() {
                     />
                     <input
                         name="cost"
-                        value={newExpense.cost}
+                        value={newExpenseForm.cost}
                         onChange={handleInputChange}
                         type="number"
                         placeholder="0"
@@ -139,7 +158,7 @@ export default function Expenses() {
                     />
                     <button onClick={handleAddClick} className="ml-3 p-1 w-8 text-lg rounded-md border border-slate-50">&#10133;</button>
                 </div>
-                {expenses.map((expense) => (
+                {expenseSheet.expenses.map((expense) => (
                     <div className="flex items-center" key={expense?.id}>
                         <button
                             className="text-white rounded-md text-xl"

@@ -3,7 +3,7 @@ import { EventState } from "../reduxFiles/slices/events";
 import { ExpenseState } from "../reduxFiles/slices/expenses";
 import { ToDoState } from "../reduxFiles/slices/toDos";
 import { UserState } from "../reduxFiles/slices/users";
-import { ApiResponse } from "./ApiResponseType";
+import { ApiResponse, ExpenseSheet } from "./ApiResponseType";
 import { MsgState } from "../reduxFiles/slices/msg";
 
 // const {data, error, isLoading} = useGetUserQuery("f099247b-189d-4025-81eb-1a53c1e9c332")
@@ -123,10 +123,7 @@ export const thesisDbApi = createApi({
 
     //Expenses
 
-    addExpense: build.mutation<
-      ApiResponse<ExpenseState>,
-      Partial<ExpenseState> & Pick<ExpenseState, "item">
-    >({
+    addExpense: build.mutation<ApiResponse<ExpenseState>,ExpenseState>({
       query: (expense) => ({
         url: "expense/",
         method: "POST",
@@ -135,21 +132,16 @@ export const thesisDbApi = createApi({
       }),
     }),
 
-    calculateExpenses: build.mutation<
-      ApiResponse<ExpenseState>,
-      Partial<ExpenseState> & Pick<ExpenseState, "item">
-    >({
-      query: (expense) => ({
-        url: "expense/",
+    calculateExpenses: build.query<ApiResponse<ExpenseSheet>,string>({
+      query: (eventId) => ({
+        url: `expense/${eventId}`,
         method: "POST",
-        body: expense,
-        headers: { "Content-type": "application/json; charset=UTF-8" },
       }),
     }),
 
-    getExpenses: build.query<ApiResponse<ExpenseState[]>, string>({
-      query: (eventId) => ({ url: `expenses/${eventId}` }),
-    }),
+    // getExpenses: build.query<ApiResponse<ExpenseState[]>, string>({
+    //   query: (eventId) => ({ url: `expenses/${eventId}` }),
+    // }),
 
     deleteExpense: build.mutation<ApiResponse<number>, string>({
       query: (id) => ({
@@ -265,9 +257,10 @@ export const {
   useAddUserMutation,
   useJoinActivityMutation,
   //get
+  useCalculateExpensesQuery,
   useGetEventQuery,
   useGetEventsQuery,
-  useGetExpensesQuery,
+  // useGetExpensesQuery,
   useGetToDosQuery,
   useGetUserQuery,
   useGetUsersQuery,
