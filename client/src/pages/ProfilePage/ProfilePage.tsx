@@ -4,7 +4,6 @@ import { useGetUserQuery } from '../../services/ThesisDB';
 import { UserState } from '../../reduxFiles/slices/users';
 import { useAuth } from '../../utils/useAuth';
 import { useUpdateUserMutation } from '../../services/ThesisDB';
-import { useDispatch } from 'react-redux';
 import Delete from '../../Components/Delete';
 
 const ImageUploader = ({
@@ -25,7 +24,7 @@ const ImageUploader = ({
         type='file'
         name='profilePic'
         accept='image/*'
-        className="file-input file-input-bordered file-input w-full max-w-xs"
+        className="file-input-bordered file-input w-full max-w-xs"
         onChange={handleImageChange}
       />
     </div>
@@ -143,13 +142,13 @@ const ProfilePage = (): any => {
             <img
               className='img-container w-24 h-25 mb-3 rounded-full shadow-lg'
               src={photoUrl}
-              alt='user img'
+              alt=''
             />
           ) : (
             <img
               className='img-container w-24 h-25 mb-3 rounded-full shadow-lg'
-              src={data?.data.profilePic}
-              alt='user img'
+              src={data?.data.profilePic || './no-profile-picture-icon.png'}
+              alt=''
             />
           )}
           <h5 className='mb-1 text-xl font-medium text-gray-900 dark:text-white'>

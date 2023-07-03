@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
 import { Link as Scroll } from "react-scroll";
@@ -70,7 +70,7 @@ function Navbar() {
                 <span className="sr-only">Open user menu</span>
                 <img
                   className="profile-pic w-8 h-8 rounded-full"
-                  src={data?.data.profilePic}
+                  src={data?.data.profilePic || './no-profile-picture-icon.png'}
                   alt=""
                 />
               </button>
