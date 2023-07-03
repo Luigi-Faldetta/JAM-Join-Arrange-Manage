@@ -15,8 +15,8 @@ const chatSlice = createSlice({
     reducers: {
         toggleChat: (state) =>( {...state, isOpen: !state.isOpen}),
         resetChat:() =>initialState,
-        openChat: (state) =>( {...state, isOpen: true}),
-        closeChat:  (state) =>( {...state, isOpen: false}),
+        openChat: (state) =>({...state, isOpen: true}),
+        closeChat:  (state) => ({eventId:'', isOpen: false}),
         openWithEventId: (_, action) => ({eventId: action.payload, isOpen: true})
     }
 })

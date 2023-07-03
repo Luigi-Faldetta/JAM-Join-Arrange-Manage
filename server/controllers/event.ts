@@ -141,6 +141,7 @@ const getUserEvents = async (req: Request, res: Response) => {
         where: { eventId: eventsArray },
         include: {
           model: UserEvent,
+          where: { userId: req.params.userid },
           attributes: ['isHost', 'isGoing']
         }
       })
