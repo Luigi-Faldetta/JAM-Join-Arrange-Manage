@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../../reduxFiles/store";
 import { setEventList } from "../../reduxFiles/slices/events";
 import ChatContainer from "./ChatContainer";
-import { openChat } from "../../reduxFiles/slices/chat";
+import { openChat, openWithEventId } from "../../reduxFiles/slices/chat";
 interface Event {
   coverPic: string;
   date: string;
@@ -48,12 +48,15 @@ function Chat() {
 
   const handleEventClick = (event: any) => {
     setSelectedEvent(event);
-    dispatch(openChat());
-    if(selectedEvent) {
-      console.log(selectedEvent.eventId)
-    }
     setChatDropdown(false);
   };
+  
+  useEffect(() => {
+    console.log("selected Event ==> ", selectedEvent)
+    if(selectedEvent.eventId) {
+      dispatch(openWithEventId(selectedEvent.eventId))
+    } 
+  }, [selectedEvent])
 
 
   return (

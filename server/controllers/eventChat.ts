@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
 import { EventChat, User, Event } from '../models/associations';
 import { validate as uuidValidate } from 'uuid';
-
-//@ts-ignore
-const resBody = (success, error, data, message) => { return { success, error, data, message } }
+import { resBody } from '../utils'
 
 /**
  * @param req needs req.params.eventid
@@ -27,6 +25,11 @@ const getChat = async (req: Request, res: Response) => {
   try {
     const chat = await EventChat.findAll({
       where: { eventId: req.params.eventid },
+      attributes: {exclude: ['eventId']},
+      include: [{
+        model: User,
+        attributes: ['name', 'profilePic'],
+      }]
     })
 
     res.status(200)
@@ -37,7 +40,6 @@ const getChat = async (req: Request, res: Response) => {
     res.status(500)
       .json(resBody(false, "500", null, err.message));
   }
-
 }
 
 /**

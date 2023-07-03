@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { resBody } from '../utils'
 import Expense from '../models/expense'
 
 // Needs body with {"item", "cost", "purchaserId", "eventId" }
@@ -7,17 +8,12 @@ const newExpense = async (req: Request, res: Response) => {
   try {
     const expense = await Expense.create(req.body)
     res.status(201)
-      .json({
-        success: true,
-        error: null,
-        data: expense,
-        message: 'Expense created',
-      });
+      .json(resBody(true, null, expense, 'Expense created'));
 
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.error(err);
     res.status(500)
-      .json({ message: err.message });
+      .json(resBody(false, null, null, err.message));
   }
 }
 
@@ -27,19 +23,14 @@ const deleteExpense = async (req: Request, res: Response) => {
   try {
     const deletedExpense = await Expense.destroy(
       { where: { id: req.params.expenseid } })
-      
+
     res.status(201)
-      .json({
-        success: true,
-        error: null,
-        data: deletedExpense,
-        message: 'Expense deleted',
-      });
+      .json(resBody(true, null, deletedExpense, 'Expense deleted'));
 
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.error(err);
     res.status(500)
-      .json({ message: err.message });
+      .json(resBody(false, null, null, err.message));
   }
 }
 
@@ -52,12 +43,7 @@ const getExpenses = async (req: Request, res: Response) => {
 
     if (expenses.length) {
       res.status(200)
-        .json({
-          success: true,
-          error: null,
-          data: expenses,
-          message: 'Expenses fetched',
-        });
+        .json(resBody(true, null, expenses, 'Expenses fetched'));
 
     } else {
       throw new Error("No expenses were found");
@@ -66,7 +52,7 @@ const getExpenses = async (req: Request, res: Response) => {
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.error(err);
     res.status(500)
-      .json({ message: err.message });
+      .json(resBody(false, null, null, err.message));
   }
 }
 

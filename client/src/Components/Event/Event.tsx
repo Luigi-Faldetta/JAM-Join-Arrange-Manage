@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import EventMini from "../EventDashboard/EventMini";
 import ToggleButton from "../EventDashboard/ToggleButton";
 import { useParams } from "react-router-dom";
@@ -6,22 +6,37 @@ import { useGetEventQuery } from "../../services/ThesisDB";
 import { useAuth } from "../../utils/useAuth";
 import { useIsLoggedIn } from "../../utils/useIsLoggedIn";
 import LandingPage from "../../pages/LandingPage/LandingPage";
+import { EventState } from "../../reduxFiles/slices/events";
 
 export default function Event() {
   const isLoggedIn = useIsLoggedIn();
   const { eventid } = useParams();
-  const { data } = useGetEventQuery(eventid as string);
+
+  console.log("eventid in Event comp ==> ", eventid);
+
+  const {
+    data: eventData,
+    error,
+    isLoading,
+  } = useGetEventQuery(eventid as string);
+
+  console.log({ error, eventData });
+
+  // const eventData = data?.data;
+  console.log(eventData);
 
   return (
     <>
       <div>
-        {isLoggedIn ? (
+        {isLoggedIn && !isLoading && eventData ? (
           <>
-            <EventMini data={data} />
-            <ToggleButton data={data} />
+            <EventMini eventData={eventData} />
+            <ToggleButton eventData={eventData} />
           </>
         ) : (
-          <LandingPage data={data} />
+          <div>test</div>
+          // <LandingPage eventData={eventData} />
+          // instead of going to landing page we should just show the modal
         )}
       </div>
     </>

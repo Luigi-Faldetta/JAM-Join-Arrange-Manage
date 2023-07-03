@@ -24,10 +24,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.updateUser = void 0;
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const associations_1 = require("../models/associations");
-//@ts-ignore
-const resBody = (success, error, data, message) => { return { success, error, data, message }; };
+const utils_1 = require("../utils");
+const bcrypt_1 = __importDefault(require("bcrypt"));
 /**
  * @param req needs body with at least {"name", "email", "password"}
  */
@@ -35,25 +34,24 @@ const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
         return res.status(409)
-            .json(resBody(false, "409", null, "Missing input data"));
+            .json((0, utils_1.resBody)(false, "409", null, "Missing input data"));
     }
     const user = yield associations_1.User.findOne({ where: { email } });
     if (user)
         return res.status(409)
-            .json(resBody(false, "409", null, "User already exists"));
+            .json((0, utils_1.resBody)(false, "409", null, "User already exists"));
     const inputPassword = password;
     try {
         const hash = yield bcrypt_1.default.hash(inputPassword, 10);
         const user = yield associations_1.User.create(Object.assign(Object.assign({}, req.body), { password: hash }));
-        // @ts-ignore
         const _a = Object.assign({}, user.dataValues), { password } = _a, safeUser = __rest(_a, ["password"]);
         res.status(201)
-            .json(resBody(true, null, safeUser, "User created"));
+            .json((0, utils_1.resBody)(true, null, safeUser, "User created"));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
         res.status(500)
-            .json(resBody(false, "500", null, err.message));
+            .json((0, utils_1.resBody)(false, "500", null, err.message));
     }
 });
 /**
@@ -66,17 +64,16 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
         if (!user) {
             return res.status(404)
-                .json(resBody(false, "404", null, "No user found"));
+                .json((0, utils_1.resBody)(false, "404", null, "No user found"));
         }
-        // @ts-ignore
         const _b = Object.assign({}, user.dataValues), { password } = _b, safeUser = __rest(_b, ["password"]);
         res.status(200)
-            .json(resBody(true, null, safeUser, "User fetched"));
+            .json((0, utils_1.resBody)(true, null, safeUser, "User fetched"));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
         res.status(400)
-            .json(resBody(false, "400", null, err.message));
+            .json((0, utils_1.resBody)(false, "400", null, err.message));
     }
 });
 /**
@@ -87,16 +84,16 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const userExists = yield associations_1.User.findOne({ where: { userId: req.params.userid } });
         if (!userExists) {
             return res.status(400)
-                .json(resBody(false, "400", null, "Wrong user id"));
+                .json((0, utils_1.resBody)(false, "400", null, "Wrong user id"));
         }
         if (req.body.email) {
             const user = yield associations_1.User.findOne({ where: { email: req.body.email } });
             if (user) {
                 return res.status(409)
-                    .json(resBody(false, "409", null, "Email already exists"));
+                    .json((0, utils_1.resBody)(false, "409", null, "Email already exists"));
             }
         }
-        let updatedUser = {};
+        let updatedUser = [];
         if (req.body.password) {
             const hash = yield bcrypt_1.default.hash(req.body.password, 10);
             updatedUser = yield associations_1.User.update(Object.assign(Object.assign({}, req.body), { password: hash }), {
@@ -110,15 +107,14 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 returning: true
             });
         }
-        // @ts-ignore
         const _c = Object.assign({}, updatedUser[1][0].dataValues), { password } = _c, safeUpdatedUser = __rest(_c, ["password"]);
         res.status(200)
-            .json(resBody(true, null, safeUpdatedUser, "User updated"));
+            .json((0, utils_1.resBody)(true, null, safeUpdatedUser, "User updated"));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
         res.status(500)
-            .json(resBody(false, "500", null, err.message));
+            .json((0, utils_1.resBody)(false, "500", null, err.message));
     }
 });
 exports.updateUser = updateUser;
@@ -130,18 +126,18 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const userExists = yield associations_1.User.findOne({ where: { userId: req.params.userid } });
         if (!userExists) {
             return res.status(400)
-                .json(resBody(false, '400', null, "Wrong user id"));
+                .json((0, utils_1.resBody)(false, '400', null, "Wrong user id"));
         }
         const deletedUser = yield associations_1.User.destroy({
             where: { userId: req.params.userid }
         });
         res.status(200)
-            .json(resBody(true, null, deletedUser, 'User deleted'));
+            .json((0, utils_1.resBody)(true, null, deletedUser, 'User deleted'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
         res.status(400)
-            .json(resBody(false, "400", null, err.message));
+            .json((0, utils_1.resBody)(false, "400", null, err.message));
     }
 });
 exports.deleteUser = deleteUser;
@@ -162,7 +158,7 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 where: { userId: usersArray }
             });
             res.status(200)
-                .json(resBody(true, null, users, 'Event users fetched'));
+                .json((0, utils_1.resBody)(true, null, users, 'Event users fetched'));
         }
         else {
             throw new Error("No users were found");
@@ -171,7 +167,7 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
         res.status(500)
-            .json(resBody(false, "500", null, err.message));
+            .json((0, utils_1.resBody)(false, "500", null, err.message));
     }
 });
 exports.default = { newUser, getUser, updateUser: exports.updateUser, deleteUser: exports.deleteUser, getAllUsers };
