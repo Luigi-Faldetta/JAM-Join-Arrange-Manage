@@ -1,6 +1,6 @@
 .landing-page {
-    height: 100%;
-    /* margin-top: 50px */
+  padding-top: 5rem;
+  height: calc(100vh - 5rem)
   }
   .landing-page .active {
     transform: scale(1.2);
