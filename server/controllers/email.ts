@@ -3,9 +3,7 @@ import { User } from '../models/associations';
 import { v4 as uuidv4 } from 'uuid';
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcrypt';
-
-//@ts-ignore
-const resBody = (success, error, data, message) => { return { success, error, data, message } }
+import { resBody } from '../utils'
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',

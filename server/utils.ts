@@ -40,3 +40,6 @@ export interface IndExpense {
     name: string,
     owes: number,
 }
+
+//@ts-ignore
+export const resBody = (success, error, data, message) => { return { success, error, data, message } }

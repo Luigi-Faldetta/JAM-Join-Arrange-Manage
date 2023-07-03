@@ -1,9 +1,8 @@
 import bcrypt from 'bcrypt';
 import { Request, Response } from "express";
 import { User, UserEvent } from "../models/associations";
+import { resBody } from '../utils'
 
-//@ts-ignore
-const resBody = (success, error, data, message) => { return { success, error, data, message } }
 
 /**
  * @param req needs body with at least {"name", "email", "password"}
@@ -37,7 +36,6 @@ const newUser = async (req: Request, res: Response) => {
       .json(resBody(false, "500", null, err.message));
   }
 };
-
 
 /**
  * @param req needs req.params.userid

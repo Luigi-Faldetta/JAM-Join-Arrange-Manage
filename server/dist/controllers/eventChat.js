@@ -11,34 +11,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const associations_1 = require("../models/associations");
 const uuid_1 = require("uuid");
-//@ts-ignore
-const resBody = (success, error, data, message) => { return { success, error, data, message }; };
+const utils_1 = require("../utils");
 /**
  * @param req needs req.params.eventid
  */
 const getChat = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!(0, uuid_1.validate)(req.params.eventid)) {
         return res.status(400)
-            .json(resBody(false, "400", null, "Wrong event id"));
+            .json((0, utils_1.resBody)(false, "400", null, "Wrong event id"));
     }
     const event = yield associations_1.Event.findOne({
         where: { eventId: req.params.eventid }
     });
     if (!event) {
         return res.status(400)
-            .json(resBody(false, "400", null, "Event could not be found"));
+            .json((0, utils_1.resBody)(false, "400", null, "Event could not be found"));
     }
     try {
         const chat = yield associations_1.EventChat.findAll({
             where: { eventId: req.params.eventid },
         });
         res.status(200)
-            .json(resBody(true, null, chat, 'Chat fetched'));
+            .json((0, utils_1.resBody)(true, null, chat, 'Chat fetched'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
         res.status(500)
-            .json(resBody(false, "500", null, err.message));
+            .json((0, utils_1.resBody)(false, "500", null, err.message));
     }
 });
 /**
@@ -47,35 +46,35 @@ const getChat = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 const newMessage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!req.body.message) {
         return res.status(400)
-            .json(resBody(false, "400", null, "Missing input message"));
+            .json((0, utils_1.resBody)(false, "400", null, "Missing input message"));
     }
     if (!(0, uuid_1.validate)(req.body.eventId) || !(0, uuid_1.validate)(req.body.userId)) {
         return res.status(400)
-            .json(resBody(false, "400", null, "Wrong event and/or user id"));
+            .json((0, utils_1.resBody)(false, "400", null, "Wrong event and/or user id"));
     }
     const user = yield associations_1.User.findOne({
         where: { userId: req.body.userId }
     });
     if (!user) {
         return res.status(400)
-            .json(resBody(false, "400", null, "User could not be found"));
+            .json((0, utils_1.resBody)(false, "400", null, "User could not be found"));
     }
     const event = yield associations_1.Event.findOne({
         where: { eventId: req.body.eventId }
     });
     if (!event) {
         return res.status(400)
-            .json(resBody(false, "400", null, "Event could not be found"));
+            .json((0, utils_1.resBody)(false, "400", null, "Event could not be found"));
     }
     try {
         const eventChat = yield associations_1.EventChat.create(Object.assign(Object.assign({}, req.body), { date: Date.now() }));
         res.status(201)
-            .json(resBody(true, null, eventChat, 'Chat message succesfully posted'));
+            .json((0, utils_1.resBody)(true, null, eventChat, 'Chat message succesfully posted'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
         res.status(500)
-            .json(resBody(false, "500", null, err.message));
+            .json((0, utils_1.resBody)(false, "500", null, err.message));
     }
 });
 exports.default = { getChat, newMessage };

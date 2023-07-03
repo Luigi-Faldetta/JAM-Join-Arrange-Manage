@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
 import { EventChat, User, Event } from '../models/associations';
 import { validate as uuidValidate } from 'uuid';
-
-//@ts-ignore
-const resBody = (success, error, data, message) => { return { success, error, data, message } }
+import { resBody } from '../utils'
 
 /**
  * @param req needs req.params.eventid

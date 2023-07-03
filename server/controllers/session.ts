@@ -3,9 +3,7 @@ import jwt from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
 import { User } from "../models/associations";
 import { __prod__ } from '../constants.js';
-
-//@ts-ignore
-const resBody = (success, error, data, message) => { return { success, error, data, message } }
+import { resBody } from '../utils'
 
 // Needs body with {"email", "password"} 
 const logIn = async (req: Request, res: Response) => {
@@ -87,17 +85,25 @@ const authorize = async (req: Request, res: Response, next: NextFunction) => {
         .json(resBody(false, "403", null, 'Some error happenedd during the token verification 2'));
     }
 
-    console.log('Success, user verified')
-
-    console.log(user);
-    
-
+    const { password, ...safeUser } = { ...user.dataValues }
     // @ts-ignore
-    req.user = user;
-    // get user
+    req.user = safeUser;
 
     return next()
   })
 }
 
-export default { logIn, logOut, authorize }
+const getUserInfo = async (req: Request, res: Response) => {
+  try {
+    res.status(200)
+      // @ts-ignore
+      .json(resBody(true, null, req.user, 'User is logged'))
+
+  } catch (err: any) {
+    process.env.NODE_ENV !== 'test' && console.log(err);
+    res.status(500)
+      .json(resBody(false, null, null, err.message));
+  }
+}
+
+export default { logIn, logOut, authorize, getUserInfo }

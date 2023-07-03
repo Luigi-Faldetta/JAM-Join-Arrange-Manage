@@ -33,7 +33,7 @@ router.post('/expense', expense.newExpense)
 router.delete('/expense/:expenseid', expense.deleteExpense)
 router.get('/expenses/:eventid', expense.getExpenses)
 
-// User events
+// User event
 router.post('/useractivity', userEvent.joinEvent)
 router.patch('/useractivity', userEvent.updateEvent)
 router.delete('/useractivity', userEvent.leaveEvent)
@@ -41,10 +41,9 @@ router.delete('/useractivity', userEvent.leaveEvent)
 // Session
 router.post('/userlogin', session.logIn);
 router.get('/userlogout', session.logOut);
-// @ts-ignore
-router.get('/me', session.authorize, (req, res) => { res.send(req.user) })
+router.get('/me', session.authorize, session.getUserInfo)
 
-// Calculations
+// Calculation
 router.get('/calculate/:eventid', calculation.expenseSheet)
 
 // Event chat
