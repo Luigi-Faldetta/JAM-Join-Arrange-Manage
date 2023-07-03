@@ -3,11 +3,18 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface ExpenseState {
     //update interface once types are declared
-    value: string
+    // item: string
+    item: string;
+    cost: string;
+    eventId: string;
+    id?: string;
 }
 
-const initialExpenseState:ExpenseState = {
-    value: ""
+const initialExpenseState: ExpenseState = {
+    item: "",
+    cost: "",
+    eventId: "",
+    id: "",
 }
 
 export const expenseSlice = createSlice({
@@ -15,8 +22,8 @@ export const expenseSlice = createSlice({
     initialState: initialExpenseState,
     reducers: {
         //state type will be Expense when the type is created.
-        createExpense: (state) => { state.value = ""},
-        deleteExpense: (state) => { state.value = ""},
+        createExpense: (state) => { state.item = "" },
+        deleteExpense: (state) => { state.item = "" },
     }
 })
 
@@ -25,9 +32,9 @@ export const expenseListSlice = createSlice({
     initialState: [] as ExpenseState[],
     reducers: {
         //state type will be Expense when the type is created.
-        createExpenseList: (state) => { state = []},
-        deleteExpenseList: (state) => { state = []},
-        updateExpenseList: (state) => { state = []},
+        createExpenseList: (state) => { state = [] },
+        deleteExpenseList: (state) => { state = [] },
+        updateExpenseList: (state) => { state = [] },
     }
 })
 
@@ -37,4 +44,4 @@ export const { createExpenseList, updateExpenseList, deleteExpenseList } = expen
 const expenseReducer = expenseSlice.reducer
 const expenseListReducer = expenseListSlice.reducer
 
-export default {expenseListReducer, expenseReducer}
+export default { expenseListReducer, expenseReducer }

@@ -124,7 +124,7 @@ export const thesisDbApi = createApi({
 
     addExpense: build.mutation<
       ApiResponse<ExpenseState>,
-      Partial<ExpenseState> & Pick<ExpenseState, "value">
+      Partial<ExpenseState> & Pick<ExpenseState, "item">
     >({
       query: (expense) => ({
         url: "expense/",
@@ -136,7 +136,7 @@ export const thesisDbApi = createApi({
 
     calculateExpenses: build.mutation<
       ApiResponse<ExpenseState>,
-      Partial<ExpenseState> & Pick<ExpenseState, "value">
+      Partial<ExpenseState> & Pick<ExpenseState, "item">
     >({
       query: (expense) => ({
         url: "expense/",

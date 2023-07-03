@@ -19,22 +19,11 @@ export default function Todos(): JSX.Element {
   const [doneToDos, setDoneToDos] = useState<ToDoState[]>([]);
 
   const { data, error, isLoading } = useGetToDosQuery(eventId);
-  console.log({ newToDo });
 
 
   useEffect(() => {
     if (data) setToDos(data.data);
-    console.log(toDos)
-    //   if (data) {
-    //     const allToDos = data.data;
-    //     const doneToDos = allToDos.filter((toDo: ToDoState) => toDo.isDone);
-    //     const pendingToDos = allToDos.filter((toDo: ToDoState) => !toDo.isDone);
-    //     setToDos(pendingToDos);
-    //     setDoneToDos(doneToDos);
-    //   }
   }, [data]);
-
-  // console.log(data, "this one");
 
   const handleAddClick = () => {
     if (newToDo.title !== "") {
@@ -44,7 +33,6 @@ export default function Todos(): JSX.Element {
         creatorId: creatorId,
         eventId: eventId,
       };
-      // return console.log({ newToDoItem });
       fetch("https://codeworks-thesis-4063bceaa74a.herokuapp.com/todo", {
         method: "POST",
         headers: {
@@ -54,7 +42,6 @@ export default function Todos(): JSX.Element {
       })
         .then((response) => response.json())
         .then((createdToDo) => {
-          console.log({ createdToDo });
           if (createdToDo.success) {
             setToDos((prevToDos) => [...prevToDos, createdToDo.data]);
           } else { alert(createdToDo.message) }
@@ -62,8 +49,6 @@ export default function Todos(): JSX.Element {
         .catch((error) => {
           console.error("Error creating todo:", error);
         });
-      // console.log(toDos)
-
       setNewToDo({
         title: "",
         isDone: false,
@@ -74,44 +59,6 @@ export default function Todos(): JSX.Element {
     }
   };
 
-
-  // const handleAddClick = () => {
-  //   // console.log(newToDo);
-  //   if (String(newToDo) !== "") {
-  //     const newToDoItem = {
-  //       title: newToDo,
-  //       isDone: false,
-  //       creatorId: creatorId,
-  //       eventId: eventId,
-  //     };
-
-  //     fetch("https://codeworks-thesis-4063bceaa74a.herokuapp.com/todo", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(newToDoItem),
-  //     })
-  //       .then((response) => response.json())
-  //       .then((createdToDo) => {
-  //         console.log(createdToDo);
-  //         setToDos((prevToDos) => [...prevToDos, createdToDo.data]);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error creating todo:", error);
-  //       });
-
-  //     setNewToDo({
-  //       title: "",
-  //       isDone: false,
-  //       id: "",
-  //       creatorId: creatorId,
-  //       eventId: eventId,
-  //     });
-  //   }
-  // };
-
-
   const handleInputChange = (e: any) => {
     const newToDo = {
       title: e.target.value,
@@ -119,9 +66,7 @@ export default function Todos(): JSX.Element {
       creatorId: creatorId,
       eventId: eventId,
     };
-    // console.log({ newToDo });
     setNewToDo(newToDo);
-    // console.log(newToDo)
   };
 
   const handleDeleteClick = (index: number) => {
@@ -132,7 +77,6 @@ export default function Todos(): JSX.Element {
     })
       .then((response) => response.json())
       .then((deletedTodo) => {
-        console.log(deletedTodo);
         setToDos((prevToDos) => {
           const updatedToDos = [...prevToDos];
           updatedToDos.splice(index, 1);
@@ -143,34 +87,6 @@ export default function Todos(): JSX.Element {
         console.error("Error deleting todo:", error);
       });
   };
-
-
-
-  // const handleDoneClick = (index: number) => {
-  //   const todoId = toDos[index].id;
-
-  //   // Update the isDone property of the todo in the database
-  //   fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/todo/${todoId}`, {
-  //     method: "PATCH",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ isDone: true }),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((updatedTodo) => {
-  //       console.log(updatedTodo);
-  //       setToDos((prevToDos) => {
-  //         const updatedToDos = [...prevToDos];
-  //         updatedToDos[index] = { ...updatedToDos[index], isDone: true };
-  //         return updatedToDos;
-  //       });
-  //       setDoneToDos((prevDoneToDos) => [...prevDoneToDos, updatedTodo.data]);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error updating todo:", error);
-  //     });
-  // };
 
   const handleDoneClick = (index: number) => {
     const todoId = toDos[index].id;
@@ -185,7 +101,6 @@ export default function Todos(): JSX.Element {
     })
       .then((response) => response.json())
       .then((updatedTodo) => {
-        console.log(updatedTodo);
         setToDos((prevToDos) => {
           const updatedToDos = [...prevToDos];
           updatedToDos.splice(index, 1); // Remove the todo from Todos
@@ -198,15 +113,10 @@ export default function Todos(): JSX.Element {
       });
   };
 
-
-
-  console.log(doneToDos)
-
   const handleMoveToTodosClick = (index: number) => {
     const doneToDo = doneToDos[index];
     const todoId = doneToDo.id;
 
-    // Update the isDone property of the todo in the database
     fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/todo/${todoId}`, {
       method: "PATCH",
       headers: {
@@ -216,7 +126,6 @@ export default function Todos(): JSX.Element {
     })
       .then((response) => response.json())
       .then((updatedTodo) => {
-        console.log(updatedTodo);
         setDoneToDos((prevDoneToDos) => {
           const updatedDoneToDos = [...prevDoneToDos];
           updatedDoneToDos.splice(index, 1);
@@ -228,9 +137,6 @@ export default function Todos(): JSX.Element {
         console.error("Error updating todo:", error);
       });
   };
-
-
-
 
   return (
     <div className="flex justify-center">

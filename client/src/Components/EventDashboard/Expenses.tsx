@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
+import { useGetExpensesQuery } from "../../services/ThesisDB";
+import { ExpenseState } from "../../reduxFiles/slices/expenses";
+import { useAddExpenseMutation } from "../../services/ThesisDB";
 
 interface Expense {
     item: string;
     cost: string;
     eventId: string;
-    id?: number;
+    id?: string;
 }
 
 
@@ -14,40 +17,17 @@ const purchaserId = "ddad6a7d-d18c-4fd4-96b3-e6814cd3a3e7";
 
 
 export default function Expenses() {
-    const [expenses, setExpenses] = useState<Expense[]>([]);
-    const [newExpense, setNewExpense] = useState<Expense>({ item: "", cost: "", eventId: "", id: 0 });
+    const [expenses, setExpenses] = useState<ExpenseState[]>([]);
+    const [newExpense, setNewExpense] = useState<ExpenseState>({ item: "", cost: "", eventId: "", id: "" });
     const [total, setTotal] = useState<number>(0);
 
-    // useEffect(() => {
-    //     fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/expenses/${eventId}`)
-    //         .then((response) => response.json())
-    //         .then((responseData) => {
-    //             const fetchedExpenses = responseData.data; // Adjust the property name if needed
-    //             console.log(fetchedExpenses);
-    //             setExpenses(fetchedExpenses);
-    //         })
-    //         .catch((error) => {
-    //             console.error('Error fetching expenses:', error);
-    //         });
-    // }, []);
+
+    const { data, error, isLoading } = useGetExpensesQuery(eventId);
+    console.log(data);
 
     useEffect(() => {
-        fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/expenses/${eventId}`)
-            .then((response) => response.json())
-            .then((responseData) => {
-                const fetchedExpenses = responseData.data; // Adjust the property name if needed
-                console.log(fetchedExpenses);
-                if (Array.isArray(fetchedExpenses)) {
-                    setExpenses(fetchedExpenses);
-                } else {
-                    setExpenses([]);
-                }
-            })
-            .catch((error) => {
-                console.error("Error fetching expenses:", error);
-            });
-    }, []);
-
+        if (data) setExpenses(data.data);
+    }, [data]);
 
 
 
@@ -86,7 +66,7 @@ export default function Expenses() {
                     console.log(responseData)
                     const createdExpense = responseData.data; // Adjust the property name if needed
                     setExpenses((prevExpenses) => [...prevExpenses, createdExpense]);
-                    setNewExpense({ item: "", cost: "", eventId: "", id: 0 });
+                    setNewExpense({ item: "", cost: "", eventId: "", id: "" });
                 })
                 .catch((error) => {
                     console.error("Error creating expense:", error);
