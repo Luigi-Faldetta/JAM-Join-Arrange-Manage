@@ -50,9 +50,6 @@ const newEvent = async (req: Request, res: Response) => {
 const getEvent = async (req: Request, res: Response) => {
 
   try {
-    // const event = await Event.findOne({
-    //   where: { eventId: req.params.eventid }
-    // })
     const event = await Event.findOne({
       where: { eventId: req.params.eventid },
       include: [{

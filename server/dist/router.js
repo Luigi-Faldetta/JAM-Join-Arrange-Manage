@@ -40,6 +40,12 @@ router.post('/userlogin', index_1.session.logIn);
 router.get('/userlogout', index_1.session.logOut);
 // Calculations
 router.get('/calculate/:eventid', index_1.calculation.expenseSheet);
+// Event chat
+router.get('/chat/:eventid', index_1.eventChat.getChat);
+router.post('/chat/', index_1.eventChat.newMessage);
+// Email
+router.get('/passwordreset/:userid', index_1.email.resetPassword);
+// Authorization temp test endpoint
 // @ts-ignore
 router.get('/test1', (req, res) => { res.send('All good'); });
 router.get('/test2', index_1.session.authorize, (req, res) => { res.send('All good'); });

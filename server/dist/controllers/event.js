@@ -50,9 +50,6 @@ const newEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
  */
 const getEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // const event = await Event.findOne({
-        //   where: { eventId: req.params.eventid }
-        // })
         const event = yield associations_1.Event.findOne({
             where: { eventId: req.params.eventid },
             include: [{

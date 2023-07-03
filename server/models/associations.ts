@@ -3,6 +3,7 @@ import Event from './event';
 import Todo from './todo';
 import Expense from './expense';
 import UserEvent from './userEvent';
+import EventChat from './eventChat';
 
 Event.belongsToMany(User, {
   through: UserEvent,
@@ -14,15 +15,15 @@ User.belongsToMany(Event, {
   foreignKey: 'userId',
 });
 
-Event.hasMany(UserEvent ,{
+Event.hasMany(UserEvent, {
   foreignKey: 'eventId'
 });
 
-User.hasMany(UserEvent ,{
+User.hasMany(UserEvent, {
   foreignKey: 'userId'
 });
 
-UserEvent.belongsTo(User,{
+UserEvent.belongsTo(User, {
   foreignKey: 'userId'
 });
 
@@ -42,4 +43,20 @@ Expense.belongsTo(User, {
   foreignKey: 'purchaserId',
 });
 
-export { User, Event, UserEvent };
+Event.hasMany(EventChat, {
+  foreignKey: 'eventId'
+});
+
+User.hasMany(EventChat, {
+  foreignKey: 'userId'
+});
+
+EventChat.belongsTo(User, {
+  foreignKey: 'userId'
+});
+
+EventChat.belongsTo(Event, {
+  foreignKey: 'eventId'
+});
+
+export { User, Event, UserEvent, EventChat };

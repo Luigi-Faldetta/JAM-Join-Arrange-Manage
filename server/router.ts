@@ -2,7 +2,7 @@ import routes from 'express';
 const router = routes.Router();
 
 import './models/modelDB'
-import { user, event, todo, expense, userEvent, session, calculation } from './controllers/index'
+import { user, event, todo, expense, userEvent, session, calculation, eventChat, email } from './controllers/index'
 
 router.get('/health', (_req, res) => {
     res.send({ health: 'Server runnning!! =)' })
@@ -45,6 +45,14 @@ router.get('/userlogout', session.logOut);
 // Calculations
 router.get('/calculate/:eventid', calculation.expenseSheet)
 
+// Event chat
+router.get('/chat/:eventid', eventChat.getChat)
+router.post('/chat/', eventChat.newMessage)
+
+// Email
+router.get('/passwordreset/:userid', email.resetPassword)
+
+// Authorization temp test endpoint
 // @ts-ignore
 router.get('/test1', (req, res) => { res.send('All good') })
 router.get('/test2', session.authorize, (req, res) => { res.send('All good') })
