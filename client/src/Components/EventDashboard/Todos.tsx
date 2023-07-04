@@ -3,6 +3,7 @@ import { useGetToDosQuery } from "../../services/ThesisDB";
 import { ToDoState } from "../../reduxFiles/slices/toDos";
 import { useAddToDoMutation } from "../../services/ThesisDB";
 import { useParams } from "react-router-dom";
+import { ImArrowRight, ImArrowLeft } from 'react-icons/im'
 
 export default function Todos(): JSX.Element {
   const { eventid } = useParams();
@@ -183,20 +184,17 @@ export default function Todos(): JSX.Element {
   return (
     <div className="flex justify-center gap-4">
 
-      <div className="w-1/2 h-96 p-4 bg-indigo-950 rounded-xl flex flex-col">
+      <div className="w-1/2 h-96 p-4 bg-gradient-to-r from-indigo-800 to-indigo-950 rounded-xl flex flex-col">
         <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">TODOS</h1>
         <div ref={todosRef} className="w-full h-full flex flex-col overflow-y-auto">
           {toDos.map((toDo, index) => (
-            <div className="flex p-2 border-t border-gray-400 text-white text-xl" key={index}>
+            <div className="flex items-center p-2 border-t border-gray-400 text-white text-xl" key={index}>
               <button
-                className="w-10 text-gray-400"
+                className="w-10 text-gray-400 cursor-pointer"
                 onClick={() => handleDeleteClick(index)}
               >X</button>
               <h3 key={index} className="w-full" >{toDo?.title}</h3>
-              <button
-                className="w-10 text-pink-500 font-black"
-                onClick={() => handleDoneClick(index)}
-              >{'>'}</button>
+              <ImArrowRight className="w-10 fill-pink-500 cursor-pointer" onClick={() => handleDoneClick(index)}/>
             </div>
           ))}
 
@@ -218,20 +216,17 @@ export default function Todos(): JSX.Element {
         </div>
       </div>
 
-      <div className="w-1/2 h-96 p-4 bg-indigo-950 rounded-xl flex flex-col">
+      <div className="w-1/2 h-96 p-4 bg-gradient-to-r from-indigo-950 to-indigo-800 rounded-xl flex flex-col">
         <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">COMPLETED</h1>
         <div className="w-full overflow-y-auto">
           {doneToDos.map((doneToDo, index) => (
-            <div className="flex p-2 border-t border-gray-400 text-white text-xl" key={index}>
-              <button
-                className="w-10 text-pink-500 font-black"
-                onClick={() => handleMoveToTodosClick(index)}
-              >{'<'}</button>
+            <div className="flex items-center p-2 border-t border-gray-400 text-white text-xl" key={index}>
+              <ImArrowLeft  className="w-10 fill-pink-500 cursor-pointer" onClick={() => handleMoveToTodosClick(index)}/>
               <h3 className="w-full ml-1">
                 {doneToDo.title}
               </h3>
               <button
-                className="w-10 text-gray-400"
+                className="w-10 text-gray-400 cursor-pointer"
                 onClick={() => handleDeleteClick(index)}
               >X</button>
             </div>
