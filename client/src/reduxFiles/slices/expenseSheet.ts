@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ExpenseState } from "./expenses";
 import { UserState } from "./users";
 import { useCalculateExpensesQuery } from "../../services/ThesisDB";
@@ -19,17 +19,29 @@ const initialExpenseSheet: ExpenseSheet = {
     indExpenses:[]
 }
 
+export const calculateExpenseSheet = createAsyncThunk(
+    'expensesheet/calculateExpenses',
+    async (eventId:string, {dispatch}) => {
+        try{
+            const response = await useCalculateExpensesQuery(eventId)
+
+            dispatch(updateExpenseSheet(response.data?.data as ExpenseSheet))
+        } catch (error) {
+            console.log("could not calculate expenses.", error);
+        }
+    }
+)
+
 export const ExpenseSheetSlice = createSlice({
-    name: "expense",
+    name: "expenseSheet",
     initialState: initialExpenseSheet,
     reducers: {
-        createExpenseSheet: (state, action: PayloadAction<string>) => {
-            const {data, error, isLoading} = useCalculateExpensesQuery(action.payload);
-            state = data?.data as ExpenseSheet;
+        updateExpenseSheet: (state, action: PayloadAction<ExpenseSheet>) => {
+            state = action.payload
             return state
-         },
+        }
     }
 })
 
-export const { createExpenseSheet } = ExpenseSheetSlice.actions;
+export const {updateExpenseSheet} = ExpenseSheetSlice.actions;
 export const expenseSheetReducer = ExpenseSheetSlice.reducer;

@@ -134,10 +134,7 @@ export const thesisDbApi = createApi({
     }),
 
     calculateExpenses: build.query<ApiResponse<ExpenseSheet>,string>({
-      query: (eventId) => ({
-        url: `expense/${eventId}`,
-        method: "POST",
-      }),
+      query: (eventId) => `calculate/${eventId}`,
     }),
 
     // getExpenses: build.query<ApiResponse<ExpenseState[]>, string>({
