@@ -41,16 +41,14 @@ export default function Expenses() {
 
     useEffect(() => {
         if(data){
+            /**
+             * FIX BELOW ON BACKEND REDEPLOYMENT
+             */
             setExpenseSheet(data)
-            // calculateExpenseSheet(eventid as string)
             setExpenseList(data?.expenses)
             setIndExpenses(data.indExpenses)
         }
     }, [data]);
-    console.log(data);
-    console.log("ExpenseList: ",expenseList);
-    // console.log("ExpenseSheet: ",data);
-
 
     const handleAddClick = async () => {
         if (newExpenseForm.item !== "") {
@@ -63,8 +61,6 @@ export default function Expenses() {
             await addApiExpense(expenseToAdd);
             setExpenseList((expenses) => [...expenses, expenseToAdd])
             //recommends fetching from server and update state with it.
-            // appDispatch(addExpense(expenseToAdd))
-            // appDispatch(calculateExpenseSheet(expenseToAdd.eventId))
         }
         setNewExpenseForm({ item: "", cost: "", eventId: "", purchaserId: "" })
     };
@@ -90,7 +86,6 @@ export default function Expenses() {
     const handleDeleteClick = async (expenseId: string) => {
         await deleteApiExpense(expenseId);
         setExpenseList(expenses => expenses.filter(expense => expense.id !== expenseId))
-        // appDispatch(deleteExpense(expenseId));
     };
 
 
@@ -143,7 +138,7 @@ export default function Expenses() {
 
             </div>
             <div className="w-1/2 h-96 p-4 bg-indigo-950 rounded-xl flex flex-col">
-                <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">BALANCE</h1>
+                <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">PER PERSON SHARE (€{expenseSheet.perPerson})</h1>
                 <div className="w-full">
 
                     {indExpenses.map((indExpense) => (

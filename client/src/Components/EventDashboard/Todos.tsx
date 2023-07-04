@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 
 export default function Todos(): JSX.Element {
   const { eventid } = useParams();
-  console.log(eventid);
   const creatorId = localStorage.getItem("token");
   const [toDos, setToDos] = useState<ToDoState[]>([]);
   const [newToDo, setNewToDo] = useState<ToDoState>({
@@ -68,15 +67,6 @@ export default function Todos(): JSX.Element {
     }
   };
 
-  // const handleInputChange = (e: any) => {
-  //   const newToDo = {
-  //     title: e.target.value,
-  //     isDone: false,
-  //     creatorId: creatorId,
-  //     eventId: eventid,
-  //   };
-  //   setNewToDo(newToDo as any);
-  // };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newToDo = {
@@ -88,11 +78,11 @@ export default function Todos(): JSX.Element {
     setNewToDo(newToDo as any);
   };
 
-  const handleInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      // handleAddClick();
-    }
-  };
+  // const handleInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (e.key === "Enter") {
+  //     // handleAddClick();
+  //   }
+  // };
 
   const handleDeleteClick = (index: number) => {
     const todoId = toDos[index].id;
