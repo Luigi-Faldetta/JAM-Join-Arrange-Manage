@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useJoinActivityMutation,
   useLeaveActivityMutation,
@@ -21,6 +21,7 @@ export default function ToggleButton({
   isLoading,
 }: ToggleButton) {
   const { eventid } = useParams();
+  const navigate = useNavigate()
   const [joinActivity] = useJoinActivityMutation();
   const [leaveActivity] = useLeaveActivityMutation();
   const eventId = eventid;
@@ -47,7 +48,7 @@ export default function ToggleButton({
 
   const onLeave = async (userId: string, eventId: string) => {
     try {
-      await leaveActivity({ userId, eventId });
+       leaveActivity({ userId, eventId }).then(() => navigate('/user-dashboard'))
     } catch (error) {
       console.error(error);
     }
