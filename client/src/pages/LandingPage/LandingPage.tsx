@@ -22,7 +22,7 @@ const LandingPage = ({ data }: any) => {
     >
       <div className="grid max-w-screen-xl px-4 mx-auto xl:gap-0 lg:py-16 lg:grid-cols-12">
         <div className="mr-auto place-self-center lg:col-span-7">
-          {currentRoute === '/' ? (
+          {currentRoute === "/" ? (
             <>
               <h1 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white">
                 Join. Arrange. Manage.
@@ -33,7 +33,10 @@ const LandingPage = ({ data }: any) => {
               </p>
             </>
           ) : (
-            <h1 className="max-w-2xl mb-4 text-4xl font-bold tracking-tight leading-none md:text-5xl xl:text-3xl dark:text-white">You were invited to {data?.data.title}. If you want to join, please log in.</h1>
+            <h1 className="max-w-2xl mb-4 text-4xl font-bold tracking-tight leading-none md:text-5xl xl:text-3xl dark:text-white">
+              You were invited to {data?.data.title}. If you want to join,
+              please log in.
+            </h1>
           )}
           {!isLoggedIn ? (
             <button
@@ -58,7 +61,11 @@ const LandingPage = ({ data }: any) => {
         </div>
         {!isLoggedIn ? (
           <div className={`lg:col-span-5 ${loginFormActive ? "active" : ""}`}>
-            <div className={`login-form lg:flex lg:flex-col ${loginFormActive ? "active" : ""}`}>
+            <div
+              className={`login-form lg:flex lg:flex-col ${
+                loginFormActive ? "active" : ""
+              }`}
+            >
               <LoginForm />
             </div>
             <div>
@@ -67,7 +74,10 @@ const LandingPage = ({ data }: any) => {
           </div>
         ) : (
           <div className="image-container lg:col-span-5">
-            <img src="https://hips.hearstapps.com/hmg-prod/images/delish-190605-raspberry-jam-031-landscape-pf-1560443834.jpg?crop=0.888532477947073xw:1xh;center,top&resize=1200:*" alt="Your Image" />
+            <img
+              src="https://hips.hearstapps.com/hmg-prod/images/delish-190605-raspberry-jam-031-landscape-pf-1560443834.jpg?crop=0.888532477947073xw:1xh;center,top&resize=1200:*"
+              alt="Your Image"
+            />
           </div>
         )}
       </div>

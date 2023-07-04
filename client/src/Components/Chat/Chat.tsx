@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import { AiOutlineComment } from "react-icons/ai";
-import { socket, useGetEventQuery, useGetEventsQuery } from "../../services/ThesisDB";
+import {
+  socket,
+  useGetEventQuery,
+  useGetEventsQuery,
+} from "../../services/ThesisDB";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../../reduxFiles/store";
 import { setEventList } from "../../reduxFiles/slices/events";
 import ChatContainer from "./ChatContainer";
 import { openChat, openWithEventId } from "../../reduxFiles/slices/chat";
 import { useClickAway } from "@uidotdev/usehooks";
-import { HiOutlineChatBubbleLeftRight } from 'react-icons/hi2'
+import { HiOutlineChatBubbleLeftRight } from "react-icons/hi2";
 import "./chatContainer.css";
-
 
 interface Event {
   coverPic: string;
@@ -36,8 +39,8 @@ function Chat() {
   const eventList = useSelector((state: RootState) => state.eventListReducer);
   const { data, error, isLoading } = useGetEventsQuery(userToken as string);
   const ref = useClickAway(() => {
-    setChatDropdown(false)
-  })
+    setChatDropdown(false);
+  });
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -45,16 +48,19 @@ function Chat() {
       dispatch(setEventList(data?.data));
     }
   }, [isLoading, error]);
-    
-    const handleChatClick = () => {
-      setChatDropdown(!chatDropdown);
-    };
-    
-    const handleEventClick = (event: any) => {
-      setSelectedEvent(event);
+
+  const handleChatClick = () => {
+    setChatDropdown(!chatDropdown);
+  };
+
+  const handleEventClick = (event: any) => {
+    setSelectedEvent(event);
     if (event.eventId) {
-      dispatch(openWithEventId(event.eventId))
-      socket.emit("joinRoom", { userId: localStorage.getItem('token') || "", eventId: event.eventId });
+      dispatch(openWithEventId(event.eventId));
+      socket.emit("joinRoom", {
+        userId: localStorage.getItem("token") || "",
+        eventId: event.eventId,
+      });
     }
     setChatDropdown(false);
   };
@@ -71,30 +77,37 @@ function Chat() {
         data-dropdown-placement="bottom"
       >
         <span className="sr-only">Open user menu</span>
-        <HiOutlineChatBubbleLeftRight id="chat-icon"  className="w-8 h-8 md:hover:text-pink-500"/>
+        <HiOutlineChatBubbleLeftRight
+          id="chat-icon"
+          className="w-8 h-8 md:hover:text-pink-500"
+        />
       </button>
       {chatDropdown && (
-  <div className="dropdown-menu" ref={ref}>
-    <ul>
-      {eventList.length ? (
-        eventList.map((event) => (
-          <li
-            key={event.eventId}
-            onClick={() => handleEventClick(event)}
-            className="event-item"
-          >
-            <div className="avatar-wrapper">
-              <img className="avatar" src={event.coverPic} alt={event.title} />
-            </div>
-            <span className="event-title">{event.title}</span>
-          </li>
-        ))
-      ) : (
-        <div>No chats available at the moment.</div>
+        <div className="dropdown-menu" ref={ref}>
+          <ul>
+            {eventList.length ? (
+              eventList.map((event) => (
+                <li
+                  key={event.eventId}
+                  onClick={() => handleEventClick(event)}
+                  className="event-item"
+                >
+                  <div className="avatar-wrapper">
+                    <img
+                      className="avatar"
+                      src={event.coverPic}
+                      alt={event.title}
+                    />
+                  </div>
+                  <span className="event-title">{event.title}</span>
+                </li>
+              ))
+            ) : (
+              <div>No chats available at the moment.</div>
+            )}
+          </ul>
+        </div>
       )}
-    </ul>
-  </div>
-)}
 
       {/* <div className="chat">
       {selectedEvent && <ChatContainer event={selectedEvent} />} 

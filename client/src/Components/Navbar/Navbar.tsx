@@ -16,9 +16,9 @@ function Navbar() {
   const [showDropdownMobile, setDropdownMobile] = useState(false);
   const isLoggedIn = useIsLoggedIn();
   const ref = useClickAway(() => {
-    setShowDropdown(false)
-    setDropdownMobile(false)
-  })
+    setShowDropdown(false);
+    setDropdownMobile(false);
+  });
 
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -50,18 +50,23 @@ function Navbar() {
     <div className="navbar-container bg-white flex justify-center" id="navbar">
       <nav className="w-4/5 border-gray-200 dark:bg-gray-900">
         <div className="flex flex-wrap items-center justify-between mx-auto py-3">
-
           <div className="flex items-center">
-
             <Link to="/" className="flex mr-12 items-center">
-              <img src="logo-jam.png" className="h-12 mr-3" alt="Flowbite Logo" />
-              <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">JAM</span>
+              <img
+                src="logo-jam.png"
+                className="h-12 mr-3"
+                alt="Flowbite Logo"
+              />
+              <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+                JAM
+              </span>
             </Link>
 
             {location.pathname === "/" && (
               <div
-                className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${showDropdownMobile ? "block" : "hidden"
-                  }`}
+                className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${
+                  showDropdownMobile ? "block" : "hidden"
+                }`}
                 id="mobile-menu-2"
               >
                 <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
@@ -75,7 +80,9 @@ function Navbar() {
                       duration={500}
                       className="block py-2 px-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
                       aria-current="page"
-                    >Home</Scroll>
+                    >
+                      Home
+                    </Scroll>
                   </li>
                   <li>
                     <Scroll
@@ -86,7 +93,9 @@ function Navbar() {
                       offset={-72}
                       duration={500}
                       className="block py-2 pl-3 pr-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
-                    >About</Scroll>
+                    >
+                      About
+                    </Scroll>
                   </li>
                   <li>
                     <Scroll
@@ -97,19 +106,24 @@ function Navbar() {
                       offset={-100}
                       duration={500}
                       className="block py-2 pl-3 pr-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
-                    >FAQs</Scroll>
+                    >
+                      FAQs
+                    </Scroll>
                   </li>
                 </ul>
               </div>
             )}
-
           </div>
 
           <div>
             {isLoggedIn && (
               <div className="flex items-center gap-5">
-
-                <Link to="/user-dashboard" className="font-medium  text-gray-900  md:hover:text-pink-500 md:p-0 ">Dashboard</Link>
+                <Link
+                  to="/user-dashboard"
+                  className="font-medium  text-gray-900  md:hover:text-pink-500 md:p-0 "
+                >
+                  Dashboard
+                </Link>
 
                 <Chat />
 
@@ -125,11 +139,12 @@ function Navbar() {
                   <span className="sr-only">Open user menu</span>
                   <img
                     className="profile-pic w-8 h-8 rounded-full"
-                    src={data?.data.profilePic || "./no-profile-picture-icon.png"}
+                    src={
+                      data?.data.profilePic || "./no-profile-picture-icon.png"
+                    }
                     alt=""
                   />
                 </button>
-
               </div>
             )}
 
@@ -180,12 +195,8 @@ function Navbar() {
                 </svg>
               </button>
             )}
-
           </div>
-
         </div>
-
-
       </nav>
     </div>
   );

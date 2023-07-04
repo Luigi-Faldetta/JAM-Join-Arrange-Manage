@@ -13,8 +13,8 @@ function App() {
     state.logoutReducer.valueOf()
   );
   const chatState = useSelector((state: RootState) =>
-  state.chatReducer.valueOf()
-  ) as { isOpen: boolean, eventId: string};
+    state.chatReducer.valueOf()
+  ) as { isOpen: boolean; eventId: string };
 
   // useEffect(() => {
   //   console.log("logout state ==> ", chatState);

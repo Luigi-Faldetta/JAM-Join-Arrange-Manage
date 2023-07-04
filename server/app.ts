@@ -17,14 +17,14 @@
 // app.use(router);
 
 // export default app;
-import 'dotenv/config';
-import express from 'express';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
-import router from './router.js';
-import http from 'http';
-import { Server, Socket } from 'socket.io';
-import { addMessageSocket } from './controllers/socketMessages.js';
+import "dotenv/config";
+import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import router from "./router.js";
+import http from "http";
+import { Server, Socket } from "socket.io";
+import { addMessageSocket } from "./controllers/socketMessages.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -42,7 +42,7 @@ app.use(router);
 io.on("connection", (socket: Socket) => {
   console.log("A user connected");
 
-  socket.on("joinRoom", (info: { eventId: string, userId: string}) => {
+  socket.on("joinRoom", (info: { eventId: string; userId: string }) => {
     socket.join(info.eventId);
     console.log(`User ${info.userId} joined room: ${info.eventId}`);
   });
@@ -52,28 +52,30 @@ io.on("connection", (socket: Socket) => {
     console.log(`User left room: ${eventId}`);
   });
 
-  socket.on("newMessage", async ({
-    userId,
-    eventId,
-    message,
-  }: {
-    userId: string;
-    eventId: string;
-    message: string;
-  }) => {
-    // save msg to database, then send back he message
-    const msgCreated = await addMessageSocket({
-      message,
+  socket.on(
+    "newMessage",
+    async ({
       userId,
-      eventId
-    })
-    io.to(eventId).emit("newMessage", msgCreated);
-  });
+      eventId,
+      message,
+    }: {
+      userId: string;
+      eventId: string;
+      message: string;
+    }) => {
+      // save msg to database, then send back he message
+      const msgCreated = await addMessageSocket({
+        message,
+        userId,
+        eventId,
+      });
+      io.to(eventId).emit("newMessage", msgCreated);
+    }
+  );
 
   socket.on("disconnect", () => {
     console.log("A user disconnected");
   });
 });
-
 
 export { app, server, io };

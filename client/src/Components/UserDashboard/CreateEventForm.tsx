@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch } from "react-redux";
 import {
+  addEventToList,
   createEvent,
   EventState,
 } from "../../reduxFiles/slices/events";
@@ -64,7 +65,12 @@ function CreateEventForm() {
       token: userToken as string,
       event: eventFormData,
     });
-    dispatch(createEvent((eventCreated as ApiResponse<EventState>).data));
+
+    if ("data" in eventCreated && eventCreated.data.success) {
+      console.log("event created in DB== > ", eventCreated);
+      dispatch(createEvent(eventCreated.data.data));
+      dispatch(addEventToList(eventCreated.data.data));
+    }
     setOpen(false);
     // Send another request with eventID, userID (host), isHost (true)
   };
@@ -81,7 +87,6 @@ function CreateEventForm() {
           </div>
 
           <div className="flex flex-col justify-center text-center bg-gray-100 rounded-md p-4 mb-5">
-
             <div className="">
               <label
                 htmlFor="eventName"
@@ -118,7 +123,7 @@ function CreateEventForm() {
               selectsStart
               placeholderText="Select date & time"
               showTimeSelect
-              id='event-date' 
+              id="event-date"
               selected={eventDate}
               onChange={(date) => setEventDate(date)}
               dateFormat="EEE MMM d 🗓 h:mm aa 🕣"

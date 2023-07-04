@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { useGetUsersQuery } from "../../services/ThesisDB";
 import { UserState } from "../../reduxFiles/slices/users";
 import { useParams } from "react-router-dom";
@@ -30,12 +30,14 @@ export default function Attendees() {
   }, [data]);
 
   const handlePrevious = () => {
-    setActiveIndex(prevIndex => (prevIndex > 0 ? prevIndex - 1 : 0));
+    setActiveIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
   };
 
   const handleNext = () => {
     const lastIndex = Math.max(attendees.length - imagesPerSlide, 0);
-    setActiveIndex(prevIndex => (prevIndex < lastIndex ? prevIndex + 1 : prevIndex));
+    setActiveIndex((prevIndex) =>
+      prevIndex < lastIndex ? prevIndex + 1 : prevIndex
+    );
   };
 
   const renderImages = () => {
@@ -61,10 +63,15 @@ export default function Attendees() {
 
   return (
     <>
-      <h2 className='absolute mt-1 ml-3 text-white text-center font-bold'>x{attendees.length} ATTENDEES</h2>
+      <h2 className="absolute mt-1 ml-3 text-white text-center font-bold">
+        x{attendees.length} ATTENDEES
+      </h2>
       <div className="carousel carousel-center rounded-box w-4/5 mx-auto flex justify-center">
         {activeIndex > 0 && (
-          <button className="carousel-arrow left-arrow" onClick={handlePrevious}>
+          <button
+            className="carousel-arrow left-arrow"
+            onClick={handlePrevious}
+          >
             <span className="carousel-arrow-icon text-4xl">&lt;</span>
           </button>
         )}

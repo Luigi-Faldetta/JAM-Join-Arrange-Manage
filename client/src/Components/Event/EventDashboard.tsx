@@ -9,7 +9,7 @@ import { useGetEventQuery } from "../../services/ThesisDB";
 import { useIsLoggedIn } from "../../utils/useIsLoggedIn";
 import { EventState } from "../../reduxFiles/slices/events";
 import EventLink from "../EventDashboard/EventLink";
-import "./EventDashboard.css"
+import "./EventDashboard.css";
 import LandingPage from "../../pages/LandingPage/LandingPage";
 
 export default function Event() {
@@ -39,49 +39,50 @@ export default function Event() {
       return;
     }
 
-    const isJoinedCheck = eventData.data.UserEvents.reduce((acc: any, cur: any) => {
-      if (cur.userId === loggedUser) {
-        return true;
-      } else {
-        return acc;
-      }
-    }, false);
+    const isJoinedCheck = eventData.data.UserEvents.reduce(
+      (acc: any, cur: any) => {
+        if (cur.userId === loggedUser) {
+          return true;
+        } else {
+          return acc;
+        }
+      },
+      false
+    );
 
     if (isJoinedCheck !== isJoined) {
       setIsJoined(isJoinedCheck);
     }
   }, [eventData, loggedUser]);
 
-
   return (
     <>
-      {isLoggedIn && !isLoading && eventData ? (<>
+      {isLoggedIn && !isLoading && eventData ? (
+        <>
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-4/5">
+              <EventData
+                eventData={eventData}
+                userIsHost={userIsHost}
+                showTodos={showTodos}
+                setShowTodos={setShowTodos}
+              />
 
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-4/5">
+              <ToggleButton
+                isJoined={isJoined}
+                loggedUser={loggedUser}
+                setIsJoined={setIsJoined}
+                isLoading={isLoading}
+              />
+            </div>
 
-            <EventData eventData={eventData} userIsHost={userIsHost} showTodos={showTodos} setShowTodos={setShowTodos}/>
+            <div className="w-4/5">{showTodos ? <Todos /> : <Expenses />}</div>
 
-            <ToggleButton
-              isJoined={isJoined}
-              loggedUser={loggedUser}
-              setIsJoined={setIsJoined}
-              isLoading={isLoading}
-            />
-
+            <div className="w-4/5 h-36 bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 border-2 border-gray-300 rounded-xl">
+              <Attendees />
+            </div>
           </div>
-
-          <div className="w-4/5">
-            {showTodos ? (<Todos />) : (<Expenses />)}
-          </div>
-
-          <div className="w-4/5 h-36 bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 border-2 border-gray-300 rounded-xl" >
-            <Attendees />
-          </div>
-
-        </div>
-      </>
-
+        </>
       ) : (
         <>
           <LandingPage eventData={eventData} />

@@ -4,7 +4,12 @@ import { RootState, useAppDispatch } from "../../reduxFiles/store";
 import { useAuth } from "../../utils/useAuth";
 import "./chatContainer.css";
 import { useSelector } from "react-redux";
-import { socket, useAddMsgMutation, useGetEventQuery, useGetMsgsQuery } from "../../services/ThesisDB";
+import {
+  socket,
+  useAddMsgMutation,
+  useGetEventQuery,
+  useGetMsgsQuery,
+} from "../../services/ThesisDB";
 import moment from "moment";
 import { MsgState, addMessage, setMessages } from "../../reduxFiles/slices/msg";
 import { ColorRing } from "react-loader-spinner";
@@ -23,9 +28,14 @@ function ChatContainer() {
   // useEffect(() => {
   //   console.log("Chat contaiiner comp ==> ", eventId)
   // }, [eventId])
-  const {data: dataevent} = useGetEventQuery(eventId as string);
-// console.log(dataevent?.data.title, 'this is event')
-  const { data: _data, isSuccess ,refetch, isLoading } = useGetMsgsQuery(eventId as string);
+  const { data: dataevent } = useGetEventQuery(eventId as string);
+  // console.log(dataevent?.data.title, 'this is event')
+  const {
+    data: _data,
+    isSuccess,
+    refetch,
+    isLoading,
+  } = useGetMsgsQuery(eventId as string);
   const data = _data?.data;
   const handleMessageSubmit = async (message: string) => {
     try {
@@ -46,13 +56,11 @@ function ChatContainer() {
     }
   };
 
-  useEffect(()=> {
+  useEffect(() => {
     socket.on("newMessage", (res) => {
-      dispatch(addMessage(res.data))
-  });
-    
-  }, [socket])
-
+      dispatch(addMessage(res.data));
+    });
+  }, [socket]);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -69,8 +77,6 @@ function ChatContainer() {
       }
     }
   }, [data, isLoading]);
-
-
 
   return (
     <div className="chat-container">
@@ -89,13 +95,7 @@ function ChatContainer() {
             ariaLabel="blocks-loading"
             wrapperStyle={{}}
             wrapperClass="blocks-wrapper"
-            colors={[
-              "#e15b64",
-              "#f47e60",
-              "#f8b26a",
-              "#abbd81",
-              "#849b87",
-            ]}
+            colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
           />
         ) : (
           isSuccess && <Msg messages={messages} userId={userId} />
@@ -118,7 +118,6 @@ function ChatContainer() {
       </div>
     </div>
   );
-        }
+}
 
-export default ChatContainer
-
+export default ChatContainer;

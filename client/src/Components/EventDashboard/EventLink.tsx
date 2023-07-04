@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import '../Event/EventDashboard.css'
-import { PiCopyBold } from 'react-icons/pi'
-
+import "../Event/EventDashboard.css";
+import { PiCopyBold } from "react-icons/pi";
 
 function EventLink({ eventid }: any) {
   const [isCopied, setisCopied] = useState(false);
@@ -18,8 +17,11 @@ function EventLink({ eventid }: any) {
     <div>
       {/* Share this link with your friends: */}
       <button className="btn" onClick={handleCopyLink}>
-       COPY LINK
-        <PiCopyBold size={30} className={ isCopied ? "fill-green-600" : "fill-gray-400"} />
+        COPY LINK
+        <PiCopyBold
+          size={30}
+          className={isCopied ? "fill-green-600" : "fill-gray-400"}
+        />
       </button>
     </div>
   );
