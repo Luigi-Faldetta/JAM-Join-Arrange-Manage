@@ -23,7 +23,7 @@ function App() {
   return (
     <>
       <div className="App">
-        <Navbar />
+        {/* <Navbar /> */}
         {logoutState ? <Logout /> : null}
         {chatState.isOpen ? <ChatContainer /> : null}
         <Outlet />
