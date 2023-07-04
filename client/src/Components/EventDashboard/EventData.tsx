@@ -15,18 +15,21 @@ import { FaLocationDot } from 'react-icons/fa6'
 export default function EventMini({
   eventData,
   userIsHost,
+  showTodos,
+  setShowTodos
 }: {
   eventData: ApiResponse<EventState>;
   userIsHost: boolean;
+  showTodos: boolean;
+  setShowTodos: any
 }) {
 
-  // const [showTodos, setShowTodos] = useState<boolean>(true);
   const { eventid } = useParams();
 
-  // const handleToggle = () => {
-  //   setShowTodos((prevShowTodos) => !prevShowTodos);
-  // };
-
+  const handleToggle = () => {
+    //@ts-ignore
+    setShowTodos((prevShowTodos) => !prevShowTodos);
+  };
 
   return (
     <div>
@@ -46,14 +49,14 @@ export default function EventMini({
                 </h3>
 
                 <div className="flex items-center">
-                  <FaCalendarAlt className="fill-gray-400"/>
+                  <FaCalendarAlt className="fill-gray-400" />
                   <h4 className="ml-1 text-lg text-gray-400">
                     {moment(eventData.data.date).format("ddd, Do MMM - h:mm a")}
                   </h4>
                 </div>
 
                 <div className="flex items-center">
-                  <FaLocationDot className="fill-gray-400"/>
+                  <FaLocationDot className="fill-gray-400" />
                   <h4 className="ml-1 text-lg text-gray-400">
                     {eventData.data.location}
                   </h4>
@@ -67,32 +70,32 @@ export default function EventMini({
 
             </div>
 
-            <div className="flex justify-end w-2/5">
+            <div className="flex flex-col justify-between items-end w-2/5">
 
-              <div className="event-icons">
-                <RiDeleteBinLine size={30} />
-                <PiNotePencilBold size={30} />
+              <div className="flex event-icons">
+                {userIsHost ? (
+                  <>
+                    <RiDeleteBinLine size={30} />
+                    <PiNotePencilBold size={30} />
+                  </>) : ''}
                 <EventLink eventid={eventid} />
               </div>
 
 
-              {/* {userIsHost ? (<DeleteEventButton></DeleteEventButton> ) : (
-                <h2>not host</h2>
-              )}
-              {eventData ? (eventData.data.UserEvents.map((user)=>{
+
+              {/* {eventData ? (eventData.data.UserEvents.map((user)=>{
               if (user.userID === userToken && user.isHost === true ) return 
             })   : (
               <h2> SOMETHING </h2>
-              )}
-              // DELETE BUTTON FROM THE ELSE, ONLY NEEDED SINCE WE DONT HAVE USER TOKEN YET */}
-              {/*              
-              <button              
-              onClick={handleToggle}
-                className="btn btn-primary"
+              )} */}
+
+              <button
+                onClick={handleToggle}
+                className="btn bg-pink-500 text-white"
               >
                 {showTodos ? "Expenses" : "Todos"}
               </button>
-               */}
+
             </div>
 
 
