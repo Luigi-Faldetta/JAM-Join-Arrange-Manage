@@ -7,7 +7,7 @@ import { useAppDispatch } from "../../reduxFiles/store";
 import { openLogout } from "../../reduxFiles/slices/logout";
 import { useIsLoggedIn } from "../../utils/useIsLoggedIn";
 import { useLocation } from "react-router-dom";
-
+import { useClickAway } from "@uidotdev/usehooks";
 import { useGetUserQuery } from "../../services/ThesisDB";
 import Chat from "../Chat/Chat";
 
@@ -15,6 +15,10 @@ function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showDropdownMobile, setDropdownMobile] = useState(false);
   const isLoggedIn = useIsLoggedIn();
+  const ref = useClickAway(() => {
+    setShowDropdown(false)
+    setDropdownMobile(false)
+  })
 
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -37,7 +41,6 @@ function Navbar() {
   };
 
   const uid = localStorage.getItem("token");
-  useAuth();
   //@ts-ignore
   const { data } = useGetUserQuery(uid);
 
@@ -56,8 +59,8 @@ function Navbar() {
             </span>
           </Link>
           {isLoggedIn && <Chat />}
-          {isLoggedIn && (
             <div className="flex items-center md:order-2">
+          {isLoggedIn && (
               <button
                 type="button"
                 className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -74,8 +77,9 @@ function Navbar() {
                   alt=""
                 />
               </button>
+                )}
               {showDropdown && (
-                <div className="dropdown-menu">
+                <div className="dropdown-menu" ref={ref}>
                   <ul>
                     <li>
                       <Link to="/profile" className="dropdown-item" onClick={handleAvatarClick}>
@@ -94,7 +98,7 @@ function Navbar() {
                     </li>
                   </ul>
                 </div>
-              )}
+                  )}
               {location.pathname === "/" && (
                 <button
                   data-collapse-toggle="mobile-menu-2"
@@ -121,14 +125,14 @@ function Navbar() {
                 </button>
               )}
             </div>
-          )}
+
           <div
-            className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${
+            className={`items-center justify-between w-full md:flex md:w-auto md:order-1  ${
               showDropdownMobile ? "block" : "hidden"
             }`}
+            ref={ref}
             id="mobile-menu-2"
           >
-            {location.pathname === "/" ? (
               <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                 <li>
                   {/* <Link to="/" className="dropdown-item"> */}
@@ -174,8 +178,8 @@ function Navbar() {
                   {/* </Link> */}
                 </li>
               </ul>
-            ) : null}
           </div>
+          
         </div>
       </nav>
     </div>
