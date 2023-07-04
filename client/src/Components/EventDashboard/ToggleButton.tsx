@@ -57,7 +57,7 @@ export default function ToggleButton({
   // JOIN / LEAVE
 
   return (
-      <div className="absolute">
+      <div className="absolute bottom-0">
         <button
           onClick={isJoined ? handleLeave : handleJoin}
           className="btn bg-white m-10"
