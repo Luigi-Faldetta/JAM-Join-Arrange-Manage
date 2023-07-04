@@ -82,7 +82,7 @@ function Navbar() {
                   <li>
                     <Link
                       to="/profile"
-                        id="profile-btn"
+                      id="profile-btn"
                       className="dropdown-item"
                       onClick={handleAvatarClick}
                     >
@@ -144,7 +144,7 @@ function Navbar() {
                 <Scroll
                   onClick={handleMobileMenu}
                   to="hero"
-                    id="tohero"
+                  id="tohero"
                   spy={true}
                   smooth={true}
                   offset={-80}
@@ -161,7 +161,7 @@ function Navbar() {
                 <Scroll
                   onClick={handleMobileMenu}
                   to="about"
-                    id="toabout"
+                  id="toabout"
                   spy={true}
                   smooth={true}
                   offset={-83}
@@ -177,7 +177,7 @@ function Navbar() {
                 <Scroll
                   onClick={handleMobileMenu}
                   to="faqs"
-                    id="tofaqs"
+                  id="tofaqs"
                   spy={true}
                   smooth={true}
                   offset={-100}
