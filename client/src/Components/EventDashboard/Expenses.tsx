@@ -12,8 +12,8 @@ export default function Expenses() {
     const { eventid } = useParams();
     const appDispatch = useAppDispatch()
     const purchaserId = localStorage.getItem("token")
-    // const [deleteExpense] = useDeleteExpenseMutation()
-    // const [addExpense] = useAddExpenseMutation()
+    const [deleteApiExpense] = useDeleteExpenseMutation()
+    const [addApiExpense] = useAddExpenseMutation()
 
     const [expenseSheet, setExpenseSheet] = useState<ExpenseSheet>({
         expenses:[],
@@ -22,6 +22,7 @@ export default function Expenses() {
         perPerson:0,
         indExpenses:[]
     });
+    const [expenseList, setExpenseList] = useState<ExpenseState[]>([]);
 
     //it might be easier if we can make the use state type ExpenseState, but for now I needed it to work.
     const [newExpenseForm, setNewExpenseForm] = useState<{item:string, cost:string, eventId:string, purchaserId:string}>({ item: "", cost: "", eventId: "", purchaserId: "" });
@@ -31,13 +32,17 @@ export default function Expenses() {
     const { data, error, isLoading } = useCalculateExpensesQuery(eventid as string);
 
     console.log("data: ",data);
-    // useEffect(() => {
-    //     if (data) {
-    //         setExpenseSheet(data.data);
-    //         console.log("data.data: ", data.data)
-    //     }
-    // }, [expenseSheet.expenses, expenseSheet.attendees]);
-
+    if(data){
+    useEffect(() => {
+        if (data) {
+            setExpenseSheet(data as ExpenseSheet);
+            setExpenseList(data.expenses as ExpenseState[])
+            console.log("data.data: ", data)
+        }
+    }, []);
+    }
+    console.log("ExpenseList: ",expenseList);
+    console.log("ExpenseSheet: ",expenseSheet);
 
 
     const handleAddClick = async () => {
@@ -48,6 +53,8 @@ export default function Expenses() {
                 eventId: eventid as string,
                 purchaserId: purchaserId as string,
             };
+            setExpenseList(expenses => [...expenses, expenseToAdd])
+            addApiExpense(expenseToAdd);
             appDispatch(addExpense(expenseToAdd))
         }
         setNewExpenseForm({ item: "", cost: "", eventId: "", purchaserId: "" })
@@ -72,6 +79,8 @@ export default function Expenses() {
 
 
     const handleDeleteClick = async (expenseId: string) => {
+        setExpenseList(expenses => expenses.filter(expense => expense.Id !== exp))
+        deleteApiExpense(expenseId);
         appDispatch(deleteExpense(expenseId));
     };
 
@@ -83,7 +92,7 @@ export default function Expenses() {
         <div className="flex justify-center">
             <div className="w-4/5 mx-20 relative bg-blue-500 rounded-lg flex flex-col items-center mt-36 h-[460px]">
                 <h1 className="p-6 text-2xl text-white">Expenses</h1>
-                <div className="absolute top-6 right-6 text-2xl text-red-600">Total:  {`$${data?.data.total}`}</div>
+                <div className="absolute top-6 right-6 text-2xl text-red-600">Total:  {`$${data?.total}`}</div>
                 <div className="flex items-center" key={newExpenseForm.purchaserId}>
                     <input
                         name="item"
@@ -103,7 +112,7 @@ export default function Expenses() {
                     />
                     <button onClick={handleAddClick} className="ml-3 p-1 w-8 text-lg rounded-md border border-slate-50">&#10133;</button>
                 </div>
-                {expenseSheet.expenses.map((expense) => (
+                {data?.expenses.map((expense) => (
                     <div className="flex items-center" key={expense?.purchaserId}>
                         <button
                             className="text-white rounded-md text-xl"

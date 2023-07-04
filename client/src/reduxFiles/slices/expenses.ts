@@ -4,6 +4,7 @@ import { calculateExpenseSheet } from './expenseSheet';
 import store from '../store';
 
 export interface ExpenseState {
+    id?:string,
     item: string;
     cost: number;
     eventId: string;
@@ -11,6 +12,7 @@ export interface ExpenseState {
 }
 
 const initialExpenseState: ExpenseState = {
+    id:"",
     item: "",
     cost: 0,
     eventId: "",
@@ -21,7 +23,7 @@ export const expenseSlice = createSlice({
     name: "expense",
     initialState: initialExpenseState,
     reducers: {
-        addExpense: (state, action: PayloadAction<ExpenseState>) => { 
+        addExpense: (state, action: PayloadAction<Partial<ExpenseState> & Pick<ExpenseState, "cost" | "eventId" | "purchaserId" | "item">>) => { 
             state= action.payload 
             store.dispatch(calculateExpenseSheet(action.payload.eventId))
         },
