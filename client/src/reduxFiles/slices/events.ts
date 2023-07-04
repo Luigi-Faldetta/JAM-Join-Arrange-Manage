@@ -59,6 +59,17 @@ export const eventListSlice = createSlice({
     updateEventList: (state) => {
       state = [];
     },
+    deleteEventFromList: (state, action) => {
+      console.log("REDUX DEUB SESH ==> ", action.payload);
+      return [...state].filter((ev) => {
+        console.log("REDUX V@ ==> ", ev.eventId, ev.eventId !== action.payload);
+        return ev.eventId !== action.payload;
+      });
+    },
+    addEventToList: (state, action) => {
+      console.log("Event in redux :  ", action.payload);
+      return [...state, action.payload];
+    },
     setEventList: (_state, action) => {
       // console.log(action);
       return action.payload;
@@ -72,6 +83,8 @@ export const {
   updateEventList,
   deleteEventList,
   setEventList,
+  deleteEventFromList,
+  addEventToList,
 } = eventListSlice.actions;
 
 const eventReducer = eventSlice.reducer;

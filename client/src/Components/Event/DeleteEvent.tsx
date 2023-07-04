@@ -1,21 +1,46 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDeleteEventMutation } from "../../services/ThesisDB";
+import { useAppDispatch } from "../../reduxFiles/store";
+import { deleteEventFromList } from "../../reduxFiles/slices/events";
 
 interface DeleteEventProps {
   setDeleteModalOpen: (isOpen: boolean) => void;
 }
 
 function DeleteEvent({ setDeleteModalOpen }: DeleteEventProps) {
+  const [errorMessage, setErrorMessage] = useState("");
+  const [deleteEvent] = useDeleteEventMutation();
   const navigate = useNavigate();
+  const { eventid } = useParams();
+  const dispatch = useAppDispatch();
 
   function handleCancelDelete() {
+    console.log("hello");
     setDeleteModalOpen(false);
   }
 
-  function handleDelete() {
-    //delete function here
-    navigate("/user-dashboard");
-    setDeleteModalOpen(false);
+  async function handleDelete() {
+    console.log("hello");
+
+    try {
+      const res = await deleteEvent(eventid as string);
+      console.log(" deleted event => ", res);
+      if ("data" in res && res.data.success) {
+        // event has been deleted
+        dispatch(deleteEventFromList(eventid));
+        navigate("/user-dashboard");
+        setDeleteModalOpen(false);
+      } else if ("error" in res && res.error) {
+        console.log("hi ", res);
+        setErrorMessage((res as any).error.data.message);
+        // display the error message
+      }
+      //@ts-ignore
+      // dispatch(deleteEvent((deletedEvent as any).data));
+    } catch (error) {
+      console.log("error in delete", error);
+    }
   }
 
   return (
@@ -63,6 +88,7 @@ function DeleteEvent({ setDeleteModalOpen }: DeleteEventProps) {
                       <p className="text-sm text-gray-500">
                         Your friends will be sad 😔
                       </p>
+                      {errorMessage ? <p>{errorMessage}</p> : null}
                     </div>
                   </div>
                 </div>
@@ -98,6 +124,10 @@ export default function DeleteEventButton() {
     setDeleteModalOpen(true);
     console.log("event delete button clicked");
   };
+
+  useEffect(() => {
+    console.log("is delete modal open : ", deleteModalOpen);
+  }, [deleteModalOpen]);
 
   return (
     <>

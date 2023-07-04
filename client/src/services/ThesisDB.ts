@@ -54,6 +54,7 @@ export const thesisDbApi = createApi({
 
     getEvents: build.query<ApiResponse<EventState[]>, string>({
       query: (userId) => ({ url: `events/${userId}` }),
+      providesTags: ["EventState"],
     }),
 
     getEvent: build.query<ApiResponse<EventState>, string>({
@@ -77,6 +78,7 @@ export const thesisDbApi = createApi({
         url: `event/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["EventState"],
     }),
 
     // Users
@@ -211,7 +213,7 @@ export const thesisDbApi = createApi({
         if (!eventId) {
           throw new Error();
         }
-        return ({ url: `chat/${eventId}` });
+        return { url: `chat/${eventId}` };
       },
     }),
 

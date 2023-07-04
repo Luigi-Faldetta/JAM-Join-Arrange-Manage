@@ -16,11 +16,13 @@ function DeleteEvent({ setDeleteModalOpen }: DeleteEventProps) {
   const navigate = useNavigate();
 
   function handleCancelDelete() {
+    console.log("hello in cancel");
     setDeleteModalOpen(false);
   }
 
   async function handleDelete(e: any) {
-    // e.preventDefault();
+    console.log("hello");
+    e.preventDefault();
     const { eventid } = useParams();
 
     try {
