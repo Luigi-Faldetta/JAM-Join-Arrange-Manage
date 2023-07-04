@@ -4,14 +4,10 @@ import { ToDoState } from "../../reduxFiles/slices/toDos";
 import { useAddToDoMutation } from "../../services/ThesisDB";
 import { useParams } from "react-router-dom";
 
-// const eventId = "d2913de4-1ef3-4f3a-b885-9e2a8120611b";
-
-// const creatorId = "ddad6a7d-d18c-4fd4-96b3-e6814cd3a3e7";
-
 export default function Todos(): JSX.Element {
   const { eventid } = useParams();
   console.log(eventid);
-  const creatorId = localStorage.getItem('token');
+  const creatorId = localStorage.getItem("token");
   const [toDos, setToDos] = useState<ToDoState[]>([]);
   const [newToDo, setNewToDo] = useState<ToDoState>({
     title: "",
@@ -42,7 +38,7 @@ export default function Todos(): JSX.Element {
         creatorId: creatorId,
         eventId: eventid,
       };
-      console.log(newToDoItem)
+      console.log(newToDoItem);
       fetch("https://codeworks-thesis-4063bceaa74a.herokuapp.com/todo", {
         method: "POST",
         headers: {
@@ -71,7 +67,17 @@ export default function Todos(): JSX.Element {
     }
   };
 
-  const handleInputChange = (e: any) => {
+  // const handleInputChange = (e: any) => {
+  //   const newToDo = {
+  //     title: e.target.value,
+  //     isDone: false,
+  //     creatorId: creatorId,
+  //     eventId: eventid,
+  //   };
+  //   setNewToDo(newToDo as any);
+  // };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newToDo = {
       title: e.target.value,
       isDone: false,
@@ -79,6 +85,12 @@ export default function Todos(): JSX.Element {
       eventId: eventid,
     };
     setNewToDo(newToDo as any);
+  };
+
+  const handleInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleAddClick();
+    }
   };
 
   const handleDeleteClick = (index: number) => {
@@ -170,6 +182,7 @@ export default function Todos(): JSX.Element {
             className="w-60 h-10"
             value={newToDo.title}
             onChange={handleInputChange}
+            onKeyPress={handleInputKeyPress}
           />
           <button
             onClick={handleAddClick}
