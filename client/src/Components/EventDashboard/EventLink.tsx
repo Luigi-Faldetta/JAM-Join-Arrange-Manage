@@ -1,5 +1,8 @@
 import React from "react";
-import './eventDashboard.css'
+import '../Event/EventDashboard.css'
+import { PiCopyBold } from 'react-icons/pi'
+
+
 function EventLink({ eventid }: any) {
   const handleCopyLink = () => {
     const link = "http://localhost:3000/event-dashboard/" + eventid;
@@ -10,9 +13,10 @@ function EventLink({ eventid }: any) {
 
   return (
     <div>
-      Share this link with your friends:
+      {/* Share this link with your friends: */}
       <button className="btn" onClick={handleCopyLink}>
         Copy Link
+        <PiCopyBold size={30} />
       </button>
     </div>
   );
