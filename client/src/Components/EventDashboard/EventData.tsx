@@ -37,10 +37,10 @@ export default function EventMini({
         <>
           <div className="flex h-38 justify-between gap-2 mt-6">
 
-            <div className="flex w-3/5 gap-3">
+            <div className="flex w-3/5 h-36 gap-3">
 
-              <div className="flex shrink-0 w-48 bg-slate-400 border-4 border-pink-500 rounded-xl overflow-hidden">
-                <img src={eventData.data.coverPic} alt="Event picture"></img>
+              <div className="flex shrink-0 grow-0 w-48 h-36 bg-slate-400 border-4 border-pink-500 rounded-xl overflow-hidden">
+                <img className="w-full h-full object-cover" src={eventData.data.coverPic? eventData.data.coverPic : 'https://cdn1.vectorstock.com/i/1000x1000/42/60/meeting-people-icon-simple-style-vector-22764260.jpg'} alt="Event picture"></img>
               </div>
 
               <div className="flex flex-col justify-center">
@@ -62,7 +62,7 @@ export default function EventMini({
                   </h4>
                 </div>
 
-                <h4 className="mt-1 text-sm leading-tight">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500.</h4>
+                <h4 className="mt-1 text-sm leading-tight">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy.</h4>
 
 
               </div>
@@ -91,7 +91,7 @@ export default function EventMini({
 
               <button
                 onClick={handleToggle}
-                className="btn bg-pink-500 text-white"
+                className="btn bg-pink-500 hover:bg-pink-700 text-white"
               >
                 {showTodos ? "Expenses" : "Todos"}
               </button>
