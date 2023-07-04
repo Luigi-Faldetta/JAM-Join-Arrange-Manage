@@ -20,7 +20,6 @@ const store = configureStore({
     msgReducer: msgReducers.msgReducer,
     eventListReducer: eventReducers.eventListReducer,
     eventReducer: eventReducers.eventReducer,
-    userListReducer: userReducers.userListReducer,
     userReducer: userReducers.userReducer,
     toDoListReducer: toDoReducers.toDoListReducer,
     toDoReduer: toDoReducers.toDoReducer,

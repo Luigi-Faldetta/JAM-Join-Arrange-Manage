@@ -46,11 +46,8 @@ export default function Expenses() {
                 eventId: eventid as string,
                 purchaserId: purchaserId as string,
             };
-            console.log(expenseToAdd);
-            const llama = await addApiExpense(expenseToAdd);
-            console.log("llama: ",llama);
+            await addApiExpense(expenseToAdd);
             fetchExpenseSheet(eventid as string).then(response => response.json()).then( (response: ApiResponse<ExpenseSheet>) => {
-                console.log("in fetch")
                setExpenseSheet(response.data)
             })
         }
