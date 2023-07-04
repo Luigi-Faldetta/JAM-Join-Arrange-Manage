@@ -139,7 +139,8 @@ const ProfilePage = (): any => {
     setConfirmPassword('');
   };
 
-  const handleDelete = () => {
+  const handleDelete = (e: any) => {
+    e.preventDefault();
     setOpen(true);
     console.log(open);
   };
@@ -180,7 +181,7 @@ const ProfilePage = (): any => {
               onChange={(e) => setName(e.target.value)}
               type='text'
               name='username'
-              placeholder={data?.data.name}
+              placeholder={data?.data.name || 'Name'}
               className='input input-bordered w-full max-w-xs'
             />
             <input
@@ -188,7 +189,7 @@ const ProfilePage = (): any => {
               onChange={(e) => setEmail(e.target.value)}
               type='text'
               name='email'
-              placeholder={data?.data.email}
+              placeholder={data?.data.email || 'Enter email'}
               className='input input-bordered w-full max-w-xs'
             />
             <input
@@ -196,7 +197,7 @@ const ProfilePage = (): any => {
               onChange={(e) => setPhone(e.target.value)}
               type='text'
               name='phone'
-              placeholder={data?.data.phone}
+              placeholder={data?.data.phone || 'Phone number'}
               className='input input-bordered w-full max-w-xs'
             />
             <input
