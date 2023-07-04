@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import { ExpenseState, addExpense/*, deleteExpense */} from "../../reduxFiles/slices/expenses";
-import { fetchExpenseSheet, useAddExpenseMutation, useCalculateExpensesQuery, useDeleteExpenseMutation } from "../../services/ThesisDB";
+import { ExpenseState} from "../../reduxFiles/slices/expenses";
+import { fetchExpenseSheet, useAddExpenseMutation, useDeleteExpenseMutation } from "../../services/ThesisDB";
 import { useParams } from "react-router-dom";
 import { ApiResponse, ExpenseSheet } from "../../services/ApiResponseType";
-import store, { RootState, useAppDispatch } from "../../reduxFiles/store";
-// import { UseSelector, useSelector } from "react-redux/es/hooks/useSelector";
 
 
 /**
@@ -40,7 +38,6 @@ export default function Expenses() {
 
     const handleAddClick = async (e:React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log("newExpenseForm: ", newExpenseForm)
         if (newExpenseForm.item !== "") {
             const expenseToAdd: ExpenseState = {
                 item: newExpenseForm.item,

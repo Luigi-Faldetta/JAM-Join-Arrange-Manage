@@ -20,7 +20,6 @@ export default function Event() {
   const loggedUser = localStorage.getItem("token");
   const isLoggedIn = useIsLoggedIn();
   const { eventid } = useParams();
-  console.log("event: ",eventid);
   const {
     data: eventData,
     error,

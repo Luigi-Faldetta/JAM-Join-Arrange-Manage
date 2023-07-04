@@ -23,19 +23,14 @@ const store = configureStore({
     userReducer: userReducers.userReducer,
     toDoListReducer: toDoReducers.toDoListReducer,
     toDoReduer: toDoReducers.toDoReducer,
-    // expenseListReducer: expenseReducers.expenseListReducer,
     expenseReducer: expenseReducers.expenseReducer,
-    // expenseSheet: expenseSheetReducer,
     [thesisDbApi.reducerPath]: thesisDbApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(thesisDbApi.middleware),
-  // devTools: true,
+  devTools: true,
 });
 
-// not sure if we need the line below, it is generally optional, but it IS required
-// if we use refetchOnFous or refetchOnReconnect
-// setupListeners(store.dispatch)
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
