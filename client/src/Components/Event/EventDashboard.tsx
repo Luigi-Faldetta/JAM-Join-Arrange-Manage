@@ -76,7 +76,7 @@ export default function Event() {
             {showTodos ? (<Todos />) : (<Expenses />)}
           </div>
 
-          <div className="w-4/5 h-36 bg-gray-300 rounded-xl" >
+          <div className="w-4/5 h-36 bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400 rounded-xl" >
             <Attendees />
           </div>
 
