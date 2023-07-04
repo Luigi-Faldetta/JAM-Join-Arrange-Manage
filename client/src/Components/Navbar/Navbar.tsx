@@ -71,7 +71,7 @@ function Navbar() {
                       to="hero"
                       spy={true}
                       smooth={true}
-                      offset={-80}
+                      offset={-190}
                       duration={500}
                       className="block py-2 px-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
                       aria-current="page"
