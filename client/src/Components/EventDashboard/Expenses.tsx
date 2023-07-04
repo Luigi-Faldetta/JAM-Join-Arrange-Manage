@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useGetExpensesQuery } from "../../services/ThesisDB";
 import { ExpenseState } from "../../reduxFiles/slices/expenses";
 import { useAddExpenseMutation } from "../../services/ThesisDB";
+import { useParams } from "react-router-dom";
 
 interface Expense {
     item: string;
@@ -11,18 +12,18 @@ interface Expense {
 }
 
 
-const eventId = "d2913de4-1ef3-4f3a-b885-9e2a8120611b";
-const purchaserId = "ddad6a7d-d18c-4fd4-96b3-e6814cd3a3e7";
 
 
 
 export default function Expenses() {
+    const { eventid } = useParams();
     const [expenses, setExpenses] = useState<ExpenseState[]>([]);
     const [newExpense, setNewExpense] = useState<ExpenseState>({ item: "", cost: "", eventId: "", id: "" });
     const [total, setTotal] = useState<number>(0);
+    const purchaserId = localStorage.getItem('token');
 
 
-    const { data, error, isLoading } = useGetExpensesQuery(eventId);
+    const { data, error, isLoading } = useGetExpensesQuery(eventid as string);
 
     useEffect(() => {
         if (data) setExpenses(data.data);
@@ -49,7 +50,7 @@ export default function Expenses() {
             const expenseToAdd = {
                 item: newExpense.item,
                 cost: Number(newExpense.cost),
-                eventId: eventId,
+                eventId: eventid,
                 purchaserId: purchaserId,
             };
             console.log(expenseToAdd);

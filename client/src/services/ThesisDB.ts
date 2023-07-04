@@ -207,7 +207,12 @@ export const thesisDbApi = createApi({
       }),
     }),
     getMsgs: build.query<ApiResponse<MsgState[]>, string>({
-      query: (eventId) => ({ url: `chat/${eventId}` }),
+      query: (eventId) => {
+        if (!eventId) {
+          throw new Error();
+        }
+        return ({ url: `chat/${eventId}` });
+      },
     }),
 
 
