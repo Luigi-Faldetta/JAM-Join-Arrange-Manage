@@ -126,6 +126,7 @@ function CreateEventForm() {
               selectsStart
               placeholderText="Select date & time"
               showTimeSelect
+              id='event-date' 
               selected={eventDate}
               onChange={(date) => setEventDate(date)}
               dateFormat="EEE MMM d 🗓 h:mm aa 🕣"
@@ -189,6 +190,7 @@ function CreateEventForm() {
           </div>
 
           <button
+            id="create-event-btn"
             type="submit"
             className="text-white 
                         bg-gradient-to-r from-red-500 to-red-600 hover:bg-blue-800 
