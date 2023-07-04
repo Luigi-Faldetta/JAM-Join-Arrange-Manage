@@ -8,14 +8,11 @@ function Delete({ setOpen }: { setOpen: (open: boolean) => void }) {
   const navigate = useNavigate();
   function handleCloseDelete() {
     setOpen(false);
-    console.log('delete account');
   }
   async function handleDelete() {
-    console.log('here')
     const userId = localStorage.getItem('token');
     try {
       const res = await deleteUser(userId as string);
-      console.log(res);
       localStorage.removeItem('token');
       navigate('/')
       window.location.reload(); 

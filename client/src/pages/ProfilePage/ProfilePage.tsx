@@ -53,7 +53,6 @@ const ProfilePage = (): any => {
   //@ts-ignore
   const { data } = useGetUserQuery(uid);
   //@ts-ignore
-  console.log('data===>> ', data);
 
   const [updateUser] = useUpdateUserMutation();
 
@@ -75,7 +74,6 @@ const ProfilePage = (): any => {
 
         const uploadedImage = await res.json();
         if (uploadedImage && uploadedImage.url) {
-          console.log('Image from Cloudinary: ', uploadedImage);
           return uploadedImage;
         } else {
           console.log('Error uploading image');
@@ -119,7 +117,6 @@ const ProfilePage = (): any => {
       }
 
       const updatedUser = await updateUser(userFormData);
-      console.log('Updated user:', updatedUser);
 
       if (updatedUser) {
         setUpdateStatus('success');
@@ -137,7 +134,6 @@ const ProfilePage = (): any => {
 
   const handleDelete = () => {
     setOpen(true);
-    console.log(open);
   };
 
   return (

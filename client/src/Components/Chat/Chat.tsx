@@ -38,9 +38,6 @@ function Chat() {
     }
   }, [isLoading, error]);
 
-//   useEffect(() => {
-//     console.log("Event list has changed ==> ", eventList);
-//   }, [eventList]);
 
   const handleChatClick = () => {
     setChatDropdown(!chatDropdown);
@@ -52,7 +49,6 @@ function Chat() {
   };
   
   useEffect(() => {
-    console.log("selected Event ==> ", selectedEvent)
     if(selectedEvent.eventId) {
       dispatch(openWithEventId(selectedEvent.eventId))
     } 

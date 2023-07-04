@@ -12,9 +12,7 @@ function Logout() {
   function signOut() {
     navigate("/");
     window.location.reload(); 
-    console.log(localStorage.getItem('token'))
     localStorage.removeItem('token');
-    console.log(localStorage.getItem('token'))
     dispatch(closeLogout());
     
   }

@@ -4,7 +4,6 @@ import moment from "moment";
 
 function EventTile({ event }: { event: any }) {
   const img = "./friends-placeholder.png";
-  console.log(event);
 
   return (
     <>

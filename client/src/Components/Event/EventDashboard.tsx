@@ -12,7 +12,6 @@ export default function Event() {
   const isLoggedIn = useIsLoggedIn();
   const { eventid } = useParams();
 
-  console.log("eventid in Event comp ==> ", eventid);
 
   const {
     data: eventData,
@@ -20,10 +19,8 @@ export default function Event() {
     isLoading,
   } = useGetEventQuery(eventid as string);
 
-  // console.log({ error, eventData });
 
   // const eventData = data?.data;
-  console.log("eventdata==>", eventData);
 
   return (
     <>

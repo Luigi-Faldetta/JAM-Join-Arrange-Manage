@@ -11,7 +11,6 @@ export const useIsLoggedIn = () => {
     useEffect(() => {
         token = localStorage.getItem("token")
         setIsloggedIn(!!token)
-        console.log(token);
     }, [token, logoutModal])
 
 

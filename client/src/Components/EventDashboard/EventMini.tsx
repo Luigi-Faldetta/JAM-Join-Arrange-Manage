@@ -14,15 +14,11 @@ export default function EventMini({
   const [userIsHost, setUserIsHost] = useState(false);
 
   useEffect(() => {
-    console.log("Data recieved in event mini ==> ", eventData);
-
     const hostUser = eventData?.data.UserEvents.find(
       (user) => user.userId === loggedUser
     );
 
     setUserIsHost(hostUser?.userId === loggedUser ? true : false);
-
-    console.log("hostuser", hostUser);
   }, [eventData]);
 
   return (

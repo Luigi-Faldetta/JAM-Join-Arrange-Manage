@@ -11,22 +11,16 @@ function UserDashboardPage() {
   const dispatch = useAppDispatch();
   const userToken = localStorage.getItem("token");
 
-  // console.log(userToken);
 
   const eventList = useSelector((state: RootState) => state.eventListReducer);
   const { data, error, isLoading } = useGetEventsQuery(userToken as string);
 
   useEffect(() => {
     if (!isLoading && !error) {
-      console.log("event list ==> ", data?.data);
       dispatch(setEventList(data?.data));
     }
   }, [isLoading, error]);
 
-  // useEffect(() => {
-  //   console.log("Event list has changed ==> ", eventList);
-  // }, [eventList]);
-  // add fetch to get all the events
 
   return (
     <>
