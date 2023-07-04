@@ -7,6 +7,13 @@ import { ApiResponse } from "./ApiResponseType";
 import { MsgState } from "../reduxFiles/slices/msg";
 import { ExpenseSheet } from "./ApiResponseType";
 
+
+import { io } from "socket.io-client";
+// const URL = process.env.NODE_ENV!=="production" ? "http://localhost:3200/" :"https://codeworks-thesis-4063bceaa74a.herokuapp.com/";
+const URL = "https://codeworks-thesis-4063bceaa74a.herokuapp.com/";
+
+
+export const socket = io(URL);
 // const {data, error, isLoading} = useGetUserQuery("f099247b-189d-4025-81eb-1a53c1e9c332")
 // const [addNewUser] = useAddUserMutation()
 
@@ -32,7 +39,7 @@ import { ExpenseSheet } from "./ApiResponseType";
 export const thesisDbApi = createApi({
   reducerPath: "thesisDbApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://codeworks-thesis-4063bceaa74a.herokuapp.com/",
+    baseUrl: URL,
   }),
   tagTypes: ["EventState", "ExpenseState", "ToDoState", "UserState", "ExpenseSheet"], //for tracking what will be referenced from the cache
   endpoints: (build) => ({
