@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import {
   createEvent,
   EventState,
+  // initialEventState,
 } from "../../reduxFiles/slices/events";
 import { useAddEventMutation } from "../../services/ThesisDB";
 import { ApiResponse } from "../../services/ApiResponseType";
@@ -70,7 +71,6 @@ function CreateEventForm() {
     console.log("event created in DB== > ", eventCreated);
     dispatch(createEvent((eventCreated as ApiResponse<EventState>).data));
     setOpen(false);
-    // Send another request with eventID, userID (host), isHost (true)
   };
 
   function createModal() {
@@ -85,7 +85,6 @@ function CreateEventForm() {
           </div>
 
           <div className="flex flex-col justify-center text-center bg-gray-100 rounded-md p-4 mb-5">
-
             <div className="">
               <label
                 htmlFor="eventName"

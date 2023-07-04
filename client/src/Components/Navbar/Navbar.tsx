@@ -37,20 +37,16 @@ function Navbar() {
   };
 
   const uid = localStorage.getItem("token");
-  useAuth();
+  // useAuth();
   //@ts-ignore
   const { data } = useGetUserQuery(uid);
 
   return (
-    <div className="navbar-container" id='navbar'>
+    <div className="navbar-container" id="navbar">
       <nav className="bg-white border-gray-200 dark:bg-gray-900">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-around mx-auto p-4">
           <Link to="/" className="flex items-center">
-            <img
-              src="logo-jam.png"
-              className="h-12 mr-3"
-              alt="Flowbite Logo"
-            />
+            <img src="logo-jam.png" className="h-12 mr-3" alt="Flowbite Logo" />
             <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
               JAM
             </span>
@@ -70,7 +66,7 @@ function Navbar() {
                 <span className="sr-only">Open user menu</span>
                 <img
                   className="profile-pic w-8 h-8 rounded-full"
-                  src={data?.data.profilePic || './no-profile-picture-icon.png'}
+                  src={data?.data.profilePic || "./no-profile-picture-icon.png"}
                   alt=""
                 />
               </button>
@@ -78,12 +74,20 @@ function Navbar() {
                 <div className="dropdown-menu">
                   <ul>
                     <li>
-                      <Link to="/profile" className="dropdown-item" onClick={handleAvatarClick}>
+                      <Link
+                        to="/profile"
+                        className="dropdown-item"
+                        onClick={handleAvatarClick}
+                      >
                         Profile
                       </Link>
                     </li>
                     <li>
-                      <Link to="/user-dashboard" className="dropdown-item" onClick={handleAvatarClick}>
+                      <Link
+                        to="/user-dashboard"
+                        className="dropdown-item"
+                        onClick={handleAvatarClick}
+                      >
                         Dashboard
                       </Link>
                     </li>
