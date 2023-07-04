@@ -27,21 +27,21 @@ export const expenseSlice = createSlice({
     }
 })
 
-export const expenseListSlice = createSlice({
-    name: "expenseList",
-    initialState: [] as ExpenseState[],
-    reducers: {
-        //state type will be Expense when the type is created.
-        createExpenseList: (state) => { state = [] },
-        deleteExpenseList: (state) => { state = [] },
-        updateExpenseList: (state) => { state = [] },
-    }
-})
+// export const expenseListSlice = createSlice({
+//     name: "expenseList",
+//     initialState: [] as ExpenseState[],
+//     reducers: {
+//         //state type will be Expense when the type is created.
+//         createExpenseList: (state) => { state = [] },
+//         deleteExpenseList: (state) => { state = [] },
+//         updateExpenseList: (state) => { state = [] },
+//     }
+// })
 
 export const { createExpense, deleteExpense } = expenseSlice.actions
-export const { createExpenseList, updateExpenseList, deleteExpenseList } = expenseListSlice.actions
+// export const { createExpenseList, updateExpenseList, deleteExpenseList } = expenseListSlice.actions
 
 const expenseReducer = expenseSlice.reducer
-const expenseListReducer = expenseListSlice.reducer
+// const expenseListReducer = expenseListSlice.reducer
 
-export default { expenseListReducer, expenseReducer }
+export default { /*expenseListReducer,*/ expenseReducer }

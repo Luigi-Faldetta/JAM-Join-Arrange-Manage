@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { ExpenseState } from "../../reduxFiles/slices/expenses";
 import { useAddExpenseMutation, useCalculateExpensesQuery, useDeleteExpenseMutation } from "../../services/ThesisDB";
 import { useParams } from "react-router-dom";
-import { ExpenseSheet } from "../../services/ApiResponseType";
+import { ExpenseSheet } from "../../reduxFiles/slices/expenseSheet";
+import store, { useAppDispatch } from "../../reduxFiles/store";
+import { createExpenseSheet, expenseSheetReducer } from "../../reduxFiles/slices/expenseSheet";
 
 
 
@@ -27,13 +29,13 @@ export default function Expenses() {
     // const [total, setTotal] = useState<number>(0);
 
 
+    
     const { data, error, isLoading } = useCalculateExpensesQuery(eventid as string);
-
     useEffect(() => {
         if (data) {
             setExpenseSheet(data.data);
         }
-    }, [data]);
+    }, [expenseSheet.expenses, expenseSheet.attendees]);
 
 
 

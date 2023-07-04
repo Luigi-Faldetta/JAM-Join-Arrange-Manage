@@ -9,6 +9,7 @@ import { thesisDbApi } from "../services/ThesisDB";
 import { useDispatch } from "react-redux";
 import { logoutReducer } from "./slices/logout";
 import { chatReducer } from "./slices/chat";
+import { expenseSheetReducer } from "./slices/expenseSheet";
 
 
 const store = configureStore({
@@ -23,8 +24,9 @@ const store = configureStore({
     userReducer: userReducers.userReducer,
     toDoListReducer: toDoReducers.toDoListReducer,
     toDoReduer: toDoReducers.toDoReducer,
-    expenseListReducer: expenseReducers.expenseListReducer,
+    // expenseListReducer: expenseReducers.expenseListReducer,
     expenseReducer: expenseReducers.expenseReducer,
+    expenseSheetReducer: expenseSheetReducer,
     [thesisDbApi.reducerPath]: thesisDbApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
