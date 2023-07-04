@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ReactEventHandler, useState } from "react";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
 import { Link as Scroll } from "react-scroll";
@@ -29,6 +29,7 @@ function Navbar() {
       setDropdownMobile(false);
     }
   };
+
   const handleMobileMenu = () => {
     setDropdownMobile(!showDropdownMobile);
     if (setShowDropdown) {
@@ -140,6 +141,7 @@ function Navbar() {
               <li>
                 {/* <Link to="/" className="dropdown-item"> */}
                 <Scroll
+                  onClick={handleMobileMenu}
                   to="hero"
                   spy={true}
                   smooth={true}
@@ -155,6 +157,7 @@ function Navbar() {
               <li>
                 {/* <Link to="/about" className="dropdown-item"> */}
                 <Scroll
+                  onClick={handleMobileMenu}
                   to="about"
                   spy={true}
                   smooth={true}
@@ -169,6 +172,7 @@ function Navbar() {
               <li>
                 {/* <Link to="/faqs" className="dropdown-item"> */}
                 <Scroll
+                  onClick={handleMobileMenu}
                   to="faqs"
                   spy={true}
                   smooth={true}
