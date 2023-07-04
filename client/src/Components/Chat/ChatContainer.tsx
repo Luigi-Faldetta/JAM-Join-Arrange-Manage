@@ -20,16 +20,12 @@ function ChatContainer() {
   const messagesRef = useRef<HTMLDivElement>(null);
   const userId = localStorage.getItem("token");
 
-  useEffect(() => {
-    console.log("Chat contaiiner comp ==> ", eventId)
-  }, [eventId])
-
-  const { data: _data, isSuccess, refetch, isLoading } = useGetMsgsQuery(eventId as string);
   // useEffect(() => {
   //   console.log("Chat contaiiner comp ==> ", eventId)
   // }, [eventId])
   const {data: dataevent} = useGetEventQuery(eventId as string);
 // console.log(dataevent?.data.title, 'this is event')
+  const { data: _data, isSuccess ,refetch, isLoading } = useGetMsgsQuery(eventId as string);
   const data = _data?.data;
   const handleMessageSubmit = async (message: string) => {
     try {
@@ -50,11 +46,11 @@ function ChatContainer() {
     }
   };
 
-  useEffect(() => {
-    socket.on("newMessage", (res: any) => {
+  useEffect(()=> {
+    socket.on("newMessage", (res) => {
       dispatch(addMessage(res.data))
-    });
-
+  });
+    
   }, [socket])
 
 
@@ -74,23 +70,6 @@ function ChatContainer() {
     }
   }, [data, isLoading]);
 
-
-
-    return messages?.map((messageData: any, index) => {
-      const isCurrentUser = messageData.userId === userId;
-      const messageClassName = `relative text-xs py-2 px-4 shadow rounded-xl m-2 w-90 ${isCurrentUser ? "bg-blue-400 ml-8" : "bg-gray-300 mr-8"
-        }`;
-      return (
-        <div key={messageData.id} className={messageClassName}>
-          <div className="user">
-
-            {messageData.User && messageData.User.profilePic && (
-              <img
-                src={messageData.User.profilePic}
-                className="object-cover h-8 w-8 rounded-full"
-                alt=""
-              />
-            )}
 
 
   return (
@@ -140,6 +119,6 @@ function ChatContainer() {
     </div>
   );
         }
-        
 
 export default ChatContainer
+
