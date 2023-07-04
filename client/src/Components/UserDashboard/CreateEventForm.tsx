@@ -3,10 +3,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch } from "react-redux";
 import {
-  addEventToList,
   createEvent,
   EventState,
-  // initialEventState,
 } from "../../reduxFiles/slices/events";
 import { useAddEventMutation } from "../../services/ThesisDB";
 import { ApiResponse } from "../../services/ApiResponseType";
@@ -69,13 +67,10 @@ function CreateEventForm() {
       token: userToken as string,
       event: eventFormData,
     });
-
-    if ("data" in eventCreated && eventCreated.data.success) {
-      console.log("event created in DB== > ", eventCreated);
-      dispatch(createEvent(eventCreated.data.data));
-      dispatch(addEventToList(eventCreated.data.data));
-    }
+    console.log("event created in DB== > ", eventCreated);
+    dispatch(createEvent((eventCreated as ApiResponse<EventState>).data));
     setOpen(false);
+    // Send another request with eventID, userID (host), isHost (true)
   };
 
   function createModal() {
@@ -90,6 +85,7 @@ function CreateEventForm() {
           </div>
 
           <div className="flex flex-col justify-center text-center bg-gray-100 rounded-md p-4 mb-5">
+
             <div className="">
               <label
                 htmlFor="eventName"
@@ -198,7 +194,7 @@ function CreateEventForm() {
                         rounded-lg 
                         text-sm 
                         px-5 py-2.5 
-                        mt-7
+                        mt-8
                         text-center 
                         dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
