@@ -1,4 +1,4 @@
-import { useState} from 'react';
+import { useState } from 'react';
 import './ProfilePage.css';
 import { useGetUserQuery } from '../../services/ThesisDB';
 import { UserState } from '../../reduxFiles/slices/users';
@@ -215,13 +215,15 @@ const ProfilePage = (): any => {
               placeholder='Confirm Password'
               className='input input-bordered w-full max-w-xs'
             />
-            <div className='profile-buttons'>
-              <button
-                type='submit'
-                className='btn btn-success'
-              >
-                Save Changes
-              </button>
+            <div className='profile-btn'>
+              <div>
+                <button
+                  type='submit'
+                  className='btn btn-success'
+                >
+                  Save Changes
+                </button>
+              </div>
               <div>
                 <button
                   type='submit'
