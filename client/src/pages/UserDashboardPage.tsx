@@ -19,12 +19,12 @@ function UserDashboardPage() {
     if (!isLoading && !error) {
       dispatch(setEventList(data?.data));
     }
-  }, [isLoading, error]);
+  }, [isLoading, error, data]);
 
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center">
+      <div className="flex flex-col justify-center items-center ">
         <div className="m-5 h-full p-5 flex flex-col items-center gap-5">
           <CreateEventForm></CreateEventForm>
         </div>

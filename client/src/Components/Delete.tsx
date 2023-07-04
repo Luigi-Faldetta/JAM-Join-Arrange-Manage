@@ -1,9 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../reduxFiles/store';
 import { useDeleteUserMutation } from '../services/ThesisDB';
 
 function Delete({ setOpen }: { setOpen: (open: boolean) => void }) {
-  const dispatch = useAppDispatch();
   const [deleteUser] = useDeleteUserMutation();
   const navigate = useNavigate();
   function handleCloseDelete() {
@@ -15,7 +13,7 @@ function Delete({ setOpen }: { setOpen: (open: boolean) => void }) {
       const res = await deleteUser(userId as string);
       localStorage.removeItem('token');
       navigate('/')
-      window.location.reload(); 
+      // window.location.reload(); 
     } catch (error) {
       console.error(error);
     }
@@ -73,11 +71,13 @@ function Delete({ setOpen }: { setOpen: (open: boolean) => void }) {
                 <button
                   onClick={handleDelete}
                   type='button'
+                  id='delete-user-btn'
                   className='inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto'
                 >
                   Delete
                 </button>
                 <button
+                  id='cancel-delete-user-btn'
                   onClick={handleCloseDelete}
                   type='button'
                   className='mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto'

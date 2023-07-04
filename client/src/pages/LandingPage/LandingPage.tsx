@@ -20,7 +20,7 @@ const LandingPage = ({data} : any) => {
       className="landing-page dark:bg-gray-900 lg:mt-9"
       id="hero"
     >
-      <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
+      <div className="grid max-w-screen-xl px-4 mx-auto xl:gap-0 lg:py-16 lg:grid-cols-12">
         <div className="mr-auto place-self-center lg:col-span-7">
         {currentRoute === '/' ? (
           <>
@@ -56,18 +56,20 @@ const LandingPage = ({data} : any) => {
           </button>
           ) : null}
         </div>
-        <div className={`lg:col-span-5 ${loginFormActive ? "active" : ""}`}>
-  {!isLoggedIn ? (
-    <div className="login-form  lg:flex lg:flex-col">
+        {!isLoggedIn ? (
+  <div className={`lg:col-span-5 ${loginFormActive ? "active" : ""}`}>
+    <div className={`login-form lg:flex lg:flex-col ${loginFormActive ? "active" : ""}`}>
       <LoginForm />
+    </div>
+    <div>
       <CreateUserForm />
     </div>
-  ) : (
-    <div className="image-container">
-      <img src="https://hips.hearstapps.com/hmg-prod/images/delish-190605-raspberry-jam-031-landscape-pf-1560443834.jpg?crop=0.888532477947073xw:1xh;center,top&resize=1200:*" alt="Your Image" />
-    </div>
-  )}
-</div>
+  </div>
+) : (
+  <div className="image-container lg:col-span-5">
+    <img src="https://hips.hearstapps.com/hmg-prod/images/delish-190605-raspberry-jam-031-landscape-pf-1560443834.jpg?crop=0.888532477947073xw:1xh;center,top&resize=1200:*" alt="Your Image" />
+  </div>
+)}
       </div>
     </section>
   );

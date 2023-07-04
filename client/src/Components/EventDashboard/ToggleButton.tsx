@@ -1,63 +1,54 @@
-import React, { useEffect, useMemo, useState } from "react";
-import Todos from "./Todos";
-import Expenses from "./Expenses";
-import Attendees from "./Attendees";
-import { useParams } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useJoinActivityMutation,
   useLeaveActivityMutation,
 } from "../../services/ThesisDB";
-import EventLink from "./EventLink";
+import { ColorRing } from  'react-loader-spinner'
 
-export default function ToggleButton({ data }: any) {
-  const userId = localStorage.getItem("token");
-  const [showTodos, setShowTodos] = useState<boolean>(true);
-  const [isJoined, setIsJoined] = useState<boolean>(false);
+
+interface ToggleButton {
+  isJoined: boolean;
+  loggedUser: string | null;
+  setIsJoined: (isJoined: boolean) => void;
+  isLoading: boolean;
+}
+
+export default function ToggleButton({
+  isJoined,
+  loggedUser,
+  setIsJoined,
+  isLoading,
+}: ToggleButton) {
   const { eventid } = useParams();
+  const navigate = useNavigate()
   const [joinActivity] = useJoinActivityMutation();
   const [leaveActivity] = useLeaveActivityMutation();
   const eventId = eventid;
 
-  useEffect(() => {
-    if (!data || !data?.data || !data?.data?.UserEvents.length) {
-      setIsJoined(false);
-      return;
-    }
-
-    const isJoinedCheck = data.data.UserEvents.reduce((acc: any, cur: any) => {
-      if (cur.userId === userId) {
-        return true;
-      }
-    }, false);
-
-    if (isJoinedCheck !== isJoined) {
-      setIsJoined(isJoinedCheck);
-    }
-  }, [data, setIsJoined]);
-
-  const handleToggle = () => {
-    setShowTodos((prevShowTodos) => !prevShowTodos);
-  };
-
-  //JOIN / LEAVE
   const handleJoin = () => {
-    onJoin(userId as string, eventId as string).then(() => setIsJoined(true));
+    onJoin(loggedUser as string, eventId as string).then(() =>
+      setIsJoined(true)
+    );
   };
 
   const onJoin = async (userId: string, eventId: string) => {
     try {
-      const res = await joinActivity({ userId, eventId });
+      await joinActivity({ userId, eventId });
     } catch (error) {
       console.error(error);
     }
   };
 
   const handleLeave = () => {
-    onLeave(userId as string, eventId as string).then(() => setIsJoined(false));
+    onLeave(loggedUser as string, eventId as string).then(() =>
+      setIsJoined(false)
+    );
   };
+
   const onLeave = async (userId: string, eventId: string) => {
     try {
-      const res = await leaveActivity({ userId, eventId });
+       leaveActivity({ userId, eventId }).then(() => navigate('/user-dashboard'))
     } catch (error) {
       console.error(error);
     }
@@ -66,31 +57,27 @@ export default function ToggleButton({ data }: any) {
   // JOIN / LEAVE
 
   return (
-    <div>
-      <button
-        onClick={handleToggle}
-        className="absolute top-28 right-24 btn btn-primary"
-      >
-        {showTodos ? "Expenses" : "Todos"}
-      </button>
-      {showTodos ? (
-        <>
-          {" "}
-          <Todos /> <Attendees />{" "}
-        </>
-      ) : (
-        <Expenses />
-      )}
-
-      <EventLink eventid={eventid} />
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+      <div className="absolute">
         <button
           onClick={isJoined ? handleLeave : handleJoin}
-          className="btn btn-primary m-10"
+          className="btn bg-white m-10"
         >
-          {isJoined ? "Leave" : "Join"}
+          {isLoading ? (
+            <ColorRing
+              visible={true}
+              height="100%"
+              width="100%"
+              ariaLabel="blocks-loading"
+              wrapperStyle={{}}
+              wrapperClass="blocks-wrapper"
+              colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+            />
+          ) : isJoined ? (
+            "Leave"
+          ) : (
+            "Join"
+          )}
         </button>
       </div>
-    </div>
   );
 }

@@ -5,6 +5,7 @@ import {
   useLogInMutation,
 } from "../../services/ThesisDB";
 import { useLocation, useNavigate } from "react-router-dom";
+import ForgotPassword from "./ForgotPassword";
 
 function LoginForm() {
   const [passwordMatch, setPasswordMatch] = useState(true);
@@ -107,9 +108,11 @@ function LoginForm() {
               Invalid email or password.
             </p>
           )}
+         <ForgotPassword/>
         </div>
         <button
           type="submit"
+          id="login"
           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base px-6 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 m-3"
         >
           Log In

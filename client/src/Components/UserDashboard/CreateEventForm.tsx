@@ -3,14 +3,13 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch } from "react-redux";
 import {
+  addEventToList,
   createEvent,
   EventState,
   // initialEventState,
 } from "../../reduxFiles/slices/events";
-// import PictureUpload from "../PictureUpload";
 import { useAddEventMutation } from "../../services/ThesisDB";
 import { ApiResponse } from "../../services/ApiResponseType";
-import PictureUpload from "../PictureUpload";
 
 function CreateEventForm() {
   const dispatch = useDispatch();
@@ -57,32 +56,27 @@ function CreateEventForm() {
       date: eventDate,
       location: event.currentTarget.eventLocation.value,
       description: null,
-      // eventHost and eventAttendees need to be updated to
-      // reflect hostID after login.
-      // eventHost: "hostId", are we sending host id or not?
-      // eventAttendees: ["hostId"], set hostid to attendees?
     };
-    // set cloudinary url to form object before sending to db
+
     const image = await handleImageUpload();
-    eventFormData.coverPic = image.url;
+
+    if (image?.url) eventFormData.coverPic = image.url;
 
     const eventCreated = await addEvent({
       token: userToken as string,
       event: eventFormData,
     });
-    dispatch(createEvent((eventCreated as ApiResponse<EventState>).data));
+
+    if ("data" in eventCreated && eventCreated.data.success) {
+      dispatch(createEvent(eventCreated.data.data));
+      dispatch(addEventToList(eventCreated.data.data));
+    }
     setOpen(false);
-
-    // eventCreated brings an eventID
-    //eventCreated.eventId + userToken
-    // const userEventRelationship = await //sendRelationCall(eventCreated.id, userToken, true)
-
-    // Send another request with eventID, userID (host), isHost (true)
   };
 
   function createModal() {
     return open ? (
-      <dialog id="my_modal_3" className="modal" open={open}>
+      <dialog id="my_modal_3" className="modal h-screen" open={open}>
         <form method="dialog" className="modal-box" onSubmit={handleFormSubmit}>
           <div
             onClick={() => setOpen(false)}
@@ -91,10 +85,7 @@ function CreateEventForm() {
             ✕
           </div>
 
-          {/* -------- image upload and event name container --------- */}
           <div className="flex flex-col justify-center text-center bg-gray-100 rounded-md p-4 mb-5">
-            {/* <PictureUpload file={file} setFile={setFile}></PictureUpload> */}
-
             <div className="">
               <label
                 htmlFor="eventName"
@@ -103,7 +94,6 @@ function CreateEventForm() {
                 Event Name
               </label>
               <input
-                // type="eventName"
                 id="eventName"
                 name="eventName"
                 maxLength={30}
@@ -120,7 +110,6 @@ function CreateEventForm() {
               />
             </div>
           </div>
-          {/* -------- image upload and event name container --------- */}
 
           <div className="mb-4  w-full ">
             <label
@@ -138,7 +127,7 @@ function CreateEventForm() {
               dateFormat="EEE MMM d 🗓 h:mm aa 🕣"
               minDate={new Date()}
               wrapperClassName="w-full"
-              className="shadow-sm 
+              className="shadow-sm
                          bg-gray-50 
                          border border-gray-300 
                          text-gray-900 text-sm 
@@ -160,7 +149,6 @@ function CreateEventForm() {
               Location
             </label>
             <input
-              // type="eventLocation"
               id="eventLocation"
               name="eventLocation"
               placeholder="Eg. '12345 Rainbow Lane...'"
@@ -173,28 +161,7 @@ function CreateEventForm() {
                           dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
             />
           </div>
-          {/* <div className="mb-6">
-            <label
-              htmlFor="eventDescription"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Description
-            </label>
-            <input
-              type="eventDescription"
-              id="eventDescription"
-              name="eventDescription"
-              placeholder="Eg. 'Music will be pumping, the dance floor will be on fire' "
-              className="shadow-sm 
-                          bg-gray-50 border border-gray-300 
-                          text-gray-900 text-sm 
-                          rounded-lg 
-                          focus:ring-blue-500 focus:border-blue-500 
-                          block w-full p-2.5 
-                          dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-              required
-            />
-          </div> */}
+
           <div className="mb-5">
             <label
               htmlFor="eventLocation"
@@ -227,6 +194,7 @@ function CreateEventForm() {
                         rounded-lg 
                         text-sm 
                         px-5 py-2.5 
+                        mt-7
                         text-center 
                         dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
