@@ -31,8 +31,19 @@ const newEvent = async (req: Request, res: Response) => {
     const event = await Event.create(req.body)
     await UserEvent.create({ userId: req.params.userid, eventId: event.eventId, isHost: true })
 
+    const eventToReturn = await Event.findOne({
+      where: { eventId: event.eventId },
+      include: [
+        {
+          model: UserEvent,
+          where: { userId: req.params.userid },
+          attributes: ["isHost", "isGoing"],
+        },
+      ],
+    });
+
     res.status(201)
-      .json(resBody(true, null, event, 'Event created and linked to host'));
+      .json(resBody(true, null, eventToReturn, 'Event created and linked to host'));
 
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.error(err);

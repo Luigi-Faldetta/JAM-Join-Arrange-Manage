@@ -34,8 +34,18 @@ const newEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const event = yield associations_1.Event.create(req.body);
         yield associations_1.UserEvent.create({ userId: req.params.userid, eventId: event.eventId, isHost: true });
+        const eventToReturn = yield associations_1.Event.findOne({
+            where: { eventId: event.eventId },
+            include: [
+                {
+                    model: associations_1.UserEvent,
+                    where: { userId: req.params.userid },
+                    attributes: ["isHost", "isGoing"],
+                },
+            ],
+        });
         res.status(201)
-            .json((0, utils_1.resBody)(true, null, event, 'Event created and linked to host'));
+            .json((0, utils_1.resBody)(true, null, eventToReturn, 'Event created and linked to host'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
@@ -127,6 +137,7 @@ const getUserEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 where: { eventId: eventsArray },
                 include: {
                     model: associations_1.UserEvent,
+                    where: { userId: req.params.userid },
                     attributes: ['isHost', 'isGoing']
                 }
             });
