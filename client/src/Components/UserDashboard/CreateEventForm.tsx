@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch } from "react-redux";
 import {
+  addEventToList,
   createEvent,
   EventState,
   // initialEventState,
@@ -68,8 +69,12 @@ function CreateEventForm() {
       token: userToken as string,
       event: eventFormData,
     });
-    console.log("event created in DB== > ", eventCreated);
-    dispatch(createEvent((eventCreated as ApiResponse<EventState>).data));
+
+    if ("data" in eventCreated && eventCreated.data.success) {
+      console.log("event created in DB== > ", eventCreated);
+      dispatch(createEvent(eventCreated.data.data));
+      dispatch(addEventToList(eventCreated.data.data));
+    }
     setOpen(false);
   };
 
