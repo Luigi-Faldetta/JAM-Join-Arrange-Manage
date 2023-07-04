@@ -45,12 +45,13 @@ export default function Attendees() {
 
     for (let i = startIndex; i < endIndex; i++) {
       renderedImages.push(
-        <div key={i} className="carousel-item m-4">
+        <div key={i} className="flex flex-col carousel-item m-4">
           <img
             src={attendees[i].profilePic}
             alt={`User${i + 1}`}
-            className="rounded-full w-24 h-24 object-cover"
+            className="rounded-full w-24 h-24 object-cover border-4 border-white"
           />
+          <h4 className="text-center">{attendees[i].name}</h4>
         </div>
       );
     }
@@ -59,7 +60,9 @@ export default function Attendees() {
   };
 
   return (
-    <div className="carousel carousel-center rounded-box w-3/5 mx-auto absolute bottom-6 left-0 right-0 flex justify-center">
+    <>
+      <h2 className='text-white text-center font-bold'>{attendees.length} ATTENDEES</h2>
+    <div className="carousel carousel-center rounded-box w-4/5 mx-auto flex justify-center">
       {activeIndex > 0 && (
         <button className="carousel-arrow left-arrow" onClick={handlePrevious}>
           <span className="carousel-arrow-icon text-4xl">&lt;</span>
@@ -74,5 +77,6 @@ export default function Attendees() {
         </button>
       )}
     </div>
+      </>
   );
 }
