@@ -47,35 +47,92 @@ function Navbar() {
   const { data } = useGetUserQuery(uid);
 
   return (
-    <div className="navbar-container" id="navbar">
-      <nav className="bg-white border-gray-200 dark:bg-gray-900">
-        <div className="max-w-screen-xl flex flex-wrap items-center justify-around mx-auto p-4">
-          <Link to="/" className="flex items-center">
-            <img src="logo-jam.png" className="h-12 mr-3" alt="Flowbite Logo" />
-            <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-              JAM
-            </span>
-          </Link>
-          {isLoggedIn && <Chat />}
-          <div className="flex items-center md:order-2">
-            {isLoggedIn && (
-              <button
-                type="button"
-                className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                id="user-menu-button"
-                aria-expanded={showDropdown ? "true" : "false"}
-                onClick={handleAvatarClick}
-                data-dropdown-toggle="user-dropdown"
-                data-dropdown-placement="bottom"
+    <div className="navbar-container bg-white flex justify-center" id="navbar">
+      <nav className="w-4/5 border-gray-200 dark:bg-gray-900">
+        <div className="flex flex-wrap items-center justify-between mx-auto py-3">
+
+          <div className="flex items-center">
+
+            <Link to="/" className="flex mr-12 items-center">
+              <img src="logo-jam.png" className="h-12 mr-3" alt="Flowbite Logo" />
+              <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">JAM</span>
+            </Link>
+
+            {location.pathname === "/" && (
+              <div
+                className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${showDropdownMobile ? "block" : "hidden"
+                  }`}
+                id="mobile-menu-2"
               >
-                <span className="sr-only">Open user menu</span>
-                <img
-                  className="profile-pic w-8 h-8 rounded-full"
-                  src={data?.data.profilePic || "./no-profile-picture-icon.png"}
-                  alt=""
-                />
-              </button>
+                <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                  <li>
+                    <Scroll
+                      onClick={handleMobileMenu}
+                      to="hero"
+                      spy={true}
+                      smooth={true}
+                      offset={-80}
+                      duration={500}
+                      className="block py-2 px-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
+                      aria-current="page"
+                    >Home</Scroll>
+                  </li>
+                  <li>
+                    <Scroll
+                      onClick={handleMobileMenu}
+                      to="about"
+                      spy={true}
+                      smooth={true}
+                      offset={-83}
+                      duration={500}
+                      className="block py-2 pl-3 pr-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
+                    >About</Scroll>
+                  </li>
+                  <li>
+                    <Scroll
+                      onClick={handleMobileMenu}
+                      to="faqs"
+                      spy={true}
+                      smooth={true}
+                      offset={-100}
+                      duration={500}
+                      className="block py-2 pl-3 pr-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
+                    >FAQs</Scroll>
+                  </li>
+                </ul>
+              </div>
             )}
+
+          </div>
+
+          <div>
+            {isLoggedIn && (
+              <div className="flex items-center gap-5">
+
+                <Link to="/user-dashboard" className="font-medium  text-gray-900  md:hover:text-pink-500 md:p-0 ">Dashboard</Link>
+
+                <Chat />
+
+                <button
+                  type="button"
+                  className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                  id="user-menu-button"
+                  aria-expanded={showDropdown ? "true" : "false"}
+                  onClick={handleAvatarClick}
+                  data-dropdown-toggle="user-dropdown"
+                  data-dropdown-placement="bottom"
+                >
+                  <span className="sr-only">Open user menu</span>
+                  <img
+                    className="profile-pic w-8 h-8 rounded-full"
+                    src={data?.data.profilePic || "./no-profile-picture-icon.png"}
+                    alt=""
+                  />
+                </button>
+
+              </div>
+            )}
+
             {showDropdown && (
               <div className="dropdown-menu" ref={ref}>
                 <ul>
@@ -90,22 +147,14 @@ function Navbar() {
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      to="/user-dashboard"
-                      className="dropdown-item"
-                      onClick={handleAvatarClick}
-                    >
-                      Dashboard
-                    </Link>
-                  </li>
-                  <li>
-                    <button id='signout-btn' onClick={handleSignOut} className="dropdown-item">
+                    <button onClick={handleSignOut} className="dropdown-item">
                       Sign out
                     </button>
                   </li>
                 </ul>
               </div>
             )}
+
             {location.pathname === "/" && (
               <button
                 data-collapse-toggle="mobile-menu-2"
@@ -131,67 +180,12 @@ function Navbar() {
                 </svg>
               </button>
             )}
-          </div>
 
-          <div
-            className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${showDropdownMobile ? "block" : "hidden"
-              }`}
-            id="mobile-menu-2"
-          >
-            <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-              <li>
-                {/* <Link to="/" className="dropdown-item"> */}
-                <Scroll
-                  onClick={handleMobileMenu}
-                  to="hero"
-                  id="tohero"
-                  spy={true}
-                  smooth={true}
-                  offset={-80}
-                  duration={500}
-                  className="block py-2 px-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                  aria-current="page"
-                >
-                  Home
-                </Scroll>
-                {/* </Link> */}
-              </li>
-              <li>
-                {/* <Link to="/about" className="dropdown-item"> */}
-                <Scroll
-                  onClick={handleMobileMenu}
-                  to="about"
-                  id="toabout"
-                  spy={true}
-                  smooth={true}
-                  offset={-83}
-                  duration={500}
-                  className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                >
-                  About
-                </Scroll>
-                {/* </Link> */}
-              </li>
-              <li>
-                {/* <Link to="/faqs" className="dropdown-item"> */}
-                <Scroll
-                  onClick={handleMobileMenu}
-                  to="faqs"
-                  id="tofaqs"
-                  spy={true}
-                  smooth={true}
-                  offset={-100}
-                  duration={500}
-                  className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                >
-                  FAQs
-                </Scroll>
-                {/* </Link> */}
-              </li>
-            </ul>
           </div>
 
         </div>
+
+
       </nav>
     </div>
   );

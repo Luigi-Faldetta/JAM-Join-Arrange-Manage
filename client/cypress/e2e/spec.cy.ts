@@ -40,7 +40,6 @@ describe('homepage', () => {
     cy.location('pathname').should('eq', '/');
   });
 
-
   it('Should login and edit profile data', () => {
     cy.contains('Log In');
     cy.get('#email-input').type('test@mail.com');
@@ -51,35 +50,60 @@ describe('homepage', () => {
     cy.get('#profile-btn').click();
     cy.get('input[type=file]').selectFile('cypress/fixtures/bilbo.jpg')
     cy.get('[name="username"]').type('Bilbo Bolson')
-    cy.get('[name="email"]').type('bilbo@theshire.com')
+    cy.get('[name="email"]').type('bilbolovesthering@theshire.com')
     cy.get('[name="phone"]').type('555-333-222')
-    cy.get('[name="password"]').type('password')
-    cy.get('[name="confirmpassword"]').type('password')
+    cy.get('[name="password"]').type('gimmedaring')
+    cy.get('[name="confirmpassword"]').type('gimmedaring')
     cy.get('#save-profile').click()
+    cy.wait(5000);
     cy.location('pathname').should('eq', '/profile');
-    // cy.get("#delete-profile").click()
-    // cy.get('#cancel-delete-user-btn').click()
-    // cy.get("#delete-profile").click()
-    // cy.get('#delete-user-btn').click()
-    // cy.location('pathname').should('eq', '/');
+    cy.get('.profile-pic').click();
+    cy.get('#signout-btn').click();
+    cy.get('#getout').click();
+    cy.location('pathname').should('eq', '/');
   });
 
-  it('Should delete the user', ()=> {
+  it('Should delete the user', () => {
     cy.contains('Log In');
-    cy.get('#email-input').type('bilbo@theshire.com');
-    cy.get('#password-input').type('password');
+    cy.get('#email-input').type('bilbolovesthering@theshire.com');
+    cy.get('#password-input').type('gimmedaring');
     cy.get('#login').click();
     cy.location('pathname').should('eq', '/user-dashboard');
     cy.get('.profile-pic').click();
     cy.get('#profile-btn').click();
     cy.contains('Bilbo Bolson');
-    cy.get("#delete-profile").click()
-    cy.get('#cancel-delete-user-btn').click()
-    cy.get("#delete-profile").click()
-    cy.get('#delete-user-btn').click()
-    cy.location('pathname').should('eq', '/');
-  })
+      cy.get("#delete-profile").click()
+      cy.get('#cancel-delete-user-btn').click()
+      cy.get("#delete-profile").click()
+      cy.get('#delete-user-btn').click()
+      cy.location('pathname').should('eq', '/');
+  });
 
+  it('Should create a new event', () => {
+    const moment = require('moment');
+    const date = moment().format('MMMM Do YYYY, h:mm:ss a');
 
-
+    cy.contains('Log In');
+    cy.get('#email-input').type('bilbolovesthering@theshire.com');
+    cy.get('#password-input').type('gimmedaring');
+    cy.get('#login').click();
+    cy.location('pathname').should('eq', '/user-dashboard');
+    cy.get('.btn').click();
+    cy.contains('Event Name');
+    cy.get('#eventName').type("Bilbo's 111th birthday party");
+    cy.get('#event-date').click();
+    cy.get('.react-datepicker__day--014').click().type('{esc}');
+    cy.get('#eventLocation').type('The Shire Square');
+    cy.get('input[type=file]').selectFile(
+      'cypress/fixtures/bilbo-baggins-birthday-cake.jpeg'
+    );
+    cy.get('#create-event-btn').click();
+    cy.location('pathname').should('eq', '/user-dashboard');
+    cy.contains('Bilbo').click();
+    cy.contains('COMPLETED');
+    cy.get('.bg-pink-500').click();
+    cy.contains('BALANCE');
+    cy.get('.bg-pink-500').click();
+    cy.get('.absolute > .btn').click();
+  });
 });
