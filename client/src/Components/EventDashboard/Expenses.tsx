@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { ExpenseState, addExpense/*, deleteExpense */} from "../../reduxFiles/slices/expenses";
-import { useAddExpenseMutation, useCalculateExpensesQuery, useDeleteExpenseMutation } from "../../services/ThesisDB";
+import { fetchExpenseSheet, useAddExpenseMutation, useCalculateExpensesQuery, useDeleteExpenseMutation } from "../../services/ThesisDB";
 import { useParams } from "react-router-dom";
-import { ExpenseSheet } from "../../services/ApiResponseType";
+import { ApiResponse, ExpenseSheet } from "../../services/ApiResponseType";
 import store, { RootState, useAppDispatch } from "../../reduxFiles/store";
 // import { UseSelector, useSelector } from "react-redux/es/hooks/useSelector";
 
@@ -29,26 +29,23 @@ export default function Expenses() {
         perPerson:0,
         indExpenses:[]
     });
-    const [expenseList, setExpenseList] = useState<ExpenseState[]>([]);
-    const [indExpenses, setIndExpenses] = useState<{name:string, owes:number}[]>([])
 
     //it might be easier if we can make the use state type ExpenseState, but for now I needed it to work.
     const [newExpenseForm, setNewExpenseForm] = useState<{item:string, cost:string, eventId:string, purchaserId:string}>({ item: "", cost: "", eventId: "", purchaserId: "" });
 
 
     
-    const { data, error, isLoading } = useCalculateExpensesQuery(eventid as string);
+    // const { data, error, isLoading } = useCalculateExpensesQuery(eventid as string);
 
     useEffect(() => {
-        if(data){
+        fetchExpenseSheet(eventid as string).then(response => response.json()).then( (response: ApiResponse<ExpenseSheet>) => {
             /**
              * FIX BELOW ON BACKEND REDEPLOYMENT
-             */
-            setExpenseSheet(data)
-            setExpenseList(data?.expenses)
-            setIndExpenses(data.indExpenses)
-        }
-    }, [data]);
+            */
+           setExpenseSheet(response)
+           console.log("response: ",response)
+        })
+    }, []);
 
     const handleAddClick = async () => {
         if (newExpenseForm.item !== "") {
@@ -58,9 +55,16 @@ export default function Expenses() {
                 eventId: eventid as string,
                 purchaserId: purchaserId as string,
             };
-            await addApiExpense(expenseToAdd);
-            setExpenseList((expenses) => [...expenses, expenseToAdd])
-            //recommends fetching from server and update state with it.
+            console.log(expenseToAdd);
+            const llama = await addApiExpense(expenseToAdd);
+            console.log("llama: ",llama);
+            fetchExpenseSheet(eventid as string).then(response => response.json()).then( (response: ApiResponse<ExpenseSheet>) => {
+                /**
+                 * FIX BELOW ON BACKEND REDEPLOYMENT
+                */
+                console.log("in fetch")
+               setExpenseSheet(response)
+            })
         }
         setNewExpenseForm({ item: "", cost: "", eventId: "", purchaserId: "" })
     };
@@ -85,7 +89,12 @@ export default function Expenses() {
 
     const handleDeleteClick = async (expenseId: string) => {
         await deleteApiExpense(expenseId);
-        setExpenseList(expenses => expenses.filter(expense => expense.id !== expenseId))
+        fetchExpenseSheet(eventid as string).then(response => response.json()).then( (response: ApiResponse<ExpenseSheet>) => {
+            /**
+             * FIX BELOW ON BACKEND REDEPLOYMENT
+            */
+           setExpenseSheet(response)
+        })
     };
 
 
@@ -99,7 +108,7 @@ export default function Expenses() {
 
                 <div className="w-full">
 
-                    {expenseList.map((expense) => (
+                    {expenseSheet.expenses.map((expense) => (
                         <div className="flex p-2 border-t border-gray-400 text-white text-xl" key={expense?.id}>
                             <button
                                 className="w-10 text-gray-400"
@@ -141,7 +150,7 @@ export default function Expenses() {
                 <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">PER PERSON SHARE (€{expenseSheet.perPerson})</h1>
                 <div className="w-full">
 
-                    {indExpenses.map((indExpense) => (
+                    {expenseSheet.indExpenses.map((indExpense) => (
                         <div className="flex p-2 border-t border-gray-400 text-white text-xl" key={indExpense?.name}>
                             <h3 className="w-full">
                                 {indExpense?.name} {indExpense.owes<0? ` is owed €${indExpense.owes * -1}`: `needs to pay €${indExpense?.owes}`} 

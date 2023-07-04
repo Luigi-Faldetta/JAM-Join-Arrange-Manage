@@ -14,27 +14,10 @@ const URL = "https://codeworks-thesis-4063bceaa74a.herokuapp.com/";
 
 
 export const socket = io(URL);
-// const {data, error, isLoading} = useGetUserQuery("f099247b-189d-4025-81eb-1a53c1e9c332")
-// const [addNewUser] = useAddUserMutation()
 
-// const onSubmit = async () => {
-//   try {
-//     const res = await addNewUser({name: "Xavi3", email: "xavi3@email.com", password: "xavi3"});
-//     // console.log((res as { data : ApiResponse<UserState>}).data.data.name)
-//   } catch (error) {
-//     // console.error(error)
-//   }
-// }
-
-// console.log("data: ", data);
-
-// someReturn
-// {error ? console.log({error}) : isLoading ? <p>loading...</p> : data ? <h3>{data.data.name}</h3> : <p>couldn't fetch</p>}
-
-//for more complete code and better error handling, refer back to the
-//and implement the transformErrorResponse, providesTags, OnQueryStarted,
-//transformResponse and OnCacheEntryStarted,
-//https://redux-toolkit.js.org/rtk-query/usage/queries
+export const fetchExpenseSheet = async (eventId:string) => {
+   return await fetch(URL+ `calculate/${eventId}`)
+}
 
 export const thesisDbApi = createApi({
   reducerPath: "thesisDbApi",
@@ -135,7 +118,7 @@ export const thesisDbApi = createApi({
 
     addExpense: build.mutation<ApiResponse<ExpenseState>,ExpenseState>({
       query: (expense) => ({
-        url: "expense/",
+        url: "expense",
         method: "POST",
         body: expense,
         headers: { "Content-type": "application/json; charset=UTF-8" },
@@ -146,10 +129,6 @@ export const thesisDbApi = createApi({
       query: (eventId) => `calculate/${eventId}`,
       // invalidatesTags:['ExpenseSheet']
     }),
-
-    // getExpenses: build.query<ApiResponse<ExpenseState[]>, string>({
-    //   query: (eventId) => ({ url: `expenses/${eventId}` }),
-    // }),
 
     deleteExpense: build.mutation<ApiResponse<number>, string>({
       query: (id) => ({
@@ -273,7 +252,6 @@ export const {
   useCalculateExpensesQuery,
   useGetEventQuery,
   useGetEventsQuery,
-  // useGetExpensesQuery,
   useGetToDosQuery,
   useGetUserQuery,
   useGetUsersQuery,
