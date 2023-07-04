@@ -30,7 +30,7 @@ export default function Expenses() {
 
 
     
-    const { data, error, isLoading } = useCalculateExpensesQuery(eventid as string);
+    const { data, error, isLoading, refetch } = useCalculateExpensesQuery(eventid as string);
     useEffect(() => {
         if (data) {
             setExpenseSheet(data.data);
@@ -61,7 +61,7 @@ export default function Expenses() {
                 purchaserId: purchaserId,
             };
             await addExpense(expenseToAdd as ExpenseState)
-            const {data, error, isLoading} = useCalculateExpensesQuery(eventid as string);
+            // const {data, error, isLoading} = useCalculateExpensesQuery(eventid as string);/
             if(error) console.log(error)
             if(isLoading) {
                 while(isLoading){}
