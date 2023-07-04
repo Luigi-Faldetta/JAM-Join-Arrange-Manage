@@ -10,7 +10,6 @@ import {
 // import PictureUpload from "../PictureUpload";
 import { useAddEventMutation } from "../../services/ThesisDB";
 import { ApiResponse } from "../../services/ApiResponseType";
-import PictureUpload from "../PictureUpload";
 
 function CreateEventForm() {
   const dispatch = useDispatch();
