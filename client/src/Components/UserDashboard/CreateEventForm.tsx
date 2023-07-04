@@ -75,7 +75,7 @@ function CreateEventForm() {
 
   function createModal() {
     return open ? (
-      <dialog id="my_modal_3" className="modal" open={open}>
+      <dialog id="my_modal_3" className="modal h-screen" open={open}>
         <form method="dialog" className="modal-box" onSubmit={handleFormSubmit}>
           <div
             onClick={() => setOpen(false)}
@@ -127,7 +127,7 @@ function CreateEventForm() {
               dateFormat="EEE MMM d 🗓 h:mm aa 🕣"
               minDate={new Date()}
               wrapperClassName="w-full"
-              className="shadow-sm 
+              className="shadow-sm
                          bg-gray-50 
                          border border-gray-300 
                          text-gray-900 text-sm 
@@ -194,6 +194,7 @@ function CreateEventForm() {
                         rounded-lg 
                         text-sm 
                         px-5 py-2.5 
+                        mt-7
                         text-center 
                         dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
