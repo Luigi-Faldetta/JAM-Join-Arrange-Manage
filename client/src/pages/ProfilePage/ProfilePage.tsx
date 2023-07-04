@@ -40,6 +40,7 @@ const ProfilePage = (): any => {
   };
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [userPhoto, setUserPhoto] = useState<File | null | string>(null);
@@ -53,7 +54,6 @@ const ProfilePage = (): any => {
   //@ts-ignore
   const { data } = useGetUserQuery(uid);
   //@ts-ignore
-  console.log('data===>> ', data);
 
   const [updateUser] = useUpdateUserMutation();
 
@@ -111,6 +111,9 @@ const ProfilePage = (): any => {
       if (phone) {
         userFormData.phone = phone;
       }
+      if (email) {
+        userFormData.email = email;
+      }
 
       const image = await handleImageUpload();
       if (image && image.url) {
@@ -131,6 +134,7 @@ const ProfilePage = (): any => {
 
     setName('');
     setPhone('');
+    setEmail('');
     setPassword('');
     setConfirmPassword('');
   };
@@ -180,6 +184,14 @@ const ProfilePage = (): any => {
               className='input input-bordered w-full max-w-xs'
             />
             <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              type='text'
+              name='email'
+              placeholder={data?.data.email}
+              className='input input-bordered w-full max-w-xs'
+            />
+            <input
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               type='text'
@@ -203,13 +215,15 @@ const ProfilePage = (): any => {
               placeholder='Confirm Password'
               className='input input-bordered w-full max-w-xs'
             />
-            <div className='profile-buttons'>
-              <button
-                type='submit'
-                className='btn btn-success'
-              >
-                Save Changes
-              </button>
+            <div className='profile-btn'>
+              <div>
+                <button
+                  type='submit'
+                  className='btn btn-success'
+                >
+                  Save Changes
+                </button>
+              </div>
               <div>
                 <button
                   type='submit'

@@ -1,5 +1,7 @@
 .landing-page {
-  height: calc(100vh);
+  top:5rem;
+  height: 100vh;
+  position: relative;
 }
   .landing-page .active {
     transform: scale(1.2);

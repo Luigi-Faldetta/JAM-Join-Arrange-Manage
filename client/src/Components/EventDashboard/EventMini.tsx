@@ -6,25 +6,11 @@ import moment from "moment";
 
 export default function EventMini({
   eventData,
+  userIsHost,
 }: {
   eventData: ApiResponse<EventState>;
+  userIsHost: boolean;
 }) {
-  const loggedUser = localStorage.getItem("token");
-
-  const [userIsHost, setUserIsHost] = useState(false);
-
-  useEffect(() => {
-    console.log("Data recieved in event mini ==> ", eventData);
-
-    const hostUser = eventData?.data.UserEvents.find(
-      (user) => user.userId === loggedUser
-    );
-
-    setUserIsHost(hostUser?.userId === loggedUser ? true : false);
-
-    console.log("hostuser", hostUser);
-  }, [eventData]);
-
   return (
     <div className="absolute left-20 top-24 grid grid-cols-2 grid-rows-3">
       {eventData && (
