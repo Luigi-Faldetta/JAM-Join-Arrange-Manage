@@ -35,11 +35,11 @@ export default function EventMini({
     <div>
       {eventData && (
         <>
-          <div className="flex h-36 justify-between gap-2 mt-4">
+          <div className="flex h-38 justify-between gap-2 mt-6">
 
             <div className="flex w-3/5 gap-3">
 
-              <div className="flex shrink-0 bg-slate-400 rounded-xl overflow-hidden">
+              <div className="flex shrink-0 w-48 bg-slate-400 border-4 border-pink-500 rounded-xl overflow-hidden">
                 <img src={eventData.data.coverPic} alt="Event picture"></img>
               </div>
 
@@ -51,14 +51,14 @@ export default function EventMini({
                 <div className="flex items-center">
                   <FaCalendarAlt className="fill-gray-400" />
                   <h4 className="ml-1 text-lg text-gray-400">
-                    {moment(eventData.data.date).format("ddd, Do MMM - h:mm a")}
+                    {eventData.data.date? moment(eventData.data.date).format("ddd, Do MMM - h:mm a") : 'No date'}
                   </h4>
                 </div>
 
                 <div className="flex items-center">
                   <FaLocationDot className="fill-gray-400" />
                   <h4 className="ml-1 text-lg text-gray-400">
-                    {eventData.data.location}
+                    {eventData.data.location ? eventData.data.location : 'No location'}
                   </h4>
                 </div>
 

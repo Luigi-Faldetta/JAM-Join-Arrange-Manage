@@ -58,6 +58,7 @@ function Navbar() {
               <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">JAM</span>
             </Link>
 
+            {location.pathname === "/" && (
             <div
               className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${showDropdownMobile ? "block" : "hidden"
                 }`}
@@ -72,7 +73,7 @@ function Navbar() {
                     smooth={true}
                     offset={-80}
                     duration={500}
-                    className="block py-2 px-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                    className="block py-2 px-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
                     aria-current="page"
                   >Home</Scroll>
                 </li>
@@ -84,7 +85,7 @@ function Navbar() {
                     smooth={true}
                     offset={-83}
                     duration={500}
-                    className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                    className="block py-2 pl-3 pr-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
                   >About</Scroll>
                 </li>
                 <li>
@@ -95,19 +96,20 @@ function Navbar() {
                     smooth={true}
                     offset={-100}
                     duration={500}
-                    className="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                    className="block py-2 pl-3 pr-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
                   >FAQs</Scroll>
                 </li>
               </ul>
             </div>
-
+            )}
+        
           </div>
 
           <div>
             {isLoggedIn && (
               <div className="flex items-center gap-5">
 
-                <Link to="/user-dashboard">Dashboard</Link>
+                <Link to="/user-dashboard" className="font-medium  text-gray-900  md:hover:text-pink-500 md:p-0 ">Dashboard</Link>
 
                 <Chat />
 
@@ -130,8 +132,6 @@ function Navbar() {
 
               </div>
             )}
-
-
 
             {showDropdown && (
               <div className="dropdown-menu" ref={ref}>
