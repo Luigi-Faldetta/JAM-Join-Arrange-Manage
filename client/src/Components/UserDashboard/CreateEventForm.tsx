@@ -36,7 +36,6 @@ function CreateEventForm() {
 
         const uploadedImage = await res.json();
 
-        console.log("Image form cloudinary ==> ", uploadedImage);
         return uploadedImage;
       } catch (error) {
         console.log(error);
@@ -58,16 +57,13 @@ function CreateEventForm() {
     };
 
     const image = await handleImageUpload();
-    console.log(image);
-    if (image?.url) eventFormData.coverPic = image.url;
 
-    console.log("in component", eventFormData);
+    if (image?.url) eventFormData.coverPic = image.url;
 
     const eventCreated = await addEvent({
       token: userToken as string,
       event: eventFormData,
     });
-    console.log("event created in DB== > ", eventCreated);
     dispatch(createEvent((eventCreated as ApiResponse<EventState>).data));
     setOpen(false);
     // Send another request with eventID, userID (host), isHost (true)
@@ -206,10 +202,6 @@ function CreateEventForm() {
       </dialog>
     ) : null;
   }
-
-  useEffect(() => {
-    console.log("open ==> ", open);
-  }, []);
 
   return (
     <>

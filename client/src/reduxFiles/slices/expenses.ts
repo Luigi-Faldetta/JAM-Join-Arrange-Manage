@@ -1,47 +1,41 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+// import { calculateExpenseSheet } from './expenseSheet';
+import store from '../store';
 
 export interface ExpenseState {
-    //update interface once types are declared
-    // item: string
+    id?:string,
     item: string;
-    cost: string;
+    cost: number;
     eventId: string;
-    id?: string;
+    purchaserId: string;
 }
 
 const initialExpenseState: ExpenseState = {
+    id:"",
     item: "",
-    cost: "",
+    cost: 0,
     eventId: "",
-    id: "",
+    purchaserId: "",
 }
 
 export const expenseSlice = createSlice({
     name: "expense",
     initialState: initialExpenseState,
     reducers: {
-        //state type will be Expense when the type is created.
-        createExpense: (state) => { state.item = "" },
-        deleteExpense: (state) => { state.item = "" },
+        addExpense: (state, action: PayloadAction<Partial<ExpenseState> & Pick<ExpenseState, "cost" | "eventId" | "purchaserId" | "item">>) => { 
+            console.log("in add expense: ", action.payload);
+            state= action.payload 
+            // store.dispatch(calculateExpenseSheet(action.payload.eventId))
+        },
+        // deleteExpense: (state, action: PayloadAction<string>) => { 
+        //     store.dispatch(calculateExpenseSheet(action.payload))
+        // },
     }
 })
 
-export const expenseListSlice = createSlice({
-    name: "expenseList",
-    initialState: [] as ExpenseState[],
-    reducers: {
-        //state type will be Expense when the type is created.
-        createExpenseList: (state) => { state = [] },
-        deleteExpenseList: (state) => { state = [] },
-        updateExpenseList: (state) => { state = [] },
-    }
-})
-
-export const { createExpense, deleteExpense } = expenseSlice.actions
-export const { createExpenseList, updateExpenseList, deleteExpenseList } = expenseListSlice.actions
+export const { addExpense, /*deleteExpense*/ } = expenseSlice.actions
 
 const expenseReducer = expenseSlice.reducer
-const expenseListReducer = expenseListSlice.reducer
 
-export default { expenseListReducer, expenseReducer }
+export default { expenseReducer }

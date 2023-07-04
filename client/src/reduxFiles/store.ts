@@ -9,6 +9,7 @@ import { thesisDbApi } from "../services/ThesisDB";
 import { useDispatch } from "react-redux";
 import { logoutReducer } from "./slices/logout";
 import { chatReducer } from "./slices/chat";
+// import { expenseSheetReducer } from "./slices/expenseSheet";
 
 
 const store = configureStore({
@@ -19,11 +20,9 @@ const store = configureStore({
     msgReducer: msgReducers.msgReducer,
     eventListReducer: eventReducers.eventListReducer,
     eventReducer: eventReducers.eventReducer,
-    userListReducer: userReducers.userListReducer,
     userReducer: userReducers.userReducer,
     toDoListReducer: toDoReducers.toDoListReducer,
     toDoReduer: toDoReducers.toDoReducer,
-    expenseListReducer: expenseReducers.expenseListReducer,
     expenseReducer: expenseReducers.expenseReducer,
     [thesisDbApi.reducerPath]: thesisDbApi.reducer,
   },
@@ -32,9 +31,6 @@ const store = configureStore({
   devTools: true,
 });
 
-// not sure if we need the line below, it is generally optional, but it IS required
-// if we use refetchOnFous or refetchOnReconnect
-// setupListeners(store.dispatch)
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

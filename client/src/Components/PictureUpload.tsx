@@ -35,7 +35,6 @@ function PictureUpload({
 
   //       // Send the url to the backend to update the post
 
-  //       console.log("Image form cloudinary ==> ", uploadedImage);
   //     } catch (error) {
   //       console.log(error);
   //     }

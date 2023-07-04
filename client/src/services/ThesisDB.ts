@@ -5,6 +5,7 @@ import { ToDoState } from "../reduxFiles/slices/toDos";
 import { UserState } from "../reduxFiles/slices/users";
 import { ApiResponse } from "./ApiResponseType";
 import { MsgState } from "../reduxFiles/slices/msg";
+import { ExpenseSheet } from "./ApiResponseType";
 
 
 import { io } from "socket.io-client";
@@ -13,34 +14,17 @@ const URL = "https://codeworks-thesis-4063bceaa74a.herokuapp.com/";
 
 
 export const socket = io(URL);
-// const {data, error, isLoading} = useGetUserQuery("f099247b-189d-4025-81eb-1a53c1e9c332")
-// const [addNewUser] = useAddUserMutation()
 
-// const onSubmit = async () => {
-//   try {
-//     const res = await addNewUser({name: "Xavi3", email: "xavi3@email.com", password: "xavi3"});
-//     // console.log((res as { data : ApiResponse<UserState>}).data.data.name)
-//   } catch (error) {
-//     // console.error(error)
-//   }
-// }
-
-// console.log("data: ", data);
-
-// someReturn
-// {error ? console.log({error}) : isLoading ? <p>loading...</p> : data ? <h3>{data.data.name}</h3> : <p>couldn't fetch</p>}
-
-//for more complete code and better error handling, refer back to the
-//and implement the transformErrorResponse, providesTags, OnQueryStarted,
-//transformResponse and OnCacheEntryStarted,
-//https://redux-toolkit.js.org/rtk-query/usage/queries
+export const fetchExpenseSheet = async (eventId:string) => {
+   return await fetch(URL+ `calculate/${eventId}`)
+}
 
 export const thesisDbApi = createApi({
   reducerPath: "thesisDbApi",
   baseQuery: fetchBaseQuery({
     baseUrl: URL,
   }),
-  tagTypes: ["EventState", "ExpenseState", "ToDoState", "UserState"], //for tracking what will be referenced from the cache
+  tagTypes: ["EventState", "ExpenseState", "ToDoState", "UserState", "ExpenseSheet"], //for tracking what will be referenced from the cache
   endpoints: (build) => ({
     // build.mutation has two type parameters, the first is response type the second is parameter type.
     // partial sets all properties to optional for parameter, pick selects which properties should be required for parameter
@@ -132,32 +116,18 @@ export const thesisDbApi = createApi({
 
     //Expenses
 
-    addExpense: build.mutation<
-      ApiResponse<ExpenseState>,
-      Partial<ExpenseState> & Pick<ExpenseState, "item">
-    >({
+    addExpense: build.mutation<ApiResponse<ExpenseState>,ExpenseState>({
       query: (expense) => ({
-        url: "expense/",
+        url: "expense",
         method: "POST",
         body: expense,
         headers: { "Content-type": "application/json; charset=UTF-8" },
       }),
     }),
 
-    calculateExpenses: build.mutation<
-      ApiResponse<ExpenseState>,
-      Partial<ExpenseState> & Pick<ExpenseState, "item">
-    >({
-      query: (expense) => ({
-        url: "expense/",
-        method: "POST",
-        body: expense,
-        headers: { "Content-type": "application/json; charset=UTF-8" },
-      }),
-    }),
-
-    getExpenses: build.query<ApiResponse<ExpenseState[]>, string>({
-      query: (eventId) => ({ url: `expenses/${eventId}` }),
+    calculateExpenses: build.query<ApiResponse<ExpenseSheet>,string>({
+      query: (eventId) => `calculate/${eventId}`,
+      // invalidatesTags:['ExpenseSheet']
     }),
 
     deleteExpense: build.mutation<ApiResponse<number>, string>({
@@ -279,9 +249,9 @@ export const {
   useAddUserMutation,
   useJoinActivityMutation,
   //get
+  useCalculateExpensesQuery,
   useGetEventQuery,
   useGetEventsQuery,
-  useGetExpensesQuery,
   useGetToDosQuery,
   useGetUserQuery,
   useGetUsersQuery,
