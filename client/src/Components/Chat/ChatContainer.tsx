@@ -11,14 +11,18 @@ import { ColorRing } from "react-loader-spinner";
 
 function ChatContainer() {
   const [addNewMsg] = useAddMsgMutation();
-  const chatState = useSelector((state: RootState) => state.chatReducer);
+  const { eventId } = useSelector((state: RootState) => state.chatReducer);
   const dispatch = useAppDispatch();
   useAuth();
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<MsgState[]>([]);
   const messagesRef = useRef<HTMLDivElement>(null);
   const userId = localStorage.getItem("token");
-  const eventId = chatState.eventId;
+
+  useEffect(() => {
+    console.log("Chat contaiiner comp ==> ", eventId)
+  }, [eventId])
+
   const query = useGetMsgsQuery(eventId as string);
   const data = query.data?.data;
 

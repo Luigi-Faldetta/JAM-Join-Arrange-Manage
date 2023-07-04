@@ -48,7 +48,8 @@ function Chat() {
     const handleEventClick = (event: any) => {
       setSelectedEvent(event);
     if (event.eventId) {
-      dispatch(openWithEventId(selectedEvent.eventId))
+      console.log("Event id se in the chat ==> ",event.eventId)
+      dispatch(openWithEventId(event.eventId))
     }
     setChatDropdown(false);
   };
