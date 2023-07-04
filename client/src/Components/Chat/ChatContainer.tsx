@@ -4,18 +4,19 @@ import { RootState, useAppDispatch } from "../../reduxFiles/store";
 import { useAuth } from "../../utils/useAuth";
 import "./chatContainer.css";
 import { useSelector } from "react-redux";
-import { useAddMsgMutation, useGetMsgsQuery } from "../../services/ThesisDB";
+import { socket, useAddMsgMutation, useGetMsgsQuery } from "../../services/ThesisDB";
 import moment from "moment";
-import { MsgState } from "../../reduxFiles/slices/msg";
+import { MsgState, addMessage, setMessages } from "../../reduxFiles/slices/msg";
 import { ColorRing } from "react-loader-spinner";
 
 function ChatContainer() {
   const [addNewMsg] = useAddMsgMutation();
   const { eventId } = useSelector((state: RootState) => state.chatReducer);
+  const messages = useSelector((state: RootState) => state.msgListReducer);
   const dispatch = useAppDispatch();
   useAuth();
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<MsgState[]>([]);
+  //const [messages, setMessages] = useState<MsgState[]>([]);
   const messagesRef = useRef<HTMLDivElement>(null);
   const userId = localStorage.getItem("token");
 
@@ -23,15 +24,15 @@ function ChatContainer() {
     console.log("Chat contaiiner comp ==> ", eventId)
   }, [eventId])
 
-  const query = useGetMsgsQuery(eventId as string);
-  const data = query.data?.data;
-
+  const { data: _data, isSuccess ,refetch, isLoading } = useGetMsgsQuery(eventId as string);
+  const data = _data?.data;
   const handleMessageSubmit = async (message: string) => {
     try {
-      await addNewMsg({ userId: userId || "", eventId, message });
+      // await addNewMsg({ userId: userId || "", eventId, message });
+      socket.emit("newMessage", { userId, eventId, message });
 
-      if (query.isSuccess) {
-        query.refetch();
+      if (isSuccess) {
+        refetch();
       }
 
       setMessage("");
@@ -44,6 +45,14 @@ function ChatContainer() {
     }
   };
 
+  useEffect(()=> {
+    socket.on("newMessage", (res) => {
+      dispatch(addMessage(res.data))
+  });
+    
+  }, [socket])
+
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -52,31 +61,34 @@ function ChatContainer() {
   };
 
   useEffect(() => {
-    if (data) {
-      setMessages(data);
+    if (data && !isLoading) {
+      dispatch(setMessages(data));
       if (messagesRef.current) {
         messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
       }
     }
-  }, [data]);
+  }, [data, isLoading]);
 
   const renderMessages = () => {
 
 
-    return data?.map((messageData: any, index) => {
+    return messages?.map((messageData: any, index) => {
       const isCurrentUser = messageData.userId === userId;
       const messageClassName = `relative text-xs py-2 px-4 shadow rounded-xl m-2 w-90 ${
         isCurrentUser ? "bg-blue-400 ml-8" : "bg-gray-300 mr-8"
       }`;
-
       return (
         <div key={messageData.id} className={messageClassName}>
           <div className="user">
+            
+          {messageData.User && messageData.User.profilePic && (
             <img
               src={messageData.User.profilePic}
               className="object-cover h-8 w-8 rounded-full"
               alt=""
             />
+          )}
+
             <div className="p-2">{messageData.User.name}</div>
           </div>
           <div className="message">{messageData.message}</div>
@@ -102,7 +114,7 @@ function ChatContainer() {
               </div>
               <div className="flex justify-end mb-4" ref={messagesRef}>
                 <div className="message-container">
-                  {query.isLoading ? (
+                  {isLoading ? (
                     <ColorRing
                       visible={true}
                       height="100%"
@@ -119,7 +131,7 @@ function ChatContainer() {
                       ]}
                     />
                   ) : (
-                    query.isSuccess && renderMessages()
+                    isSuccess && renderMessages()
                   )}
                 </div>
               </div>
