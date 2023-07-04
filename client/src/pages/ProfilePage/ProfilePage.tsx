@@ -220,6 +220,7 @@ const ProfilePage = (): any => {
               <div>
                 <button
                   type='submit'
+                  id='save-profile'
                   className='btn btn-success text-white'
                 >
                   Save Changes
@@ -228,6 +229,7 @@ const ProfilePage = (): any => {
               <div>
                 <button
                   type='submit'
+                  id='delete-profile'
                   className='btn btn-error text-white'
                   onClick={handleDelete}
                 >

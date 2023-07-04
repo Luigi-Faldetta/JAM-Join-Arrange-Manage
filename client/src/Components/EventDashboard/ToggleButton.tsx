@@ -57,11 +57,10 @@ export default function ToggleButton({
   // JOIN / LEAVE
 
   return (
-    <div>
-      <div style={{ position: "absolute", top: "0px", right: "0px"  }}>
+      <div className="absolute">
         <button
           onClick={isJoined ? handleLeave : handleJoin}
-          className="btn btn-primary m-10"
+          className="btn bg-white m-10"
         >
           {isLoading ? (
             <ColorRing
@@ -80,6 +79,5 @@ export default function ToggleButton({
           )}
         </button>
       </div>
-    </div>
   );
 }

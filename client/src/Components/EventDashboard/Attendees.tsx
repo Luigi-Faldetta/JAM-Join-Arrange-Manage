@@ -61,22 +61,22 @@ export default function Attendees() {
 
   return (
     <>
-      <h2 className='text-white text-center font-bold'>{attendees.length} ATTENDEES</h2>
-    <div className="carousel carousel-center rounded-box w-4/5 mx-auto flex justify-center">
-      {activeIndex > 0 && (
-        <button className="carousel-arrow left-arrow" onClick={handlePrevious}>
-          <span className="carousel-arrow-icon text-4xl">&lt;</span>
-        </button>
-      )}
+      <h2 className='absolute mt-1 ml-3 text-white text-center font-bold'>x{attendees.length} ATTENDEES</h2>
+      <div className="carousel carousel-center rounded-box w-4/5 mx-auto flex justify-center">
+        {activeIndex > 0 && (
+          <button className="carousel-arrow left-arrow" onClick={handlePrevious}>
+            <span className="carousel-arrow-icon text-4xl">&lt;</span>
+          </button>
+        )}
 
-      {renderImages()}
+        {renderImages()}
 
-      {activeIndex < attendees.length - imagesPerSlide && (
-        <button className="carousel-arrow right-arrow" onClick={handleNext}>
-          <span className="carousel-arrow-icon text-4xl">&gt;</span>
-        </button>
-      )}
-    </div>
-      </>
+        {activeIndex < attendees.length - imagesPerSlide && (
+          <button className="carousel-arrow right-arrow" onClick={handleNext}>
+            <span className="carousel-arrow-icon text-4xl">&gt;</span>
+          </button>
+        )}
+      </div>
+    </>
   );
 }

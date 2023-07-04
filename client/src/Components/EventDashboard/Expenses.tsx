@@ -11,10 +11,6 @@ interface Expense {
     id?: string;
 }
 
-
-
-
-
 export default function Expenses() {
     const { eventid } = useParams();
     const [expenses, setExpenses] = useState<ExpenseState[]>([]);
@@ -42,7 +38,9 @@ export default function Expenses() {
     }, [expenses]);
 
 
-    const handleAddClick = () => {
+    const handleAddClick = (e: any) => {
+        e.preventDefault();
+
         console.log(newExpense);
 
         if (newExpense.item !== "") {
@@ -117,43 +115,55 @@ export default function Expenses() {
 
 
     return (
-        <div className="flex justify-center">
-            <div className="w-4/5 mx-20 relative bg-blue-500 rounded-lg flex flex-col items-center mt-36 h-[460px]">
-                <h1 className="p-6 text-2xl text-white">Expenses</h1>
-                <div className="absolute top-6 right-6 text-2xl text-red-600">Total: ${total}</div>
-                <div className="flex items-center" key={newExpense.id}>
-                    <input
-                        name="item"
-                        value={newExpense.item}
-                        onChange={handleInputChange}
-                        type="text"
-                        placeholder="Expense item"
-                        className="w-40 h-10"
-                    />
-                    <input
-                        name="cost"
-                        value={newExpense.cost}
-                        onChange={handleInputChange}
-                        type="number"
-                        placeholder="0"
-                        className="w-20 h-10 ml-3"
-                    />
-                    <button onClick={handleAddClick} className="ml-3 p-1 w-8 text-lg rounded-md border border-slate-50">&#10133;</button>
-                </div>
-                {expenses.map((expense) => (
-                    <div className="flex items-center" key={expense?.id}>
-                        <button
-                            className="text-white rounded-md text-xl"
-                            onClick={() => handleDeleteClick(String(expense?.id))}
-                        >
-                            ❌
-                        </button>
-                        <h3 className="text-white border border-slate-50 m-4 rounded-md text-center w-60 h-8">
-                            {expense?.item} (${expense?.cost})
-                        </h3>
+        <div className="flex justify-center gap-4">
+            <div className="w-1/2 h-96 p-4 bg-indigo-950 rounded-xl flex flex-col">
+                <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">EXPENSES (Total: €{total})</h1>
+
+                <div className="w-full">
+
+                    {expenses.map((expense) => (
+                        <div className="flex p-2 border-t border-gray-400 text-white text-xl" key={expense?.id}>
+                            <button
+                                className="w-10 text-gray-400"
+                                onClick={() => handleDeleteClick(String(expense?.id))}
+                            >X</button>
+
+                            <h3 className="w-full">
+                                {expense?.item} ( €{expense?.cost} )
+                            </h3>
+                        </div>
+                    ))}
+
+                    <div className="text-white text-xl">
+                        <form onSubmit={handleAddClick} className="flex p-1 pt-3 ">
+                            <input
+                                name="item"
+                                value={newExpense.item}
+                                onChange={handleInputChange}
+                                type="text"
+                                placeholder="Add expense"
+                                className="ml-4 w-full h-10 border-0 border-b border-gray-400 bg-indigo-950"
+                            />
+                            <input
+                                name="cost"
+                                value={newExpense.cost}
+                                onChange={handleInputChange}
+                                type="number"
+                                placeholder="€"
+                                className="ml-4 w-1/6 h-10 border-0 border-b border-gray-400 bg-indigo-950"
+                            />
+                            <button type="submit" className="w-12  font-bold rounded-full border border-gray-400">+</button>
+                        </form>
                     </div>
-                ))}
+
+                </div>
+
             </div>
+            <div className="w-1/2 h-96 p-4 bg-indigo-950 rounded-xl flex flex-col">
+                <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">BALANCE</h1>
+
+            </div>
+
         </div>
     )
 }

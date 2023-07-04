@@ -177,7 +177,7 @@ export default function Todos(): JSX.Element {
 
       <div className="w-1/2 h-96 p-4 bg-indigo-950 rounded-xl flex flex-col">
         <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">TODOS</h1>
-        <div className="w-full">
+        <div className="w-full h-full flex flex-col overflow-y-auto">
           {toDos.map((toDo, index) => (
             <div className="flex p-2 border-t border-gray-400 text-white text-xl" key={index}>
               <button
@@ -192,7 +192,7 @@ export default function Todos(): JSX.Element {
             </div>
           ))}
 
-          <div className="text-white text-xl ">
+          <div className="text-white text-xl">
             <form onSubmit={handleAddClick} className="flex p-1 pt-3 ">
               <input
                 type="text"
@@ -212,16 +212,20 @@ export default function Todos(): JSX.Element {
 
       <div className="w-1/2 h-96 p-4 bg-indigo-950 rounded-xl flex flex-col">
         <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">COMPLETED</h1>
-        <div className="w-full">
+        <div className="w-full overflow-y-auto">
           {doneToDos.map((doneToDo, index) => (
             <div className="flex p-2 border-t border-gray-400 text-white text-xl" key={index}>
               <button
                 className="w-10 text-pink-500 font-black"
                 onClick={() => handleMoveToTodosClick(index)}
               >{'<'}</button>
-              <h3 className="w-full">
+              <h3 className="w-full ml-1">
                 {doneToDo.title}
               </h3>
+              <button
+                className="w-10 text-gray-400"
+                onClick={() => handleDeleteClick(index)}
+              >X</button>
             </div>
           ))}
         </div>
