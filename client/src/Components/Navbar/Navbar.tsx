@@ -1,8 +1,7 @@
-import { ReactEventHandler, useState } from "react";
+import { useState } from "react";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
 import { Link as Scroll } from "react-scroll";
-import { useAuth } from "../../utils/useAuth";
 import { useAppDispatch } from "../../reduxFiles/store";
 import { openLogout } from "../../reduxFiles/slices/logout";
 import { useIsLoggedIn } from "../../utils/useIsLoggedIn";
@@ -69,6 +68,7 @@ function Navbar() {
                   <Scroll
                     onClick={handleMobileMenu}
                     to="hero"
+                    id="tohero"
                     spy={true}
                     smooth={true}
                     offset={-80}
@@ -81,6 +81,7 @@ function Navbar() {
                   <Scroll
                     onClick={handleMobileMenu}
                     to="about"
+                    id="toabout"
                     spy={true}
                     smooth={true}
                     offset={-83}
@@ -92,6 +93,7 @@ function Navbar() {
                   <Scroll
                     onClick={handleMobileMenu}
                     to="faqs"
+                    id="tofaqs"
                     spy={true}
                     smooth={true}
                     offset={-100}
@@ -139,6 +141,7 @@ function Navbar() {
                   <li>
                     <Link
                       to="/profile"
+                      id="profile-btn"
                       className="dropdown-item"
                       onClick={handleAvatarClick}
                     >
@@ -146,7 +149,7 @@ function Navbar() {
                     </Link>
                   </li>
                   <li>
-                    <button onClick={handleSignOut} className="dropdown-item">
+                    <button id="signout-btn" onClick={handleSignOut} className="dropdown-item">
                       Sign out
                     </button>
                   </li>
