@@ -7,7 +7,10 @@ import { setEventList } from "../../reduxFiles/slices/events";
 import ChatContainer from "./ChatContainer";
 import { openChat, openWithEventId } from "../../reduxFiles/slices/chat";
 import { useClickAway } from "@uidotdev/usehooks";
+import { HiOutlineChatBubbleLeftRight } from 'react-icons/hi2'
 import "./chatContainer.css";
+
+
 interface Event {
   coverPic: string;
   date: string;
@@ -57,7 +60,7 @@ function Chat() {
   };
 
   return (
-    <div className="flex items-center md:order-2">
+    <div className="flex items-center">
       <button
         type="button"
         className=""
@@ -68,7 +71,7 @@ function Chat() {
         data-dropdown-placement="bottom"
       >
         <span className="sr-only">Open user menu</span>
-        <AiOutlineComment className="w-8 h-8 text-black" />
+        <HiOutlineChatBubbleLeftRight  className="w-8 h-8 md:hover:text-pink-500"/>
       </button>
       {chatDropdown && (
   <div className="dropdown-menu" ref={ref}>

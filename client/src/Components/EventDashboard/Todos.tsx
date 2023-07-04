@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGetToDosQuery } from "../../services/ThesisDB";
 import { ToDoState } from "../../reduxFiles/slices/toDos";
 import { useAddToDoMutation } from "../../services/ThesisDB";
@@ -18,6 +18,7 @@ export default function Todos(): JSX.Element {
   const [doneToDos, setDoneToDos] = useState<ToDoState[]>([]);
 
   const { data, error, isLoading } = useGetToDosQuery(eventid as string);
+  const todosRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (data) {
@@ -28,6 +29,13 @@ export default function Todos(): JSX.Element {
       setDoneToDos(doneTodos);
     }
   }, [data]);
+
+  useEffect(() => {
+    // Scroll to the bottom of the todos div
+    if (todosRef.current) {
+      todosRef.current.scrollTop = todosRef.current.scrollHeight;
+    }
+  }, [toDos]);
 
   const handleAddClick = (e: any) => {
     e.preventDefault();
@@ -167,7 +175,7 @@ export default function Todos(): JSX.Element {
 
       <div className="w-1/2 h-96 p-4 bg-indigo-950 rounded-xl flex flex-col">
         <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">TODOS</h1>
-        <div className="w-full h-full flex flex-col overflow-y-auto">
+        <div ref={todosRef} className="w-full h-full flex flex-col overflow-y-auto">
           {toDos.map((toDo, index) => (
             <div className="flex p-2 border-t border-gray-400 text-white text-xl" key={index}>
               <button
