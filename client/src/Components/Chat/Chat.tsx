@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AiOutlineComment } from "react-icons/ai";
-import { useGetEventQuery, useGetEventsQuery } from "../../services/ThesisDB";
+import { socket, useGetEventQuery, useGetEventsQuery } from "../../services/ThesisDB";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../../reduxFiles/store";
 import { setEventList } from "../../reduxFiles/slices/events";
@@ -55,6 +55,7 @@ function Chat() {
     if (event.eventId) {
       // console.log("Event id se in the chat ==> ",event.eventId)
       dispatch(openWithEventId(event.eventId))
+      socket.emit("joinRoom", { userId: localStorage.getItem('token') || "", eventId: event.eventId });
     }
     setChatDropdown(false);
   };
