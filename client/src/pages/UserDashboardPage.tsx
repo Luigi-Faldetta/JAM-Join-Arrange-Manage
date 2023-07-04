@@ -21,7 +21,7 @@ function UserDashboardPage() {
       console.log("event list ==> ", data?.data);
       dispatch(setEventList(data?.data));
     }
-  }, [isLoading, error]);
+  }, [isLoading, error, data]);
 
   useEffect(() => {
     console.log("Event list has changed ==> ", eventList);
