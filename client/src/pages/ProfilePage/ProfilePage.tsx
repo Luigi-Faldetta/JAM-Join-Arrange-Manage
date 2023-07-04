@@ -26,7 +26,7 @@ const ProfilePage = (): any => {
     };
 
     return (
-      <div className='upload-btn mb-3'>
+      <div className='overflow-y-hidden upload-btn mb-3'>
         <input
           id='profilePic'
           type='file'
