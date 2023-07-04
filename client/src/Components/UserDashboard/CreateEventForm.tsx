@@ -57,10 +57,6 @@ function CreateEventForm() {
       date: eventDate,
       location: event.currentTarget.eventLocation.value,
       description: null,
-      // eventHost and eventAttendees need to be updated to
-      // reflect hostID after login.
-      // eventHost: "hostId", are we sending host id or not?
-      // eventAttendees: ["hostId"], set hostid to attendees?
     };
     // set cloudinary url to form object before sending to db
     const image = await handleImageUpload();
@@ -76,12 +72,6 @@ function CreateEventForm() {
     console.log("event created in DB== > ", eventCreated);
     dispatch(createEvent((eventCreated as ApiResponse<EventState>).data));
     setOpen(false);
-
-    // eventCreated brings an eventID
-    //eventCreated.eventId + userToken
-    // const userEventRelationship = await //sendRelationCall(eventCreated.id, userToken, true)
-
-    // Send another request with eventID, userID (host), isHost (true)
   };
 
   function createModal() {
