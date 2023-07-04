@@ -17,11 +17,9 @@ import store, { RootState, useAppDispatch } from "../../reduxFiles/store";
 
 export default function Expenses() {
     const { eventid } = useParams();
-    // const appDispatch = useAppDispatch()
     const purchaserId = localStorage.getItem("token")
     const [deleteApiExpense] = useDeleteExpenseMutation()
     const [addApiExpense] = useAddExpenseMutation()
-    // const expenseSheet = useSelector((state: RootState) => state.expenseSheet)
     const [expenseSheet, setExpenseSheet] = useState<ExpenseSheet>({
         expenses:[],
         attendees:[],
@@ -34,16 +32,9 @@ export default function Expenses() {
     const [newExpenseForm, setNewExpenseForm] = useState<{item:string, cost:string, eventId:string, purchaserId:string}>({ item: "", cost: "", eventId: "", purchaserId: "" });
 
 
-    
-    // const { data, error, isLoading } = useCalculateExpensesQuery(eventid as string);
-
     useEffect(() => {
         fetchExpenseSheet(eventid as string).then(response => response.json()).then( (response: ApiResponse<ExpenseSheet>) => {
-            /**
-             * FIX BELOW ON BACKEND REDEPLOYMENT
-            */
-           setExpenseSheet(response)
-           console.log("response: ",response)
+           setExpenseSheet(response.data)
         })
     }, []);
 
@@ -59,11 +50,8 @@ export default function Expenses() {
             const llama = await addApiExpense(expenseToAdd);
             console.log("llama: ",llama);
             fetchExpenseSheet(eventid as string).then(response => response.json()).then( (response: ApiResponse<ExpenseSheet>) => {
-                /**
-                 * FIX BELOW ON BACKEND REDEPLOYMENT
-                */
                 console.log("in fetch")
-               setExpenseSheet(response)
+               setExpenseSheet(response.data)
             })
         }
         setNewExpenseForm({ item: "", cost: "", eventId: "", purchaserId: "" })
@@ -90,10 +78,7 @@ export default function Expenses() {
     const handleDeleteClick = async (expenseId: string) => {
         await deleteApiExpense(expenseId);
         fetchExpenseSheet(eventid as string).then(response => response.json()).then( (response: ApiResponse<ExpenseSheet>) => {
-            /**
-             * FIX BELOW ON BACKEND REDEPLOYMENT
-            */
-           setExpenseSheet(response)
+           setExpenseSheet(response.data)
         })
     };
 
