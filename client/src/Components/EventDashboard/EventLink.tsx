@@ -17,9 +17,9 @@ function EventLink({ eventid }: any) {
   return (
     <div>
       {/* Share this link with your friends: */}
-      <button className={ !isCopied ? "btn" : "btn bg-green-300"} onClick={handleCopyLink}>
-        Copy Link
-        <PiCopyBold size={30} />
+      <button className="btn" onClick={handleCopyLink}>
+       COPY LINK
+        <PiCopyBold size={30} className={ isCopied ? "fill-green-600" : "fill-gray-400"} />
       </button>
     </div>
   );
