@@ -75,7 +75,7 @@ function Chat() {
         data-dropdown-placement="bottom"
       >
         <span className="sr-only">Open user menu</span>
-        <HiOutlineChatBubbleLeftRight  className="w-8 h-8 md:hover:text-pink-500"/>
+        <HiOutlineChatBubbleLeftRight id="chat-icon"  className="w-8 h-8 md:hover:text-pink-500"/>
       </button>
       {chatDropdown && (
   <div className="dropdown-menu" ref={ref}>
