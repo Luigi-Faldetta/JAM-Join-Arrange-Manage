@@ -9,7 +9,7 @@ import { thesisDbApi } from "../services/ThesisDB";
 import { useDispatch } from "react-redux";
 import { logoutReducer } from "./slices/logout";
 import { chatReducer } from "./slices/chat";
-import { expenseSheetReducer } from "./slices/expenseSheet";
+// import { expenseSheetReducer } from "./slices/expenseSheet";
 
 
 const store = configureStore({
@@ -26,12 +26,12 @@ const store = configureStore({
     toDoReduer: toDoReducers.toDoReducer,
     // expenseListReducer: expenseReducers.expenseListReducer,
     expenseReducer: expenseReducers.expenseReducer,
-    expenseSheetReducer: expenseSheetReducer,
+    // expenseSheet: expenseSheetReducer,
     [thesisDbApi.reducerPath]: thesisDbApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(thesisDbApi.middleware),
-  devTools: true,
+  // devTools: true,
 });
 
 // not sure if we need the line below, it is generally optional, but it IS required

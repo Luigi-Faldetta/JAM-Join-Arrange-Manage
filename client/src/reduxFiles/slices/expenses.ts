@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { calculateExpenseSheet } from './expenseSheet';
+// import { calculateExpenseSheet } from './expenseSheet';
 import store from '../store';
 
 export interface ExpenseState {
@@ -24,16 +24,17 @@ export const expenseSlice = createSlice({
     initialState: initialExpenseState,
     reducers: {
         addExpense: (state, action: PayloadAction<Partial<ExpenseState> & Pick<ExpenseState, "cost" | "eventId" | "purchaserId" | "item">>) => { 
+            console.log("in add expense: ", action.payload);
             state= action.payload 
-            store.dispatch(calculateExpenseSheet(action.payload.eventId))
+            // store.dispatch(calculateExpenseSheet(action.payload.eventId))
         },
-        deleteExpense: (state, action: PayloadAction<string>) => { 
-            store.dispatch(calculateExpenseSheet(action.payload))
-        },
+        // deleteExpense: (state, action: PayloadAction<string>) => { 
+        //     store.dispatch(calculateExpenseSheet(action.payload))
+        // },
     }
 })
 
-export const { addExpense, deleteExpense } = expenseSlice.actions
+export const { addExpense, /*deleteExpense*/ } = expenseSlice.actions
 
 const expenseReducer = expenseSlice.reducer
 

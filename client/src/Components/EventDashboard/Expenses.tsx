@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { ExpenseState, addExpense, deleteExpense } from "../../reduxFiles/slices/expenses";
+import { ExpenseState, addExpense/*, deleteExpense */} from "../../reduxFiles/slices/expenses";
 import { useAddExpenseMutation, useCalculateExpensesQuery, useDeleteExpenseMutation } from "../../services/ThesisDB";
 import { useParams } from "react-router-dom";
-import { ExpenseSheet } from "../../reduxFiles/slices/expenseSheet";
-import { useAppDispatch } from "../../reduxFiles/store";
+import { ExpenseSheet } from "../../services/ApiResponseType";
+import store, { RootState, useAppDispatch } from "../../reduxFiles/store";
+// import { UseSelector, useSelector } from "react-redux/es/hooks/useSelector";
 
 
 
@@ -14,7 +15,7 @@ export default function Expenses() {
     const purchaserId = localStorage.getItem("token")
     const [deleteApiExpense] = useDeleteExpenseMutation()
     const [addApiExpense] = useAddExpenseMutation()
-
+    // const expenseSheet = useSelector((state: RootState) => state.expenseSheet)
     const [expenseSheet, setExpenseSheet] = useState<ExpenseSheet>({
         expenses:[],
         attendees:[],
@@ -31,18 +32,14 @@ export default function Expenses() {
     
     const { data, error, isLoading } = useCalculateExpensesQuery(eventid as string);
 
-    console.log("data: ",data);
-    if(data){
     useEffect(() => {
-        if (data) {
-            setExpenseSheet(data as ExpenseSheet);
-            setExpenseList(data.expenses as ExpenseState[])
-            console.log("data.data: ", data)
-        }
-    }, []);
-    }
-    console.log("ExpenseList: ",expenseList);
-    console.log("ExpenseSheet: ",expenseSheet);
+        if(data)
+        setExpenseSheet(data)
+        // calculateExpenseSheet(eventid as string)
+        setExpenseList(data?.expenses)
+    }, [expenseList]);
+    // console.log("ExpenseList: ",expenseList);
+    // console.log("ExpenseSheet: ",data);
 
 
     const handleAddClick = async () => {
@@ -53,9 +50,11 @@ export default function Expenses() {
                 eventId: eventid as string,
                 purchaserId: purchaserId as string,
             };
-            setExpenseList(expenses => [...expenses, expenseToAdd])
-            addApiExpense(expenseToAdd);
-            appDispatch(addExpense(expenseToAdd))
+            await addApiExpense(expenseToAdd);
+            setExpenseList((expenses) => [...expenses, expenseToAdd])
+            //recommends fetching from server and update state with it.
+            // appDispatch(addExpense(expenseToAdd))
+            // appDispatch(calculateExpenseSheet(expenseToAdd.eventId))
         }
         setNewExpenseForm({ item: "", cost: "", eventId: "", purchaserId: "" })
     };
@@ -79,9 +78,9 @@ export default function Expenses() {
 
 
     const handleDeleteClick = async (expenseId: string) => {
-        setExpenseList(expenses => expenses.filter(expense => expense.Id !== exp))
         deleteApiExpense(expenseId);
-        appDispatch(deleteExpense(expenseId));
+        setExpenseList(expenses => expenses.filter(expense => expense.id !== expenseId))
+        // appDispatch(deleteExpense(expenseId));
     };
 
 

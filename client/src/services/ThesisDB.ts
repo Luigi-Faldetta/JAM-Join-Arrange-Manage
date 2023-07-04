@@ -5,7 +5,7 @@ import { ToDoState } from "../reduxFiles/slices/toDos";
 import { UserState } from "../reduxFiles/slices/users";
 import { ApiResponse } from "./ApiResponseType";
 import { MsgState } from "../reduxFiles/slices/msg";
-import { ExpenseSheet } from "../reduxFiles/slices/expenseSheet";
+import { ExpenseSheet } from "./ApiResponseType";
 
 // const {data, error, isLoading} = useGetUserQuery("f099247b-189d-4025-81eb-1a53c1e9c332")
 // const [addNewUser] = useAddUserMutation()
@@ -34,7 +34,7 @@ export const thesisDbApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "https://codeworks-thesis-4063bceaa74a.herokuapp.com/",
   }),
-  tagTypes: ["EventState", "ExpenseState", "ToDoState", "UserState"], //for tracking what will be referenced from the cache
+  tagTypes: ["EventState", "ExpenseState", "ToDoState", "UserState", "ExpenseSheet"], //for tracking what will be referenced from the cache
   endpoints: (build) => ({
     // build.mutation has two type parameters, the first is response type the second is parameter type.
     // partial sets all properties to optional for parameter, pick selects which properties should be required for parameter
@@ -135,6 +135,7 @@ export const thesisDbApi = createApi({
 
     calculateExpenses: build.query<ApiResponse<ExpenseSheet>,string>({
       query: (eventId) => `calculate/${eventId}`,
+      // invalidatesTags:['ExpenseSheet']
     }),
 
     // getExpenses: build.query<ApiResponse<ExpenseState[]>, string>({
