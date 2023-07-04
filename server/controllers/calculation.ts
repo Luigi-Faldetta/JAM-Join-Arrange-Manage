@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import Expense from '../models/expense';
 import User from '../models/user';
 import UserEvent from '../models/userEvent';
-import { BeUser, IndExpense } from '../utils';
+import { BeUser, IndExpense, resBody } from '../utils';
 
 const expenseSheet = async (req: Request, res: Response) => {
 
@@ -50,16 +50,17 @@ try {
     })
 
 
-    res.status(200).json({
+    res.status(200).json(resBody(true, "200", {
         expenses: expenseList,
         attendees: userList,
         total: totalExpenses,
         perPerson,
         indExpenses,
-    })
+    }, "Expense Sheet Calculated"))
 
 } catch (error) {
     console.log(error)
+    res.status(400).json(resBody(true, "400", null, "Could not calculate Expenses"))
 }
 
 }
