@@ -50,12 +50,11 @@ function EventTile({ event }: { event: any }) {
           {/* {event.attendees.length > 1 ? <p>{`${event.attendees.length} going`}</p>}*/}
         </div>
 
-        <div className=" min-w-lg w-[200px] h-[120px] rounded-lg overflow-hidden items-center">
-          {event.coverPic ? (
-            <img className="object-cover" src={event.coverPic}></img>
-          ) : (
-            <img className="object-cover " src={img}></img>
-          )}
+        <div className=" w-[200px] h-[120px] rounded-lg overflow-hidden items-center">
+          <img
+            className="object-cover w-full h-full"
+            src={event.coverPic ? event.coverPic : img}
+          ></img>
         </div>
         {/* </a> */}
       </Link>
