@@ -18,7 +18,6 @@ export default function Event() {
   const [isJoined, setIsJoined] = useState<boolean>(false);
 
   const loggedUser = localStorage.getItem("token");
-
   const isLoggedIn = useIsLoggedIn();
   const { eventid } = useParams();
 
@@ -54,11 +53,6 @@ export default function Event() {
     }
   }, [eventData, loggedUser]);
 
-  const handleToggle = () => {
-    setShowTodos((prevShowTodos) => !prevShowTodos);
-  };
-
-  // console.log("____________________________________eventdata==>", eventData);
 
   return (
     <>
@@ -67,7 +61,7 @@ export default function Event() {
         <div className="flex flex-col items-center gap-4">
           <div className="w-4/5">
 
-            <EventData eventData={eventData} userIsHost={userIsHost} />
+            <EventData eventData={eventData} userIsHost={userIsHost} showTodos={showTodos} setShowTodos={setShowTodos}/>
 
             <ToggleButton
               isJoined={isJoined}
@@ -76,21 +70,13 @@ export default function Event() {
               isLoading={isLoading}
             />
 
-            <button
-              onClick={handleToggle}
-              className="absolute top-28 right-24 btn btn-primary"
-              style={{ position: "absolute", top: "0px", right: "0px" }}
-            >
-              {showTodos ? "Expenses" : "Todos"}
-            </button>
-
           </div>
 
           <div className="w-4/5">
             {showTodos ? (<Todos />) : (<Expenses />)}
           </div>
 
-          <div className="w-4/5 bg-purple-200 rounded-xl" >
+          <div className="w-4/5 h-36 bg-gray-300 rounded-xl" >
             <Attendees />
           </div>
 
