@@ -36,7 +36,9 @@ function EventTile({ event }: { event: any }) {
             {event.title}
           </h2>
           <div className="flex flex-row">
-            {event.UserEvents[0].isHost === true ? (
+            {event.UserEvents &&
+            event.UserEvents.length &&
+            event.UserEvents[0].isHost === true ? (
               <p className=" text-[10px] tracking-tight text-gray-500 dark:text-white">
                 ⋆ You are hosting
               </p>
