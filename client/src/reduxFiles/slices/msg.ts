@@ -3,15 +3,18 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface MsgState {
     //update interface once types are declared
+    id?:number,
     userId: string, 
     eventId: string, 
-    message: string
+    message: string,
+    User?: any
 }
 
 const initialMsgState:MsgState = {
     userId: "", 
     eventId: "", 
-    message: ""
+    message: "",
+    User: {}
 }
 
 export const msgSlice = createSlice({
@@ -24,17 +27,25 @@ export const msgSlice = createSlice({
 })
 
 export const msgListSlice = createSlice({
-    name: "expenseList",
+    name: "messages",
     initialState: [] as MsgState[],
     reducers: {
         //state type will be Expense when the type is created.
-        createMsgList: (state) => { state = []},
-        updateMsgList: (state) => { state = []},
+        setMessages: (_state, action) => {
+            return action.payload
+        },
+        addMessage: (state, action) => {
+            const itsAlreadyThere = state.some(msg => msg.id === action.payload.id);
+            if (itsAlreadyThere) {
+                return state;
+            }
+            return [...state, action.payload]
+        },
     }
 })
 
 export const { createMsg } = msgSlice.actions
-export const { createMsgList, updateMsgList} = msgListSlice.actions
+export const { setMessages, addMessage} = msgListSlice.actions
 
 const msgReducer = msgSlice.reducer
 const msgListReducer = msgListSlice.reducer
