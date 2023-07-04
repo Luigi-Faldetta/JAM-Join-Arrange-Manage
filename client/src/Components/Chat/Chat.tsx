@@ -45,9 +45,6 @@ function Chat() {
       dispatch(setEventList(data?.data));
     }
   }, [isLoading, error]);
-  //   useEffect(() => {
-    //     console.log("Event list has changed ==> ", eventList);
-    //   }, [eventList]);
     
     const handleChatClick = () => {
       setChatDropdown(!chatDropdown);
@@ -56,7 +53,6 @@ function Chat() {
     const handleEventClick = (event: any) => {
       setSelectedEvent(event);
     if (event.eventId) {
-      // console.log("Event id se in the chat ==> ",event.eventId)
       dispatch(openWithEventId(event.eventId))
       socket.emit("joinRoom", { userId: localStorage.getItem('token') || "", eventId: event.eventId });
     }

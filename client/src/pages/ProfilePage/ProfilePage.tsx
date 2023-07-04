@@ -75,7 +75,6 @@ const ProfilePage = (): any => {
 
         const uploadedImage = await res.json();
         if (uploadedImage && uploadedImage.url) {
-          console.log('Image from Cloudinary: ', uploadedImage);
           return uploadedImage;
         } else {
           console.log('Error uploading image');
@@ -122,7 +121,6 @@ const ProfilePage = (): any => {
       }
 
       const updatedUser = await updateUser(userFormData);
-      console.log('Updated user:', updatedUser);
 
       if (updatedUser) {
         setUpdateStatus('success');
@@ -142,7 +140,6 @@ const ProfilePage = (): any => {
   const handleDelete = (e: any) => {
     e.preventDefault();
     setOpen(true);
-    console.log(open);
   };
 
   return (

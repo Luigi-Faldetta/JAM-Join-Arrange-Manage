@@ -30,37 +30,14 @@ export const userSlice = createSlice({
     ) => {
       state = action.payload;
     },
-    deleteUser: (state) => {
-      state = state;
-    },
     updateUserState: (state: UserState, action) => {
       state = action.payload;
     },
   },
 });
 
-export const userListSlice = createSlice({
-  name: "userList",
-  initialState: [] as UserState[],
-  reducers: {
-    //state type will be User when the type is created.
-    createUserList: (state) => {
-      state = [];
-    },
-    deleteUserList: (state) => {
-      state = [];
-    },
-    updateUserList: (state) => {
-      state = [];
-    },
-  },
-});
-
-export const { createUser, updateUserState, deleteUser } = userSlice.actions;
-export const { createUserList, updateUserList, deleteUserList } =
-  userListSlice.actions;
+export const { createUser, updateUserState} = userSlice.actions;
 
 const userReducer = userSlice.reducer;
-const userListReducer = userListSlice.reducer;
 
-export default { userListReducer, userReducer };
+export default { userReducer };

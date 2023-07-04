@@ -1,87 +1,68 @@
 import { useEffect, useState } from "react";
-import { useGetExpensesQuery } from "../../services/ThesisDB";
-import { ExpenseState } from "../../reduxFiles/slices/expenses";
-import { useAddExpenseMutation } from "../../services/ThesisDB";
+import { ExpenseState} from "../../reduxFiles/slices/expenses";
+import { fetchExpenseSheet, useAddExpenseMutation, useDeleteExpenseMutation } from "../../services/ThesisDB";
 import { useParams } from "react-router-dom";
+import { ApiResponse, ExpenseSheet } from "../../services/ApiResponseType";
 
-interface Expense {
-    item: string;
-    cost: string;
-    eventId: string;
-    id?: string;
-}
+
+/**
+ * 
+ * WE NEED TO ADD AN ID PARAMETER TO THE INDEXPENSES ARRAY HERE AND IN BACK END CALCULATIONS CONTROLLER
+ * WITH THE USER ID SO WE CAN PROPERLY MAP IT IN THE TSX BELOW.  CURRENTLY USING THE NAME PARAMETER AS A
+ * QUICKFIX
+ * 
+ */
 
 export default function Expenses() {
     const { eventid } = useParams();
-    const [expenses, setExpenses] = useState<ExpenseState[]>([]);
-    const [newExpense, setNewExpense] = useState<ExpenseState>({ item: "", cost: "", eventId: "", id: "" });
-    const [total, setTotal] = useState<number>(0);
-    const purchaserId = localStorage.getItem('token');
+    const purchaserId = localStorage.getItem("token")
+    const [deleteApiExpense] = useDeleteExpenseMutation()
+    const [addApiExpense] = useAddExpenseMutation()
+    const [expenseSheet, setExpenseSheet] = useState<ExpenseSheet>({
+        expenses:[],
+        attendees:[],
+        total:0,
+        perPerson:0,
+        indExpenses:[]
+    });
 
+    //it might be easier if we can make the use state type ExpenseState, but for now I needed it to work.
+    const [newExpenseForm, setNewExpenseForm] = useState<{item:string, cost:string, eventId:string, purchaserId:string}>({ item: "", cost: "", eventId: "", purchaserId: "" });
 
-    const { data, error, isLoading } = useGetExpensesQuery(eventid as string);
 
     useEffect(() => {
-        if (data) setExpenses(data.data);
-    }, [data]);
+        fetchExpenseSheet(eventid as string).then(response => response.json()).then( (response: ApiResponse<ExpenseSheet>) => {
+           setExpenseSheet(response.data)
+        })
+    }, []);
 
-
-
-    useEffect(() => {
-        const calculateTotal = () => {
-            const totalPrice = expenses.reduce((accumulator, expense) => {
-                return accumulator + Number(expense?.cost || 0);
-            }, 0);
-            setTotal(totalPrice);
-        };
-        calculateTotal();
-    }, [expenses]);
-
-
-    const handleAddClick = (e: any) => {
-        e.preventDefault();
-
-        console.log(newExpense);
-
-        if (newExpense.item !== "") {
-            console.log("HERE")
-            const expenseToAdd = {
-                item: newExpense.item,
-                cost: Number(newExpense.cost),
-                eventId: eventid,
-                purchaserId: purchaserId,
+    const handleAddClick = async (e:React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        if (newExpenseForm.item !== "") {
+            const expenseToAdd: ExpenseState = {
+                item: newExpenseForm.item,
+                cost: +newExpenseForm.cost,
+                eventId: eventid as string,
+                purchaserId: purchaserId as string,
             };
-            console.log(expenseToAdd);
-            fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/expense`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(expenseToAdd),
+            await addApiExpense(expenseToAdd);
+            fetchExpenseSheet(eventid as string).then(response => response.json()).then( (response: ApiResponse<ExpenseSheet>) => {
+               setExpenseSheet(response.data)
             })
-                .then((response) => response.json())
-                .then((responseData) => {
-                    console.log(responseData)
-                    const createdExpense = responseData.data; // Adjust the property name if needed
-                    setExpenses((prevExpenses) => [...prevExpenses, createdExpense]);
-                    setNewExpense({ item: "", cost: "", eventId: "", id: "" });
-                })
-                .catch((error) => {
-                    console.error("Error creating expense:", error);
-                });
         }
+        setNewExpenseForm({ item: "", cost: "", eventId: "", purchaserId: "" })
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
 
         if (name === 'cost' && value === '0') {
-            setNewExpense((prevExpense) => ({
+            setNewExpenseForm((prevExpense) => ({
                 ...prevExpense,
                 [name]: '',
             }));
         } else {
-            setNewExpense((prevExpense) => ({
+            setNewExpenseForm((prevExpense) => ({
                 ...prevExpense,
                 [name]: value,
             }));
@@ -90,24 +71,11 @@ export default function Expenses() {
 
 
 
-    const handleDeleteClick = (expenseId: string) => {
-        fetch(`https://codeworks-thesis-4063bceaa74a.herokuapp.com/expense/${expenseId}`, {
-            method: "DELETE"
+    const handleDeleteClick = async (expenseId: string) => {
+        await deleteApiExpense(expenseId);
+        fetchExpenseSheet(eventid as string).then(response => response.json()).then( (response: ApiResponse<ExpenseSheet>) => {
+           setExpenseSheet(response.data)
         })
-            .then((response) => {
-                console.log(expenseId)
-                console.log(response)
-                if (response.ok) {
-                    setExpenses((prevExpenses) => {
-                        return prevExpenses.filter((expense) => String(expense.id) !== expenseId);
-                    });
-                } else {
-                    console.error("Failed to delete expense:", response.statusText);
-                }
-            })
-            .catch((error) => {
-                console.error("Error deleting expense:", error);
-            });
     };
 
 
@@ -117,11 +85,11 @@ export default function Expenses() {
     return (
         <div className="flex justify-center gap-4">
             <div className="w-1/2 h-96 p-4 bg-indigo-950 rounded-xl flex flex-col">
-                <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">EXPENSES (Total: €{total})</h1>
+                <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">EXPENSES (Total: €{expenseSheet.total})</h1>
 
                 <div className="w-full">
 
-                    {expenses.map((expense) => (
+                    {expenseSheet.expenses.map((expense) => (
                         <div className="flex p-2 border-t border-gray-400 text-white text-xl" key={expense?.id}>
                             <button
                                 className="w-10 text-gray-400"
@@ -135,10 +103,10 @@ export default function Expenses() {
                     ))}
 
                     <div className="text-white text-xl">
-                        <form onSubmit={handleAddClick} className="flex p-1 pt-3 ">
+                        <form onSubmit={(e) => handleAddClick(e)} className="flex p-1 pt-3 ">
                             <input
                                 name="item"
-                                value={newExpense.item}
+                                value={newExpenseForm.item}
                                 onChange={handleInputChange}
                                 type="text"
                                 placeholder="Add expense"
@@ -146,7 +114,7 @@ export default function Expenses() {
                             />
                             <input
                                 name="cost"
-                                value={newExpense.cost}
+                                value={newExpenseForm.cost}
                                 onChange={handleInputChange}
                                 type="number"
                                 placeholder="€"
@@ -160,8 +128,17 @@ export default function Expenses() {
 
             </div>
             <div className="w-1/2 h-96 p-4 bg-indigo-950 rounded-xl flex flex-col">
-                <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">BALANCE</h1>
+                <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">PER PERSON SHARE (€{expenseSheet.perPerson})</h1>
+                <div className="w-full">
 
+                    {expenseSheet.indExpenses.map((indExpense) => (
+                        <div className="flex p-2 border-t border-gray-400 text-white text-xl" key={indExpense?.name}>
+                            <h3 className="w-full">
+                                {indExpense?.name} {indExpense.owes<0? ` is owed €${indExpense.owes * -1}`: `needs to pay €${indExpense?.owes}`} 
+                            </h3>
+                        </div>
+                    ))}
+                </div>
             </div>
 
         </div>
