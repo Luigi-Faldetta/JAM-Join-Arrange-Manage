@@ -38,7 +38,9 @@ export default function Expenses() {
         })
     }, []);
 
-    const handleAddClick = async () => {
+    const handleAddClick = async (e:React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        console.log("newExpenseForm: ", newExpenseForm)
         if (newExpenseForm.item !== "") {
             const expenseToAdd: ExpenseState = {
                 item: newExpenseForm.item,
@@ -104,7 +106,7 @@ export default function Expenses() {
                     ))}
 
                     <div className="text-white text-xl">
-                        <form onSubmit={handleAddClick} className="flex p-1 pt-3 ">
+                        <form onSubmit={(e) => handleAddClick(e)} className="flex p-1 pt-3 ">
                             <input
                                 name="item"
                                 value={newExpenseForm.item}
