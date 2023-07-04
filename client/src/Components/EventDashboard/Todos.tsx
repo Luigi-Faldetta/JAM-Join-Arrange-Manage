@@ -174,7 +174,7 @@ export default function Todos(): JSX.Element {
   return (
     <div className="flex justify-center gap-4">
 
-      <div className="w-1/2 h-96 p-4 bg-gradient-to-r from-indigo-800 to-indigo-950 rounded-xl flex flex-col">
+      <div className="w-1/2 h-96 p-4 bg-gradient-to-r from-gray-700 to-indigo-900 border-2 border-indigo-950 rounded-xl flex flex-col">
         <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">TODOS</h1>
         <div ref={todosRef} className="w-full h-full flex flex-col overflow-y-auto">
           {toDos.map((toDo, index) => (
@@ -206,7 +206,7 @@ export default function Todos(): JSX.Element {
         </div>
       </div>
 
-      <div className="w-1/2 h-96 p-4 bg-gradient-to-r from-indigo-950 to-indigo-800 rounded-xl flex flex-col">
+      <div className="w-1/2 h-96 p-4 bg-gradient-to-r from-indigo-900 to-indigo-950 border-2 border-indigo-950 rounded-xl flex flex-col">
         <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">COMPLETED</h1>
         <div className="w-full overflow-y-auto">
           {doneToDos.map((doneToDo, index) => (

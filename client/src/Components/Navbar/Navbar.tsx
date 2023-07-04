@@ -59,50 +59,50 @@ function Navbar() {
             </Link>
 
             {location.pathname === "/" && (
-            <div
-              className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${showDropdownMobile ? "block" : "hidden"
-                }`}
-              id="mobile-menu-2"
-            >
-              <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-                <li>
-                  <Scroll
-                    onClick={handleMobileMenu}
-                    to="hero"
-                    spy={true}
-                    smooth={true}
-                    offset={-80}
-                    duration={500}
-                    className="block py-2 px-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
-                    aria-current="page"
-                  >Home</Scroll>
-                </li>
-                <li>
-                  <Scroll
-                    onClick={handleMobileMenu}
-                    to="about"
-                    spy={true}
-                    smooth={true}
-                    offset={-83}
-                    duration={500}
-                    className="block py-2 pl-3 pr-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
-                  >About</Scroll>
-                </li>
-                <li>
-                  <Scroll
-                    onClick={handleMobileMenu}
-                    to="faqs"
-                    spy={true}
-                    smooth={true}
-                    offset={-100}
-                    duration={500}
-                    className="block py-2 pl-3 pr-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
-                  >FAQs</Scroll>
-                </li>
-              </ul>
-            </div>
+              <div
+                className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${showDropdownMobile ? "block" : "hidden"
+                  }`}
+                id="mobile-menu-2"
+              >
+                <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                  <li>
+                    <Scroll
+                      onClick={handleMobileMenu}
+                      to="hero"
+                      spy={true}
+                      smooth={true}
+                      offset={-80}
+                      duration={500}
+                      className="block py-2 px-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
+                      aria-current="page"
+                    >Home</Scroll>
+                  </li>
+                  <li>
+                    <Scroll
+                      onClick={handleMobileMenu}
+                      to="about"
+                      spy={true}
+                      smooth={true}
+                      offset={-72}
+                      duration={500}
+                      className="block py-2 pl-3 pr-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
+                    >About</Scroll>
+                  </li>
+                  <li>
+                    <Scroll
+                      onClick={handleMobileMenu}
+                      to="faqs"
+                      spy={true}
+                      smooth={true}
+                      offset={-100}
+                      duration={500}
+                      className="block py-2 pl-3 pr-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
+                    >FAQs</Scroll>
+                  </li>
+                </ul>
+              </div>
             )}
-        
+
           </div>
 
           <div>
@@ -139,6 +139,7 @@ function Navbar() {
                   <li>
                     <Link
                       to="/profile"
+                      id="profile-btn"
                       className="dropdown-item"
                       onClick={handleAvatarClick}
                     >
