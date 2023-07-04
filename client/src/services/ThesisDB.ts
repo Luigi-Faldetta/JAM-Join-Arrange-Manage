@@ -197,7 +197,7 @@ export const thesisDbApi = createApi({
     //Messages:
     addMsg: build.mutation<
       ApiResponse<MsgState>,
-      Partial<MsgState> & Pick<MsgState,  "userId" | "eventId" | "message">
+      Partial<MsgState> & Pick<MsgState, "userId" | "eventId" | "message">
     >({
       query: (msg) => ({
         url: "chat/",
@@ -214,7 +214,6 @@ export const thesisDbApi = createApi({
         return ({ url: `chat/${eventId}` });
       },
     }),
-
 
     //Activity participation
 
@@ -291,5 +290,5 @@ export const {
   useLogOutQuery,
   //msg
   useAddMsgMutation,
-  useGetMsgsQuery
+  useGetMsgsQuery,
 } = thesisDbApi;
