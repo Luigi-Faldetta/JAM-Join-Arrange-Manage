@@ -58,7 +58,7 @@ export default function ToggleButton({
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+      <div style={{ position: "absolute", top: "0px", right: "0px"  }}>
         <button
           onClick={isJoined ? handleLeave : handleJoin}
           className="btn btn-primary m-10"

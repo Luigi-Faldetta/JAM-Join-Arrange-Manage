@@ -18,7 +18,7 @@ function App() {
 
   useEffect(() => {
     console.log("logout state ==> ", chatState);
-  }, [chatState])
+  }, [chatState.eventId])
 
   return (
     <>
