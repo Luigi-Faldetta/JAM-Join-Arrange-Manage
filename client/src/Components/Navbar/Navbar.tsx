@@ -1,8 +1,7 @@
-import { ReactEventHandler, useState } from "react";
+import { useState } from "react";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
 import { Link as Scroll } from "react-scroll";
-import { useAuth } from "../../utils/useAuth";
 import { useAppDispatch } from "../../reduxFiles/store";
 import { openLogout } from "../../reduxFiles/slices/logout";
 import { useIsLoggedIn } from "../../utils/useIsLoggedIn";
@@ -59,48 +58,51 @@ function Navbar() {
             </Link>
 
             {location.pathname === "/" && (
-              <div
-                className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${showDropdownMobile ? "block" : "hidden"
-                  }`}
-                id="mobile-menu-2"
-              >
-                <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-                  <li>
-                    <Scroll
-                      onClick={handleMobileMenu}
-                      to="hero"
-                      spy={true}
-                      smooth={true}
-                      offset={-80}
-                      duration={500}
-                      className="block py-2 px-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
-                      aria-current="page"
-                    >Home</Scroll>
-                  </li>
-                  <li>
-                    <Scroll
-                      onClick={handleMobileMenu}
-                      to="about"
-                      spy={true}
-                      smooth={true}
-                      offset={-83}
-                      duration={500}
-                      className="block py-2 pl-3 pr-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
-                    >About</Scroll>
-                  </li>
-                  <li>
-                    <Scroll
-                      onClick={handleMobileMenu}
-                      to="faqs"
-                      spy={true}
-                      smooth={true}
-                      offset={-100}
-                      duration={500}
-                      className="block py-2 pl-3 pr-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
-                    >FAQs</Scroll>
-                  </li>
-                </ul>
-              </div>
+            <div
+              className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${showDropdownMobile ? "block" : "hidden"
+                }`}
+              id="mobile-menu-2"
+            >
+              <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                <li>
+                  <Scroll
+                    onClick={handleMobileMenu}
+                    to="hero"
+                    id="tohero"
+                    spy={true}
+                    smooth={true}
+                    offset={-80}
+                    duration={500}
+                    className="block py-2 px-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
+                    aria-current="page"
+                  >Home</Scroll>
+                </li>
+                <li>
+                  <Scroll
+                    onClick={handleMobileMenu}
+                    to="about"
+                    id="toabout"
+                    spy={true}
+                    smooth={true}
+                    offset={-83}
+                    duration={500}
+                    className="block py-2 pl-3 pr-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
+                  >About</Scroll>
+                </li>
+                <li>
+                  <Scroll
+                    onClick={handleMobileMenu}
+                    to="faqs"
+                    id="tofaqs"
+                    spy={true}
+                    smooth={true}
+                    offset={-100}
+                    duration={500}
+                    className="block py-2 pl-3 pr-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
+                  >FAQs</Scroll>
+                </li>
+              </ul>
+            </div>
             )}
 
           </div>
@@ -147,7 +149,7 @@ function Navbar() {
                     </Link>
                   </li>
                   <li>
-                    <button onClick={handleSignOut} className="dropdown-item">
+                    <button id="signout-btn" onClick={handleSignOut} className="dropdown-item">
                       Sign out
                     </button>
                   </li>
