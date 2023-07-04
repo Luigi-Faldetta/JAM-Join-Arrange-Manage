@@ -16,9 +16,9 @@ function App() {
   state.chatReducer.valueOf()
   ) as { isOpen: boolean, eventId: string};
 
-  useEffect(() => {
-    console.log("logout state ==> ", chatState);
-  }, [chatState.eventId])
+  // useEffect(() => {
+  //   console.log("logout state ==> ", chatState);
+  // }, [chatState.eventId])
 
   return (
     <>

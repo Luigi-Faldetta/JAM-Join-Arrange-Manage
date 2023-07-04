@@ -4,10 +4,11 @@ import { RootState, useAppDispatch } from "../../reduxFiles/store";
 import { useAuth } from "../../utils/useAuth";
 import "./chatContainer.css";
 import { useSelector } from "react-redux";
-import { socket, useAddMsgMutation, useGetMsgsQuery } from "../../services/ThesisDB";
+import { socket, useAddMsgMutation, useGetEventQuery, useGetMsgsQuery } from "../../services/ThesisDB";
 import moment from "moment";
 import { MsgState, addMessage, setMessages } from "../../reduxFiles/slices/msg";
 import { ColorRing } from "react-loader-spinner";
+import Msg from "./Msg";
 
 function ChatContainer() {
   const [addNewMsg] = useAddMsgMutation();
@@ -16,14 +17,14 @@ function ChatContainer() {
   const dispatch = useAppDispatch();
   useAuth();
   const [message, setMessage] = useState("");
-  //const [messages, setMessages] = useState<MsgState[]>([]);
   const messagesRef = useRef<HTMLDivElement>(null);
   const userId = localStorage.getItem("token");
 
-  useEffect(() => {
-    console.log("Chat contaiiner comp ==> ", eventId)
-  }, [eventId])
-
+  // useEffect(() => {
+  //   console.log("Chat contaiiner comp ==> ", eventId)
+  // }, [eventId])
+  const {data: dataevent} = useGetEventQuery(eventId as string);
+// console.log(dataevent?.data.title, 'this is event')
   const { data: _data, isSuccess ,refetch, isLoading } = useGetMsgsQuery(eventId as string);
   const data = _data?.data;
   const handleMessageSubmit = async (message: string) => {
@@ -69,93 +70,54 @@ function ChatContainer() {
     }
   }, [data, isLoading]);
 
-  const renderMessages = () => {
 
-
-    return messages?.map((messageData: any, index) => {
-      const isCurrentUser = messageData.userId === userId;
-      const messageClassName = `relative text-xs py-2 px-4 shadow rounded-xl m-2 w-90 ${
-        isCurrentUser ? "bg-blue-400 ml-8" : "bg-gray-300 mr-8"
-      }`;
-      return (
-        <div key={messageData.id} className={messageClassName}>
-          <div className="user">
-            
-          {messageData.User && messageData.User.profilePic && (
-            <img
-              src={messageData.User.profilePic}
-              className="object-cover h-8 w-8 rounded-full"
-              alt=""
-            />
-          )}
-
-            <div className="p-2">{messageData.User.name}</div>
-          </div>
-          <div className="message">{messageData.message}</div>
-          <div className="time">
-            {moment(messageData.date).calendar()}{" "}
-          </div>
-        </div>
-      );
-    })
-  }
 
   return (
     <div className="chat-container">
-      <div
-        className="border rounded-lg h-full"
-        style={{ backgroundColor: "#F8F8FF", borderColor: "#D3D3D3" }}
-      >
-        <div className="chat-messages" style={{ width: "100%" }}>
-          <div className="px-5 flex flex-col justify-between">
-            <div className="flex flex-col mt-5">
-              <div className="close" onClick={() => dispatch(closeChat())}>
-                ×
-              </div>
-              <div className="flex justify-end mb-4" ref={messagesRef}>
-                <div className="message-container">
-                  {isLoading ? (
-                    <ColorRing
-                      visible={true}
-                      height="100%"
-                      width="100%"
-                      ariaLabel="blocks-loading"
-                      wrapperStyle={{}}
-                      wrapperClass="blocks-wrapper"
-                      colors={[
-                        "#e15b64",
-                        "#f47e60",
-                        "#f8b26a",
-                        "#abbd81",
-                        "#849b87",
-                      ]}
-                    />
-                  ) : (
-                    isSuccess && renderMessages()
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
+      <div className="chat-header">
+        <div className="chat-title">{dataevent?.data.title}</div>
+        <div className="close" onClick={() => dispatch(closeChat())}>
+          ×
         </div>
-        <div className="input-container">
-          <input
-            className="flex w-full bg-gray-300 py-3 px-3 rounded-xl xl-2 pr-2 mb-0"
-            type="text"
-            placeholder="Type your message here..."
-            value={message}
-            onChange={(event) => setMessage(event.target.value)}
-            onKeyDown={handleKeyDown}
-            name="message"
-            autoComplete="off" // Disable autocomplete
-            autoCorrect="off" // Disable autocorrect
-            autoCapitalize="off" // Disable autocapitalize
-            spellCheck="false" // Disable spellcheck
+      </div>
+      <div className="chat-messages">
+        {isLoading ? (
+          <ColorRing
+            visible={true}
+            height="100%"
+            width="100%"
+            ariaLabel="blocks-loading"
+            wrapperStyle={{}}
+            wrapperClass="blocks-wrapper"
+            colors={[
+              "#e15b64",
+              "#f47e60",
+              "#f8b26a",
+              "#abbd81",
+              "#849b87",
+            ]}
           />
-        </div>
+        ) : (
+          isSuccess && <Msg messages={messages} userId={userId} />
+        )}
+      </div>
+      <div className="input-container">
+        <input
+          className="bg-gray-400 w-5/6 py-4 px-3 rounded-xl xl-2 pr-2"
+          type="text"
+          placeholder="Type your message here..."
+          value={message}
+          onChange={(event) => setMessage(event.target.value)}
+          onKeyDown={handleKeyDown}
+          name="message"
+          autoComplete="off" // Disable autocomplete
+          autoCorrect="off" // Disable autocorrect
+          autoCapitalize="off" // Disable autocapitalize
+          spellCheck="false" // Disable spellcheck
+        />
       </div>
     </div>
   );
-}
+        }
 
-export default ChatContainer;
+export default ChatContainer
