@@ -23,10 +23,9 @@ function UserDashboardPage() {
     }
   }, [isLoading, error]);
 
-  // useEffect(() => {
-  //   console.log("Event list has changed ==> ", eventList);
-  // }, [eventList]);
-  // add fetch to get all the events
+  useEffect(() => {
+    console.log("Event list has changed ==> ", eventList);
+  }, [eventList]);
 
   return (
     <>

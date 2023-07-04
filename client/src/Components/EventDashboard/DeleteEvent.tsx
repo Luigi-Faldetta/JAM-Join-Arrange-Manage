@@ -1,21 +1,38 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDeleteEventMutation } from "../../services/ThesisDB";
+import { useDispatch } from "react-redux";
+import { ApiResponse } from "../../services/ApiResponseType";
+// import { deleteEvent } from "../../reduxFiles/slices/events";
 
 interface DeleteEventProps {
   setDeleteModalOpen: (isOpen: boolean) => void;
 }
 
 function DeleteEvent({ setDeleteModalOpen }: DeleteEventProps) {
+  const dispatch = useDispatch();
+  const [deleteEvent] = useDeleteEventMutation();
+
   const navigate = useNavigate();
 
   function handleCancelDelete() {
     setDeleteModalOpen(false);
   }
 
-  function handleDelete() {
-    //delete function here
-    navigate("/user-dashboard");
-    setDeleteModalOpen(false);
+  async function handleDelete(e: any) {
+    // e.preventDefault();
+    const { eventid } = useParams();
+
+    try {
+      const res = await deleteEvent(eventid as string);
+      console.log(" deleted event => ", res);
+      navigate("/user-dashboard");
+      setDeleteModalOpen(false);
+      //@ts-ignore
+      // dispatch(deleteEvent((deletedEvent as any).data));
+    } catch (error) {
+      console.log("error in delete", error);
+    }
   }
 
   return (
@@ -96,7 +113,6 @@ export default function DeleteEventButton() {
 
   const openDeleteModal = () => {
     setDeleteModalOpen(true);
-    console.log("event delete button clicked");
   };
 
   return (
