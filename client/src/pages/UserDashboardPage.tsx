@@ -21,16 +21,15 @@ function UserDashboardPage() {
       console.log("event list ==> ", data?.data);
       dispatch(setEventList(data?.data));
     }
-  }, [isLoading, error]);
+  }, [isLoading, error, data]);
 
   useEffect(() => {
     console.log("Event list has changed ==> ", eventList);
   }, [eventList]);
-  // add fetch to get all the events
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center">
+      <div className="flex flex-col justify-center items-center ">
         <div className="m-5 h-full p-5 flex flex-col items-center gap-5">
           <CreateEventForm></CreateEventForm>
         </div>

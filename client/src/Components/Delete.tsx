@@ -1,9 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../reduxFiles/store';
 import { useDeleteUserMutation } from '../services/ThesisDB';
 
 function Delete({ setOpen }: { setOpen: (open: boolean) => void }) {
-  const dispatch = useAppDispatch();
   const [deleteUser] = useDeleteUserMutation();
   const navigate = useNavigate();
   function handleCloseDelete() {
@@ -18,7 +16,7 @@ function Delete({ setOpen }: { setOpen: (open: boolean) => void }) {
       console.log(res);
       localStorage.removeItem('token');
       navigate('/')
-      window.location.reload(); 
+      // window.location.reload(); 
     } catch (error) {
       console.error(error);
     }

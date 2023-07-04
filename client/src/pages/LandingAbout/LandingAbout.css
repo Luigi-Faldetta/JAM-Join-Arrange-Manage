@@ -1,9 +1,9 @@
 .about-page {
-  height: calc(100vh - 5rem);
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-top: 2rem;
 }
 
 .about-text {

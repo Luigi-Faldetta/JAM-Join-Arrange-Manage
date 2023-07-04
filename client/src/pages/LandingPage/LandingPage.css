@@ -1,19 +1,21 @@
 .landing-page {
-  padding-top: 5rem;
-  height: calc(100vh - 5rem)
-  }
-  .landing-page .active {
-    transform: scale(1.2);
-    transition: transform 0.8s ease;
-    animation-name: jam-animation;
-    animation-duration: 4s;
-    animation-delay: 0s;
-  }
-  
-  @keyframes jam-animation {
+  top:5rem;
+  height: 100vh;
+  position: relative;
+}
+.landing-page .login-form.active {
+  padding-bottom: 20px;
+  transform: scale(1.2);
+  transition: transform 0.8s ease;
+  animation-name: jam-animation;
+  animation-duration: 4s;
+  animation-delay: 0s;
+  z-index: 1; 
+}
+  /* @keyframes jam-animation {
     0%   { background-color: red; left: 0px; top: 0px; }
     25%  { background-color: yellow; left: 200px; top: 0px; }
     50%  { background-color: blue; left: 200px; top: 200px; }
     75%  { background-color: green; left: 0px; top: 200px; }
     100% { background-color: red; left: 0px; top: 0px; }
-  }
+  } */

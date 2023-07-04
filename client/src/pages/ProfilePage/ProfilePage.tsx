@@ -40,6 +40,7 @@ const ProfilePage = (): any => {
   };
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [userPhoto, setUserPhoto] = useState<File | null | string>(null);
@@ -53,7 +54,6 @@ const ProfilePage = (): any => {
   //@ts-ignore
   const { data } = useGetUserQuery(uid);
   //@ts-ignore
-  console.log('data===>> ', data);
 
   const [updateUser] = useUpdateUserMutation();
 
@@ -111,6 +111,9 @@ const ProfilePage = (): any => {
       if (phone) {
         userFormData.phone = phone;
       }
+      if (email) {
+        userFormData.email = email;
+      }
 
       const image = await handleImageUpload();
       if (image && image.url) {
@@ -131,11 +134,13 @@ const ProfilePage = (): any => {
 
     setName('');
     setPhone('');
+    setEmail('');
     setPassword('');
     setConfirmPassword('');
   };
 
-  const handleDelete = () => {
+  const handleDelete = (e: any) => {
+    e.preventDefault();
     setOpen(true);
     console.log(open);
   };
@@ -143,11 +148,10 @@ const ProfilePage = (): any => {
   return (
     <div className='profile-container bg-gray-100 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8'>
       <div className='w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
-        <div className='flex justify-end px-4 pt-4'></div>
-        <div className='flex flex-col items-center pb-10'>
+        <div className='flex flex-col items-center pb-10 '>
           {previewUrl || userPhoto ? (
             <img
-              className='img-container w-24 h-25 mb-3 rounded-full shadow-lg'
+              className='img-container w-24 h-25 rounded-full shadow-lg'
               src={previewUrl ? previewUrl : photoUrl}
               alt=''
             />
@@ -158,7 +162,7 @@ const ProfilePage = (): any => {
               alt=''
             />
           )}
-          <h5 className='mb-1 text-xl font-medium text-gray-900 dark:text-white'>
+          <h5 className='text-3xl font-medium text-gray-900 dark:text-white mb-5'>
             {data?.data.name}
           </h5>
           {updateStatus === 'success' && (
@@ -177,16 +181,24 @@ const ProfilePage = (): any => {
               onChange={(e) => setName(e.target.value)}
               type='text'
               name='username'
-              placeholder={data?.data.name}
-              className='input input-bordered w-full max-w-xs'
+              placeholder={data?.data.name || 'Name'}
+              className='input input-bordered w-full max-w-xs input-primary'
+            />
+            <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              type='text'
+              name='email'
+              placeholder={data?.data.email || 'Enter email'}
+              className='input input-bordered w-full max-w-xs input-primary'
             />
             <input
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               type='text'
               name='phone'
-              placeholder='Phone number'
-              className='input input-bordered w-full max-w-xs'
+              placeholder={data?.data.phone || 'Phone number'}
+              className='input input-bordered w-full max-w-xs input-primary'
             />
             <input
               value={password}
@@ -194,7 +206,7 @@ const ProfilePage = (): any => {
               type='password'
               name='password'
               placeholder='Change Password'
-              className='input input-bordered w-full max-w-xs'
+              className='input input-bordered w-full max-w-xs input-primary'
             />
             <input
               value={confirmPassword}
@@ -202,25 +214,29 @@ const ProfilePage = (): any => {
               type='password'
               name='confirmpassword'
               placeholder='Confirm Password'
-              className='input input-bordered w-full max-w-xs'
+              className='input input-bordered w-full max-w-xs input-primary'
             />
-            <button
-              type='submit'
-              className='btn btn-success'
-            >
-              Save Changes
-            </button>
+            <div className='profile-btn'>
+              <div>
+                <button
+                  type='submit'
+                  className='btn btn-success text-white'
+                >
+                  Save Changes
+                </button>
+              </div>
+              <div>
+                <button
+                  type='submit'
+                  className='btn btn-error text-white'
+                  onClick={handleDelete}
+                >
+                  Delete Account
+                </button>
+                {open ? <Delete setOpen={setOpen} /> : null}
+              </div>
+            </div>
           </form>
-          <div className='flex mt-4 space-x-3 md:mt-6'>
-            <button
-              type='submit'
-              className='btn btn-error'
-              onClick={handleDelete}
-            >
-              Delete Account
-            </button>
-            {open ? <Delete setOpen={setOpen} /> : null}
-          </div>
         </div>
       </div>
     </div>

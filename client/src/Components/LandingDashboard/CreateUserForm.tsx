@@ -81,7 +81,8 @@ function CreateUserForm() {
           Don't have an account yet?
         </div>
         <button
-          className="text-blue-700 hover:text-blue-800 text-sm font-medium underline ml-2"
+          className="text-blue-700 hover:text-blue-800 text-sm font-medium underline ml-2 "
+          style={{ zIndex: 2 }}
           onClick={() => setOpen(true)}
         >
           Sign Up
