@@ -88,7 +88,7 @@ export default function Expenses() {
 
 
     const handleDeleteClick = async (expenseId: string) => {
-        deleteApiExpense(expenseId);
+        await deleteApiExpense(expenseId);
         setExpenseList(expenses => expenses.filter(expense => expense.id !== expenseId))
         // appDispatch(deleteExpense(expenseId));
     };
