@@ -81,6 +81,7 @@ function Navbar() {
                     <li>
                       <Link
                         to="/profile"
+                        id="profile-btn"
                         className="dropdown-item"
                         onClick={handleAvatarClick}
                       >
@@ -97,7 +98,7 @@ function Navbar() {
                       </Link>
                     </li>
                     <li>
-                      <button onClick={handleSignOut} className="dropdown-item">
+                      <button id='signout-btn' onClick={handleSignOut} className="dropdown-item">
                         Sign out
                       </button>
                     </li>
@@ -141,6 +142,7 @@ function Navbar() {
                   {/* <Link to="/" className="dropdown-item"> */}
                   <Scroll
                     to="hero"
+                    id="tohero"
                     spy={true}
                     smooth={true}
                     offset={-50}
@@ -156,6 +158,7 @@ function Navbar() {
                   {/* <Link to="/about" className="dropdown-item"> */}
                   <Scroll
                     to="about"
+                    id="toabout"
                     spy={true}
                     smooth={true}
                     offset={-60}
@@ -170,6 +173,7 @@ function Navbar() {
                   {/* <Link to="/faqs" className="dropdown-item"> */}
                   <Scroll
                     to="faqs"
+                    id="tofaqs"
                     spy={true}
                     smooth={true}
                     offset={-90}
