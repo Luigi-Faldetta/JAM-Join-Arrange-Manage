@@ -139,7 +139,8 @@ const ProfilePage = (): any => {
     setConfirmPassword('');
   };
 
-  const handleDelete = () => {
+  const handleDelete = (e: any) => {
+    e.preventDefault();
     setOpen(true);
     console.log(open);
   };
@@ -147,10 +148,10 @@ const ProfilePage = (): any => {
   return (
     <div className='profile-container bg-gray-100 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8'>
       <div className='w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
-        <div className='flex flex-col items-center pb-10'>
+        <div className='flex flex-col items-center pb-10 '>
           {previewUrl || userPhoto ? (
             <img
-              className='img-container w-24 h-25 mb-3 rounded-full shadow-lg'
+              className='img-container w-24 h-25 rounded-full shadow-lg'
               src={previewUrl ? previewUrl : photoUrl}
               alt=''
             />
@@ -161,7 +162,7 @@ const ProfilePage = (): any => {
               alt=''
             />
           )}
-          <h5 className='mb-1 text-xl font-medium text-gray-900 dark:text-white'>
+          <h5 className='text-3xl font-medium text-gray-900 dark:text-white mb-5'>
             {data?.data.name}
           </h5>
           {updateStatus === 'success' && (
@@ -180,24 +181,24 @@ const ProfilePage = (): any => {
               onChange={(e) => setName(e.target.value)}
               type='text'
               name='username'
-              placeholder={data?.data.name}
-              className='input input-bordered w-full max-w-xs'
+              placeholder={data?.data.name || 'Name'}
+              className='input input-bordered w-full max-w-xs input-primary'
             />
             <input
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               type='text'
               name='email'
-              placeholder={data?.data.email}
-              className='input input-bordered w-full max-w-xs'
+              placeholder={data?.data.email || 'Enter email'}
+              className='input input-bordered w-full max-w-xs input-primary'
             />
             <input
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               type='text'
               name='phone'
-              placeholder={data?.data.phone}
-              className='input input-bordered w-full max-w-xs'
+              placeholder={data?.data.phone || 'Phone number'}
+              className='input input-bordered w-full max-w-xs input-primary'
             />
             <input
               value={password}
@@ -205,7 +206,7 @@ const ProfilePage = (): any => {
               type='password'
               name='password'
               placeholder='Change Password'
-              className='input input-bordered w-full max-w-xs'
+              className='input input-bordered w-full max-w-xs input-primary'
             />
             <input
               value={confirmPassword}
@@ -213,13 +214,13 @@ const ProfilePage = (): any => {
               type='password'
               name='confirmpassword'
               placeholder='Confirm Password'
-              className='input input-bordered w-full max-w-xs'
+              className='input input-bordered w-full max-w-xs input-primary'
             />
             <div className='profile-btn'>
               <div>
                 <button
                   type='submit'
-                  className='btn btn-success'
+                  className='btn btn-success text-white'
                 >
                   Save Changes
                 </button>
@@ -227,7 +228,7 @@ const ProfilePage = (): any => {
               <div>
                 <button
                   type='submit'
-                  className='btn btn-error'
+                  className='btn btn-error text-white'
                   onClick={handleDelete}
                 >
                   Delete Account

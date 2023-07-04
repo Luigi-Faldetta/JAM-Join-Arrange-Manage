@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import EventMini from "../EventDashboard/EventMini";
+import EventData from "../EventDashboard/EventData";
 import ToggleButton from "../EventDashboard/ToggleButton";
 import { useParams } from "react-router-dom";
 import Todos from "../EventDashboard/Todos";
@@ -9,8 +9,8 @@ import { useGetEventQuery } from "../../services/ThesisDB";
 import { useIsLoggedIn } from "../../utils/useIsLoggedIn";
 import { EventState } from "../../reduxFiles/slices/events";
 import EventLink from "../EventDashboard/EventLink";
-
-// Test for merging
+import "./EventDashboard.css"
+import LandingPage from "../../pages/LandingPage/LandingPage";
 
 export default function Event() {
   const [userIsHost, setUserIsHost] = useState<boolean>(false);
@@ -58,44 +58,50 @@ export default function Event() {
     setShowTodos((prevShowTodos) => !prevShowTodos);
   };
 
-  console.log("____________________________________eventdata==>", eventData);
+  // console.log("____________________________________eventdata==>", eventData);
 
   return (
     <>
-      <div>
-        {isLoggedIn && !isLoading && eventData ? (
-          <>
-            <EventMini eventData={eventData} userIsHost={userIsHost} />
-          </>
-        ) : (
-          <div>test</div>
-          // <LandingPage eventData={eventData} />
-          // instead of going to landing page we should just show the modal
-        )}
+      {isLoggedIn && !isLoading && eventData ? (<>
 
-        <button
-          onClick={handleToggle}
-          className="absolute top-28 right-24 btn btn-primary"
-        >
-          {showTodos ? "Expenses" : "Todos"}
-        </button>
-        {showTodos ? (
-          <>
-            {" "}
-            <Todos /> <Attendees />{" "}
-          </>
-        ) : (
-          <Expenses />
-        )}
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-4/5">
 
-        <ToggleButton 
-          isJoined={isJoined} 
-          loggedUser={loggedUser}
-          setIsJoined={setIsJoined}
-          isLoading={isLoading}
-        />
-        <EventLink eventid={eventid} />
-      </div>
+            <EventData eventData={eventData} userIsHost={userIsHost} />
+
+            <ToggleButton
+              isJoined={isJoined}
+              loggedUser={loggedUser}
+              setIsJoined={setIsJoined}
+              isLoading={isLoading}
+            />
+
+            <button
+              onClick={handleToggle}
+              className="absolute top-28 right-24 btn btn-primary"
+              style={{ position: "absolute", top: "0px", right: "0px" }}
+            >
+              {showTodos ? "Expenses" : "Todos"}
+            </button>
+
+          </div>
+
+          <div className="w-4/5">
+            {showTodos ? (<Todos />) : (<Expenses />)}
+          </div>
+
+          <div className="w-4/5 bg-purple-200 rounded-xl" >
+            <Attendees />
+          </div>
+
+        </div>
+      </>
+
+      ) : (
+        <>
+          <LandingPage eventData={eventData} />
+        </>
+      )}
     </>
   );
 }
