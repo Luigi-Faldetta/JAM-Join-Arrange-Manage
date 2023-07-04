@@ -41,27 +41,31 @@ function UserDashboardPage() {
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center ">
-        <div className="m-5 h-full p-5 flex flex-col items-center gap-5">
-          <CreateEventForm></CreateEventForm>
-        </div>
-        <EventCalendar sortedEventList={sortedEventList}></EventCalendar>
-
-        <div className=" h-full p-5 flex flex-col justify-center items-center gap-1">
-          {sortedEventList.length >= 1 ? (
+      <div className="flex flex-row justify-center  ">
+        <div className=" p-5 flex flex-col justify-center items-center gap-1 ">
+          {isLoading && <h2>loading...</h2>}
+          {sortedEventList.length >= 1 &&
             sortedEventList.map((event: EventState) => {
               return <EventTile event={event}></EventTile>;
-            })
-          ) : (
+            })}
+
+          {!isLoading && sortedEventList.length < 1 && (
             <div className="flex flex-col justify-center align-middle text-center">
               <div className=" self-center">
-                <img src="sad-jam.png" className="max-w-[150px]"></img>
+                <img src="sad-jam.png" className="max-w-[150px]" />
               </div>
               <div>
                 <h3>No upcoming events yet. Click "Host Event" to begin.</h3>
               </div>
             </div>
           )}
+        </div>
+
+        <div className="sticky top-0 flex-shrink-0 max-h-screen overflow-y-auto w-1/3">
+          <div className="m-5 p-5 flex flex-col  gap-5">
+            <CreateEventForm></CreateEventForm>
+            <EventCalendar sortedEventList={sortedEventList}></EventCalendar>
+          </div>
         </div>
       </div>
     </>
