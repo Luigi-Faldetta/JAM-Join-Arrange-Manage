@@ -21,6 +21,7 @@ const store = configureStore({
     eventListReducer: eventReducers.eventListReducer,
     eventReducer: eventReducers.eventReducer,
     userReducer: userReducers.userReducer,
+    userList: userReducers.userListReducer,
     toDoListReducer: toDoReducers.toDoListReducer,
     toDoReduer: toDoReducers.toDoReducer,
     expenseReducer: expenseReducers.expenseReducer,

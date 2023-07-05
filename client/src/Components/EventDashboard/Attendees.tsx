@@ -1,31 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useGetUsersQuery } from "../../services/ThesisDB";
-import { UserState } from "../../reduxFiles/slices/users";
+import { createUserList } from "../../reduxFiles/slices/users";
 import { useParams } from "react-router-dom";
-
-interface User {
-  userId: string;
-  name: string;
-  email: string;
-  phone?: string | null;
-  profilePic?: string | undefined;
-  password: string;
-}
+import { useSelector } from "react-redux";
+import { RootState, useAppDispatch } from "../../reduxFiles/store";
 
 export default function Attendees() {
   const { eventid } = useParams();
   const [activeIndex, setActiveIndex] = useState(0);
   const imagesPerSlide = 5;
-  const apiUrl = `https://codeworks-thesis-4063bceaa74a.herokuapp.com/users/${eventid}`;
-
-  const [attendees, setAttendees] = useState<UserState[]>([]);
+  const appDispatch = useAppDispatch()
+  const attendees = useSelector((state: RootState) => state.userList);
 
   const { data, error, isLoading } = useGetUsersQuery(eventid as string);
 
   useEffect(() => {
     if (data) {
       const fetchedToDos = data.data;
-      setAttendees(fetchedToDos);
+      appDispatch(createUserList(fetchedToDos));
     }
   }, [data]);
 

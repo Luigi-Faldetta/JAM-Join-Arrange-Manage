@@ -1,12 +1,16 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
+  useGetUserQuery,
   useJoinActivityMutation,
   useLeaveActivityMutation,
 } from "../../services/ThesisDB";
 import { ColorRing } from  'react-loader-spinner'
 import { MdBlock } from "react-icons/md"
 import { IoMdCheckmarkCircleOutline } from "react-icons/io"
+import { useSelector } from "react-redux";
+import { RootState, useAppDispatch } from "../../reduxFiles/store";
+import { UserState, deleteUserFromList, updateUserList } from "../../reduxFiles/slices/users";
 
 interface ToggleButton {
   isJoined: boolean;
@@ -26,11 +30,16 @@ export default function ToggleButton({
   const [joinActivity] = useJoinActivityMutation();
   const [leaveActivity] = useLeaveActivityMutation();
   const eventId = eventid;
+  const attendees = useSelector((state:RootState) => state.userList)
+  const appDispatch = useAppDispatch()
+  const token = localStorage.getItem("token") as string
+  const {data} = useGetUserQuery(token)
 
   const handleJoin = () => {
     onJoin(loggedUser as string, eventId as string).then(() =>
       setIsJoined(true)
     );
+    appDispatch(updateUserList(data?.data as UserState))
   };
 
   const onJoin = async (userId: string, eventId: string) => {
@@ -45,6 +54,7 @@ export default function ToggleButton({
     onLeave(loggedUser as string, eventId as string).then(() =>
       setIsJoined(false)
     );
+    appDispatch(deleteUserFromList(token))
   };
 
   const onLeave = async (userId: string, eventId: string) => {
@@ -75,12 +85,12 @@ export default function ToggleButton({
             />
           ) : isJoined ? (
             <>
-            LEAVE
+            LEAVE EVENT
             <MdBlock size={20} className="fill-red-300"/>
             </>
           ) : (
             <>
-            JOIN
+            JOIN EVENT
             <IoMdCheckmarkCircleOutline size={20} className="fill-green-300"/>
             </>
           )}
