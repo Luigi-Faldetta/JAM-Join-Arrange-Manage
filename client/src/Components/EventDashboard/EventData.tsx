@@ -40,8 +40,8 @@ export default function EventMini({
     <div>
       {eventData && (
         <>
-          <div className="flex h-38 justify-between gap-2 mt-4">
-            <div className="flex w-3/5 h-36 gap-3">
+          <div className="flex flex-col lg:flex-row h-38 justify-between gap-2 mt-4">
+            <div className="flex lg:w-3/5 h-36 gap-3">
               <div className="flex shrink-0 grow-0 w-48 h-36 bg-slate-400 border-2 border-pink-500 rounded-xl overflow-hidden">
                 <img
                   className="w-full h-full object-cover"
@@ -96,7 +96,7 @@ export default function EventMini({
 
             </div>
 
-            <div className="flex flex-col justify-between items-end w-2/5">
+            <div className="flex flex-row lg:flex-col justify-between items-end lg:w-2/5">
               <div className="flex event-icons">
                 {userIsHost ? (
                   <>
