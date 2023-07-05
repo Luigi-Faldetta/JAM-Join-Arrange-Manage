@@ -33,10 +33,16 @@ const LandingPage = ({ data }: any) => {
               </p>
             </>
           ) : (
+            <>
             <h1 className="max-w-2xl mb-4 text-4xl font-bold tracking-tight leading-none md:text-5xl xl:text-3xl dark:text-white">
-              You were invited to {data?.data.title}. If you want to join,
-              please log in.
+              You were invited to <span className="text-pink-500">
+                {data?.data.title}an event
+                </span>.
             </h1>
+            <h1 className="max-w-2xl mb-4 text-4xl font-bold tracking-tight leading-none md:text-5xl xl:text-3xl dark:text-white">
+            If you want to join, please log in.
+            </h1>
+            </>
           )}
           {!isLoggedIn ? (
             <button
