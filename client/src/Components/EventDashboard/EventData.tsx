@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from "react";
-import DeleteEventButton from "../Event/DeleteEvent";
 import { ApiResponse } from "../../services/ApiResponseType";
 import { EventState } from "../../reduxFiles/slices/events";
 import moment from "moment";
@@ -17,11 +15,19 @@ export default function EventMini({
   userIsHost,
   showTodos,
   setShowTodos,
+  isJoined,
+  loggedUser,
+  setIsJoined,
+  isLoading,
 }: {
   eventData: ApiResponse<EventState>;
   userIsHost: boolean;
   showTodos: boolean;
   setShowTodos: any;
+  isJoined: boolean;
+  loggedUser: any;
+  setIsJoined: any;
+  isLoading: boolean
 }) {
   const { eventid } = useParams();
 
@@ -34,7 +40,7 @@ export default function EventMini({
     <div>
       {eventData && (
         <>
-          <div className="flex h-38 justify-between gap-2 mt-6">
+          <div className="flex h-38 justify-between gap-2 mt-4">
             <div className="flex w-3/5 h-36 gap-3">
               <div className="flex shrink-0 grow-0 w-48 h-36 bg-slate-400 border-2 border-pink-500 rounded-xl overflow-hidden">
                 <img
@@ -48,16 +54,26 @@ export default function EventMini({
                 ></img>
               </div>
 
-              <div className="flex flex-col justify-center">
-                <h3 className="text-3xl font-bold">{eventData.data.title}</h3>
+              <div className="flex flex-col justify-start">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-3xl font-bold">{eventData.data.title}</h3>
+
+                  {userIsHost ? "" : (                  
+                  <ToggleButton
+                    isJoined={isJoined}
+                    loggedUser={loggedUser}
+                    setIsJoined={setIsJoined}
+                    isLoading={isLoading}
+                  />)}
+                </div>
 
                 <div className="flex items-center">
                   <FaCalendarAlt className="fill-gray-400" />
                   <h4 className="ml-1 text-lg text-gray-400">
                     {eventData.data.date
                       ? moment(eventData.data.date).format(
-                          "ddd, Do MMM - h:mm a"
-                        )
+                        "ddd, Do MMM - h:mm a"
+                      )
                       : "No date"}
                   </h4>
                 </div>
@@ -72,17 +88,20 @@ export default function EventMini({
                 </div>
 
                 <h4 className="mt-1 text-sm leading-tight">
-                {eventData.data.description}
+                  {eventData.data.description}
                 </h4>
               </div>
+
+
+
             </div>
 
             <div className="flex flex-col justify-between items-end w-2/5">
               <div className="flex event-icons">
                 {userIsHost ? (
                   <>
-                    <RiDeleteBinLine size={30} />
-                    <PiNotePencilBold size={30} />
+                    <RiDeleteBinLine size={30} className="cursor-pointer" />
+                    <PiNotePencilBold size={30} className="cursor-pointer" />
                   </>
                 ) : (
                   ""
@@ -91,7 +110,7 @@ export default function EventMini({
               </div>
               <button
                 onClick={handleToggle}
-                className="btn bg-pink-500 hover:bg-pink-700 text-white"
+                className="btn w-24 bg-pink-500 hover:bg-pink-700 text-white"
               >
                 {showTodos ? "Expenses" : "Todos"}
               </button>

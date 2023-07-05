@@ -5,7 +5,8 @@ import {
   useLeaveActivityMutation,
 } from "../../services/ThesisDB";
 import { ColorRing } from  'react-loader-spinner'
-
+import { MdBlock } from "react-icons/md"
+import { IoMdCheckmarkCircleOutline } from "react-icons/io"
 
 interface ToggleButton {
   isJoined: boolean;
@@ -57,10 +58,10 @@ export default function ToggleButton({
   // JOIN / LEAVE
 
   return (
-      <div className="absolute bottom-0">
+      <div className="">
         <button
           onClick={isJoined ? handleLeave : handleJoin}
-          className="btn bg-white m-10"
+          className="btn flex bg-white items-center gap-2 p-1 px-4 ml-4 border-2 border-slate-200 rounded-md"
         >
           {isLoading ? (
             <ColorRing
@@ -73,11 +74,18 @@ export default function ToggleButton({
               colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
             />
           ) : isJoined ? (
-            "Leave"
+            <>
+            LEAVE
+            <MdBlock size={20} className="fill-red-300"/>
+            </>
           ) : (
-            "Join"
+            <>
+            JOIN
+            <IoMdCheckmarkCircleOutline size={20} className="fill-green-300"/>
+            </>
           )}
         </button>
+
       </div>
   );
 }

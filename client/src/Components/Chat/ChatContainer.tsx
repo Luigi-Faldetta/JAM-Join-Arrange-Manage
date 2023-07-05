@@ -101,13 +101,14 @@ function ChatContainer() {
         {isLoading ? (
           <ColorRing
             visible={true}
-            height="100%"
+            height="50%"
             width="100%"
             ariaLabel="blocks-loading"
             wrapperStyle={{}}
             wrapperClass="blocks-wrapper"
             // colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
-            colors={["#ec4899", "#312e81", "#ec4899", "#d6d3d1", "#312e81"]}
+            // colors={["#ec4899", "#312e81", "#ec4899", "#d6d3d1", "#312e81"]}
+            colors={["#ec4899", "#ec4899", "#ec4899", "#ec4899", "#ec4899"]}
           />
         ) : (
           isSuccess && (
