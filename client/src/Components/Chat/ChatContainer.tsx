@@ -39,7 +39,9 @@ function ChatContainer() {
       setMessage("");
 
       if (messagesRef.current) {
-        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+        // messagesRef.current.scrollIntoView({ behavior: 'smooth' })
+        // messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+        messagesRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
       }
     } catch (error) {
       console.error(error);
@@ -65,11 +67,12 @@ function ChatContainer() {
     if (data && !isLoading) {
       dispatch(setMessages(data));
       if (messagesRef.current) {
-        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+        // messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+        messagesRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        console.log("______________________________________________som tu");
       }
     }
   }, [data, isLoading]);
-
 
 
   return (
@@ -98,7 +101,7 @@ function ChatContainer() {
             ]}
           />
         ) : (
-          isSuccess && <Msg messages={messages} userId={userId} />
+          isSuccess && <Msg messages={[...messages].reverse()} userId={userId}/>
         )}
       </div>
       <div className="input-container">

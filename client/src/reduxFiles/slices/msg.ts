@@ -39,10 +39,10 @@ export const msgListSlice = createSlice({
             if (itsAlreadyThere) {
                 return state;
             }
-            return [...state, action.payload]
+            return [...state, action.payload];
         },
     }
-})
+});
 
 export const { createMsg } = msgSlice.actions
 export const { setMessages, addMessage} = msgListSlice.actions
