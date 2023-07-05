@@ -186,6 +186,7 @@ export default function Todos(): JSX.Element {
               key={index}
             >
               <button
+                id="x-btn"
                 className="w-10 text-gray-400 cursor-pointer"
                 onClick={() => handleDeleteClick(index)}
               >
@@ -195,6 +196,7 @@ export default function Todos(): JSX.Element {
                 {toDo?.title}
               </h3>
               <ImArrowRight
+                id="pink-arrow"
                 className="w-10 fill-pink-500 cursor-pointer"
                 onClick={() => handleDoneClick(index)}
               />

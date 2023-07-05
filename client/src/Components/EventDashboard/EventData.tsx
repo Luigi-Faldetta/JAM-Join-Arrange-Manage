@@ -91,6 +91,7 @@ export default function EventMini({
               </div>
               <button
                 onClick={handleToggle}
+                id="exp-todo"
                 className="btn bg-pink-500 hover:bg-pink-700 text-white"
               >
                 {showTodos ? "Expenses" : "Todos"}
