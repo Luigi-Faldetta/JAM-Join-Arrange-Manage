@@ -211,7 +211,7 @@ function CreateEventForm() {
   return (
     <>
       <button
-        className="btn"
+        className="btn bg-pink-500 text-white m-10 font-bold hover:bg-pink-700"
         type="button"
         onClick={(event) => {
           event.stopPropagation();
