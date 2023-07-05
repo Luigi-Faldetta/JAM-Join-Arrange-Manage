@@ -78,10 +78,10 @@ function CreateEventForm() {
   function createModal() {
     return open ? (
       <dialog id="my_modal_3" className="modal h-screen" open={open}>
-        <form method="dialog" className="modal-box" onSubmit={handleFormSubmit}>
+        <form method="dialog" className="modal-box border-indigo-950 border-2" onSubmit={handleFormSubmit}>
           <div
             onClick={() => setOpen(false)}
-            className="btn btn-circle absolute right-2 top-2"
+            className="btn btn-circle absolute right-2 top-2 bg-indigo-950 text-white hover:text-pink-500 hover:bg-indigo-950"
           >
             ✕
           </div>
@@ -189,8 +189,9 @@ function CreateEventForm() {
           <button
             id="create-event-btn"
             type="submit"
-            className="text-white 
-                        bg-gradient-to-r from-red-500 to-red-600 hover:bg-blue-800 
+            className="text-white hover:text-pink-500
+                        font-bold 
+                        bg-gradient-to-r from-indigo-900 to-indigo-950  
                         focus:ring-4 focus:outline-none focus:ring-blue-300 
                         font-medium 
                         w-full
@@ -211,7 +212,7 @@ function CreateEventForm() {
   return (
     <>
       <button
-        className="btn"
+        className="btn bg-pink-500 text-white m-10 font-bold hover:bg-pink-700"
         type="button"
         onClick={(event) => {
           event.stopPropagation();

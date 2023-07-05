@@ -1,8 +1,7 @@
-import { ReactEventHandler, useState } from "react";
+import { useState } from "react";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
 import { Link as Scroll } from "react-scroll";
-import { useAuth } from "../../utils/useAuth";
 import { useAppDispatch } from "../../reduxFiles/store";
 import { openLogout } from "../../reduxFiles/slices/logout";
 import { useIsLoggedIn } from "../../utils/useIsLoggedIn";
@@ -53,7 +52,7 @@ function Navbar() {
           <div className="flex items-center">
             <Link to="/" className="flex mr-12 items-center">
               <img
-                src="logo-jam.png"
+                src="https://res.cloudinary.com/dpzz6vn2w/image/upload/v1688551951/logo-jam_hj6qmj.png"
                 className="h-12 mr-3"
                 alt="JAM Logo"
               />
@@ -74,6 +73,7 @@ function Navbar() {
                     <Scroll
                       onClick={handleMobileMenu}
                       to="hero"
+                      id="tohero"
                       spy={true}
                       smooth={true}
                       offset={-190}
@@ -88,6 +88,7 @@ function Navbar() {
                     <Scroll
                       onClick={handleMobileMenu}
                       to="about"
+                      id="toabout"
                       spy={true}
                       smooth={true}
                       offset={-72}
@@ -101,6 +102,7 @@ function Navbar() {
                     <Scroll
                       onClick={handleMobileMenu}
                       to="faqs"
+                      id="tofaqs"
                       spy={true}
                       smooth={true}
                       offset={-100}
@@ -162,7 +164,7 @@ function Navbar() {
                     </Link>
                   </li>
                   <li>
-                    <button onClick={handleSignOut} className="dropdown-item">
+                    <button id="signout-btn" onClick={handleSignOut} className="dropdown-item">
                       Sign out
                     </button>
                   </li>
