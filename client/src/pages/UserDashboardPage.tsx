@@ -16,15 +16,13 @@ function UserDashboardPage() {
   const eventList = useSelector((state: RootState) => state.eventListReducer);
   const { data, error, isLoading } = useGetEventsQuery(userToken as string);
 
+  const [showAllEvents, setShowEvents] = useState<string>("all");
+
   useEffect(() => {
     if (!isLoading && !error) {
       dispatch(setEventList(data?.data));
     }
   }, [isLoading, error, data]);
-
-  // const sortedList = eventList.sort((a, b)=>{
-  //   return moment(a.date).valueOf() - moment(b.date).valueOf();
-  // } )
 
   const sortedEventList = eventList
     .slice()
@@ -34,17 +32,41 @@ function UserDashboardPage() {
     console.log("Event list has changed ==> ", eventList);
   }, [eventList]);
 
-  // const hostedEvents = eventList.
+  const handleToggle = (eventType: string) => {
+    //@ts-ignore
+    setShowEvents(eventType);
+  };
+
+  function AllEvents() {
+    return (
+      <>
+        {" "}
+        {sortedEventList.length >= 1 &&
+          sortedEventList.map((event: EventState) => {
+            return <EventTile event={event}></EventTile>;
+          })}
+      </>
+    );
+  }
+
+  function HostedEvents() {
+    return (
+      <>
+        {sortedEventList.map((event: EventState) => {
+          if (event.UserEvents[0].isHost === true) {
+            return <EventTile event={event} />;
+          }
+          return null; // Return null for non-hosted events or handle them differently
+        })}
+      </>
+    );
+  }
 
   return (
     <>
       <div className="flex flex-row justify-center  ">
         <div className=" p-5 flex flex-col justify-center items-center gap-1 ">
           {isLoading && <h2>loading...</h2>}
-          {sortedEventList.length >= 1 &&
-            sortedEventList.map((event: EventState) => {
-              return <EventTile event={event}></EventTile>;
-            })}
 
           {!isLoading && sortedEventList.length < 1 && (
             <div className="flex flex-col justify-center align-middle text-center">
@@ -54,6 +76,23 @@ function UserDashboardPage() {
               <div>
                 <h3>No upcoming events yet. Click "Host Event" to begin.</h3>
               </div>
+            </div>
+          )}
+          {sortedEventList.length >= 1 && (
+            <div className="w-4/5">
+              <button
+                onClick={() => handleToggle("all")}
+                className="btn bg-pink-500 hover:bg-pink-700 text-white"
+              >
+                ALL
+              </button>
+              <button
+                onClick={() => handleToggle("host")}
+                className="btn bg-pink-500 hover:bg-pink-700 text-white"
+              >
+                HOST
+              </button>
+              {showAllEvents === "all" ? <AllEvents /> : <HostedEvents />}
             </div>
           )}
         </div>
