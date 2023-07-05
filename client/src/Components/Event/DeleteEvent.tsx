@@ -14,6 +14,7 @@ function DeleteEvent({ setDeleteModalOpen }: DeleteEventProps) {
   const navigate = useNavigate();
   const { eventid } = useParams();
   const dispatch = useAppDispatch();
+  const eventId = eventid as string;
 
   function handleCancelDelete() {
     console.log("hello");
@@ -24,11 +25,10 @@ function DeleteEvent({ setDeleteModalOpen }: DeleteEventProps) {
     console.log("hello");
 
     try {
-      const res = await deleteEvent(eventid as string);
-      console.log(" deleted event => ", res);
+      const res = await deleteEvent(eventId);
       if ("data" in res && res.data.success) {
         // event has been deleted
-        dispatch(deleteEventFromList(eventid));
+        dispatch(deleteEventFromList(eventId));
         navigate("/user-dashboard");
         setDeleteModalOpen(false);
       } else if ("error" in res && res.error) {

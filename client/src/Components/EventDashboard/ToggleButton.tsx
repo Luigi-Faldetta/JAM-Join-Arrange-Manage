@@ -1,17 +1,16 @@
-import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
+  useGetEventQuery,
   useGetUserQuery,
   useJoinActivityMutation,
   useLeaveActivityMutation,
 } from "../../services/ThesisDB";
 import { ColorRing } from  'react-loader-spinner'
-import { MdBlock } from "react-icons/md"
-import { IoMdCheckmarkCircleOutline } from "react-icons/io"
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../../reduxFiles/store";
 import { UserState, deleteUserFromList, updateUserList } from "../../reduxFiles/slices/users";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
+import { EventState, addEventToList, deleteEventFromList } from "../../reduxFiles/slices/events";
 
 
 
@@ -32,17 +31,19 @@ export default function ToggleButton({
   const navigate = useNavigate()
   const [joinActivity] = useJoinActivityMutation();
   const [leaveActivity] = useLeaveActivityMutation();
-  const eventId = eventid;
-  const attendees = useSelector((state:RootState) => state.userList)
+  const eventId = eventid as string;
   const appDispatch = useAppDispatch()
   const token = localStorage.getItem("token") as string
   const {data} = useGetUserQuery(token)
+  // const eventList = useSelector((state: RootState)  => state.eventListReducer)
+  const eventData = useGetEventQuery(eventId);
 
   const handleJoin = () => {
     onJoin(loggedUser as string, eventId as string).then(() =>
       setIsJoined(true)
-    );
+    )
     appDispatch(updateUserList(data?.data as UserState))
+    appDispatch(addEventToList(eventData.data?.data as EventState))
   };
 
   const onJoin = async (userId: string, eventId: string) => {
@@ -58,11 +59,13 @@ export default function ToggleButton({
       setIsJoined(false)
     );
     appDispatch(deleteUserFromList(token))
+    appDispatch(deleteEventFromList(eventId));
   };
 
   const onLeave = async (userId: string, eventId: string) => {
     try {
-       leaveActivity({ userId, eventId }).then(() => navigate('/user-dashboard'))
+       await leaveActivity({ userId, eventId })
+       navigate('/user-dashboard')
     } catch (error) {
       console.error(error);
     }
@@ -88,13 +91,13 @@ export default function ToggleButton({
             />
           ) : isJoined ? (
             <>
-            LEAVE EVENT
+            LEAVE
             <FaArrowRight size={16} className="fill-gray-300"/>
             </>
           ) : (
             <>
             <FaArrowLeft size={16} className="fill-pink-300"/>
-            JOIN EVENT
+            JOIN
             </>
           )}
         </button>

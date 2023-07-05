@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDeleteEventMutation } from "../../services/ThesisDB";
 import { useDispatch } from "react-redux";
 import { ApiResponse } from "../../services/ApiResponseType";
-// import { deleteEvent } from "../../reduxFiles/slices/events";
 
 interface DeleteEventProps {
   setDeleteModalOpen: (isOpen: boolean) => void;
@@ -20,10 +19,10 @@ function DeleteEvent({ setDeleteModalOpen }: DeleteEventProps) {
     setDeleteModalOpen(false);
   }
 
+  const { eventid } = useParams();
   async function handleDelete(e: any) {
     console.log("hello");
     e.preventDefault();
-    const { eventid } = useParams();
 
     try {
       const res = await deleteEvent(eventid as string);
@@ -109,26 +108,26 @@ function DeleteEvent({ setDeleteModalOpen }: DeleteEventProps) {
     </>
   );
 }
+export default DeleteEvent
+// export default function DeleteEventButton() {
+//   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
-export default function DeleteEventButton() {
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+//   const openDeleteModal = () => {
+//     setDeleteModalOpen(true);
+//   };
 
-  const openDeleteModal = () => {
-    setDeleteModalOpen(true);
-  };
+//   return (
+//     <>
+//       <button
+//         onClick={() => openDeleteModal()}
+//         className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300  hover:bg-red-800 hover:text-white sm:mt-0 sm:w-auto"
+//       >
+//         Delete
+//       </button>
 
-  return (
-    <>
-      <button
-        onClick={() => openDeleteModal()}
-        className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300  hover:bg-red-800 hover:text-white sm:mt-0 sm:w-auto"
-      >
-        Delete
-      </button>
-
-      {deleteModalOpen && (
-        <DeleteEvent setDeleteModalOpen={setDeleteModalOpen} />
-      )}
-    </>
-  );
-}
+//       {deleteModalOpen && (
+//         <DeleteEvent setDeleteModalOpen={setDeleteModalOpen} />
+//       )}
+//     </>
+//   );
+// }

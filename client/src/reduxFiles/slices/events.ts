@@ -50,28 +50,13 @@ export const eventListSlice = createSlice({
   initialState: [] as EventState[],
   reducers: {
     //state type will be Event when the type is created.
-    createEventList: (state) => {
-      state = [];
+    deleteEventFromList: (state, action:PayloadAction<string>) => {
+      return state.filter((ev) => ev.eventId !== action.payload);
     },
-    deleteEventList: (state) => {
-      state = [];
-    },
-    updateEventList: (state) => {
-      state = [];
-    },
-    deleteEventFromList: (state, action) => {
-      console.log("REDUX DEUB SESH ==> ", action.payload);
-      return [...state].filter((ev) => {
-        console.log("REDUX V@ ==> ", ev.eventId, ev.eventId !== action.payload);
-        return ev.eventId !== action.payload;
-      });
-    },
-    addEventToList: (state, action) => {
-      console.log("Event in redux :  ", action.payload);
-      return [...state, action.payload];
+    addEventToList: (state, action:PayloadAction<EventState>) => {
+      state.push(action.payload);
     },
     setEventList: (_state, action) => {
-      // console.log(action);
       return action.payload;
     },
   },
@@ -79,9 +64,6 @@ export const eventListSlice = createSlice({
 
 export const { createEvent, updateEvent, deleteEvent } = eventSlice.actions;
 export const {
-  createEventList,
-  updateEventList,
-  deleteEventList,
   setEventList,
   deleteEventFromList,
   addEventToList,

@@ -144,7 +144,7 @@ const ProfilePage = (): any => {
 
   return (
     <div className='profile-container bg-white min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8'>
-      <div className='w-full max-w-sm bg-gradient-to-r from-indigo-900 to-indigo-950 border-2 border-indigo-950 rounded-xl shadow dark:bg-gray-800 dark:border-gray-700'>
+      <div className='w-full max-w-sm border-indigo-950 border-2 rounded-xl bg-gray-100'>
         <div className='flex flex-col items-center pb-10 '>
           {previewUrl || userPhoto ? (
             <img
@@ -179,7 +179,7 @@ const ProfilePage = (): any => {
               type='text'
               name='username'
               placeholder={data?.data.name || 'Name'}
-              className='input w-full max-w-xs border-gray-400 bg-indigo-950 text-white text-xl'
+              className='input w-full max-w-xs border-gray-400 block text-md font-medium text-gray-900 dark:text-white'
             />
             <input
               value={email}
@@ -187,7 +187,7 @@ const ProfilePage = (): any => {
               type='text'
               name='email'
               placeholder={data?.data.email || 'Enter email'}
-              className='input w-full max-w-xs border-gray-400 bg-indigo-950 text-white text-xl'
+              className='input w-full max-w-xs border-gray-400 block text-md font-medium text-gray-900 dark:text-white'
             />
             <input
               value={phone}
@@ -195,7 +195,7 @@ const ProfilePage = (): any => {
               type='text'
               name='phone'
               placeholder={data?.data.phone || 'Phone number'}
-              className='input w-full max-w-xs border-gray-400 bg-indigo-950 text-white text-xl'
+              className='input w-full max-w-xs border-gray-400 block text-md font-medium text-gray-900 dark:text-white'
             />
             <input
               value={password}
@@ -203,7 +203,7 @@ const ProfilePage = (): any => {
               type='password'
               name='password'
               placeholder='Change Password'
-              className='input w-full max-w-xs border-gray-400 bg-indigo-950 text-white text-xl'
+              className='input w-full max-w-xs border-gray-400 block text-md font-medium text-gray-900 dark:text-white'
             />
             <input
               value={confirmPassword}
@@ -211,14 +211,14 @@ const ProfilePage = (): any => {
               type='password'
               name='confirmpassword'
               placeholder='Confirm Password'
-              className='input w-full max-w-xs border-gray-400 bg-indigo-950 text-white text-xl'
+              className='input w-full max-w-xs border-gray-400 block text-md font-medium text-gray-900 dark:text-white'
             />
             <div className='profile-btn'>
               <div>
                 <button
                   type='submit'
                   id='save-profile'
-                  className='btn btn-success text-pink-500'
+                  className='btn text-md font-medium text-white bg-gradient-to-r from-indigo-900 to-indigo-950 '
                 >
                   Save Changes
                 </button>
@@ -227,7 +227,7 @@ const ProfilePage = (): any => {
                 <button
                   type='submit'
                   id='delete-profile'
-                  className='btn bg-pink-500 text-white'
+                  className='btn text-md font-medium bg-pink-500 text-white hover:bg-pink-700'
                   onClick={handleDelete}
                 >
                   Delete Account

@@ -7,36 +7,34 @@ import {
 } from "../../services/ThesisDB";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../../reduxFiles/store";
-import { setEventList } from "../../reduxFiles/slices/events";
+import { EventState, setEventList } from "../../reduxFiles/slices/events";
 import ChatContainer from "./ChatContainer";
 import { openChat, openWithEventId } from "../../reduxFiles/slices/chat";
 import { useClickAway } from "@uidotdev/usehooks";
 import { HiOutlineChatBubbleLeftRight } from "react-icons/hi2";
 import "./chatContainer.css";
 
-interface Event {
-  coverPic: string;
-  date: string;
-  description?: string;
-  eventId: string;
-  host?: string;
-  location: string;
-  title: string;
-}
 
 function Chat() {
   const [chatDropdown, setChatDropdown] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState<Event>({
-    coverPic: "",
-    date: "",
-    description: "",
-    eventId: "",
-    host: "",
-    location: "",
+  const [selectedEvent, setSelectedEvent] = useState<EventState>({
+    eventId: undefined,
     title: "",
+    date: null,
+    location: null,
+    description: null,
+    eventHost: "",
+    /**
+     * the any type array below will need addressed.
+     */
+    UserEvents:[],
+    coverPic: undefined,
   });
   const userToken = localStorage.getItem("token");
   const eventList = useSelector((state: RootState) => state.eventListReducer);
+  useEffect(()=>{
+    console.log("eventList: ", eventList)
+  }, [eventList])
   const { data, error, isLoading } = useGetEventsQuery(userToken as string);
   const ref = useClickAway(() => {
     setChatDropdown(false);
