@@ -1,5 +1,5 @@
 import { ApiResponse } from "../../services/ApiResponseType";
-import { EventState } from "../../reduxFiles/slices/events";
+import { EventState, setEvent } from "../../reduxFiles/slices/events";
 import moment from "moment";
 import "../Event/EventDashboard.css";
 import EventLink from "./EventLink";
@@ -9,8 +9,11 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import ToggleButton from "./ToggleButton";
 import { FaCalendarAlt } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DeleteEvent from "./DeleteEventButtonToDelete";
+import EditEvent from "./EditEvent";
+import { RootState, useAppDispatch } from "../../reduxFiles/store";
+import { useSelector } from "react-redux";
 
 export default function EventMini({
   eventData,
@@ -31,8 +34,13 @@ export default function EventMini({
   setIsJoined: any;
   isLoading: boolean;
 }) {
+  const appDispatch = useAppDispatch()
+
+  useEffect(() => {appDispatch(setEvent(eventData.data))},[])
+  const currentEvent = useSelector((state :RootState) => state.eventReducer)
   const { eventid } = useParams();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [editModalOpen, setEditModalOpen] = useState(false);
   const handleToggle = () => {
     //@ts-ignore
     setShowTodos((prevShowTodos) => !prevShowTodos);
@@ -48,8 +56,8 @@ export default function EventMini({
                 <img
                   className="w-full h-full object-cover"
                   src={
-                    eventData.data.coverPic
-                      ? eventData.data.coverPic
+                    currentEvent.coverPic
+                      ? currentEvent.coverPic
                       : "https://res.cloudinary.com/dpzz6vn2w/image/upload/v1688544322/friends-placeholder_ljftyb.png"
                   }
                   alt="Event picture"
@@ -58,7 +66,7 @@ export default function EventMini({
 
               <div className="flex flex-col justify-start">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-3xl font-bold">{eventData.data.title}</h3>
+                  <h3 className="text-3xl font-bold">{currentEvent.title}</h3>
 
                   {userIsHost ? (
                     ""
@@ -75,8 +83,8 @@ export default function EventMini({
                 <div className="flex items-center">
                   <FaCalendarAlt className="fill-gray-400" />
                   <h4 className="ml-1 text-lg text-gray-400">
-                    {eventData.data.date
-                      ? moment(eventData.data.date).format(
+                    {currentEvent.date
+                      ? moment(currentEvent.date).format(
                           "ddd, Do MMM - h:mm a"
                         )
                       : "No date"}
@@ -86,14 +94,14 @@ export default function EventMini({
                 <div className="flex items-center">
                   <FaLocationDot className="fill-gray-400" />
                   <h4 className="ml-1 text-lg text-gray-400">
-                    {eventData.data.location
-                      ? eventData.data.location
+                    {currentEvent.location
+                      ? currentEvent.location
                       : "No location"}
                   </h4>
                 </div>
 
                 <h4 className="mt-1 text-sm leading-tight">
-                  {eventData.data.description}
+                  {currentEvent.description}
                 </h4>
               </div>
             </div>
@@ -105,7 +113,10 @@ export default function EventMini({
                     <span onClick={() => setDeleteModalOpen(true)}>
                       <RiDeleteBinLine size={30} className="cursor-pointer" />
                     </span>
+                     <span onClick={() => setEditModalOpen(true)}>
                     <PiNotePencilBold size={30} className="cursor-pointer" />
+                    </span>
+                     {editModalOpen && <EditEvent setEditModalOpen={setEditModalOpen} eventid={eventid}/>}
                     {deleteModalOpen && <DeleteEvent setDeleteModalOpen={setDeleteModalOpen}/>}
                   </>
                 ) : (

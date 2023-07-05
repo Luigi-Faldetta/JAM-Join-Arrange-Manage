@@ -1,86 +1,105 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDeleteEventMutation, useUpdateEventMutation } from "../../services/ThesisDB";
+import { useState } from "react";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { useDispatch } from "react-redux";
 import {
-  addEventToList,
-  setEvent,
-  EventState,
-} from "../../reduxFiles/slices/events";
-import { useAddEventMutation } from "../../services/ThesisDB";
-import { ApiResponse } from "../../services/ApiResponseType";
+    addEventToList,
+    EventState,
+    updateEvent,
+  } from "../../reduxFiles/slices/events";
+import { RootState } from "../../reduxFiles/store";
 
-function CreateEventForm() {
-  const dispatch = useDispatch();
-  const userToken = localStorage.getItem("token");
-
-  const [eventDate, setEventDate] = useState<Date | null>(null);
-  const [open, setOpen] = useState(false);
-  const [eventFile, setEventFile] = useState<File | null>(null);
-  const [addEvent] = useAddEventMutation();
-
-  const handleImageUpload = async () => {
-    if (eventFile) {
-      const data = new FormData();
-      data.append("file", eventFile);
-      data.append("upload_preset", "tdzb6v4z");
-      data.append("cloud_name", "de4bu4ijj");
-
-      try {
-        const res = await fetch(
-          "https://api.cloudinary.com/v1_1/de4bu4ijj/image/upload",
-          {
-            method: "post",
-            body: data,
+interface EditEventProps {
+    setEditModalOpen: (isOpen: boolean) => void;
+  }
+  
+function EditEvent ({setEditModalOpen, eventid}: any) {
+    const eventInfo = useSelector((state: RootState) => state.eventReducer)
+    const dispatch = useDispatch();
+    const [eventFile, setEventFile] = useState<File | null>(null);
+    const navigate = useNavigate();
+    const [eventDate, setEventDate] = useState<Date | null>(null);
+    const [patchEvent] = useUpdateEventMutation();
+    // // const { eventId } = useParams()
+    // console.log(eventId)
+    const [title, setTitle] = useState('');
+    const [date, setDate] = useState<Date | null>(null);
+    const [location, setLocation] = useState('');
+    const [description, setDescription] = useState('');
+    const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault(); //removed as it was preventing modal from closing
+    
+        const eventFormData: Partial<EventState> &
+          Pick<EventState, "title" | "date" | "location" | "description"> = {
+          title: event.currentTarget.eventName.value,
+          date: eventDate,
+          location: event.currentTarget.eventLocation.value,
+          description: null,
+          eventId: eventid
+        };
+    
+        const image = await handleImageUpload();
+    
+        eventFormData.eventId = eventid
+        if (image?.url) eventFormData.coverPic = image.url;
+        if (title) {
+            eventFormData.title = title;
           }
-        );
-
-        const uploadedImage = await res.json();
-
-        return uploadedImage;
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      return;
-    }
-  };
-
-  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); //removed as it was preventing modal from closing
-
-    const eventFormData: Partial<EventState> &
-      Pick<EventState, "title" | "date" | "location" | "description"> = {
-      title: event.currentTarget.eventName.value,
-      date: eventDate,
-      location: event.currentTarget.eventLocation.value,
-      description: null,
-    };
-
-    const image = await handleImageUpload();
-
-    if (image?.url) eventFormData.coverPic = image.url;
-
-    const eventCreated = await addEvent({
-      token: userToken as string,
-      event: eventFormData,
-    });
-
-    if ("data" in eventCreated && eventCreated.data.success) {
-      console.log("event created in DB== > ", eventCreated);
-      dispatch(setEvent(eventCreated.data.data));
-      dispatch(addEventToList(eventCreated.data.data));
-    }
-    setOpen(false);
-    // Send another request with eventID, userID (host), isHost (true)
-  };
-
-  function createModal() {
-    return open ? (
-      <dialog id="my_modal_3" className="modal h-screen" open={open}>
-        <form method="dialog" className="modal-box border-indigo-950 border-2" onSubmit={handleFormSubmit}>
+          if (date) {
+            eventFormData.date = date;
+          }
+          if (location) {
+            eventFormData.location = location;
+          }
+          if (description) {
+            eventFormData.description = description;
+          }
+    
+        const eventChanged = await patchEvent(eventFormData);
+        if ("data" in eventChanged && eventChanged.data.success) {
+          console.log("event created in DB== > ", eventChanged);
+          dispatch(updateEvent(eventChanged.data.data));
+        }
+        setEditModalOpen(false)
+      };
+    const handleImageUpload = async () => {
+        if (eventFile) {
+          const data = new FormData();
+          data.append("file", eventFile);
+          data.append("upload_preset", "tdzb6v4z");
+          data.append("cloud_name", "de4bu4ijj");
+    
+          try {
+            const res = await fetch(
+              "https://api.cloudinary.com/v1_1/de4bu4ijj/image/upload",
+              {
+                method: "post",
+                body: data,
+              }
+            );
+    
+            const uploadedImage = await res.json();
+    
+            return uploadedImage;
+          } catch (error) {
+            console.log(error);
+          }
+        } else {
+          return;
+        }
+      };
+    return (
+        <>
+        <div
+          className="fixed inset-0 flex items-center justify-center z-50"
+          aria-labelledby="modal-title"
+          role="dialog"
+          aria-modal="true"
+        >
+             <form method="" className="modal-box border-indigo-950 border-2" onSubmit={handleFormSubmit}>
           <div
-            onClick={() => setOpen(false)}
+            onClick={() => setEditModalOpen(false)}
             className="btn btn-circle absolute right-2 top-2 bg-indigo-950 text-white hover:text-pink-500 hover:bg-indigo-950"
           >
             ✕
@@ -98,6 +117,7 @@ function CreateEventForm() {
                 id="eventName"
                 name="eventName"
                 maxLength={30}
+                onChange={(e) => setTitle(e.target.value)}
                 className="shadow-sm 
               
                           bg-gray-50 border border-gray-300 
@@ -107,7 +127,7 @@ function CreateEventForm() {
                           block w-full p-2.5 
                           dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                 placeholder="Eg. 'Anna's houseparty...'"
-                required
+                
               />
             </div>
           </div>
@@ -125,7 +145,7 @@ function CreateEventForm() {
               showTimeSelect
               id="event-date"
               selected={eventDate}
-              onChange={(date) => setEventDate(date)}
+              onChange={(date) => setDate(date)}
               dateFormat="EEE MMM d 🗓 h:mm aa 🕣"
               minDate={new Date()}
               wrapperClassName="w-full"
@@ -154,6 +174,7 @@ function CreateEventForm() {
               type="eventDescription"
               id="eventDescription"
               name="eventDescription"
+              onChange={(e) => setDescription(e.target.value)}
               placeholder="Eg. 'Music will be pumping, the dance floor will be on fire' "
               className="shadow-sm 
                           bg-gray-50 border border-gray-300 
@@ -162,7 +183,7 @@ function CreateEventForm() {
                           focus:ring-blue-500 focus:border-blue-500 
                           block w-full p-2.5 
                           dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-              required
+              
             />
           </div>
 
@@ -176,6 +197,7 @@ function CreateEventForm() {
             <input
               id="eventLocation"
               name="eventLocation"
+              onChange={(e) => setLocation(e.target.value)}
               placeholder="Eg. '12345 Rainbow Lane...'"
               className="shadow-sm 
                           bg-gray-50 border border-gray-300 
@@ -225,28 +247,11 @@ function CreateEventForm() {
                         text-center 
                         dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
-            Create Event
+            Edit Event
           </button>
         </form>
-      </dialog>
-    ) : null;
-  }
-
-  return (
-    <>
-      <button
-        className="btn bg-pink-500 text-white m-10 font-bold hover:bg-pink-700"
-        type="button"
-        onClick={(event) => {
-          event.stopPropagation();
-          setOpen((st) => !st);
-        }}
-      >
-        Host event
-      </button>
-      {createModal()}
-    </>
-  );
+        </div>{" "}
+      </>
+    );
 }
-
-export default CreateEventForm;
+export default EditEvent
