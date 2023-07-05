@@ -140,7 +140,7 @@ export default function Expenses() {
 
             <div className="lg:w-1/2 h-96 p-4 bg-gradient-to-r from-indigo-900 to-indigo-950 border-2 border-indigo-950 rounded-xl flex flex-col">
                 <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">PER PERSON SHARE (€{expenseSheet.perPerson})</h1>
-                <div className="w-full">
+                <div className="w-full flex-grow  flex flex-col overflow-y-auto">
 
                     {expenseSheet.indExpenses.map((indExpense) => (
                         <div className="flex p-2 border-t border-gray-400 text-white text-xl" key={indExpense?.name}>
