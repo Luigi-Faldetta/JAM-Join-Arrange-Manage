@@ -170,8 +170,8 @@ export default function Todos(): JSX.Element {
 
 
 
-    <div className="flex justify-center gap-4">
-      <div className="w-1/2 h-96 p-4 bg-gradient-to-r from-indigo-950 to-indigo-900 border-2 border-indigo-950 rounded-xl flex flex-col">
+    <div className="flex flex-col lg:flex-row justify-center gap-4">
+      <div className="lg:w-1/2 h-96 p-4 bg-gradient-to-r from-indigo-950 to-indigo-900 border-2 border-indigo-950 rounded-xl flex flex-col">
         <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">
           TODOS
         </h1>
@@ -219,7 +219,7 @@ export default function Todos(): JSX.Element {
         </div>
       </div>
 
-      <div className="w-1/2 h-96 p-4 bg-gradient-to-r from-indigo-900 to-indigo-950 border-2 border-indigo-950 rounded-xl flex flex-col">
+      <div className="lg:w-1/2 h-96 p-4 bg-gradient-to-r from-indigo-900 to-indigo-950 border-2 border-indigo-950 rounded-xl flex flex-col">
         <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">
           COMPLETED
         </h1>
