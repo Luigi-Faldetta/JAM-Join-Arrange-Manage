@@ -118,7 +118,7 @@ export default function Expenses() {
                                 onChange={handleInputChange}
                                 type="number"
                                 placeholder="€"
-                                className="ml-4 w-1/6 h-10 border-0 border-b border-gray-400 bg-indigo-950"
+                                className="money ml-4 w-1/6 h-10 border-0 border-b border-gray-400 bg-indigo-950"
                             />
                             <button type="submit" className="w-12  font-bold rounded-full border border-gray-400">+</button>
                         </form>

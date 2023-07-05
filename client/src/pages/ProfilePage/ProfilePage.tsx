@@ -143,8 +143,8 @@ const ProfilePage = (): any => {
   };
 
   return (
-    <div className='profile-container bg-gray-100 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8'>
-      <div className='w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700'>
+    <div className='profile-container bg-white min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8'>
+      <div className='w-full max-w-sm bg-gradient-to-r from-indigo-900 to-indigo-950 border-2 border-indigo-950 rounded-xl shadow dark:bg-gray-800 dark:border-gray-700'>
         <div className='flex flex-col items-center pb-10 '>
           {previewUrl || userPhoto ? (
             <img
@@ -159,7 +159,7 @@ const ProfilePage = (): any => {
               alt=''
             />
           )}
-          <h5 className='text-3xl font-medium text-gray-900 dark:text-white mb-5'>
+          <h5 className='text-3xl font-bold pb-3 text-pink-500 dark:text-white mb-5'>
             {data?.data.name}
           </h5>
           {updateStatus === 'success' && (
@@ -179,7 +179,7 @@ const ProfilePage = (): any => {
               type='text'
               name='username'
               placeholder={data?.data.name || 'Name'}
-              className='input input-bordered w-full max-w-xs input-primary'
+              className='input w-full max-w-xs border-gray-400 bg-indigo-950 text-white text-xl'
             />
             <input
               value={email}
@@ -187,7 +187,7 @@ const ProfilePage = (): any => {
               type='text'
               name='email'
               placeholder={data?.data.email || 'Enter email'}
-              className='input input-bordered w-full max-w-xs input-primary'
+              className='input w-full max-w-xs border-gray-400 bg-indigo-950 text-white text-xl'
             />
             <input
               value={phone}
@@ -195,7 +195,7 @@ const ProfilePage = (): any => {
               type='text'
               name='phone'
               placeholder={data?.data.phone || 'Phone number'}
-              className='input input-bordered w-full max-w-xs input-primary'
+              className='input w-full max-w-xs border-gray-400 bg-indigo-950 text-white text-xl'
             />
             <input
               value={password}
@@ -203,7 +203,7 @@ const ProfilePage = (): any => {
               type='password'
               name='password'
               placeholder='Change Password'
-              className='input input-bordered w-full max-w-xs input-primary'
+              className='input w-full max-w-xs border-gray-400 bg-indigo-950 text-white text-xl'
             />
             <input
               value={confirmPassword}
@@ -211,14 +211,14 @@ const ProfilePage = (): any => {
               type='password'
               name='confirmpassword'
               placeholder='Confirm Password'
-              className='input input-bordered w-full max-w-xs input-primary'
+              className='input w-full max-w-xs border-gray-400 bg-indigo-950 text-white text-xl'
             />
             <div className='profile-btn'>
               <div>
                 <button
                   type='submit'
                   id='save-profile'
-                  className='btn btn-success text-white'
+                  className='btn btn-success text-pink-500'
                 >
                   Save Changes
                 </button>
@@ -227,7 +227,7 @@ const ProfilePage = (): any => {
                 <button
                   type='submit'
                   id='delete-profile'
-                  className='btn btn-error text-white'
+                  className='btn bg-pink-500 text-white'
                   onClick={handleDelete}
                 >
                   Delete Account
