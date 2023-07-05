@@ -88,13 +88,13 @@ export default function ToggleButton({
             />
           ) : isJoined ? (
             <>
-            LEAVE EVENT
+            LEAVE
             <FaArrowRight size={16} className="fill-gray-300"/>
             </>
           ) : (
             <>
             <FaArrowLeft size={16} className="fill-pink-300"/>
-            JOIN EVENT
+            JOIN
             </>
           )}
         </button>
