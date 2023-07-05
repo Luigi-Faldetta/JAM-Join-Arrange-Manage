@@ -5,7 +5,6 @@ import { Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "./reduxFiles/store";
 import Logout from "./Components/Logout";
-import { useEffect, useState } from "react";
 import ChatContainer from "./Components/Chat/ChatContainer";
 
 function App() {
@@ -16,9 +15,6 @@ function App() {
     state.chatReducer.valueOf()
   ) as { isOpen: boolean; eventId: string };
 
-  // useEffect(() => {
-  //   console.log("logout state ==> ", chatState);
-  // }, [chatState.eventId])
 
   return (
     <>

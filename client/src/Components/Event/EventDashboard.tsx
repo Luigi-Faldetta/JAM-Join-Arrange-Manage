@@ -68,17 +68,17 @@ export default function Event() {
                 setShowTodos={setShowTodos}
               />
 
+            </div>
               <ToggleButton
                 isJoined={isJoined}
                 loggedUser={loggedUser}
                 setIsJoined={setIsJoined}
                 isLoading={isLoading}
               />
-            </div>
 
             <div className="w-4/5">{showTodos ? <Todos /> : <Expenses />}</div>
 
-            <div className="w-4/5 h-36 bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 border-2 border-gray-300 rounded-xl">
+            <div className="w-4/5 h-36 bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 border-2 border-pink-500 rounded-xl">
               <Attendees />
             </div>
           </div>

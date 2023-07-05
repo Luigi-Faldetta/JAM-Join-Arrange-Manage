@@ -8,7 +8,7 @@ function EventTile({ event }: { event: any }) {
   return (
     <>
       <Link
-        to={`/event-dashboard/${event.eventId}`}
+        to={`/event/${event.eventId}`}
         className="flex flex-row w-full p-2 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
       >
         {/* <a

@@ -36,13 +36,13 @@ export default function EventMini({
         <>
           <div className="flex h-38 justify-between gap-2 mt-6">
             <div className="flex w-3/5 h-36 gap-3">
-              <div className="flex shrink-0 grow-0 w-48 h-36 bg-slate-400 border-4 border-pink-500 rounded-xl overflow-hidden">
+              <div className="flex shrink-0 grow-0 w-48 h-36 bg-slate-400 border-2 border-pink-500 rounded-xl overflow-hidden">
                 <img
                   className="w-full h-full object-cover"
                   src={
                     eventData.data.coverPic
                       ? eventData.data.coverPic
-                      : "https://cdn1.vectorstock.com/i/1000x1000/42/60/meeting-people-icon-simple-style-vector-22764260.jpg"
+                      : 'https://res.cloudinary.com/dpzz6vn2w/image/upload/v1688544322/friends-placeholder_ljftyb.png'
                   }
                   alt="Event picture"
                 ></img>
@@ -72,9 +72,7 @@ export default function EventMini({
                 </div>
 
                 <h4 className="mt-1 text-sm leading-tight">
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy.
+                {eventData.data.description}
                 </h4>
               </div>
             </div>
@@ -91,13 +89,6 @@ export default function EventMini({
                 )}
                 <EventLink eventid={eventid} />
               </div>
-
-              {/* {eventData ? (eventData.data.UserEvents.map((user)=>{
-              if (user.userID === userToken && user.isHost === true ) return 
-            })   : (
-              <h2> SOMETHING </h2>
-              )} */}
-
               <button
                 onClick={handleToggle}
                 id="exp-todo"

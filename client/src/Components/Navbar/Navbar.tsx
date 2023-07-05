@@ -54,7 +54,7 @@ function Navbar() {
               <img
                 src="logo-jam.png"
                 className="h-12 mr-3"
-                alt="Flowbite Logo"
+                alt="JAM Logo"
               />
               <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
                 JAM

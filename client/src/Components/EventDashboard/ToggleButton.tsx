@@ -60,7 +60,7 @@ export default function ToggleButton({
       <div className="absolute bottom-0">
         <button
           onClick={isJoined ? handleLeave : handleJoin}
-          className="btn bg-white m-10"
+          className={isJoined ? "btn bg-indigo-900 text-pink-500 m-10 hover:bg-indigo-950":"btn bg-pink-500 text-white  m-10 font-bold hover:bg-pink-700"}
         >
           {isLoading ? (
             <ColorRing
@@ -73,9 +73,9 @@ export default function ToggleButton({
               colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
             />
           ) : isJoined ? (
-            "Leave"
+            "Leave Event"
           ) : (
-            "Join"
+            "Join Event"
           )}
         </button>
       </div>

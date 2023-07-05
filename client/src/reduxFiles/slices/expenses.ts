@@ -26,15 +26,11 @@ export const expenseSlice = createSlice({
         addExpense: (state, action: PayloadAction<Partial<ExpenseState> & Pick<ExpenseState, "cost" | "eventId" | "purchaserId" | "item">>) => { 
             console.log("in add expense: ", action.payload);
             state= action.payload 
-            // store.dispatch(calculateExpenseSheet(action.payload.eventId))
         },
-        // deleteExpense: (state, action: PayloadAction<string>) => { 
-        //     store.dispatch(calculateExpenseSheet(action.payload))
-        // },
     }
 })
 
-export const { addExpense, /*deleteExpense*/ } = expenseSlice.actions
+export const { addExpense } = expenseSlice.actions
 
 const expenseReducer = expenseSlice.reducer
 
