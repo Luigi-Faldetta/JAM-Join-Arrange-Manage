@@ -52,6 +52,10 @@ function Chat() {
   const handleChatClick = () => {
     setChatDropdown(!chatDropdown);
   };
+  // useEffect(() => {
+
+
+  // }, [eventList.length]); 
 
   const handleEventClick = (event: any) => {
     setSelectedEvent(event);
@@ -92,10 +96,11 @@ function Chat() {
                   onClick={() => handleEventClick(event)}
                   className="event-item"
                 >
-                  <div className="avatar-wrapper">
+                  <div className="avatar-wrapper flex overflow-hidden border border-slate-300">
                     <img
-                      className="avatar"
-                      src={event.coverPic}
+                      className="avatar w-full h-full object-cover"
+                      src={event.coverPic? event.coverPic : 'https://res.cloudinary.com/dpzz6vn2w/image/upload/v1688544322/friends-placeholder_ljftyb.png'
+                    }
                       alt={event.title}
                     />
                   </div>

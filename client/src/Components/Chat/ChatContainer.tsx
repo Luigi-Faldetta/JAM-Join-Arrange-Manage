@@ -65,6 +65,14 @@ function ChatContainer() {
   useEffect(() => {
     socket.on("newMessage", (res: any) => {
       dispatch(addMessage(res.data));
+      if (messagesRef.current) {
+        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+        messagesRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+        });
+        console.log("______________________________________________som tu");
+      }
     });
   }, [socket]);
 
@@ -92,8 +100,8 @@ function ChatContainer() {
   return (
     <div className="chat-container border-2 border-indigo-900 rounded-xl">
       <div className="chat-header">
-        <div className="chat-title text-base">{dataevent?.data.title}</div>
-        <div className="close" onClick={() => dispatch(closeChat())}>
+        <div className="chat-title w-full text-base text-center">{dataevent?.data.title}</div>
+        <div className="close absolute right-4" onClick={() => dispatch(closeChat())}>
           ×
         </div>
       </div>
@@ -101,17 +109,18 @@ function ChatContainer() {
         {isLoading ? (
           <ColorRing
             visible={true}
-            height="100%"
+            height="50%"
             width="100%"
             ariaLabel="blocks-loading"
             wrapperStyle={{}}
             wrapperClass="blocks-wrapper"
             // colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
-            colors={["#ec4899", "#312e81", "#ec4899", "#d6d3d1", "#312e81"]}
+            // colors={["#ec4899", "#312e81", "#ec4899", "#d6d3d1", "#312e81"]}
+            colors={["#ec4899", "#ec4899", "#ec4899", "#ec4899", "#ec4899"]}
           />
         ) : (
           isSuccess && (
-            <Msg messages={[...messages].reverse()} userId={userId} />
+            <Msg messages={messages} userId={userId} messagesRef={messagesRef} />
           )
         )}
       </div>

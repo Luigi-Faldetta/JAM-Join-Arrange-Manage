@@ -16,14 +16,14 @@ function EventCalendar({ sortedEventList }: { sortedEventList: any }) {
     const event = sortedEventList.find((event: any) =>
       isSameDay(new Date(event.date), date)
     );
+    //@ts-ignore
 
     if (view === "month") {
       return (
-        <div className="tile-content align-top  bg-pink-400">
+        <div>
           {event && (
-            <div className="align-top">
+            <div className="align-top bg-pink-400 p-1 rounded-sm">
               {/* <div className=""> */}
-              {/* <div className="event-day-number">{date.getDate()}</div> */}
               {/* <div className="event-details"> */}
               {/* Additional event details */}
               {/* </div> */}
@@ -39,10 +39,23 @@ function EventCalendar({ sortedEventList }: { sortedEventList: any }) {
         </div>
       );
     }
-
     // Default tile content for other views (e.g., week, day)
     return null;
   };
+  //@ts-ignore
+  function tileClassName({ date, view }) {
+    if (view === "month") {
+      const hasEvent = sortedEventList.some((event: any) =>
+        isSameDay(new Date(event.date), date)
+      );
+      if (hasEvent) {
+        return "tile-with-event";
+      }
+      if (date < new Date()) {
+        return "past-date";
+      }
+    }
+  }
 
   return (
     <div className=" my-8">
@@ -51,6 +64,8 @@ function EventCalendar({ sortedEventList }: { sortedEventList: any }) {
         onChange={handleDateChange}
         tileContent={tileContent}
         className=" p-2 shadow rounded-lg"
+        minDate={new Date()}
+        tileClassName={tileClassName}
       />
     </div>
   );

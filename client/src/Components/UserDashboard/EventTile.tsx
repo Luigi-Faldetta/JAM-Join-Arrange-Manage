@@ -1,4 +1,3 @@
-import { createEventList } from "../../reduxFiles/slices/events";
 import { Link } from "react-router-dom";
 import moment from "moment";
 
@@ -9,7 +8,7 @@ function EventTile({ event }: { event: any }) {
     <>
       <Link
         to={`/event/${event.eventId}`}
-        className="flex flex-row w-full p-2 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+        className="flex flex-row w-full p-2 my-3 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
       >
         {/* <a
           href="#"

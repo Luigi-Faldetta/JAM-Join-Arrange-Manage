@@ -39,7 +39,7 @@ export const msgListSlice = createSlice({
             if (itsAlreadyThere) {
                 return state;
             }
-            return [...state, action.payload];
+            state.push(action.payload);
         },
     }
 });

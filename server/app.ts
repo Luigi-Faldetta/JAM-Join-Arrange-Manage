@@ -1,22 +1,3 @@
-// import 'dotenv/config'
-// import express from 'express';
-// import cors from 'cors';
-// import cookieParser from 'cookie-parser';
-// import router from './router.js';
-
-// const app = express();
-
-// const corsOptions = {
-//   origin: true,
-//   credentials: true,
-// }
-
-// app.use(cors(corsOptions))
-// app.use(express.json());
-// app.use(cookieParser());
-// app.use(router);
-
-// export default app;
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
@@ -28,12 +9,10 @@ import { addMessageSocket } from "./controllers/socketMessages.js";
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: true,
-    credentials: true,
-  },
-});
+
+const corsOptions = { origin: true, credentials: true }
+const io = new Server(server, { cors: corsOptions });
+
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
@@ -55,19 +34,14 @@ io.on("connection", (socket: Socket) => {
   socket.on(
     "newMessage",
     async ({
-      userId,
-      eventId,
-      message,
-    }: {
-      userId: string;
-      eventId: string;
-      message: string;
-    }) => {
+      userId, eventId, message
+    }:
+      {
+        userId: string; eventId: string; message: string
+      }) => {
       // save msg to database, then send back he message
       const msgCreated = await addMessageSocket({
-        message,
-        userId,
-        eventId,
+        message, userId, eventId,
       });
       io.to(eventId).emit("newMessage", msgCreated);
     }

@@ -15,7 +15,6 @@ function EventLink({ eventid }: any) {
 
   return (
     <div>
-      {/* Share this link with your friends: */}
       <button className="btn" onClick={handleCopyLink}>
         COPY LINK
         <PiCopyBold
