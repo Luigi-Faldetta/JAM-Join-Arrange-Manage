@@ -9,6 +9,8 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import ToggleButton from "./ToggleButton";
 import { FaCalendarAlt } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
+import { useState } from "react";
+import DeleteEvent from "./DeleteEventButtonToDelete";
 
 export default function EventMini({
   eventData,
@@ -27,10 +29,10 @@ export default function EventMini({
   isJoined: boolean;
   loggedUser: any;
   setIsJoined: any;
-  isLoading: boolean
+  isLoading: boolean;
 }) {
   const { eventid } = useParams();
-
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const handleToggle = () => {
     //@ts-ignore
     setShowTodos((prevShowTodos) => !prevShowTodos);
@@ -48,7 +50,7 @@ export default function EventMini({
                   src={
                     eventData.data.coverPic
                       ? eventData.data.coverPic
-                      : 'https://res.cloudinary.com/dpzz6vn2w/image/upload/v1688544322/friends-placeholder_ljftyb.png'
+                      : "https://res.cloudinary.com/dpzz6vn2w/image/upload/v1688544322/friends-placeholder_ljftyb.png"
                   }
                   alt="Event picture"
                 ></img>
@@ -58,13 +60,16 @@ export default function EventMini({
                 <div className="flex items-center justify-between">
                   <h3 className="text-3xl font-bold">{eventData.data.title}</h3>
 
-                  {userIsHost ? "" : (                  
-                  <ToggleButton
-                    isJoined={isJoined}
-                    loggedUser={loggedUser}
-                    setIsJoined={setIsJoined}
-                    isLoading={isLoading}
-                  />)}
+                  {userIsHost ? (
+                    ""
+                  ) : (
+                    <ToggleButton
+                      isJoined={isJoined}
+                      loggedUser={loggedUser}
+                      setIsJoined={setIsJoined}
+                      isLoading={isLoading}
+                    />
+                  )}
                 </div>
 
                 <div className="flex items-center">
@@ -72,8 +77,8 @@ export default function EventMini({
                   <h4 className="ml-1 text-lg text-gray-400">
                     {eventData.data.date
                       ? moment(eventData.data.date).format(
-                        "ddd, Do MMM - h:mm a"
-                      )
+                          "ddd, Do MMM - h:mm a"
+                        )
                       : "No date"}
                   </h4>
                 </div>
@@ -91,17 +96,17 @@ export default function EventMini({
                   {eventData.data.description}
                 </h4>
               </div>
-
-
-
             </div>
 
             <div className="flex flex-row lg:flex-col justify-between items-end lg:w-2/5">
               <div className="flex event-icons">
                 {userIsHost ? (
                   <>
-                    <RiDeleteBinLine size={30} className="cursor-pointer" />
+                    <span onClick={() => setDeleteModalOpen(true)}>
+                      <RiDeleteBinLine size={30} className="cursor-pointer" />
+                    </span>
                     <PiNotePencilBold size={30} className="cursor-pointer" />
+                    {deleteModalOpen && <DeleteEvent setDeleteModalOpen={setDeleteModalOpen}/>}
                   </>
                 ) : (
                   ""
