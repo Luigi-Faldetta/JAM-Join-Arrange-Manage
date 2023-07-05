@@ -3,7 +3,7 @@ import { Accordion } from "flowbite-react";
 
 export default function LandingFaqs() {
   return (
-    <div className="mt-32 mb-40 flex flex-col items-center" id="faqs">
+    <div className="mt-32 mb-96 flex flex-col items-center" id="faqs">
       <p className="mb-20 text-3xl">Frequently asked questions</p>
       <Accordion className="w-2/3">
         <Accordion.Panel>
