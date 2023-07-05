@@ -54,7 +54,7 @@ function CreateEventForm() {
       title: event.currentTarget.eventName.value,
       date: eventDate,
       location: event.currentTarget.eventLocation.value,
-      description: null,
+      description: event.currentTarget.eventDescription.value,
     };
 
     const image = await handleImageUpload();
@@ -216,7 +216,6 @@ function CreateEventForm() {
                         font-bold 
                         bg-gradient-to-r from-indigo-900 to-indigo-950  
                         focus:ring-4 focus:outline-none focus:ring-blue-300 
-                        font-medium 
                         w-full
                         rounded-lg 
                         text-sm 
