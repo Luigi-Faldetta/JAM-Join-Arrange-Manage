@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
-import { AiOutlineComment } from "react-icons/ai";
 import {
   socket,
-  useGetEventQuery,
   useGetEventsQuery,
 } from "../../services/ThesisDB";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../../reduxFiles/store";
-import { EventState, setEventList } from "../../reduxFiles/slices/events";
-import ChatContainer from "./ChatContainer";
-import { openChat, openWithEventId } from "../../reduxFiles/slices/chat";
+import { setEventList } from "../../reduxFiles/slices/events";
+import { openWithEventId } from "../../reduxFiles/slices/chat";
 import { useClickAway } from "@uidotdev/usehooks";
 import { HiOutlineChatBubbleLeftRight } from "react-icons/hi2";
 import "./chatContainer.css";
@@ -17,24 +14,8 @@ import "./chatContainer.css";
 
 function Chat() {
   const [chatDropdown, setChatDropdown] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState<EventState>({
-    eventId: undefined,
-    title: "",
-    date: null,
-    location: null,
-    description: null,
-    eventHost: "",
-    /**
-     * the any type array below will need addressed.
-     */
-    UserEvents:[],
-    coverPic: undefined,
-  });
   const userToken = localStorage.getItem("token");
   const eventList = useSelector((state: RootState) => state.eventListReducer);
-  useEffect(()=>{
-    console.log("eventList: ", eventList)
-  }, [eventList])
   const { data, error, isLoading } = useGetEventsQuery(userToken as string);
   const ref = useClickAway(() => {
     setChatDropdown(false);
@@ -51,13 +32,12 @@ function Chat() {
     setChatDropdown(!chatDropdown);
   };
 
-  const handleEventClick = (event: any) => {
-    setSelectedEvent(event);
-    if (event.eventId) {
-      dispatch(openWithEventId(event.eventId));
+  const handleEventClick = (eventId: string) => {
+    if (eventId) {
+      dispatch(openWithEventId(eventId));
       socket.emit("joinRoom", {
         userId: localStorage.getItem("token") || "",
-        eventId: event.eventId,
+        eventId: eventId,
       });
     }
     setChatDropdown(false);
@@ -87,7 +67,7 @@ function Chat() {
               eventList.map((event) => (
                 <li
                   key={event.eventId}
-                  onClick={() => handleEventClick(event)}
+                  onClick={() => handleEventClick(event.eventId as string)}
                   className="event-item"
                 >
                   <div className="avatar-wrapper flex overflow-hidden border border-slate-300">
@@ -107,10 +87,6 @@ function Chat() {
           </ul>
         </div>
       )}
-
-      {/* <div className="chat">
-      {selectedEvent && <ChatContainer event={selectedEvent} />} 
-      </div> */}
     </div>
   );
 }

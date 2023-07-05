@@ -23,7 +23,6 @@ export const userSlice = createSlice({
   name: "user",
   initialState: initialUserState,
   reducers: {
-    //state type will be User when the type is created.
     createUser: (
       state = initialUserState,
       action: PayloadAction<UserState>
@@ -43,7 +42,6 @@ export const userListSlice = createSlice({
   name: "userList",
   initialState: [] as UserState[],
   reducers: {
-    //state type will be User when the type is created.
     createUserList: (state, action:PayloadAction<UserState[]>) => {
       return  action.payload;
     },

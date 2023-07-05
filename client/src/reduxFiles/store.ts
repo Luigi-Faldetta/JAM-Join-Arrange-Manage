@@ -4,12 +4,10 @@ import expenseReducers from "./slices/expenses";
 import toDoReducers from "./slices/toDos";
 import userReducers from "./slices/users";
 import msgReducers from './slices/msg'
-// import { setupListeners } from '@reduxjs/toolkit/query'
 import { thesisDbApi } from "../services/ThesisDB";
 import { useDispatch } from "react-redux";
 import { logoutReducer } from "./slices/logout";
 import { chatReducer } from "./slices/chat";
-// import { expenseSheetReducer } from "./slices/expenseSheet";
 
 
 const store = configureStore({

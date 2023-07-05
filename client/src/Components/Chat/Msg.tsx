@@ -4,8 +4,6 @@ const Msg = ({messages, userId, messagesRef}: any) => {
   
     const len = messages.length;
 
-  console.log([...messages].reverse(), " <== here pls")
-
     return <>{messages && messages.length ? messages.map((messageData: any, i: number) => {
         const isCurrentUser = messageData.userId === userId;
       

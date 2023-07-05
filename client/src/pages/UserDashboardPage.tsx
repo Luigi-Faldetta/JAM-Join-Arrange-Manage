@@ -28,10 +28,6 @@ function UserDashboardPage() {
     .slice()
     .sort((a, b) => moment(a.date).diff(moment(b.date)));
 
-  useEffect(() => {
-    console.log("Event list has changed ==> ", eventList);
-  }, [eventList]);
-
   const handleToggle = (eventType: string) => {
     //@ts-ignore
     setShowEvents(eventType);
