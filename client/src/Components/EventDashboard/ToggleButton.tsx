@@ -37,6 +37,7 @@ export default function ToggleButton({
   const token = localStorage.getItem("token") as string
   const {data} = useGetUserQuery(token)
   const eventData = useGetEventQuery(eventId);
+  const chatInfo = useSelector((state:RootState) => state.chatReducer)
 
   const handleJoin = () => {
     onJoin(loggedUser as string, eventId as string).then(() =>
@@ -57,7 +58,7 @@ export default function ToggleButton({
   const handleLeave = () => {
     appDispatch(deleteUserFromList(token));
     appDispatch(deleteEventFromList(eventId));
-    appDispatch(closeChat());
+    if(eventId === chatInfo.eventId)  appDispatch(closeChat());
     onLeave(loggedUser as string, eventId as string).then(() =>
       setIsJoined(false)
     );
