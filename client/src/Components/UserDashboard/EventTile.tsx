@@ -10,9 +10,6 @@ function EventTile({ event }: { event: any }) {
         to={`/event/${event.eventId}`}
         className="flex flex-row w-full p-2 my-3 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
       >
-        {/* <a
-          href="#"
-        > */}
         <div className="flex flex-col w-3/5 pr-3 justify-between">
           <div>
             {event.date ? (
@@ -56,7 +53,6 @@ function EventTile({ event }: { event: any }) {
             src={event.coverPic ? event.coverPic : img}
           ></img>
         </div>
-        {/* </a> */}
       </Link>
     </>
   );

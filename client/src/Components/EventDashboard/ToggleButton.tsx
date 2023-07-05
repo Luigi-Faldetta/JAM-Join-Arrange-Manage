@@ -11,6 +11,7 @@ import { RootState, useAppDispatch } from "../../reduxFiles/store";
 import { UserState, deleteUserFromList, updateUserList } from "../../reduxFiles/slices/users";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
 import { EventState, addEventToList, deleteEventFromList } from "../../reduxFiles/slices/events";
+import { closeChat } from "../../reduxFiles/slices/chat";
 
 
 
@@ -54,11 +55,12 @@ export default function ToggleButton({
   };
 
   const handleLeave = () => {
+    appDispatch(deleteUserFromList(token));
+    appDispatch(deleteEventFromList(eventId));
+    appDispatch(closeChat());
     onLeave(loggedUser as string, eventId as string).then(() =>
       setIsJoined(false)
     );
-    appDispatch(deleteUserFromList(token))
-    appDispatch(deleteEventFromList(eventId));
   };
 
   const onLeave = async (userId: string, eventId: string) => {
