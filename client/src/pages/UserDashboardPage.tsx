@@ -37,7 +37,7 @@ function UserDashboardPage() {
     setShowEvents(eventType);
   };
 
-  function AllEvents() {
+  function AllEvents({ sortedEventList }: { sortedEventList: any }) {
     return (
       <>
         {" "}
@@ -49,7 +49,7 @@ function UserDashboardPage() {
     );
   }
 
-  function HostedEvents() {
+  function HostedEvents({ sortedEventList }: { sortedEventList: any }) {
     return (
       <>
         {sortedEventList.map((event: EventState) => {
@@ -96,16 +96,20 @@ function UserDashboardPage() {
               </div>
             )}
             <div>
-              {showAllEvents === "all" ? <AllEvents /> : <HostedEvents />}
+              {showAllEvents === "all" ? (
+                <AllEvents sortedEventList={sortedEventList} />
+              ) : (
+                <HostedEvents sortedEventList={sortedEventList} />
+              )}
             </div>
           </div>
         </div>
 
-        <div className="sticky top-0 flex-shrink-0 justify-start max-h-screen overflow-y-auto w-1/3">
-          <div className="p-5 flex flex-col ">
-            <CreateEventForm></CreateEventForm>
-            <EventCalendar sortedEventList={sortedEventList}></EventCalendar>
-          </div>
+        <div className=" p-5 flex flex-col justify-start items-center gap-1 align-top w-1/3 ">
+          {/* <div className="p-5 flex flex-col "> */}
+          <CreateEventForm></CreateEventForm>
+          <EventCalendar sortedEventList={sortedEventList}></EventCalendar>
+          {/* </div> */}
         </div>
       </div>
     </>
