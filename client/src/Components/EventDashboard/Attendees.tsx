@@ -61,7 +61,7 @@ export default function Attendees() {
 
   return (
     <>
-      <h2 className='absolute mt-1 ml-3 text-white text-center font-bold'>x{attendees.length} ATTENDEES</h2>
+      <h2 className='absolute mt-1 ml-3 text-pink-500 text-center font-bold'>GOING x{attendees.length}</h2>
       <div className="carousel carousel-center rounded-box w-4/5 mx-auto flex justify-center">
         {activeIndex > 0 && (
           <button className="carousel-arrow left-arrow" onClick={handlePrevious}>
