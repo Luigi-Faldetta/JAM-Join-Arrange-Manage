@@ -16,11 +16,11 @@ function EventTile({ event }: { event: any }) {
         <div className="flex flex-col w-3/5 pr-3 justify-between">
           <div>
             {event.date ? (
-              <h3 className="text-red-500 text-xs lg:text-sm">
+              <h3 className="text-pink-500 text-[13px] ">
                 {moment(event.date).format("ddd, Do MMM - h:mm a")}{" "}
               </h3>
             ) : (
-              <h3 className="text-red-500 text-xs lg:text-sm">Date TBC</h3>
+              <h3 className="text-pink-500 text-xs lg:text-sm">Date TBC</h3>
             )}
             {event.location ? (
               <h3 className="text-xs lg:text-sm text-gray-500">
@@ -50,7 +50,7 @@ function EventTile({ event }: { event: any }) {
           {/* {event.attendees.length > 1 ? <p>{`${event.attendees.length} going`}</p>}*/}
         </div>
 
-        <div className=" w-[200px] h-[120px] rounded-lg overflow-hidden items-center">
+        <div className=" w-[270px] h-[120px] rounded-lg overflow-hidden items-center">
           <img
             className="object-cover w-full h-full"
             src={event.coverPic ? event.coverPic : img}
