@@ -18,7 +18,6 @@ const chatSlice = createSlice({
         openChat: (state) =>({...state, isOpen: true}),
         closeChat:  (state) => ({eventId:'', isOpen: false}),
         openWithEventId: (_, action) => {
-            console.log(action.payload, " <== Redux event id")
             return {eventId: action.payload, isOpen: true}
         }
     }

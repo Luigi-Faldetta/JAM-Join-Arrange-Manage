@@ -16,8 +16,6 @@ const Msg = ({messages, userId, messagesRef}: any) => {
         const dateClassName = `${isCurrentUser ? "flex justify-end text-slate-600 text-xs" : "flex justify-end text-slate-400 text-xs"
           }`;
 
-          console.log(`${i}==>`, len == i+1)
-      
         return (
         <div key={messageData.id} className={messageClassName} ref={len == i+1 ? messagesRef : undefined}>
             {!isCurrentUser && (

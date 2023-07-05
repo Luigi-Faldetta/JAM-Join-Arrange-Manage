@@ -71,7 +71,6 @@ function ChatContainer() {
           behavior: "smooth",
           block: "end",
         });
-        console.log("______________________________________________som tu");
       }
     });
   }, [socket]);
@@ -92,7 +91,6 @@ function ChatContainer() {
           behavior: "smooth",
           block: "end",
         });
-        console.log("______________________________________________som tu");
       }
     }
   }, [data, isLoading]);
