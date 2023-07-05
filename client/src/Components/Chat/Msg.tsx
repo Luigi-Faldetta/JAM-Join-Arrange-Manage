@@ -1,11 +1,12 @@
 import moment from "moment";
 
-const Msg = ({messages, userId}: any) => {
+const Msg = ({messages, userId, messagesRef}: any) => {
+  
+    const len = messages.length;
 
-    if (!messages) {
-      return "";
-    }
-    return messages?.map((messageData: any) => {
+  console.log([...messages].reverse(), " <== here pls")
+
+    return <>{messages && messages.length ? messages.map((messageData: any, i: number) => {
         const isCurrentUser = messageData.userId === userId;
       
         const messageClassName = `relative text-m p-1 px-2 shadow rounded-xl m-1 ${
@@ -16,10 +17,11 @@ const Msg = ({messages, userId}: any) => {
 
         const dateClassName = `${isCurrentUser ? "flex justify-end text-slate-600 text-xs" : "flex justify-end text-slate-400 text-xs"
           }`;
-      
 
+          console.log(`${i}==>`, len == i+1)
+      
         return (
-          <div key={messageData.id} className={messageClassName}>
+        <div key={messageData.id} className={messageClassName} ref={len == i+1 ? messagesRef : undefined}>
             {!isCurrentUser && (
               <div className="user">
                 {messageData.User && messageData.User.profilePic && (
@@ -39,7 +41,9 @@ const Msg = ({messages, userId}: any) => {
             </div>
           </div>
         );
-      });
+      }) : null}
+
+      </>
       
   }
   export default Msg
