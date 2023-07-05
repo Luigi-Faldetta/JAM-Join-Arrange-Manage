@@ -4,8 +4,7 @@ import { UserState, createUser } from "../../reduxFiles/slices/users";
 import {
   useLogInMutation,
 } from "../../services/ThesisDB";
-import { useLocation, useNavigate } from "react-router-dom";
-import ForgotPassword from "./ForgotPassword";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function LoginForm() {
   const [passwordMatch, setPasswordMatch] = useState(true);
@@ -108,7 +107,7 @@ function LoginForm() {
               Invalid email or password.
             </p>
           )}
-         <ForgotPassword/>
+       <Link to="/passwordreset" className="block mt-2 text-sm font-medium text-gray-900 dark:text-white hover:text-blue-500 hover:underline">Forgot password?</Link>
         </div>
         <button
           type="submit"

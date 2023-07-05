@@ -18,6 +18,7 @@ import UserDashboardPage from "./pages/UserDashboardPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import Landing from "./pages/Landing/Landing";
 import EventDashboard from "./Components/Event/EventDashboard";
+import ForgotPasswordPage from "./pages/ForgotPassword/ForgotPasswordPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,6 +29,7 @@ const router = createBrowserRouter(
       <Route path="/user-dashboard" element={<UserDashboardPage />} />
       <Route path="/event-dashboard/:eventid" element={<EventDashboard />} />
       <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/passwordreset" element={<ForgotPasswordPage />} />
     </Route>
   )
 );

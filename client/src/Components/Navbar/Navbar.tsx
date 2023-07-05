@@ -54,7 +54,7 @@ function Navbar() {
           <div className="flex items-center">
 
             <Link to="/" className="flex mr-12 items-center">
-              <img src="logo-jam.png" className="h-12 mr-3" alt="Flowbite Logo" />
+              <img src="logo-jam.png" className="h-12 mr-3" alt="" />
               <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">JAM</span>
             </Link>
 

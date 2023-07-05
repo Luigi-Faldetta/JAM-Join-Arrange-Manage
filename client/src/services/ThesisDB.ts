@@ -18,6 +18,9 @@ export const socket = io(URL);
 export const fetchExpenseSheet = async (eventId:string) => {
    return await fetch(URL+ `calculate/${eventId}`)
 }
+export const fetchLogin = async (email:string) => {
+  return await fetch(URL+ `passwordreset/${email}`)
+}
 
 export const thesisDbApi = createApi({
   reducerPath: "thesisDbApi",
@@ -233,7 +236,6 @@ export const thesisDbApi = createApi({
         headers: { "Content-type": "application/json; charset=UTF-8" },
       }),
     }),
-
     logOut: build.query<ApiResponse<null>, null>({
       query: () => ({ url: `userlogout` }),
     }),
