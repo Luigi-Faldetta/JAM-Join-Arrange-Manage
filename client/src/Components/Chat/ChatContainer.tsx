@@ -57,7 +57,7 @@ function ChatContainer() {
   };
 
   useEffect(() => {
-    socket.on("newMessage", (res) => {
+    socket.on("newMessage", (res: any) => {
       dispatch(addMessage(res.data));
     });
   }, [socket]);

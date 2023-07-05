@@ -7,24 +7,28 @@ import { ApiResponse } from "./ApiResponseType";
 import { MsgState } from "../reduxFiles/slices/msg";
 import { ExpenseSheet } from "./ApiResponseType";
 
-
 import { io } from "socket.io-client";
 // const URL = process.env.NODE_ENV!=="production" ? "http://localhost:3200/" :"https://codeworks-thesis-4063bceaa74a.herokuapp.com/";
 const URL = "https://codeworks-thesis-4063bceaa74a.herokuapp.com/";
 
-
 export const socket = io(URL);
 
-export const fetchExpenseSheet = async (eventId:string) => {
-   return await fetch(URL+ `calculate/${eventId}`)
-}
+export const fetchExpenseSheet = async (eventId: string) => {
+  return await fetch(URL + `calculate/${eventId}`);
+};
 
 export const thesisDbApi = createApi({
   reducerPath: "thesisDbApi",
   baseQuery: fetchBaseQuery({
     baseUrl: URL,
   }),
-  tagTypes: ["EventState", "ExpenseState", "ToDoState", "UserState", "ExpenseSheet"], //for tracking what will be referenced from the cache
+  tagTypes: [
+    "EventState",
+    "ExpenseState",
+    "ToDoState",
+    "UserState",
+    "ExpenseSheet",
+  ], //for tracking what will be referenced from the cache
   endpoints: (build) => ({
     // build.mutation has two type parameters, the first is response type the second is parameter type.
     // partial sets all properties to optional for parameter, pick selects which properties should be required for parameter
@@ -116,7 +120,7 @@ export const thesisDbApi = createApi({
 
     //Expenses
 
-    addExpense: build.mutation<ApiResponse<ExpenseState>,ExpenseState>({
+    addExpense: build.mutation<ApiResponse<ExpenseState>, ExpenseState>({
       query: (expense) => ({
         url: "expense",
         method: "POST",
@@ -125,7 +129,7 @@ export const thesisDbApi = createApi({
       }),
     }),
 
-    calculateExpenses: build.query<ApiResponse<ExpenseSheet>,string>({
+    calculateExpenses: build.query<ApiResponse<ExpenseSheet>, string>({
       query: (eventId) => `calculate/${eventId}`,
       // invalidatesTags:['ExpenseSheet']
     }),
@@ -188,7 +192,7 @@ export const thesisDbApi = createApi({
     getMsgs: build.query<ApiResponse<MsgState[]>, string>({
       query: (eventId) => {
         if (!eventId) {
-          console.log(eventId)
+          console.log(eventId);
           throw new Error();
         }
         return { url: `chat/${eventId}` };
