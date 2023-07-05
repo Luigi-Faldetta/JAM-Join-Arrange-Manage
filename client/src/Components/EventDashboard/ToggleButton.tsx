@@ -7,6 +7,9 @@ import {
 import { ColorRing } from  'react-loader-spinner'
 import { MdBlock } from "react-icons/md"
 import { IoMdCheckmarkCircleOutline } from "react-icons/io"
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
+
+
 
 interface ToggleButton {
   isJoined: boolean;
@@ -61,7 +64,7 @@ export default function ToggleButton({
       <div className="">
         <button
           onClick={isJoined ? handleLeave : handleJoin}
-          className="btn flex bg-white items-center gap-2 p-1 px-4 ml-4 border-2 border-slate-200 rounded-md"
+          className="btn flex bg-white items-center gap-2 px-4 ml-4 border-2 border-slate-200 rounded-md"
         >
           {isLoading ? (
             <ColorRing
@@ -76,12 +79,14 @@ export default function ToggleButton({
           ) : isJoined ? (
             <>
             LEAVE
-            <MdBlock size={20} className="fill-red-300"/>
+            {/* <MdBlock size={20} className="fill-red-300"/> */}
+            <FaArrowRight size={16} className="fill-gray-300"/>
             </>
           ) : (
             <>
+            <FaArrowLeft size={16} className="fill-pink-300"/>
             JOIN
-            <IoMdCheckmarkCircleOutline size={20} className="fill-green-300"/>
+            {/* <IoMdCheckmarkCircleOutline size={20} className="fill-green-300"/> */}
             </>
           )}
         </button>
