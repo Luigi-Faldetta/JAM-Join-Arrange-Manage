@@ -68,13 +68,13 @@ export default function Event() {
                 setShowTodos={setShowTodos}
               />
 
+            </div>
               <ToggleButton
                 isJoined={isJoined}
                 loggedUser={loggedUser}
                 setIsJoined={setIsJoined}
                 isLoading={isLoading}
               />
-            </div>
 
             <div className="w-4/5">{showTodos ? <Todos /> : <Expenses />}</div>
 
