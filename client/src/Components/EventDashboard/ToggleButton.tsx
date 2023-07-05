@@ -11,6 +11,9 @@ import { IoMdCheckmarkCircleOutline } from "react-icons/io"
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../../reduxFiles/store";
 import { UserState, deleteUserFromList, updateUserList } from "../../reduxFiles/slices/users";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
+
+
 
 interface ToggleButton {
   isJoined: boolean;
@@ -71,7 +74,7 @@ export default function ToggleButton({
       <div className="">
         <button
           onClick={isJoined ? handleLeave : handleJoin}
-          className="btn flex bg-white items-center gap-2 p-1 px-4 ml-4 border-2 border-slate-200 rounded-md"
+          className="btn flex bg-white items-center gap-2 px-4 ml-4 border-2 border-slate-200 rounded-md"
         >
           {isLoading ? (
             <ColorRing
@@ -86,12 +89,12 @@ export default function ToggleButton({
           ) : isJoined ? (
             <>
             LEAVE EVENT
-            <MdBlock size={20} className="fill-red-300"/>
+            <FaArrowRight size={16} className="fill-gray-300"/>
             </>
           ) : (
             <>
+            <FaArrowLeft size={16} className="fill-pink-300"/>
             JOIN EVENT
-            <IoMdCheckmarkCircleOutline size={20} className="fill-green-300"/>
             </>
           )}
         </button>

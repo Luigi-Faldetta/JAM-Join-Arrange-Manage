@@ -86,11 +86,6 @@ export default function Todos(): JSX.Element {
     setNewToDo(newToDo as any);
   };
 
-  // const handleInputKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  //   if (e.key === "Enter") {
-  //     // handleAddClick();
-  //   }
-  // };
 
   const handleDeleteClick = (index: number) => {
     const todoId = toDos[index].id;
@@ -171,6 +166,10 @@ export default function Todos(): JSX.Element {
   };
 
   return (
+
+
+
+
     <div className="flex justify-center gap-4">
       <div className="w-1/2 h-96 p-4 bg-gradient-to-r from-indigo-950 to-indigo-900 border-2 border-indigo-950 rounded-xl flex flex-col">
         <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">
@@ -178,7 +177,7 @@ export default function Todos(): JSX.Element {
         </h1>
         <div
           ref={todosRef}
-          className="w-full h-full flex flex-col overflow-y-auto"
+          className="w-full flex-grow  flex flex-col overflow-y-auto"
         >
           {toDos.map((toDo, index) => (
             <div
@@ -202,24 +201,21 @@ export default function Todos(): JSX.Element {
               />
             </div>
           ))}
-
-          <div className="text-white text-xl">
-            <form onSubmit={handleAddClick} className="flex p-1 pt-3 ">
-              <input
-                type="text"
-                placeholder="Add item"
-                className="ml-4 w-full h-10 border-0 border-b border-gray-400 bg-indigo-950"
-                value={newToDo.title}
-                onChange={handleInputChange}
-              />
-              <button
-                type="submit"
-                className="w-12 font-bold rounded-full border border-gray-400"
-              >
-                +
-              </button>
-            </form>
-          </div>
+          <form onSubmit={handleAddClick} className="text-white mt-auto flex p-1 pt-3">
+            <input
+              type="text"
+              placeholder="Add item"
+              className="ml-4 w-full h-10 border-0 border-b border-gray-400 bg-indigo-950"
+              value={newToDo.title}
+              onChange={handleInputChange}
+            />
+            <button
+              type="submit"
+              className="w-10 ml-2 font-bold rounded-full border border-gray-400 flex items-center justify-center"
+            >
+              +
+            </button>
+          </form>
         </div>
       </div>
 
@@ -227,7 +223,7 @@ export default function Todos(): JSX.Element {
         <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">
           COMPLETED
         </h1>
-        <div className="w-full overflow-y-auto">
+        <div className="w-full flex-grow overflow-y-auto">
           {doneToDos.map((doneToDo, index) => (
             <div
               className="flex items-center p-2 border-t border-gray-400 text-white text-xl"
