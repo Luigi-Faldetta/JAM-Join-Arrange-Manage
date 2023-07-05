@@ -52,6 +52,10 @@ function Chat() {
   const handleChatClick = () => {
     setChatDropdown(!chatDropdown);
   };
+  // useEffect(() => {
+
+
+  // }, [eventList.length]); 
 
   const handleEventClick = (event: any) => {
     setSelectedEvent(event);
