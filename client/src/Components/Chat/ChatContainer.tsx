@@ -14,6 +14,7 @@ import moment from "moment";
 import { MsgState, addMessage, setMessages } from "../../reduxFiles/slices/msg";
 import { ColorRing } from "react-loader-spinner";
 import Msg from "./Msg";
+import { VscSend } from "react-icons/vsc"
 
 function ChatContainer() {
   const [addNewMsg] = useAddMsgMutation();
@@ -89,9 +90,9 @@ function ChatContainer() {
   }, [data, isLoading]);
 
   return (
-    <div className="chat-container">
+    <div className="chat-container border-2 border-indigo-900 rounded-xl">
       <div className="chat-header">
-        <div className="chat-title">{dataevent?.data.title}</div>
+        <div className="chat-title text-base">{dataevent?.data.title}</div>
         <div className="close" onClick={() => dispatch(closeChat())}>
           ×
         </div>
@@ -105,7 +106,8 @@ function ChatContainer() {
             ariaLabel="blocks-loading"
             wrapperStyle={{}}
             wrapperClass="blocks-wrapper"
-            colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+            // colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+            colors={["#ec4899", "#312e81", "#ec4899", "#d6d3d1", "#312e81"]}
           />
         ) : (
           isSuccess && (
@@ -115,7 +117,7 @@ function ChatContainer() {
       </div>
       <div className="input-container">
         <input
-          className="bg-gray-400 w-5/6 py-4 px-3 rounded-xl xl-2 pr-2"
+          className="bg-white border-slate-300 md:active:border-pink-500 md:focus:border-pink-500 w-5/6 py-4 px-3 rounded-xl xl-2 pr-2"
           type="text"
           placeholder="Type your message here..."
           value={message}
@@ -127,6 +129,7 @@ function ChatContainer() {
           autoCapitalize="off" // Disable autocapitalize
           spellCheck="false" // Disable spellcheck
         />
+        <VscSend className="absolute right-8 h-6 w-6 fill-pink-500"/>
       </div>
     </div>
   );

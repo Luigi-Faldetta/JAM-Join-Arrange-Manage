@@ -8,10 +8,14 @@ const Msg = ({messages, userId}: any) => {
     return messages?.map((messageData: any) => {
         const isCurrentUser = messageData.userId === userId;
       
-        const messageClassName = `relative text-m py-2 px-4 shadow rounded-xl m-2 ${
-            isCurrentUser ? "bg-blue-400 ml-8" : "bg-gray-300 mr-8"
+        const messageClassName = `relative text-m p-2 px-4 shadow rounded-xl m-1 ${
+            isCurrentUser ? "bg-pink-400 ml-12" : "bg-indigo-800 mr-12 text-white"
           } inline-block`;
+
+        const dateClassName = `${isCurrentUser ? "flex justify-end text-slate-600 text-xs" : "flex justify-end text-slate-400 text-xs"
+          }`;
       
+
         return (
           <div key={messageData.id} className={messageClassName}>
             {!isCurrentUser && (
@@ -28,7 +32,7 @@ const Msg = ({messages, userId}: any) => {
             )}
       
             <div className="message">{messageData.message}</div>
-            <div className="time text-xs">
+            <div className={dateClassName}>
               {moment(messageData.date).calendar()}
             </div>
           </div>
