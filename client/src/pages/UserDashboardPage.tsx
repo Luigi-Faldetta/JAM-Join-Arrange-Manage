@@ -56,7 +56,7 @@ function UserDashboardPage() {
           if (event.UserEvents[0].isHost === true) {
             return <EventTile event={event} />;
           }
-          return null; // Return null for non-hosted events or handle them differently
+          <h3 className="w-full">You are not hosting any events</h3>; // Return null for non-hosted events or handle them differently
         })}
       </>
     );
@@ -64,41 +64,45 @@ function UserDashboardPage() {
 
   return (
     <>
-      <div className="flex flex-row justify-center  ">
-        <div className=" p-5 flex flex-col justify-center items-center gap-1 ">
-          {isLoading && <h2>loading...</h2>}
+      <div className="flex flex-row justify-center align-top top-0 gap-16">
+        <div className=" p-5 flex flex-col justify-start items-center gap-1 align-top w-1/3 ">
+          <div className=" bg-yellow-30">
+            {isLoading && <h2>Loading...</h2>}
 
-          {!isLoading && sortedEventList.length < 1 && (
-            <div className="flex flex-col justify-center align-middle text-center">
-              <div className=" self-center">
-                <img src="sad-jam.png" className="max-w-[150px]" />
+            {!isLoading && sortedEventList.length < 1 && (
+              <div className="flex flex-col justify-center align-middle text-center">
+                <div className=" self-center">
+                  <img src="sad-jam.png" className="max-w-[150px]" />
+                </div>
+                <div>
+                  <h3>No upcoming events yet. Click "Host Event" to begin.</h3>
+                </div>
               </div>
-              <div>
-                <h3>No upcoming events yet. Click "Host Event" to begin.</h3>
+            )}
+            {sortedEventList.length >= 1 && (
+              <div className="w-full flex flex-row align-top justify-center  ">
+                <button
+                  onClick={() => handleToggle("all")}
+                  className="btn bg-pink-500 hover:bg-pink-700 text-white w-1/2"
+                >
+                  ALL
+                </button>
+                <button
+                  onClick={() => handleToggle("host")}
+                  className="btn bg-pink-500 hover:bg-pink-700 text-white w-1/2"
+                >
+                  HOSTING
+                </button>
               </div>
-            </div>
-          )}
-          {sortedEventList.length >= 1 && (
-            <div className="w-4/5">
-              <button
-                onClick={() => handleToggle("all")}
-                className="btn bg-pink-500 hover:bg-pink-700 text-white"
-              >
-                ALL
-              </button>
-              <button
-                onClick={() => handleToggle("host")}
-                className="btn bg-pink-500 hover:bg-pink-700 text-white"
-              >
-                HOST
-              </button>
+            )}
+            <div>
               {showAllEvents === "all" ? <AllEvents /> : <HostedEvents />}
             </div>
-          )}
+          </div>
         </div>
 
-        <div className="sticky top-0 flex-shrink-0 max-h-screen overflow-y-auto w-1/3">
-          <div className="m-5 p-5 flex flex-col  gap-5">
+        <div className="sticky top-0 flex-shrink-0 justify-start max-h-screen overflow-y-auto w-1/3">
+          <div className="p-5 flex flex-col ">
             <CreateEventForm></CreateEventForm>
             <EventCalendar sortedEventList={sortedEventList}></EventCalendar>
           </div>
