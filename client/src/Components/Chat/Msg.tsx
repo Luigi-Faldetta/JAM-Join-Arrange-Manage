@@ -1,8 +1,10 @@
 import moment from "moment";
 
-const Msg = ({messages, userId} :any) => {
+const Msg = ({messages, userId}: any) => {
 
-
+    if (!messages) {
+      return "";
+    }
     return messages?.map((messageData: any) => {
         const isCurrentUser = messageData.userId === userId;
       
@@ -27,7 +29,7 @@ const Msg = ({messages, userId} :any) => {
       
             <div className="message">{messageData.message}</div>
             <div className="time text-xs">
-              {moment(messageData.date).format('LT')}
+              {moment(messageData.date).calendar()}
             </div>
           </div>
         );
