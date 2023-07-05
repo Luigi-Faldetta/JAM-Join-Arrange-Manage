@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useGetUserQuery,
@@ -6,8 +5,6 @@ import {
   useLeaveActivityMutation,
 } from "../../services/ThesisDB";
 import { ColorRing } from  'react-loader-spinner'
-import { MdBlock } from "react-icons/md"
-import { IoMdCheckmarkCircleOutline } from "react-icons/io"
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../../reduxFiles/store";
 import { UserState, deleteUserFromList, updateUserList } from "../../reduxFiles/slices/users";
@@ -33,7 +30,7 @@ export default function ToggleButton({
   const [joinActivity] = useJoinActivityMutation();
   const [leaveActivity] = useLeaveActivityMutation();
   const eventId = eventid;
-  const attendees = useSelector((state:RootState) => state.userList)
+  // const attendees = useSelector((state:RootState) => state.userList)
   const appDispatch = useAppDispatch()
   const token = localStorage.getItem("token") as string
   const {data} = useGetUserQuery(token)
@@ -62,7 +59,8 @@ export default function ToggleButton({
 
   const onLeave = async (userId: string, eventId: string) => {
     try {
-       leaveActivity({ userId, eventId }).then(() => navigate('/user-dashboard'))
+       await leaveActivity({ userId, eventId })
+       navigate('/user-dashboard')
     } catch (error) {
       console.error(error);
     }
