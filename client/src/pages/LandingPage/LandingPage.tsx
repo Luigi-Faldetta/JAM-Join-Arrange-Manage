@@ -4,17 +4,16 @@ import "./LandingPage.css";
 import { useState } from "react";
 import { useIsLoggedIn } from "../../utils/useIsLoggedIn";
 import { useLocation } from "react-router-dom";
+import { ApiResponse } from "../../services/ApiResponseType";
 
-const LandingPage = ({ data }: any) => {
+const LandingPage = ({eventData}: any) => {
   const [loginFormActive, setLoginFormActive] = useState(false);
   const location = useLocation();
   const currentRoute = location.pathname;
   const isLoggedIn = useIsLoggedIn();
-
   const handleGetStartedClick = () => {
     setLoginFormActive(!loginFormActive);
   };
-
   return (
     <section
       className="overflow-y-hidden landing-page dark:bg-gray-900 lg:mt-9"
@@ -36,7 +35,7 @@ const LandingPage = ({ data }: any) => {
             <>
             <h1 className="max-w-2xl mb-4 text-4xl font-bold tracking-tight leading-none md:text-5xl xl:text-3xl dark:text-white">
               You were invited to <span className="text-pink-500">
-                {data?.data.title}an event
+                {eventData?.data.title}
                 </span>.
             </h1>
             <h1 className="max-w-2xl mb-4 text-4xl font-bold tracking-tight leading-none md:text-5xl xl:text-3xl dark:text-white">
