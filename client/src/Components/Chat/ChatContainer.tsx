@@ -65,6 +65,14 @@ function ChatContainer() {
   useEffect(() => {
     socket.on("newMessage", (res: any) => {
       dispatch(addMessage(res.data));
+      if (messagesRef.current) {
+        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+        messagesRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+        });
+        console.log("______________________________________________som tu");
+      }
     });
   }, [socket]);
 
@@ -112,7 +120,7 @@ function ChatContainer() {
           />
         ) : (
           isSuccess && (
-            <Msg messages={[...messages].reverse()} userId={userId} />
+            <Msg messages={messages} userId={userId} messagesRef={messagesRef} />
           )
         )}
       </div>
