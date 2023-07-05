@@ -26,7 +26,6 @@ function DeleteEvent({ setDeleteModalOpen }: DeleteEventProps) {
 
     try {
       const res = await deleteEvent(eventId);
-      console.log(" deleted event => ", res);
       if ("data" in res && res.data.success) {
         // event has been deleted
         dispatch(deleteEventFromList(eventId));
