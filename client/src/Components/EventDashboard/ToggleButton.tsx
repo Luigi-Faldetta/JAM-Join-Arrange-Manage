@@ -35,7 +35,6 @@ export default function ToggleButton({
   const appDispatch = useAppDispatch()
   const token = localStorage.getItem("token") as string
   const {data} = useGetUserQuery(token)
-  // const eventList = useSelector((state: RootState)  => state.eventListReducer)
   const eventData = useGetEventQuery(eventId);
 
   const handleJoin = () => {

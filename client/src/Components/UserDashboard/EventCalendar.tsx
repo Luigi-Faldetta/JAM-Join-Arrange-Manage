@@ -22,12 +22,14 @@ function EventCalendar({ sortedEventList }: { sortedEventList: any }) {
       return (
         <div>
           {event && (
-            <div className="align-top bg-pink-400 p-1 rounded-sm">
+            <div className="align-top ">
               {/* <div className=""> */}
               {/* <div className="event-details"> */}
               {/* Additional event details */}
               {/* </div> */}
-              <div className="event-day text-[12px]">{event.title}</div>
+              <div className="event-day text-[12px] text-pink-500 mx-2">
+                {event.title}
+              </div>
               {/* </div> */}
             </div>
           )}
@@ -58,7 +60,7 @@ function EventCalendar({ sortedEventList }: { sortedEventList: any }) {
   }
 
   return (
-    <div className=" my-8">
+    <div className="my-2">
       <Calendar
         value={selectedDate}
         onChange={handleDateChange}

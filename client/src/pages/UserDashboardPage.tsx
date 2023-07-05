@@ -102,10 +102,8 @@ function UserDashboardPage() {
         </div>
 
         <div className=" p-5 flex flex-col justify-start items-center gap-1 align-top w-1/3 ">
-          {/* <div className="p-5 flex flex-col "> */}
           <CreateEventForm></CreateEventForm>
           <EventCalendar sortedEventList={sortedEventList}></EventCalendar>
-          {/* </div> */}
         </div>
       </div>
     </>
