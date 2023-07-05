@@ -84,7 +84,7 @@ export default function Expenses() {
 
     return (
         <div className="flex justify-center gap-4">
-            <div className="w-1/2 h-96 p-4 bg-indigo-950 rounded-xl flex flex-col">
+            <div className="w-1/2 h-96 p-4 bg-gradient-to-r from-indigo-950 to-indigo-900 border-2 border-indigo-950 rounded-xl flex flex-col">
                 <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">EXPENSES (Total: €{expenseSheet.total})</h1>
 
                 <div className="w-full">
@@ -127,7 +127,7 @@ export default function Expenses() {
                 </div>
 
             </div>
-            <div className="w-1/2 h-96 p-4 bg-indigo-950 rounded-xl flex flex-col">
+            <div className="w-1/2 h-96 p-4 bg-gradient-to-r from-indigo-900 to-indigo-950 border-2 border-indigo-950 rounded-xl flex flex-col">
                 <h1 className="text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white">PER PERSON SHARE (€{expenseSheet.perPerson})</h1>
                 <div className="w-full">
 

@@ -6,7 +6,7 @@ function EventLink({ eventid }: any) {
   const [isCopied, setisCopied] = useState(false);
 
   const handleCopyLink = () => {
-    const link = "http://localhost:3000/event-dashboard/" + eventid;
+    const link = "http://localhost:3000/event/" + eventid;
     navigator.clipboard.writeText(link).catch((error) => {
       console.error("Failed to copy link:", error);
     });
@@ -20,7 +20,7 @@ function EventLink({ eventid }: any) {
         COPY LINK
         <PiCopyBold
           size={30}
-          className={isCopied ? "fill-green-600" : "fill-gray-400"}
+          className={isCopied ? "fill-pink-500" : "fill-gray-300"}
         />
       </button>
     </div>
