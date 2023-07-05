@@ -147,10 +147,10 @@ export default function Expenses() {
                             <h3 className="w-full">
                                 {indExpense?.name} {indExpense.owes < 0 ? (
                                     <span>
-                                        is owed <span className="text-green-500">€{indExpense.owes * -1}</span>
+                                        is owed <span className="text-green-500">€{(indExpense.owes * -1).toFixed(2)}</span>
                                     </span>
                                 ) : (<span>
-                                    should pay <span className="text-red-600">€${indExpense?.owes}</span>
+                                    should pay <span className="text-red-600">€${(indExpense?.owes).toFixed(2)}</span>
                                 </span>
                                 )}
                             </h3>
