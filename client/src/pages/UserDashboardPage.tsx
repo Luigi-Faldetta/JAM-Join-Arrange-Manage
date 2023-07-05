@@ -1,6 +1,6 @@
 import CreateEventForm from "../Components/UserDashboard/CreateEventForm";
 import EventTile from "../Components/UserDashboard/EventTile";
-import { EventState, createEventList } from "../reduxFiles/slices/events";
+import { EventState} from "../reduxFiles/slices/events";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../reduxFiles/store";
 import { useGetEventsQuery } from "../services/ThesisDB";

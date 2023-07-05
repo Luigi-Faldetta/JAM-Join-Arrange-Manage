@@ -1,4 +1,3 @@
-import { createEventList } from "../../reduxFiles/slices/events";
 import { Link } from "react-router-dom";
 import moment from "moment";
 
