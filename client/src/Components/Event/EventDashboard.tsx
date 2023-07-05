@@ -72,6 +72,8 @@ export default function Event() {
 
             </div>
 
+          <div className="absolute top-[310px] w-full h-[8px] bg-white"></div>
+
             <div className="w-4/5">{showTodos ? <Todos /> : <Expenses />}</div>
 
             <div className="w-4/5 h-36 bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 border-2 border-slate-400 rounded-xl">
