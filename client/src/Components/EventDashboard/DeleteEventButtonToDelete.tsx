@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDeleteEventMutation } from "../../services/ThesisDB";
 import { useDispatch } from "react-redux";
 import { ApiResponse } from "../../services/ApiResponseType";
+import { deleteEventFromList } from "../../reduxFiles/slices/events";
 
 interface DeleteEventProps {
   setDeleteModalOpen: (isOpen: boolean) => void;
@@ -11,6 +12,7 @@ interface DeleteEventProps {
 function DeleteEvent({ setDeleteModalOpen }: DeleteEventProps) {
   const dispatch = useDispatch();
   const [deleteEvent] = useDeleteEventMutation();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -20,15 +22,24 @@ function DeleteEvent({ setDeleteModalOpen }: DeleteEventProps) {
   }
 
   const { eventid } = useParams();
+  const eventId = eventid as string;
   async function handleDelete(e: any) {
     console.log("hello");
     e.preventDefault();
 
     try {
-      const res = await deleteEvent(eventid as string);
-      console.log(" deleted event => ", res);
-      navigate("/user-dashboard");
-      setDeleteModalOpen(false);
+      
+      const res = await deleteEvent(eventId as string);
+      if ("data" in res && res.data.success) {
+        // event has been deleted
+        dispatch(deleteEventFromList(eventId));
+        navigate("/user-dashboard");
+        setDeleteModalOpen(false);
+      } else if ("error" in res && res.error) {
+        console.log("hi ", res);
+        setErrorMessage((res as any).error.data.message);
+        // display the error message
+      }
       //@ts-ignore
       // dispatch(deleteEvent((deletedEvent as any).data));
     } catch (error) {

@@ -29,18 +29,19 @@ export const eventSlice = createSlice({
   initialState: initialEventState,
   reducers: {
     //state type will be Event when the type is created.
-    createEvent: (
-      state = initialEventState,
+    setEvent: (
+      state,
       action: PayloadAction<EventState>
     ) => {
-      state = action.payload;
+      return action.payload;
       // console.log("state test", state);
     },
     deleteEvent: (state) => {
-      state = state;
+      return initialEventState
     },
-    updateEvent: (state) => {
-      state = state;
+    updateEvent: (state, action: PayloadAction<EventState>) => {
+      console.log('something')
+      return action.payload
     },
   },
 });
@@ -62,7 +63,7 @@ export const eventListSlice = createSlice({
   },
 });
 
-export const { createEvent, updateEvent, deleteEvent } = eventSlice.actions;
+export const { setEvent, updateEvent, deleteEvent } = eventSlice.actions;
 export const {
   setEventList,
   deleteEventFromList,
