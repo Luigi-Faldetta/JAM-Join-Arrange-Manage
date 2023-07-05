@@ -218,7 +218,7 @@ const ProfilePage = (): any => {
                 <button
                   type='submit'
                   id='save-profile'
-                  className='btn btn-success text-pink-500'
+                  className='btn bg-green-400 text-pink-500 hover:bg-green-700'
                 >
                   Save Changes
                 </button>
@@ -227,7 +227,7 @@ const ProfilePage = (): any => {
                 <button
                   type='submit'
                   id='delete-profile'
-                  className='btn bg-pink-500 text-white'
+                  className='btn bg-pink-500 text-white hover:bg-pink-700'
                   onClick={handleDelete}
                 >
                   Delete Account
