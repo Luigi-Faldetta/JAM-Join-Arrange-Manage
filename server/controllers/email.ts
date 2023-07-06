@@ -15,10 +15,10 @@ const transporter = nodemailer.createTransport({
 
 async function sendEmail(user: any, pw: string) {
   const mailOptions = {
-    from: `"J.A.M. - IT Department" <${process.env.JAM_EMAIL}>`,
+    from: `"JAM - IT Department" <${process.env.JAM_EMAIL}>`,
     to: user.email,
     subject: `Password reset requested`,
-    html: `<p>Hi ${user.name}, here you can find your new temporary password:</p><code style="border:1px solid lightgrey; padding: 5px">${pw}</code><p>Please <a href="https://youtu.be/dQw4w9WgXcQ">log in now</a> and update it</p><p>J.A.M.</p>`,
+    html: `<p>Hi ${user.name}, here you can find your new temporary password:</p><code style="border:1px solid lightgrey; padding: 5px">${pw}</code><p>Please <a href="http://localhost:3000/">log in now</a> and update it</p><p>JAM</p>`,
   };
 
   try {
