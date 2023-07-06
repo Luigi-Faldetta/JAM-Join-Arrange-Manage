@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import moment from "moment";
+import { FaLocationDot } from "react-icons/fa6";
 
 function EventTile({ event }: { event: any }) {
   const img = "./friends-placeholder.png";
@@ -20,11 +21,19 @@ function EventTile({ event }: { event: any }) {
               <h3 className="text-pink-500 text-xs lg:text-sm">Date TBC</h3>
             )}
             {event.location ? (
-              <h3 className="text-xs lg:text-sm text-gray-500">
-                {event.location}
-              </h3>
+              <div className="flex align-bottom pt-1">
+                <FaLocationDot className="fill-gray-400 inline-block" />
+                <h3 className="text-sm lg:text-sm text-gray-500 inline-block pl-1">
+                  {event.location}
+                </h3>
+              </div>
             ) : (
-              <h3 className="text-xs lg:text-sm text-gray-500">Location TBC</h3>
+              <div className="flex align-bottom pt-1">
+                <FaLocationDot className="fill-gray-400 inline-block" />
+                <h3 className="text-sm lg:text-sm text-gray-500 inline-block pl-1">
+                  Location TBC
+                </h3>
+              </div>
             )}
           </div>
           <h2 className=" text-xl font-bold tracking-tight text-gray-900 dark:text-white">
