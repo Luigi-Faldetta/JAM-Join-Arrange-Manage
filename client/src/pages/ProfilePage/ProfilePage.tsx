@@ -144,22 +144,22 @@ const ProfilePage = (): any => {
 
   return (
     <div className='profile-container bg-white min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8'>
-      <div className='w-full max-w-sm border-indigo-950 border-2 rounded-xl bg-gray-100'>
+      <div className='w-full max-w-lg border-indigo-950 border-2 rounded-xl bg-gray-100'>
         <div className='flex flex-col items-center pb-10 '>
           {previewUrl || userPhoto ? (
             <img
-              className='img-container w-24 h-25 rounded-full shadow-lg'
+              className='img-container'
               src={previewUrl ? previewUrl : photoUrl}
               alt=''
             />
           ) : (
             <img
-              className='img-container w-24 h-25 mb-3 rounded-full shadow-lg'
+              className='img-container'
               src={data?.data.profilePic || './no-profile-picture-icon.png'}
               alt=''
             />
           )}
-          <h5 className='text-3xl font-bold pb-3 text-pink-500 dark:text-white mb-5'>
+          <h5 className='text-4xl font-bold pb-3 text-pink-500 dark:text-white mb-5'>
             {data?.data.name}
           </h5>
           {updateStatus === 'success' && (
@@ -218,7 +218,7 @@ const ProfilePage = (): any => {
                 <button
                   type='submit'
                   id='save-profile'
-                  className='btn text-md font-medium text-white bg-gradient-to-r from-indigo-900 to-indigo-950 '
+                  className='btn text-md font-medium text-white bg-indigo-800 hover:bg-indigo-950 hover:text-pink-700'
                 >
                   Save Changes
                 </button>
@@ -227,7 +227,7 @@ const ProfilePage = (): any => {
                 <button
                   type='submit'
                   id='delete-profile'
-                  className='btn text-md font-medium bg-pink-500 text-white hover:bg-pink-700'
+                  className='btn text-md font-medium bg-pink-500 text-white hover:bg-pink-700 hover:text-indigo-700'
                   onClick={handleDelete}
                 >
                   Delete Account
