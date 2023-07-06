@@ -28,6 +28,10 @@ function UserDashboardPage() {
     .slice()
     .sort((a, b) => moment(a.date).diff(moment(b.date)));
 
+  useEffect(() => {
+    console.log("Event list has changed ==> ", eventList);
+  }, [eventList]);
+
   const handleToggle = (eventType: string) => {
     //@ts-ignore
     setShowEvents(eventType);
@@ -79,19 +83,28 @@ function UserDashboardPage() {
               <div className="w-full flex flex-row align-top justify-center  ">
                 <button
                   onClick={() => handleToggle("all")}
-                  className="btn bg-pink-500 hover:bg-pink-700 text-white w-1/2"
+                  className={`btn ${
+                    showAllEvents === "all"
+                      ? "bg-pink-500 text-white"
+                      : "bg-pink-100 text-slate-600"
+                  } hover:bg-pink-500 hover:text-white w-1/2`}
                 >
+                  {/* className="btn flex bg-white items-center gap-2 px-4 ml-4  */}
                   ALL
                 </button>
                 <button
                   onClick={() => handleToggle("host")}
-                  className="btn bg-pink-500 hover:bg-pink-700 text-white w-1/2"
+                  className={`btn ${
+                    showAllEvents === "host"
+                      ? "bg-pink-500 text-white"
+                      : "bg-pink-100 text-slate-600"
+                  } hover:bg-pink-500 hover:text-white w-1/2`}
                 >
                   HOSTING
                 </button>
               </div>
             )}
-            <div>
+            <div className="overflow-y-auto">
               {showAllEvents === "all" ? (
                 <AllEvents sortedEventList={sortedEventList} />
               ) : (
@@ -101,9 +114,11 @@ function UserDashboardPage() {
           </div>
         </div>
 
-        <div className=" p-5 flex flex-col justify-start items-center gap-1 align-top w-1/3 ">
+        <div className=" p-5 flex flex-col justify-start items-center gap-1 align-top w-1/3 h-full">
+          {/* <div className="p-5 flex flex-col "> */}
           <CreateEventForm></CreateEventForm>
           <EventCalendar sortedEventList={sortedEventList}></EventCalendar>
+          {/* </div> */}
         </div>
       </div>
     </>
