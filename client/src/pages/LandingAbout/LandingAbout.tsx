@@ -2,7 +2,7 @@ import "./LandingAbout.css";
 
 const LandingAbout = () => {
   return (
-    <div className="overflow-y-hidden about-page bg-[#f3f4f6] w-1/5" id="about">
+    <div className="overflow-y-hidden about-page light:bg-[#f3f4f6] dark:bg-gray-900 w-1/5" id="about">
       <div className="container flex flex-col items-center">
 
 
