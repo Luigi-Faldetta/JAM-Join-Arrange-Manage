@@ -1,9 +1,7 @@
 import { useState, useRef } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { UserState, createUser } from "../../reduxFiles/slices/users";
-import {
-  useLogInMutation,
-} from "../../services/ThesisDB";
+import { useLogInMutation } from "../../services/ThesisDB";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function LoginForm() {
@@ -75,6 +73,10 @@ function LoginForm() {
             placeholder="Your email"
             required
             ref={emailInputRef}
+            autoComplete="off" // Disable autocomplete
+            autoCorrect="off" // Disable autocorrect
+            autoCapitalize="off" // Disable autocapitalize
+            spellCheck="false" // Disable spellcheck
           />
         </div>
         <div className="mb-8">
@@ -107,7 +109,12 @@ function LoginForm() {
               Invalid email or password.
             </p>
           )}
-       <Link to="/passwordreset" className="block mt-2 text-sm font-medium text-gray-900 dark:text-white hover:text-blue-500 hover:underline">Forgot password?</Link>
+          <Link
+            to="/passwordreset"
+            className="block mt-2 text-sm font-medium text-gray-900 dark:text-white hover:text-blue-500 hover:underline"
+          >
+            Forgot password?
+          </Link>
         </div>
         <button
           type="submit"

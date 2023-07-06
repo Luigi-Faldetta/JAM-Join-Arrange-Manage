@@ -114,6 +114,10 @@ function CreateEventForm() {
                           dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
                 placeholder="Eg. 'Anna's houseparty...'"
                 required
+                autoComplete="off" // Disable autocomplete
+                autoCorrect="off" // Disable autocorrect
+                autoCapitalize="off" // Disable autocapitalize
+                spellCheck="false" // Disable spellcheck
               />
             </div>
           </div>
@@ -146,6 +150,7 @@ function CreateEventForm() {
                          w-full
                          p-2.5 
                          dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+              autoComplete="off" // Disable autocomplete
             />
           </div>
 
@@ -169,6 +174,10 @@ function CreateEventForm() {
                           block w-full p-2.5 
                           dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
               required
+              autoComplete="off" // Disable autocomplete
+              autoCorrect="off" // Disable autocorrect
+              autoCapitalize="off" // Disable autocapitalize
+              spellCheck="false" // Disable spellcheck
             />
           </div>
 
@@ -190,6 +199,10 @@ function CreateEventForm() {
                           focus:ring-blue-500 focus:border-blue-500 
                           block w-full p-2.5 
                           dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+              autoComplete="off" // Disable autocomplete
+              autoCorrect="off" // Disable autocorrect
+              autoCapitalize="off" // Disable autocapitalize
+              spellCheck="false" // Disable spellcheck
             />
           </div>
 
