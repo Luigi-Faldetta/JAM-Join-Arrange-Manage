@@ -100,7 +100,7 @@ export default function EventMini({
                   </h4>
                 </div>
 
-                <h4 className="mt-1 text-sm leading-tight">
+                <h4 className="mt-1 text-sm leading-tight" >
                   {currentEvent.description}
                 </h4>
               </div>
