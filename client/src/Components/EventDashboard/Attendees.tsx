@@ -4,6 +4,7 @@ import { createUserList } from "../../reduxFiles/slices/users";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../../reduxFiles/store";
+import "./Attendees.css";
 
 export default function Attendees() {
   const { eventid } = useParams();
@@ -39,9 +40,9 @@ export default function Attendees() {
 
     for (let i = startIndex; i < endIndex; i++) {
       renderedImages.push(
-        <div key={i} className="flex flex-col carousel-item m-4">
+        <div key={i} className="flex flex-col shrink-0">
           <img
-            src={attendees[i].profilePic? attendees[i].profilePic : "https://res.cloudinary.com/dpzz6vn2w/image/upload/v1688557267/240_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju_wprc8v.jpg"}
+            src={attendees[i].profilePic ? attendees[i].profilePic : "https://res.cloudinary.com/dpzz6vn2w/image/upload/v1688557267/240_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju_wprc8v.jpg"}
             alt={`User${i + 1}`}
             className="rounded-full w-24 h-24 object-cover border-4 border-white"
           />
@@ -55,27 +56,18 @@ export default function Attendees() {
 
   return (
     <>
-      <h2 className="absolute mt-1 ml-3 text-slate-600 text-center font-bold">
-        GOING x{attendees.length}
-      </h2>
-      <div className="carousel carousel-center rounded-box w-4/5 mx-auto flex justify-center">
-        {activeIndex > 0 && (
-          <button
-            className="carousel-arrow left-arrow"
-            onClick={handlePrevious}
-          >
-            <span className="carousel-arrow-icon text-4xl">&lt;</span>
-          </button>
-        )}
-
-        {renderImages()}
-
-        {activeIndex < attendees.length - imagesPerSlide && (
-          <button className="carousel-arrow right-arrow" onClick={handleNext}>
-            <span className="carousel-arrow-icon text-4xl">&gt;</span>
-          </button>
-        )}
+      <div className="hidden lg:block absolute lex flex-col justify-center mt-5 w-16 mx-4 text-center">
+        <h1 className="text-6xl font-bold text-slate-600">{attendees.length}</h1>
+        <h2 className="relative text-slate-600 font-bold">        GOING      </h2>
       </div>
+      <div className="attendees-row relative w-full flex flex-row justify-center items-center">
+        <div className="gradientback-left"></div>
+        <div className="gradientback-right"></div>
+        <div className="flex flex-row gap-4 justify-start overflow-x-auto">
+          {renderImages()}
+        </div>
+      </div>
+
     </>
   );
 }

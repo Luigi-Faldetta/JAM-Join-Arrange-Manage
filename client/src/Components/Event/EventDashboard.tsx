@@ -74,7 +74,7 @@ export default function Event() {
 
             <div className="w-4/5">{showTodos ? <Todos /> : <Expenses />}</div>
 
-            <div className="w-4/5 mb-8 h-36 bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 border-2 border-slate-400 rounded-xl">
+            <div className="w-4/5 flex flex-row justify-start mb-5 h-36 bg-gradient-to-r from-gray-300 via-gray-300 to-gray-300 border-2 border-slate-400 rounded-xl overflow-hidden">
               <Attendees />
             </div>
           </div>
