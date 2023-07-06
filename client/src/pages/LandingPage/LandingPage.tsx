@@ -16,7 +16,7 @@ const LandingPage = ({eventData}: any) => {
   };
   return (
     <section
-      className="overflow-y-hidden landing-page dark:bg-gray-900 lg:mt-9"
+      className="overflow-y-hidden landing-page dark:bg-gray-800 lg:mt-9"
       id="hero"
     >
       <div className="grid max-w-screen-xl px-4 mx-auto xl:gap-0 lg:py-16 lg:grid-cols-12">
@@ -46,7 +46,7 @@ const LandingPage = ({eventData}: any) => {
           {!isLoggedIn ? (
             <button
               onClick={handleGetStartedClick}
-              className="hidden lg:inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-black rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
+              className="hidden lg:inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center light:text-black dark:text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
             >
               Get started
               <svg

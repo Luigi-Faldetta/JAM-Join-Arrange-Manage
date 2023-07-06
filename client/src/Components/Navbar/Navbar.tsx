@@ -46,8 +46,8 @@ function Navbar() {
   const { data } = useGetUserQuery(uid);
 
   return (
-    <div className="navbar-container bg-white flex justify-center" id="navbar">
-      <nav className="w-4/5 border-gray-200 dark:bg-gray-900">
+    <div className="navbar-container dark:bg-gray-800 flex justify-center" id="navbar">
+      <nav className="w-4/5 border-gray-200">
         <div className="flex flex-wrap items-center justify-between mx-auto py-3">
           <div className="flex items-center">
             <Link to="/" className="flex mr-12 items-center">
@@ -70,7 +70,7 @@ function Navbar() {
                 }`}
                 id="mobile-menu-2"
               >
-                <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border light:border-gray-100 rounded-lg light:bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 light:md:bg-white">
                   <li>
                     <Scroll
                       onClick={handleMobileMenu}
@@ -80,7 +80,7 @@ function Navbar() {
                       smooth={true}
                       offset={-190}
                       duration={500}
-                      className="block py-2 px-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
+                      className="block py-2 px-4 dark:text-white light:text-gray-900 md:hover:text-pink-500 md:p-0 "
                       aria-current="page"
                     >
                       Home
@@ -95,7 +95,7 @@ function Navbar() {
                       smooth={true}
                       offset={-72}
                       duration={500}
-                      className="block py-2 pl-3 pr-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
+                      className="block py-2 pl-3 pr-4 dark:text-white light:text-gray-900 md:hover:text-pink-500 md:p-0 "
                     >
                       About
                     </Scroll>
@@ -109,7 +109,7 @@ function Navbar() {
                       smooth={true}
                       offset={-100}
                       duration={500}
-                      className="block py-2 pl-3 pr-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
+                      className="block py-2 pl-3 pr-4 dark:text-white light:text-gray-900 md:hover:text-pink-500 md:p-0 "
                     >
                       FAQs
                     </Scroll>
@@ -124,7 +124,7 @@ function Navbar() {
               <div className="flex items-center gap-5">
                 <Link
                   to="/user-dashboard"
-                  className="font-medium dashboard-btn  text-gray-900  md:hover:text-pink-500 md:p-0 "
+                  className="font-medium dashboard-btn  dark:text-white light:text-gray-900 md:hover:text-pink-500 md:p-0 "
                 >
                   Dashboard
                 </Link>

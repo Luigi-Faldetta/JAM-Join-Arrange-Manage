@@ -89,7 +89,7 @@ function CreateUserForm() {
         </button>
       </div>
       <dialog id="my_modal_3" className="modal" open={open}>
-        <form method="dialog" className="modal-box" onSubmit={handleFormSubmit}>
+        <form method="dialog" className="modal-box dark:border-2 border-white" onSubmit={handleFormSubmit}>
           <div
             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
             onClick={() => setOpen(false)}
@@ -101,7 +101,7 @@ function CreateUserForm() {
           <div className="mb-6">
             <label
               htmlFor="name"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              className="block mb-2 text-sm font-medium light:text-gray-900 dark:text-white"
             >
               Your name
             </label>
@@ -117,7 +117,7 @@ function CreateUserForm() {
           <div className="mb-6">
             <label
               htmlFor="email"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              className="block mb-2 text-sm font-medium light:text-gray-900 dark:text-white"
             >
               Your email
             </label>
@@ -133,7 +133,7 @@ function CreateUserForm() {
           <div className="mb-6">
             <label
               htmlFor="password"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              className="block mb-2 text-sm font-medium light:text-gray-900 dark:text-white"
             >
               Your password
             </label>
@@ -159,7 +159,7 @@ function CreateUserForm() {
           <div className="mb-6">
             <label
               htmlFor="repeat-password"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              className="block mb-2 text-sm font-medium light:text-gray-900 dark:text-white"
             >
               Repeat password
             </label>

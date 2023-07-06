@@ -143,7 +143,7 @@ const ProfilePage = (): any => {
   };
 
   return (
-    <div className='profile-container bg-white min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8'>
+    <div className='profile-container light:bg-white dark:bg-gray-800 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8'>
       <div className='w-full max-w-lg border-indigo-950 border-2 rounded-xl bg-gray-100'>
         <div className='flex flex-col items-center pb-10 '>
           {previewUrl || userPhoto ? (

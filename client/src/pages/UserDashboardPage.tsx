@@ -61,7 +61,7 @@ function UserDashboardPage() {
 
   return (
     <>
-      <div className="flex flex-row justify-center align-top top-0 gap-14">
+      <div className="flex flex-row justify-center align-top dark:bg-gray-800 top-0 gap-14">
         <div className=" p-5 flex flex-col justify-start items-center gap-1 align-top w-1/3 h-screen">
           <div className=" bg-yellow-30">
             {isLoading && <h2>Loading...</h2>}

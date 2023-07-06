@@ -2,7 +2,7 @@ import "./LandingAbout.css";
 
 const LandingAbout = () => {
   return (
-    <div className="overflow-y-hidden about-page bg-#f3f4f6 mb-20 h-[58rem]" id="about">
+    <div className="overflow-y-hidden about-page ight:bg-[#f3f4f6] dark:bg-gray-900 mb-20 h-[58rem]" id="about">
       <div className="container">
         <div className="flex justify-center">
           <h1 className=" text-3xl tracking-tight leading-none md:text-5xl xl:text-4xl text-gray-500 dark:text-gray-400 mb-20 mt-12">
@@ -11,7 +11,7 @@ const LandingAbout = () => {
         </div>
         <div className="grid grid-cols-2 gap-8 text-lg">
           <div className="grid-item">
-            <p className="paragraph">
+            <p className="paragraph dark:text-gray-400">
               <h4>
                 JAM. - Join, Arrange, Manage - is an all-in-one application designed to streamline event organization and management. With J.A.M., users can easily create events, coordinate schedules, manage attendees, split bills, and efficiently collaborate on tasks. Additionally, J.A.M. offers a comprehensive to-do list feature that allows users to plan and prioritize their tasks, ensuring nothing is overlooked.
               </h4>

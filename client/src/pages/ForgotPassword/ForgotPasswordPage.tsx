@@ -28,7 +28,7 @@ function ForgotPasswordPage() {
     };
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900">
+    <section className="light:bg-white dark:bg-gray-800">
       <div className="flex flex-col items-center justify-center px-8 py-8 mx-auto lg:py-0 h-screen -translate-y-10">
 
         <div className="w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8 h-80">

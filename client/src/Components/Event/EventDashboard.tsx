@@ -57,7 +57,7 @@ export default function Event() {
     <>
       {isLoggedIn && !isLoading && eventData ? (
         <>
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-4 dark:bg-gray-800">
             <div className="w-4/5">
               <EventData
                 eventData={eventData}
