@@ -1,17 +1,77 @@
-.about-page {
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 2rem;
+.overflow-y-hidden {
+  overflow-y: hidden;
 }
 
-.about-text {
-  margin: 2rem;
-  box-sizing: border-box;
+.about-page {
+  background-color: #f3f4f6;
 }
 
 .container {
+  max-width: 100%;
+  padding: 0 1rem;
+}
+
+.mb-12 {
+  margin-bottom: 3rem;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+}
+
+.font-extrabold {
+  font-weight: 800;
+}
+
+.tracking-tight {
+  letter-spacing: -0.025em;
+}
+
+.leading-none {
+  line-height: 1;
+}
+
+.md\:text-5xl {
+  font-size: 3rem;
+}
+
+.xl\:text-4xl {
+  font-size: 2.25rem;
+}
+
+.dark\:text-white {
+  color: white;
+}
+
+.grid {
+  display: grid;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.gap-8 {
+  gap: 2rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+}
+
+.grid-item {
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
+}
+
+.paragraph {
+  text-align: justify;
+  max-width: 28rem;
+}
+
+.image {
+  width: 100%;
+  max-width: 28rem;
 }
