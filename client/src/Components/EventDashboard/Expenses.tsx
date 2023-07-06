@@ -149,7 +149,7 @@ export default function Expenses() {
 
       <div className='lg:w-1/2 h-96 p-4 bg-gradient-to-r from-indigo-900 to-indigo-950 border-2 border-indigo-950 rounded-xl flex flex-col'>
         <h1 className='text-2xl pb-3 text-pink-500 font-bold text-center border-b-4 border-white'>
-          PER PERSON SHARE (€{expenseSheet.perPerson})
+          PER PERSON SHARE (€{(expenseSheet.perPerson).toFixed(2)})
         </h1>
         <div className='w-full flex-grow  flex flex-col overflow-y-auto'>
           {expenseSheet.indExpenses.map((indExpense) => (
