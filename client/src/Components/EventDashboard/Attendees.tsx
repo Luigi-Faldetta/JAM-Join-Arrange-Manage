@@ -9,7 +9,7 @@ import "./Attendees.css";
 export default function Attendees() {
   const { eventid } = useParams();
   const [activeIndex, setActiveIndex] = useState(0);
-  const imagesPerSlide = 5;
+  const imagesPerSlide = 100;
   const appDispatch = useAppDispatch()
   const attendees = useSelector((state: RootState) => state.userList);
 
@@ -19,6 +19,8 @@ export default function Attendees() {
     if (data) {
       const fetchedToDos = data.data;
       appDispatch(createUserList(fetchedToDos));
+      console.log('attendees', attendees);
+      
     }
   }, [data]);
 
@@ -39,6 +41,8 @@ export default function Attendees() {
     const renderedImages = [];
 
     for (let i = startIndex; i < endIndex; i++) {
+      console.log('array', renderedImages);
+      
       renderedImages.push(
         <div key={i} className="flex flex-col shrink-0">
           <img
