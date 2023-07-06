@@ -1,6 +1,6 @@
 import CreateEventForm from "../Components/UserDashboard/CreateEventForm";
 import EventTile from "../Components/UserDashboard/EventTile";
-import { EventState} from "../reduxFiles/slices/events";
+import { EventState } from "../reduxFiles/slices/events";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../reduxFiles/store";
 import { useGetEventsQuery } from "../services/ThesisDB";
@@ -39,7 +39,7 @@ function UserDashboardPage() {
         {" "}
         {sortedEventList.length >= 1 &&
           sortedEventList.map((event: EventState) => {
-            return <EventTile event={event}></EventTile>;
+            return <EventTile key={event.eventId} event={event}></EventTile>;
           })}
       </>
     );
@@ -50,7 +50,7 @@ function UserDashboardPage() {
       <>
         {sortedEventList.map((event: EventState) => {
           if (event.UserEvents[0].isHost === true) {
-            return <EventTile event={event} />;
+            return <EventTile key={event.eventId} event={event} />;
           }
           <h3 className="w-full">You are not hosting any events</h3>; // Return null for non-hosted events or handle them differently
         })}
@@ -60,8 +60,8 @@ function UserDashboardPage() {
 
   return (
     <>
-      <div className="flex flex-row justify-center align-top top-0 gap-16">
-        <div className=" p-5 flex flex-col justify-start items-center gap-1 align-top w-1/3 ">
+      <div className="flex flex-row justify-center align-top top-0 gap-14">
+        <div className=" p-5 flex flex-col justify-start items-center gap-1 align-top w-1/3 h-screen">
           <div className=" bg-yellow-30">
             {isLoading && <h2>Loading...</h2>}
 
