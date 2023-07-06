@@ -122,7 +122,7 @@ function Navbar() {
               <div className="flex items-center gap-5">
                 <Link
                   to="/user-dashboard"
-                  className="font-medium  text-gray-900  md:hover:text-pink-500 md:p-0 "
+                  className="font-medium dashboard-btn  text-gray-900  md:hover:text-pink-500 md:p-0 "
                 >
                   Dashboard
                 </Link>

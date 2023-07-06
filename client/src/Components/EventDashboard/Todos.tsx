@@ -204,6 +204,7 @@ export default function Todos(): JSX.Element {
           <form onSubmit={handleAddClick} className="text-white mt-auto flex p-1 pt-3">
             <input
               type="text"
+              id="add-item"
               placeholder="Add item"
               className="ml-4 w-full h-10 border-0 border-b border-gray-400 bg-indigo-950"
               value={newToDo.title}
