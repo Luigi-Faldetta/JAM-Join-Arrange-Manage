@@ -37,9 +37,9 @@ export const msgListSlice = createSlice({
         addMessage: (state, action) => {
             const itsAlreadyThere = state.some(msg => msg.id === action.payload.id);
             if (itsAlreadyThere) {
-                return state;
+                return [...state];
             }
-            state.push(action.payload);
+            return [...state, action.payload];
         },
     }
 });

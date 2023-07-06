@@ -49,14 +49,14 @@ function ChatContainer() {
 
       setMessage("");
 
-      if (messagesRef.current) {
-        // messagesRef.current.scrollIntoView({ behavior: 'smooth' })
-        // messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-        messagesRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "end",
-        });
-      }
+      // if (messagesRef.current) {
+      //   // messagesRef.current.scrollIntoView({ behavior: 'smooth' })
+      //   messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+      //   messagesRef.current.scrollIntoView({
+      //     behavior: "smooth",
+      //     block: "end",
+      //   });
+      // }
     } catch (error) {
       console.error(error);
     }

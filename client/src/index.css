@@ -2,3 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 @import 'daisyui/dist/full.css';
+body {
+    overflow-x: hidden;
+}
