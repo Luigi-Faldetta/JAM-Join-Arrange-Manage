@@ -53,7 +53,8 @@ function Navbar() {
             <Link to="/" className="flex mr-12 items-center">
               <img
                 // src="https://res.cloudinary.com/dpzz6vn2w/image/upload/v1688551951/logo-jam_hj6qmj.png"
-                src="jam-strw.png"
+                src="https://res.cloudinary.com/dpzz6vn2w/image/upload/v1688644579/jam-strw_irm1ti.png"
+                // src="jam-strw.png"
                 className="h-12 mr-3"
                 alt="JAM Logo"
               />
