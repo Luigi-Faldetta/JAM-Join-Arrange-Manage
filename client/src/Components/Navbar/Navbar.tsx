@@ -165,7 +165,11 @@ function Navbar() {
                     </Link>
                   </li>
                   <li>
-                    <button id="signout-btn" onClick={handleSignOut} className="dropdown-item">
+                    <button
+                      id="signout-btn"
+                      onClick={handleSignOut}
+                      className="dropdown-item"
+                    >
                       Sign out
                     </button>
                   </li>
