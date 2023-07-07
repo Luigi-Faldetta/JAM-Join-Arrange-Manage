@@ -169,7 +169,7 @@ export default function Expenses() {
                 ) : (
                   <span>
                     should pay{' '}
-                    <span className='text-red-600'>€${(indExpense?.owes).toFixed(2)}</span>
+                    <span className='text-red-600'>€{(indExpense?.owes).toFixed(2)}</span>
                   </span>
                 )}
               </h3>
