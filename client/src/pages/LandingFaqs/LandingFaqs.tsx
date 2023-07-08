@@ -7,7 +7,7 @@ export default function LandingFaqs() {
       <p className="mb-20 text-3xl text-gray-500">Frequently asked questions</p>
       <Accordion className="w-2/3">
         <Accordion.Panel>
-          <Accordion.Title >How do I create a new event?</Accordion.Title>
+          <Accordion.Title className="dark:text-gray-600">How do I create a new event?</Accordion.Title>
           <Accordion.Content className="bg-white">
             <p className="mb-2 text-gray-500">
               <p>
@@ -21,7 +21,7 @@ export default function LandingFaqs() {
           </Accordion.Content>
         </Accordion.Panel>
         <Accordion.Panel>
-          <Accordion.Title>
+          <Accordion.Title className="dark:text-gray-600">
             How can I invite participants to my event?
           </Accordion.Title>
           <Accordion.Content className="bg-white">
@@ -36,7 +36,7 @@ export default function LandingFaqs() {
           </Accordion.Content>
         </Accordion.Panel>
         <Accordion.Panel>
-          <Accordion.Title>
+          <Accordion.Title className="dark:text-gray-600">
             Can I split bills among event attendees?
           </Accordion.Title>
           <Accordion.Content className="bg-white">
@@ -51,7 +51,7 @@ export default function LandingFaqs() {
           </Accordion.Content>
         </Accordion.Panel>
         <Accordion.Panel>
-          <Accordion.Title>
+          <Accordion.Title className="dark:text-gray-600">
             How do I create a to-do list for my event?
           </Accordion.Title>
           <Accordion.Content className="bg-white">
@@ -67,7 +67,7 @@ export default function LandingFaqs() {
           </Accordion.Content>
         </Accordion.Panel>
         <Accordion.Panel>
-          <Accordion.Title>
+          <Accordion.Title className="dark:text-gray-600">
             Can I join existing events organized by others?
           </Accordion.Title>
           <Accordion.Content className="bg-white">

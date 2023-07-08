@@ -81,7 +81,7 @@ function CreateUserForm() {
           Don't have an account yet?
         </div>
         <button
-          className="text-blue-700 hover:text-blue-800 text-sm font-medium underline ml-2 "
+          className="text-indigo-700 hover:text-indigo-800 text-sm font-medium underline ml-2 "
           style={{ zIndex: 2 }}
           onClick={() => setOpen(true)}
         >
@@ -108,7 +108,7 @@ function CreateUserForm() {
             <input
               type="text"
               id="name"
-              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-700 focus:border-indigo-700 block w-full p-2.5"
               placeholder="Your name"
               required
               ref={nameInputRef}
@@ -124,7 +124,7 @@ function CreateUserForm() {
             <input
               type="email"
               id="email"
-              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-700 focus:border-indigo-700 block w-full p-2.5"
               placeholder="Your email"
               required
               ref={emailInputRef}
@@ -142,7 +142,7 @@ function CreateUserForm() {
                 type={type}
                 id="password"
                 placeholder="Your password"
-                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-700 focus:border-indigo-700 block w-full p-2.5"
                 required
                 ref={passwordInputRef}
                 onChange={(e) => setPassword(e.target.value)}
@@ -168,7 +168,7 @@ function CreateUserForm() {
                 type={type}
                 id="repeat-password"
                 placeholder="Repeat password"
-                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-700 focus:border-indigo-700 block w-full p-2.5"
                 required
                 ref={repeatPasswordInputRef}
               />
@@ -190,7 +190,7 @@ function CreateUserForm() {
           <button
             type="submit"
             id="login-btn"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
             Register new account
           </button>
