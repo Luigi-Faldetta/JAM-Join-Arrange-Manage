@@ -45,15 +45,6 @@ function ChatContainer() {
       }
 
       setMessage("");
-
-      // if (messagesRef.current) {
-      //   // messagesRef.current.scrollIntoView({ behavior: 'smooth' })
-      //   messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-      //   messagesRef.current.scrollIntoView({
-      //     behavior: "smooth",
-      //     block: "end",
-      //   });
-      // }
     } catch (error) {
       console.error(error);
     }
@@ -109,8 +100,6 @@ function ChatContainer() {
             ariaLabel="blocks-loading"
             wrapperStyle={{}}
             wrapperClass="blocks-wrapper"
-            // colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
-            // colors={["#ec4899", "#312e81", "#ec4899", "#d6d3d1", "#312e81"]}
             colors={["#ec4899", "#ec4899", "#ec4899", "#ec4899", "#ec4899"]}
           />
         ) : (
@@ -129,7 +118,6 @@ function ChatContainer() {
           onKeyDown={handleKeyDown}
           name="message"
           autoComplete="off" // Disable autocomplete
-          autoCorrect="off" // Disable autocorrect
           autoCapitalize="off" // Disable autocapitalize
           spellCheck="false" // Disable spellcheck
         />

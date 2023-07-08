@@ -1,13 +1,16 @@
 import moment from "moment";
 import { useState, useEffect } from "react";
+import { MsgState } from "../../reduxFiles/slices/msg";
 
-const Msg = ({ messages, userId, messagesRef }: any) => {
-  const [len, setLen] = useState(messages.length)
+interface MsgProps {
+  messages: MsgState[];
+  userId: string | null;
+  messagesRef: any;
+}
+
+const Msg = ({ messages, userId, messagesRef }: MsgProps) => {
 
  useEffect(() => {
-  if(messages.length !== len) {
-    setLen(messages.length)
-  }
   if (messagesRef.current) {
     messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
     messagesRef.current.scrollIntoView({
@@ -15,22 +18,21 @@ const Msg = ({ messages, userId, messagesRef }: any) => {
       block: "end",
     });
   }
- },)
+ }, [messages, messagesRef.current]);
 
-  const sortedMessages = [...messages].sort((a: any, b: any) =>
+  const sortedMessages = [...messages].sort((a: MsgState, b: MsgState) =>
     moment(a.date).diff(moment(b.date))
   );
 
   return (
     <>
       {sortedMessages &&
-        sortedMessages.length &&
-        sortedMessages.map((messageData: any, i: number) => {
+        sortedMessages.map((messageData: MsgState, i: number) => {
           const isCurrentUser = messageData.userId === userId;
 
           const messageClassName = `relative text-m p-1 px-2 shadow rounded-xl m-1 ${
             isCurrentUser
-              ? "bg-pink-300 border-2 border-pink-500 ml-12"
+              ? "bg-pink-300 border-2 border-pink-500 ml-12 text-black"
               : "bg-indigo-700 border-2 border-indigo-900 mr-12 text-white"
           } inline-block`;
 
@@ -44,7 +46,7 @@ const Msg = ({ messages, userId, messagesRef }: any) => {
             <div
               key={messageData.id}
               className={messageClassName}
-              ref={len === i + 1 ? messagesRef : undefined}
+              ref={messages.length === i + 1 ? messagesRef : undefined}
             >
               {!isCurrentUser && (
                 <div className="user">
