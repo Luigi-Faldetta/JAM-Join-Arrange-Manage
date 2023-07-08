@@ -35,12 +35,16 @@ export const toDoListSlice = createSlice({
         //state type will be ToDo when the type is created.
         setToDoList: (state, action: PayloadAction<ToDoState[]>) => { state = action.payload },
         deleteToDoFromList: (state, action:PayloadAction<string>) => { state.filter(toDo => toDo.id !== action.payload) },
-        updateToDoList: (state, action: PayloadAction<ToDoState>) => { state.push(action.payload) } ,
+        addToToDoList: (state, action: PayloadAction<ToDoState>) => { state.push(action.payload) } ,
+        updateToDoList: (state, action: PayloadAction<string>) => { return state.map(todo => {
+            if(todo.id === action.payload) todo.isDone = !todo.isDone;
+            return todo
+        }) } ,
     }
 })
 
 // export const { addToDo, /*updateToDo,*/ deleteToDo } = toDoSlice.actions
-export const { setToDoList, updateToDoList, deleteToDoFromList } = toDoListSlice.actions
+export const { setToDoList, updateToDoList, deleteToDoFromList, addToToDoList } = toDoListSlice.actions
 
 // const toDoReducer = toDoSlice.reducer
 const toDoListReducer = toDoListSlice.reducer
