@@ -21,8 +21,8 @@ We are using PostgreSQL for the database, so make sure you are familiar with it.
 ## Tech stack
 ![Tech stack](https://res.cloudinary.com/dpzz6vn2w/image/upload/v1688811975/Screenshot_2023-07-08_at_12.25.58_qwroyg.png)
 
-**Back End:** NodeJS, TypeScript, ExpressJS, PostgreSWL, Sequelize, JWT, socket.io, Nodemailer, Heroku  
-**Front End:** ReactJS, TypeScript, Redux, socket.io, TailwindCSS, Flowbite, daisyUI, Cloudinary, Moment.js  
+**Back End:** NodeJS, TypeScript, ExpressJS, PostgreSWL, Sequelize, JWT, socket.io, Nodemailer, Heroku.
+**Front End:** ReactJS, TypeScript, Redux, socket.io, TailwindCSS, Flowbite, daisyUI, Cloudinary, Moment.js.
 **Testing:** Jest, Supertest, Cypress
 
 
@@ -40,7 +40,7 @@ Any feedback or suggestions are welcome. Please reach us at jam.noreply@gmail.co
 ## Contributors
 
 **By Anna, Juliana, Chris, Marcelo, Luigi and Alejandro**  
-*(links to our profiles)*
+Anna Kucherenko - [Github](https://github.com/AnnaKucherenko1) - [LinkedIn](www.linkedin.com/in/anna-kucherenko1)
 
 ## Screenshots
 *(x5 max)*

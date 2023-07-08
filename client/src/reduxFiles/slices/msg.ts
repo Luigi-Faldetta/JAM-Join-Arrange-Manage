@@ -8,6 +8,7 @@ export interface MsgState {
     eventId: string, 
     message: string,
     User?: any
+    date?: string;
 }
 
 const initialMsgState:MsgState = {
