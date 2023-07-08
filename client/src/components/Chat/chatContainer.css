@@ -12,8 +12,7 @@
   overflow-y: auto;
   justify-content: flex-start;
   background-color: rgb(232, 232, 232, 0.5);
-  /* border: 1px solid #e6e6e6; */
-  /* border-radius: 8px; */
+
   backdrop-filter: blur(20px);
 }
 
@@ -22,7 +21,6 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  /* background-color: #f8f8ff; */
   border-bottom: 1px solid #8c8c8c;
 }
 

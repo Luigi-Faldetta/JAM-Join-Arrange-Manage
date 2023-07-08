@@ -47,7 +47,7 @@ function CreateEventForm() {
   };
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); //removed as it was preventing modal from closing
+    event.preventDefault(); 
 
     const eventFormData: Partial<EventState> &
       Pick<EventState, "title" | "date" | "location" | "description"> = {
@@ -67,12 +67,10 @@ function CreateEventForm() {
     });
 
     if ("data" in eventCreated && eventCreated.data.success) {
-      console.log("event created in DB== > ", eventCreated);
       dispatch(setEvent(eventCreated.data.data));
       dispatch(addEventToList(eventCreated.data.data));
     }
     setOpen(false);
-    // Send another request with eventID, userID (host), isHost (true)
   };
 
   function createModal() {
@@ -170,7 +168,6 @@ function CreateEventForm() {
                           rounded-lg 
                           focus:ring-blue-500 focus:border-blue-500 
                           block w-full p-2.5"
-              required
               autoComplete="off" // Disable autocomplete
               autoCorrect="off" // Disable autocorrect
               autoCapitalize="off" // Disable autocapitalize

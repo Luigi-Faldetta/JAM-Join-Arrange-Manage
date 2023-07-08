@@ -16,31 +16,27 @@ function DeleteEvent({ setDeleteModalOpen }: DeleteEventProps) {
   const navigate = useNavigate();
 
   function handleCancelDelete() {
-    console.log("hello in cancel");
     setDeleteModalOpen(false);
   }
 
   const { eventid } = useParams();
   const eventId = eventid as string;
   async function handleDelete(e: any) {
-    console.log("hello");
     e.preventDefault();
 
     try {
       
       const res = await deleteEvent(eventId as string);
       if ("data" in res && res.data.success) {
-        // event has been deleted
         dispatch(deleteEventFromList(eventId));
         navigate("/user-dashboard");
         setDeleteModalOpen(false);
       } else if ("error" in res && res.error) {
-        console.log("hi ", res);
         setErrorMessage((res as any).error.data.message);
-        // display the error message
+
       }
-      //@ts-ignore
-      // dispatch(deleteEvent((deletedEvent as any).data));
+
+
     } catch (error) {
       console.log("error in delete", error);
     }

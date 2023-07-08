@@ -34,13 +34,11 @@ export const eventSlice = createSlice({
       action: PayloadAction<EventState>
     ) => {
       return action.payload;
-      // console.log("state test", state);
     },
     deleteEvent: (state) => {
       return initialEventState
     },
     updateEvent: (state, action: PayloadAction<EventState>) => {
-      console.log('something')
       return action.payload
     },
   },

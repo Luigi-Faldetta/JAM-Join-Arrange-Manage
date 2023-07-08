@@ -40,7 +40,7 @@ Any feedback or suggestions are welcome. Please reach us at jam.noreply@gmail.co
 ## Contributors
 
 **By Anna, Juliana, Chris, Marcelo, Luigi and Alejandro**  
-*(links to our profiles)*
+Anna Kucherenko - [Github](https://github.com/AnnaKucherenko1) - [LinkedIn](www.linkedin.com/in/anna-kucherenko1)
 
 ## Screenshots
 *(x5 max)*

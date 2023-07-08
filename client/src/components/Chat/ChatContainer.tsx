@@ -26,11 +26,9 @@ function ChatContainer() {
   const messagesRef = useRef<HTMLDivElement>(null);
   const userId = localStorage.getItem("token");
 
-  // useEffect(() => {
-  //   console.log("Chat contaiiner comp ==> ", eventId)
-  // }, [eventId])
+
   const { data: dataevent } = useGetEventQuery(eventId as string);
-  // console.log(dataevent?.data.title, 'this is event')
+
   const {
     data: _data,
     isSuccess,
@@ -40,7 +38,6 @@ function ChatContainer() {
   const data = _data?.data;
   const handleMessageSubmit = async (message: string) => {
     try {
-      // await addNewMsg({ userId: userId || "", eventId, message });
       socket.emit("newMessage", { userId, eventId, message });
 
       if (isSuccess) {
@@ -48,15 +45,6 @@ function ChatContainer() {
       }
 
       setMessage("");
-
-      // if (messagesRef.current) {
-      //   // messagesRef.current.scrollIntoView({ behavior: 'smooth' })
-      //   messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-      //   messagesRef.current.scrollIntoView({
-      //     behavior: "smooth",
-      //     block: "end",
-      //   });
-      // }
     } catch (error) {
       console.error(error);
     }
@@ -112,8 +100,6 @@ function ChatContainer() {
             ariaLabel="blocks-loading"
             wrapperStyle={{}}
             wrapperClass="blocks-wrapper"
-            // colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
-            // colors={["#ec4899", "#312e81", "#ec4899", "#d6d3d1", "#312e81"]}
             colors={["#ec4899", "#ec4899", "#ec4899", "#ec4899", "#ec4899"]}
           />
         ) : (
@@ -132,7 +118,6 @@ function ChatContainer() {
           onKeyDown={handleKeyDown}
           name="message"
           autoComplete="off" // Disable autocomplete
-          autoCorrect="off" // Disable autocorrect
           autoCapitalize="off" // Disable autocapitalize
           spellCheck="false" // Disable spellcheck
         />

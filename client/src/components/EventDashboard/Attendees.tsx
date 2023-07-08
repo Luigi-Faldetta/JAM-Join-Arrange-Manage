@@ -19,7 +19,6 @@ export default function Attendees() {
     if (data) {
       const fetchedToDos = data.data;
       appDispatch(createUserList(fetchedToDos));
-      console.log('attendees', attendees);
       
     }
   }, [data]);
@@ -41,7 +40,7 @@ export default function Attendees() {
     const renderedImages = [];
 
     for (let i = startIndex; i < endIndex; i++) {
-      console.log('array', renderedImages);
+
       
       renderedImages.push(
         <div key={i} className="flex flex-col shrink-0">
