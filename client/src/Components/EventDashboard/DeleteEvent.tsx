@@ -17,27 +17,21 @@ function DeleteEvent({ setDeleteModalOpen }: DeleteEventProps) {
   const eventId = eventid as string;
 
   function handleCancelDelete() {
-    console.log("hello");
     setDeleteModalOpen(false);
   }
 
   async function handleDelete() {
-    console.log("hello");
 
     try {
       const res = await deleteEvent(eventId);
       if ("data" in res && res.data.success) {
-        // event has been deleted
         dispatch(deleteEventFromList(eventId));
         navigate("/user-dashboard");
         setDeleteModalOpen(false);
       } else if ("error" in res && res.error) {
-        console.log("hi ", res);
         setErrorMessage((res as any).error.data.message);
-        // display the error message
       }
-      //@ts-ignore
-      // dispatch(deleteEvent((deletedEvent as any).data));
+
     } catch (error) {
       console.log("error in delete", error);
     }
@@ -122,7 +116,6 @@ export default function DeleteEventButton() {
 
   const openDeleteModal = () => {
     setDeleteModalOpen(true);
-    console.log("event delete button clicked");
   };
 
   useEffect(() => {

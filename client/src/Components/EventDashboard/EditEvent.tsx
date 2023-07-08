@@ -24,15 +24,12 @@ function EditEvent({ setEditModalOpen, eventid }: any) {
   const navigate = useNavigate();
   const [eventDate, setEventDate] = useState<Date | null>(null);
   const [patchEvent] = useUpdateEventMutation();
-  // // const { eventId } = useParams()
-  // console.log(eventId)
   const [title, setTitle] = useState("");
   const [date, setDate] = useState<Date | null>(null);
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); //removed as it was preventing modal from closing
-
+    event.preventDefault(); 
     const eventFormData: Partial<EventState> &
       Pick<EventState, "title" | "date" | "location" | "description"> = {
       title: event.currentTarget.eventName.value,
@@ -74,7 +71,6 @@ function EditEvent({ setEditModalOpen, eventid }: any) {
 
     const eventChanged = await patchEvent(eventFormData);
     if ("data" in eventChanged && eventChanged.data.success) {
-      console.log("event created in DB== > ", eventChanged);
       dispatch(updateEvent(eventChanged.data.data));
     }
     setEditModalOpen(false);

@@ -19,7 +19,6 @@ export default function Attendees() {
     if (data) {
       const fetchedToDos = data.data;
       appDispatch(createUserList(fetchedToDos));
-      console.log('attendees', attendees);
       
     }
   }, [data]);

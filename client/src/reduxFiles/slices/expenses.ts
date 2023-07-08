@@ -24,7 +24,6 @@ export const expenseSlice = createSlice({
     initialState: initialExpenseState,
     reducers: {
         addExpense: (state, action: PayloadAction<Partial<ExpenseState> & Pick<ExpenseState, "cost" | "eventId" | "purchaserId" | "item">>) => { 
-            console.log("in add expense: ", action.payload);
             state= action.payload 
         },
     }

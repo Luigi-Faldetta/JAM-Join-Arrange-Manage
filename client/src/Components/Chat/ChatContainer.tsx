@@ -26,11 +26,9 @@ function ChatContainer() {
   const messagesRef = useRef<HTMLDivElement>(null);
   const userId = localStorage.getItem("token");
 
-  // useEffect(() => {
-  //   console.log("Chat contaiiner comp ==> ", eventId)
-  // }, [eventId])
+
   const { data: dataevent } = useGetEventQuery(eventId as string);
-  // console.log(dataevent?.data.title, 'this is event')
+
   const {
     data: _data,
     isSuccess,
@@ -40,7 +38,6 @@ function ChatContainer() {
   const data = _data?.data;
   const handleMessageSubmit = async (message: string) => {
     try {
-      // await addNewMsg({ userId: userId || "", eventId, message });
       socket.emit("newMessage", { userId, eventId, message });
 
       if (isSuccess) {

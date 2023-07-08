@@ -3,14 +3,12 @@ import { useState, useEffect } from "react";
 
 const Msg = ({ messages, userId, messagesRef }: any) => {
   const [len, setLen] = useState(messages.length)
-  // const len = messages.length;
+
  useEffect(() => {
   if(messages.length !== len) {
     setLen(messages.length)
-    console.log(messagesRef)
   }
   if (messagesRef.current) {
-    // messagesRef.current.scrollIntoView({ behavior: 'smooth' })
     messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
     messagesRef.current.scrollIntoView({
       behavior: "smooth",

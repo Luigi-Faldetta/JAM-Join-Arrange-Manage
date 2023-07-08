@@ -67,7 +67,6 @@ function CreateEventForm() {
     });
 
     if ("data" in eventCreated && eventCreated.data.success) {
-      console.log("event created in DB== > ", eventCreated);
       dispatch(setEvent(eventCreated.data.data));
       dispatch(addEventToList(eventCreated.data.data));
     }

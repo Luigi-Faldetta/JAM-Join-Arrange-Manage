@@ -10,7 +10,7 @@ import { addMessageSocket } from "./controllers/socketMessages.js";
 const app = express();
 const server = http.createServer(app);
 
-const corsOptions = { origin: true, credentials: true }
+const corsOptions = { origin: true, credentials: true };
 const io = new Server(server, { cors: corsOptions });
 
 app.use(cors());
@@ -19,8 +19,6 @@ app.use(cookieParser());
 app.use(router);
 
 io.on("connection", (socket: Socket) => {
-  console.log("A user connected");
-
   socket.on("joinRoom", (info: { eventId: string; userId: string }) => {
     socket.join(info.eventId);
     console.log(`User ${info.userId} joined room: ${info.eventId}`);
@@ -28,28 +26,29 @@ io.on("connection", (socket: Socket) => {
 
   socket.on("leaveRoom", (eventId: string) => {
     socket.leave(eventId);
-    console.log(`User left room: ${eventId}`);
   });
 
   socket.on(
     "newMessage",
     async ({
-      userId, eventId, message
-    }:
-      {
-        userId: string; eventId: string; message: string
-      }) => {
-      // save msg to database, then send back he message
+      userId,
+      eventId,
+      message,
+    }: {
+      userId: string;
+      eventId: string;
+      message: string;
+    }) => {
       const msgCreated = await addMessageSocket({
-        message, userId, eventId,
+        message,
+        userId,
+        eventId,
       });
       io.to(eventId).emit("newMessage", msgCreated);
     }
   );
 
-  socket.on("disconnect", () => {
-    console.log("A user disconnected");
-  });
+  socket.on("disconnect", () => {});
 });
 
 export { app, server, io };

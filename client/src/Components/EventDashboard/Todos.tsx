@@ -47,7 +47,7 @@ export default function Todos(): JSX.Element {
         creatorId: creatorId,
         eventId: eventid,
       };
-      console.log(newToDoItem);
+  
       fetch("https://codeworks-thesis-4063bceaa74a.herokuapp.com/todo", {
         method: "POST",
         headers: {
