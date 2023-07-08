@@ -9,6 +9,7 @@ export default function Todos(): JSX.Element {
   const { eventid } = useParams();
   const creatorId = localStorage.getItem("token");
   const [toDos, setToDos] = useState<ToDoState[]>([]);
+  const [doneToDos, setDoneToDos] = useState<ToDoState[]>([]);
   const [newToDo, setNewToDo] = useState<ToDoState>({
     title: "",
     isDone: false,
@@ -16,7 +17,6 @@ export default function Todos(): JSX.Element {
     creatorId: "",
     eventId: "",
   });
-  const [doneToDos, setDoneToDos] = useState<ToDoState[]>([]);
 
   const { data, error, isLoading } = useGetToDosQuery(eventid as string);
   const todosRef = useRef<HTMLDivElement>(null);

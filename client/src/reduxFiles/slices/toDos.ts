@@ -10,39 +10,39 @@ export interface ToDoState {
     eventId: string;
 }
 
-const initialToDoState: ToDoState = {
-    title: "",
-    isDone: false,
-    creatorId: "",
-    eventId: "",
-}
+// const initialToDoState: ToDoState = {
+//     title: "",
+//     isDone: false,
+//     creatorId: "",
+//     eventId: "",
+// }
 
-export const toDoSlice = createSlice({
-    name: "toDo",
-    initialState: initialToDoState,
-    reducers: {
-        //state type will be ToDo when the type is created.
-        createToDo: (state) => { state.title = "" },
-        deleteToDo: (state) => { state.title = "" },
-        updateToDo: (state) => { state.title = "" },
-    }
-})
+// export const toDoSlice = createSlice({
+//     name: "toDo",
+//     initialState: initialToDoState,
+//     reducers: {
+//         //state type will be ToDo when the type is created.
+//         addToDo: (state, action:PayloadAction<ToDoState>) => { state = action.payload },
+//         deleteToDo: (state) => { state = initialToDoState},
+//         // updateToDo: (state) => { state.title = "" },
+//     }
+// })
 
 export const toDoListSlice = createSlice({
     name: "toDoList",
     initialState: [] as ToDoState[],
     reducers: {
         //state type will be ToDo when the type is created.
-        createToDoList: (state) => { state = [] },
-        deleteToDoList: (state) => { state = [] },
-        updateToDoList: (state) => { state = [] },
+        setToDoList: (state, action: PayloadAction<ToDoState[]>) => { state = action.payload },
+        deleteToDoFromList: (state, action:PayloadAction<string>) => { state.filter(toDo => toDo.id !== action.payload) },
+        updateToDoList: (state, action: PayloadAction<ToDoState>) => { state.push(action.payload) } ,
     }
 })
 
-export const { createToDo, updateToDo, deleteToDo } = toDoSlice.actions
-export const { createToDoList, updateToDoList, deleteToDoList } = toDoListSlice.actions
+// export const { addToDo, /*updateToDo,*/ deleteToDo } = toDoSlice.actions
+export const { setToDoList, updateToDoList, deleteToDoFromList } = toDoListSlice.actions
 
-const toDoReducer = toDoSlice.reducer
+// const toDoReducer = toDoSlice.reducer
 const toDoListReducer = toDoListSlice.reducer
 
-export default { toDoListReducer, toDoReducer }
+export default { toDoListReducer, /*toDoReducer*/ }
