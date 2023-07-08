@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useGetToDosQuery } from "../../services/ThesisDB";
-import { ToDoState, setToDoList, updateToDoList } from "../../reduxFiles/slices/toDos";
-import { useAddToDoMutation, useDeleteToDoMutation } from "../../services/ThesisDB";
+import { useGetToDosQuery, useUpdateToDoMutation, useAddToDoMutation, useDeleteToDoMutation } from "../../services/ThesisDB";
+import { ToDoState, addToToDoList, deleteToDoFromList, setToDoList, updateToDoList } from "../../reduxFiles/slices/toDos";
 import { useParams } from "react-router-dom";
 import { ImArrowRight, ImArrowLeft } from "react-icons/im";
 import { RootState, useAppDispatch } from "../../reduxFiles/store";
@@ -11,11 +10,10 @@ import { useSelector } from "react-redux";
 export default function Todos(): JSX.Element {
   const { eventid } = useParams();
   const creatorId = localStorage.getItem("token");
-  // const [toDos, setToDos] = useState<ToDoState[]>([]);
-  // const [doneToDos, setDoneToDos] = useState<ToDoState[]>([]);
   const [addTodo] = useAddToDoMutation();
-  const [deletedTodo] = useDeleteToDoMutation();
-  const toDoList = useSelector((state: RootState) => state.eventListReducer)
+  const [deleteTodo] = useDeleteToDoMutation();
+  const [updateTodo] = useUpdateToDoMutation()
+  const toDoList = useSelector((state: RootState) => state.toDoListReducer)
   const appDispatch = useAppDispatch()
   const [newToDo, setNewToDo] = useState<ToDoState>({
     title: "",
@@ -31,10 +29,7 @@ export default function Todos(): JSX.Element {
   useEffect(() => {
     if (data) {
       const toDos = data.data;
-      // const todos = fetchedToDos.filter((todo) => !todo.isDone);
-      // const doneTodos = fetchedToDos.filter((todo) => todo.isDone);
       appDispatch(setToDoList(toDos));
-      // setDoneToDos(doneTodos);
     }
   }, [data]);
 
@@ -56,26 +51,8 @@ export default function Todos(): JSX.Element {
       };
       const toDoRes = await addTodo(newToDoItem as ToDoState) 
       if('data' in toDoRes){
-        appDispatch(updateToDoList(toDoRes.data.data))
+        appDispatch(addToToDoList(toDoRes.data.data))
       }
-      // fetch("https://codeworks-thesis-4063bceaa74a.herokuapp.com/todo", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(newToDoItem),
-      // })
-      //   .then((response) => response.json())
-      //   .then((createdToDo) => {
-      //     if (createdToDo.success) {
-      //       setToDos((prevToDos) => [...prevToDos, createdToDo.data]);
-      //     } else {
-      //       alert(createdToDo.message);
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.error("Error creating todo:", error);
-      //   });
       setNewToDo({
         title: "",
         isDone: false,
@@ -97,82 +74,15 @@ export default function Todos(): JSX.Element {
   };
 
 
-  const handleDeleteClick = (index: number) => {
-    const todoId = toDos[index].id;
-
-    fetch(
-      `https://codeworks-thesis-4063bceaa74a.herokuapp.com/todo/${todoId}`,
-      {
-        method: "DELETE",
-      }
-    )
-      .then((response) => response.json())
-      .then((deletedTodo) => {
-        setToDos((prevToDos) => {
-          const updatedToDos = [...prevToDos];
-          updatedToDos.splice(index, 1);
-          return updatedToDos;
-        });
-      })
-      .catch((error) => {
-        console.error("Error deleting todo:", error);
-      });
+  const handleDeleteClick = (toDoId:string) => {
+    deleteTodo(toDoId);
+    appDispatch(deleteToDoFromList(toDoId));
   };
 
-  const handleDoneClick = (index: number) => {
-    const todoId = toDos[index].id;
-
-    // Update the isDone property of the todo in the database
-    fetch(
-      `https://codeworks-thesis-4063bceaa74a.herokuapp.com/todo/${todoId}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ isDone: true }),
-      }
-    )
-      .then((response) => response.json())
-      .then((updatedTodo) => {
-        setToDos((prevToDos) => {
-          const updatedToDos = [...prevToDos];
-          updatedToDos.splice(index, 1); // Remove the todo from Todos
-          return updatedToDos;
-        });
-        setDoneToDos((prevDoneToDos) => [...prevDoneToDos, updatedTodo.data]);
-      })
-      .catch((error) => {
-        console.error("Error updating todo:", error);
-      });
-  };
-
-  const handleMoveToTodosClick = (index: number) => {
-    const doneToDo = doneToDos[index];
-    const todoId = doneToDo.id;
-
-    fetch(
-      `https://codeworks-thesis-4063bceaa74a.herokuapp.com/todo/${todoId}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ isDone: false }),
-      }
-    )
-      .then((response) => response.json())
-      .then((updatedTodo) => {
-        setDoneToDos((prevDoneToDos) => {
-          const updatedDoneToDos = [...prevDoneToDos];
-          updatedDoneToDos.splice(index, 1);
-          return updatedDoneToDos;
-        });
-        setToDos((prevToDos) => [...prevToDos, updatedTodo.data]);
-      })
-      .catch((error) => {
-        console.error("Error updating todo:", error);
-      });
+  const handleDoneClick = async (toDoId:string) => {
+    const index = toDoList.indexOf(toDoList.find(todo => todo.id === toDoId) as ToDoState)
+    await updateTodo({id:toDoId, isDone: !toDoList[index].isDone});
+    appDispatch(updateToDoList(toDoId))
   };
 
   return (
@@ -189,25 +99,25 @@ export default function Todos(): JSX.Element {
           ref={todosRef}
           className="w-full flex-grow  flex flex-col overflow-y-auto"
         >
-          {toDos.map((toDo, index) => (
+          {toDoList.filter(todo => todo.isDone === false).map(toDo => (
             <div
               className="flex items-center p-2 border-t border-gray-400 text-white text-xl"
-              key={index}
+              key={toDo.id}
             >
               <button
                 id="x-btn"
                 className="w-10 text-gray-400 cursor-pointer"
-                onClick={() => handleDeleteClick(index)}
+                onClick={() => handleDeleteClick(toDo.id as string)}
               >
                 X
               </button>
-              <h3 key={index} className="w-full">
+              <h3 key={toDo.id} className="w-full">
                 {toDo?.title}
               </h3>
               <ImArrowRight
                 id="pink-arrow"
                 className="w-10 fill-pink-500 cursor-pointer"
-                onClick={() => handleDoneClick(index)}
+                onClick={() => handleDoneClick(toDo.id as string)}
               />
             </div>
           ))}
@@ -239,19 +149,19 @@ export default function Todos(): JSX.Element {
           COMPLETED
         </h1>
         <div className="w-full flex-grow overflow-y-auto">
-          {doneToDos.map((doneToDo, index) => (
+          {toDoList.filter(todo => todo.isDone === true).map((toDo, index) => (
             <div
               className="flex items-center p-2 border-t border-gray-400 text-white text-xl"
-              key={index}
+              key={toDo.id}
             >
               <ImArrowLeft
                 className="w-10 fill-pink-500 cursor-pointer"
-                onClick={() => handleMoveToTodosClick(index)}
+                onClick={() => handleDoneClick(toDo.id as string)}
               />
-              <h3 className="w-full ml-1">{doneToDo.title}</h3>
+              <h3 className="w-full ml-1">{toDo.title}</h3>
               <button
                 className="w-10 text-gray-400 cursor-pointer"
-                onClick={() => handleDeleteClick(index)}
+                onClick={() => handleDeleteClick(toDo.id as string)}
               >
                 X
               </button>

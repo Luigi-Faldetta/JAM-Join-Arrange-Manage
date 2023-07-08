@@ -21,7 +21,6 @@ const store = configureStore({
     userReducer: userReducers.userReducer,
     userList: userReducers.userListReducer,
     toDoListReducer: toDoReducers.toDoListReducer,
-    // toDoReduer: toDoReducers.toDoReducer,
     expenseReducer: expenseReducers.expenseReducer,
     [thesisDbApi.reducerPath]: thesisDbApi.reducer,
   },
