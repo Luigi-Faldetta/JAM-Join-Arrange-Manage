@@ -1,5 +1,5 @@
-import LoginForm from "../../Components/LandingDashboard/LoginForm";
-import CreateUserForm from "../../Components/LandingDashboard/CreateUserForm";
+import LoginForm from "../../components/LandingDashboard/LoginForm";
+import CreateUserForm from "../../components/LandingDashboard/CreateUserForm";
 import "./LandingPage.css";
 import { useState } from "react";
 import { useIsLoggedIn } from "../../utils/useIsLoggedIn";
@@ -20,7 +20,7 @@ const LandingPage = ({eventData}: any) => {
       id="hero"
     >
       <div className="grid max-w-screen-xl px-4 mx-auto xl:gap-0 lg:py-16 lg:grid-cols-12">
-        <div className="mr-auto place-self-center lg:col-span-7">
+        <div className="mx-auto md:ml-12 place-self-center lg:col-span-7">
           {currentRoute === "/" ? (
             <>
               <h1 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl text-black">

@@ -14,16 +14,16 @@ import {
 } from "react-router-dom";
 import LandingAbout from "./pages/LandingAbout/LandingAbout";
 import LandingFaqs from "./pages/LandingFaqs/LandingFaqs";
-import UserDashboardPage from "./pages/UserDashboardPage";
+import UserDashboardPage from "./pages/UserDashboard/UserDashboardPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
-import Landing from "./pages/Landing/Landing";
-import EventDashboard from "./Components/Event/EventDashboard";
+import LandingHero from "./pages/LandingHero/LandingHero";
+import EventDashboard from "./pages/EventDashboard/EventDashboard";
 import ForgotPasswordPage from "./pages/ForgotPassword/ForgotPasswordPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      <Route index={true} path="/" element={<Landing />} />
+      <Route index={true} path="/" element={<LandingHero />} />
       <Route path="/about" element={<LandingAbout />} />
       <Route path="/faqs" element={<LandingFaqs />} />
       <Route path="/user-dashboard" element={<UserDashboardPage />} />

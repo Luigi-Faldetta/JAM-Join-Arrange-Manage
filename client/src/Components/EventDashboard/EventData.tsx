@@ -1,7 +1,7 @@
 import { ApiResponse } from "../../services/ApiResponseType";
 import { EventState, setEvent } from "../../reduxFiles/slices/events";
 import moment from "moment";
-import "../Event/EventDashboard.css";
+import "../../pages/EventDashboard/EventDashboard.css";
 import EventLink from "./EventLink";
 import { useParams } from "react-router-dom";
 import { PiNotePencilBold } from "react-icons/pi";

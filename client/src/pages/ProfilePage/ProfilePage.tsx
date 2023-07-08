@@ -4,7 +4,7 @@ import { useGetUserQuery } from '../../services/ThesisDB';
 import { UserState } from '../../reduxFiles/slices/users';
 import { useAuth } from '../../utils/useAuth';
 import { useUpdateUserMutation } from '../../services/ThesisDB';
-import Delete from '../../Components/Delete';
+import Delete from '../../components/Delete';
 
 const ProfilePage = (): any => {
   const ImageUploader = ({

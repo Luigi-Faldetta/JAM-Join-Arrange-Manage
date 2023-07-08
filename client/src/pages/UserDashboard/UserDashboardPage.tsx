@@ -1,13 +1,13 @@
-import CreateEventForm from "../Components/UserDashboard/CreateEventForm";
-import EventTile from "../Components/UserDashboard/EventTile";
-import { EventState } from "../reduxFiles/slices/events";
+import CreateEventForm from "../../components/UserDashboard/CreateEventForm";
+import EventTile from "../../components/UserDashboard/EventTile";
+import { EventState } from "../../reduxFiles/slices/events";
 import { useSelector } from "react-redux";
-import { RootState, useAppDispatch } from "../reduxFiles/store";
-import { useGetEventsQuery } from "../services/ThesisDB";
+import { RootState, useAppDispatch } from "../../reduxFiles/store";
+import { useGetEventsQuery } from "../../services/ThesisDB";
 import { useEffect, useState } from "react";
-import { setEventList } from "../reduxFiles/slices/events";
+import { setEventList } from "../../reduxFiles/slices/events";
 import moment from "moment";
-import EventCalendar from "../Components/UserDashboard/EventCalendar";
+import EventCalendar from "../../components/UserDashboard/EventCalendar";
 
 function UserDashboardPage() {
   const dispatch = useAppDispatch();

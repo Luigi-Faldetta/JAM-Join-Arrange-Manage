@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import "../Event/EventDashboard.css";
+import { useState } from "react";
+import "../../pages/EventDashboard/EventDashboard.css";
 import { PiCopyBold } from "react-icons/pi";
 
 function EventLink({ eventid }: any) {

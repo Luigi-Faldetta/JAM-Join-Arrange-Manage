@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import EventData from "../EventDashboard/EventData";
+import EventData from "../../components/EventDashboard/EventData";
 import { useParams } from "react-router-dom";
-import Todos from "../EventDashboard/Todos";
-import Expenses from "../EventDashboard/Expenses";
-import Attendees from "../EventDashboard/Attendees";
+import Todos from "../../components/EventDashboard/Todos";
+import Expenses from "../../components/EventDashboard/Expenses";
+import Attendees from "../../components/EventDashboard/Attendees";
 import { useGetEventQuery } from "../../services/ThesisDB";
 import { useIsLoggedIn } from "../../utils/useIsLoggedIn";
 import { EventState } from "../../reduxFiles/slices/events";
 import "./EventDashboard.css";
-import LandingPage from "../../pages/LandingPage/LandingPage";
+import LandingPage from "../LandingPage/LandingPage";
 
-export default function Event() {
+export default function EventDashboard() {
   const [userIsHost, setUserIsHost] = useState<boolean>(false);
   const [showTodos, setShowTodos] = useState<boolean>(true);
   const [isJoined, setIsJoined] = useState<boolean>(false);
