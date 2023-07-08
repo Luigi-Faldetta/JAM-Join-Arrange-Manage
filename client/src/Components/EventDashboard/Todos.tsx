@@ -209,7 +209,11 @@ export default function Todos(): JSX.Element {
               className="ml-4 w-full h-10 border-0 border-b border-gray-400 bg-indigo-950"
               value={newToDo.title}
               onChange={handleInputChange}
-            />
+              autoComplete="off" // Disable autocomplete
+              autoCorrect="off" // Disable autocorrect
+              autoCapitalize="off" // Disable autocapitalize
+              spellCheck="false" // Disable spellcheck
+          />
             <button
               type="submit"
               className="w-10 ml-2 font-bold rounded-full border border-gray-400 flex items-center justify-center"
