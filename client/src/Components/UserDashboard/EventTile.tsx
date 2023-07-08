@@ -9,7 +9,7 @@ function EventTile({ event }: { event: any }) {
     <>
       <Link
         to={`/event/${event.eventId}`}
-        className="flex flex-row w-full p-2 my-3 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+        className="flex flex-row w-full p-2 my-3 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100"
       >
         <div className="flex flex-col w-3/5 pr-3 justify-between">
           <div>
@@ -36,18 +36,18 @@ function EventTile({ event }: { event: any }) {
               </div>
             )}
           </div>
-          <h2 className=" text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <h2 className=" text-xl font-bold tracking-tight text-gray-900">
             {event.title}
           </h2>
           <div className="flex flex-row">
             {event.UserEvents &&
             event.UserEvents.length &&
             event.UserEvents[0].isHost === true ? (
-              <p className=" text-[10px] tracking-tight text-gray-500 dark:text-white">
+              <p className=" text-[10px] tracking-tight text-gray-500">
                 ⋆ You are hosting
               </p>
             ) : (
-              <p className=" text-[10px] tracking-tight text-gray-500 dark:text-white">
+              <p className=" text-[10px] tracking-tight text-gray-500">
                 ⋆ You are a guest
               </p>
             )}

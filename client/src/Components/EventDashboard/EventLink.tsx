@@ -15,7 +15,7 @@ function EventLink({ eventid }: any) {
 
   return (
     <div>
-      <button className="btn" onClick={handleCopyLink}>
+      <button className="btn bg-gray-100 hover:bg-gray-200 border-0 text-black" onClick={handleCopyLink}>
         COPY LINK
         <PiCopyBold
           size={30}

@@ -115,7 +115,7 @@ function EditEvent({ setEditModalOpen, eventid }: any) {
       >
         <form
           method=""
-          className="modal-box border-indigo-950 border-2"
+          className="modal-box border-indigo-950 border-2 bg-white"
           onSubmit={handleFormSubmit}
         >
           <div
@@ -129,7 +129,7 @@ function EditEvent({ setEditModalOpen, eventid }: any) {
             <div className="">
               <label
                 htmlFor="eventName"
-                className="block mb-2 text-md font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-md font-medium text-gray-900"
               >
                 Event Name
               </label>
@@ -144,8 +144,7 @@ function EditEvent({ setEditModalOpen, eventid }: any) {
                           rounded-lg 
                           text-gray-900 text-sm 
                           focus:ring-blue-500 focus:border-blue-500 
-                          block w-full p-2.5 
-                          dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                          block w-full p-2.5"
                 placeholder="Eg. 'Anna's houseparty...'"
               />
             </div>
@@ -154,7 +153,7 @@ function EditEvent({ setEditModalOpen, eventid }: any) {
           <div className="mb-4  w-full ">
             <label
               htmlFor="eventDateAndTime"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              className="block mb-2 text-sm font-medium text-gray-900"
             >
               Date & Time
             </label>
@@ -177,15 +176,14 @@ function EditEvent({ setEditModalOpen, eventid }: any) {
                          focus:border-blue-500 
                          block 
                          w-full
-                         p-2.5 
-                         dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                         p-2.5"
             />
           </div>
 
           <div className="mb-6">
             <label
               htmlFor="eventDescription"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              className="block mb-2 text-sm font-medium text-gray-900"
             >
               Description
             </label>
@@ -200,15 +198,14 @@ function EditEvent({ setEditModalOpen, eventid }: any) {
                           text-gray-900 text-sm 
                           rounded-lg 
                           focus:ring-blue-500 focus:border-blue-500 
-                          block w-full p-2.5 
-                          dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                          block w-full p-2.5"
             />
           </div>
 
           <div className="mb-5">
             <label
               htmlFor="eventLocation"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              className="block mb-2 text-sm font-medium text-gray-900"
             >
               Location
             </label>
@@ -222,15 +219,14 @@ function EditEvent({ setEditModalOpen, eventid }: any) {
                           text-gray-900 text-sm 
                           rounded-lg 
                           focus:ring-blue-500 focus:border-blue-500 
-                          block w-full p-2.5 
-                          dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                          block w-full p-2.5"
             />
           </div>
 
           <div className="mb-5">
             <label
               htmlFor="eventLocation"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              className="block mb-2 text-sm font-medium text-gray-900"
             >
               Image
             </label>
@@ -243,8 +239,7 @@ function EditEvent({ setEditModalOpen, eventid }: any) {
             text-gray-900 text-sm 
             rounded-lg 
             focus:ring-blue-500 focus:border-blue-500 
-            block w-full 
-            dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+            block w-full"
               onChange={(e) => setEventFile(e.target.files?.[0]!)}
             />
           </div>
@@ -253,7 +248,7 @@ function EditEvent({ setEditModalOpen, eventid }: any) {
             id="create-event-btn"
             type="submit"
             className="text-white hover:text-pink-500
-                        font-bold 
+
                         bg-gradient-to-r from-indigo-900 to-indigo-950  
                         focus:ring-4 focus:outline-none focus:ring-blue-300 
                         font-medium 
@@ -262,8 +257,7 @@ function EditEvent({ setEditModalOpen, eventid }: any) {
                         text-sm 
                         px-5 py-2.5 
                         mt-8
-                        text-center 
-                        dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        text-center"
           >
             Edit Event
           </button>

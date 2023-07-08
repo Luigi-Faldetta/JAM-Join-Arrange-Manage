@@ -143,8 +143,8 @@ const ProfilePage = (): any => {
   };
 
   return (
-    <div className='profile-container light:bg-white dark:bg-gray-800 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8'>
-      <div className='w-full max-w-lg border-indigo-950 border-2 rounded-xl bg-gray-100'>
+    <div className='profile-container bg-white min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8'>
+      <div className='w-full max-w-lg border-indigo-950 border-2 rounded-xl bg-white my-8'>
         <div className='flex flex-col items-center pb-10 '>
           {previewUrl || userPhoto ? (
             <img
@@ -159,7 +159,7 @@ const ProfilePage = (): any => {
               alt=''
             />
           )}
-          <h5 className='text-4xl font-bold pb-3 text-pink-500 dark:text-white mb-5'>
+          <h5 className='text-4xl font-bold pb-3 text-pink-500 mb-5'>
             {data?.data.name}
           </h5>
           {updateStatus === 'success' && (
@@ -179,7 +179,12 @@ const ProfilePage = (): any => {
               type='text'
               name='username'
               placeholder={data?.data.name || 'Name'}
-              className='input w-full max-w-xs border-gray-400 block text-md font-medium text-gray-900 dark:text-white'
+              className="shadow-sm 
+                          bg-gray-50 border border-gray-300 
+                          text-gray-900 text-sm 
+                          rounded-lg 
+                          focus:ring-blue-500 focus:border-blue-500 
+                          block w-full p-2.5"
             />
             <input
               value={email}
@@ -187,7 +192,12 @@ const ProfilePage = (): any => {
               type='text'
               name='email'
               placeholder={data?.data.email || 'Enter email'}
-              className='input w-full max-w-xs border-gray-400 block text-md font-medium text-gray-900 dark:text-white'
+              className="shadow-sm 
+                          bg-gray-50 border border-gray-300 
+                          text-gray-900 text-sm 
+                          rounded-lg 
+                          focus:ring-blue-500 focus:border-blue-500 
+                          block w-full p-2.5"
             />
             <input
               value={phone}
@@ -195,7 +205,12 @@ const ProfilePage = (): any => {
               type='text'
               name='phone'
               placeholder={data?.data.phone || 'Phone number'}
-              className='input w-full max-w-xs border-gray-400 block text-md font-medium text-gray-900 dark:text-white'
+              className="shadow-sm 
+              bg-gray-50 border border-gray-300 
+              text-gray-900 text-sm 
+              rounded-lg 
+              focus:ring-blue-500 focus:border-blue-500 
+              block w-full p-2.5"
             />
             <input
               value={password}
@@ -203,7 +218,12 @@ const ProfilePage = (): any => {
               type='password'
               name='password'
               placeholder='Change Password'
-              className='input w-full max-w-xs border-gray-400 block text-md font-medium text-gray-900 dark:text-white'
+              className="shadow-sm 
+                          bg-gray-50 border border-gray-300 
+                          text-gray-900 text-sm 
+                          rounded-lg 
+                          focus:ring-blue-500 focus:border-blue-500 
+                          block w-full p-2.5"
             />
             <input
               value={confirmPassword}
@@ -211,7 +231,12 @@ const ProfilePage = (): any => {
               type='password'
               name='confirmpassword'
               placeholder='Confirm Password'
-              className='input w-full max-w-xs border-gray-400 block text-md font-medium text-gray-900 dark:text-white'
+              className="shadow-sm 
+                          bg-gray-50 border border-gray-300 
+                          text-gray-900 text-sm 
+                          rounded-lg 
+                          focus:ring-blue-500 focus:border-blue-500 
+                          block w-full p-2.5"
             />
             <div className='profile-btn'>
               <div>

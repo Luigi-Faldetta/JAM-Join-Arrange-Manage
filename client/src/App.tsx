@@ -18,7 +18,7 @@ function App() {
 
   return (
     <>
-      <div className="App dark:bg-gray-800">
+      <div className="App bg-white">
         <Navbar />
         {logoutState ? <Logout /> : null}
         {chatState.isOpen ? <ChatContainer /> : null}

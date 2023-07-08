@@ -61,7 +61,7 @@ function UserDashboardPage() {
 
   return (
     <>
-      <div className="flex flex-row justify-center align-top dark:bg-gray-800 top-0 gap-14">
+      <div className="flex flex-row justify-center align-top top-0 gap-14">
         <div className=" p-5 flex flex-col justify-start items-center gap-1 align-top w-1/3 h-screen">
           <div className=" bg-yellow-30">
             {isLoading && <h2>Loading...</h2>}
@@ -84,7 +84,7 @@ function UserDashboardPage() {
                     showAllEvents === "all"
                       ? "bg-pink-500 text-white"
                       : "bg-pink-100 text-slate-600"
-                  } hover:bg-pink-500 hover:text-white w-1/2`}
+                  } hover:bg-pink-500 hover:text-white w-1/2 border-0`}
                 >
                   {/* className="btn flex bg-white items-center gap-2 px-4 ml-4  */}
                   ALL
@@ -95,7 +95,7 @@ function UserDashboardPage() {
                     showAllEvents === "host"
                       ? "bg-pink-500 text-white"
                       : "bg-pink-100 text-slate-600"
-                  } hover:bg-pink-500 hover:text-white w-1/2`}
+                  } hover:bg-pink-500 hover:text-white w-1/2 border-0`}
                 >
                   HOSTING
                 </button>

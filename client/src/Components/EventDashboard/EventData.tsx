@@ -51,9 +51,8 @@ export default function EventMini({
       {eventData && (
         <>
           <div className="flex flex-col lg:flex-row h-38 justify-between gap-2 mt-4">
-            <div className="flex lg:w-3/5 h-36 gap-3">
-              <div className="flex shrink-0 grow-0 w-48 h-36 bg-slate-400 border-2 border-slate-400  rounded-xl overflow-hidden">
-              {/* <div className="flex shrink-0 grow-0 w-48 h-36 bg-slate-400 border-2 border-pink-500 rounded-xl overflow-hidden"> */}
+            <div className="flex flex-col md:flex-row lg:w-3/5 md:h-36 gap-3">
+              <div className="flex shrink-0 grow-0 md:w-48 h-36 bg-slate-400 border-2 border-slate-500 rounded-xl overflow-hidden">
                 <img
                   className="w-full h-full object-cover"
                   src={
@@ -67,7 +66,7 @@ export default function EventMini({
 
               <div className="flex flex-col justify-start">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-3xl font-bold">{currentEvent.title}</h3>
+                  <h3 className="text-3xl font-bold text-slate-800">{currentEvent.title}</h3>
 
                   {userIsHost ? (
                     ""
@@ -101,7 +100,7 @@ export default function EventMini({
                   </h4>
                 </div>
 
-                <h4 className="mt-1 text-sm leading-tight" >
+                <h4 className="mt-1 text-sm leading-tight text-slate-800" >
                   {currentEvent.description}
                 </h4>
               </div>
@@ -128,7 +127,7 @@ export default function EventMini({
               <button
                 onClick={handleToggle}
                 id="exp-todo"
-                className="btn w-24 bg-pink-500 hover:bg-pink-700 text-white"
+                className="btn w-24 bg-pink-500 hover:bg-pink-700 text-white border-0"
               >
                 {showTodos ? "Expenses" : "Todos"}
               </button>
