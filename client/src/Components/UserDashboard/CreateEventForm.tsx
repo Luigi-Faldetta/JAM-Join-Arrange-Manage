@@ -71,7 +71,6 @@ function CreateEventForm() {
       dispatch(addEventToList(eventCreated.data.data));
     }
     setOpen(false);
-    // Send another request with eventID, userID (host), isHost (true)
   };
 
   function createModal() {
