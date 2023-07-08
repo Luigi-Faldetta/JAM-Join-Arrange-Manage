@@ -25,7 +25,6 @@ function EditEvent({ setEditModalOpen, eventid }: any) {
   const [eventDate, setEventDate] = useState<Date | null>(null);
   const [patchEvent] = useUpdateEventMutation();
   const [title, setTitle] = useState("");
-  const [date, setDate] = useState<Date | null>(null);
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -50,8 +49,8 @@ function EditEvent({ setEditModalOpen, eventid }: any) {
       delete eventFormData.title;
     }
 
-    if (date !== null) {
-      eventFormData.date = date;
+    if (eventDate !== null) {
+      eventFormData.date = eventDate;
     } else {
       //@ts-ignore
       delete eventFormData.date;
@@ -159,7 +158,7 @@ function EditEvent({ setEditModalOpen, eventid }: any) {
               showTimeSelect
               id="event-date"
               selected={eventDate}
-              onChange={(date) => setDate(date)}
+              onChange={(date) => setEventDate(date)}
               dateFormat="EEE MMM d 🗓 h:mm aa 🕣"
               minDate={new Date()}
               wrapperClassName="w-full"
@@ -173,6 +172,7 @@ function EditEvent({ setEditModalOpen, eventid }: any) {
                          block 
                          w-full
                          p-2.5"
+                         autoComplete="off" // Disable autocomplete
             />
           </div>
 
