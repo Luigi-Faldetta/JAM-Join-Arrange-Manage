@@ -4,7 +4,6 @@ import "./LandingPage.css";
 import { useState } from "react";
 import { useIsLoggedIn } from "../../utils/useIsLoggedIn";
 import { useLocation } from "react-router-dom";
-import { ApiResponse } from "../../services/ApiResponseType";
 
 const LandingPage = ({eventData}: any) => {
   const [loginFormActive, setLoginFormActive] = useState(false);
@@ -19,8 +18,8 @@ const LandingPage = ({eventData}: any) => {
       className="flex flex-col md:flex-row overflow-y-hidden landing-page lg:mt-9"
       id="hero"
     >
-      <div className="grid max-w-screen-xl px-4 mx-auto xl:gap-0 lg:py-16 lg:grid-cols-12">
-        <div className="mx-auto md:ml-12 place-self-center lg:col-span-7">
+      <div className="grid max-w-screen-xl px-4 mx-auto xl:gap-0 lg:grid-cols-12 content-center">
+        <div className="mx-auto md:ml-12 lg:col-span-7 flex flex-wrap content-center">
           {currentRoute === "/" ? (
             <>
               <h1 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl text-black">
@@ -78,8 +77,9 @@ const LandingPage = ({eventData}: any) => {
             </div>
           </div>
         ) : (
-          <div className="image-container lg:col-span-5">
+          <div className="image-container lg:col-span-5 ">
             <img
+            className="rounded-md"
               src="https://hips.hearstapps.com/hmg-prod/images/delish-190605-raspberry-jam-031-landscape-pf-1560443834.jpg?crop=0.888532477947073xw:1xh;center,top&resize=1200:*"
               alt="Your Image"
             />
