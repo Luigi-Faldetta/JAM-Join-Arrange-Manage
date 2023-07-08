@@ -1,15 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import { useGetToDosQuery } from "../../services/ThesisDB";
-import { ToDoState } from "../../reduxFiles/slices/toDos";
-import { useAddToDoMutation } from "../../services/ThesisDB";
+import { ToDoState, setToDoList, updateToDoList } from "../../reduxFiles/slices/toDos";
+import { useAddToDoMutation, useDeleteToDoMutation } from "../../services/ThesisDB";
 import { useParams } from "react-router-dom";
 import { ImArrowRight, ImArrowLeft } from "react-icons/im";
+import { RootState, useAppDispatch } from "../../reduxFiles/store";
+import { useSelector } from "react-redux";
+
 
 export default function Todos(): JSX.Element {
   const { eventid } = useParams();
   const creatorId = localStorage.getItem("token");
-  const [toDos, setToDos] = useState<ToDoState[]>([]);
-  const [doneToDos, setDoneToDos] = useState<ToDoState[]>([]);
+  // const [toDos, setToDos] = useState<ToDoState[]>([]);
+  // const [doneToDos, setDoneToDos] = useState<ToDoState[]>([]);
+  const [addTodo] = useAddToDoMutation();
+  const [deletedTodo] = useDeleteToDoMutation();
+  const toDoList = useSelector((state: RootState) => state.eventListReducer)
+  const appDispatch = useAppDispatch()
   const [newToDo, setNewToDo] = useState<ToDoState>({
     title: "",
     isDone: false,
@@ -23,11 +30,11 @@ export default function Todos(): JSX.Element {
 
   useEffect(() => {
     if (data) {
-      const fetchedToDos = data.data;
-      const todos = fetchedToDos.filter((todo) => !todo.isDone);
-      const doneTodos = fetchedToDos.filter((todo) => todo.isDone);
-      setToDos(todos);
-      setDoneToDos(doneTodos);
+      const toDos = data.data;
+      // const todos = fetchedToDos.filter((todo) => !todo.isDone);
+      // const doneTodos = fetchedToDos.filter((todo) => todo.isDone);
+      appDispatch(setToDoList(toDos));
+      // setDoneToDos(doneTodos);
     }
   }, [data]);
 
@@ -36,9 +43,9 @@ export default function Todos(): JSX.Element {
     if (todosRef.current) {
       todosRef.current.scrollTop = todosRef.current.scrollHeight;
     }
-  }, [toDos]);
+  }, [toDoList]);
 
-  const handleAddClick = (e: any) => {
+  const handleAddClick = async (e: any) => {
     e.preventDefault();
     if (newToDo.title !== "") {
       const newToDoItem = {
@@ -47,25 +54,28 @@ export default function Todos(): JSX.Element {
         creatorId: creatorId,
         eventId: eventid,
       };
-  
-      fetch("https://codeworks-thesis-4063bceaa74a.herokuapp.com/todo", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newToDoItem),
-      })
-        .then((response) => response.json())
-        .then((createdToDo) => {
-          if (createdToDo.success) {
-            setToDos((prevToDos) => [...prevToDos, createdToDo.data]);
-          } else {
-            alert(createdToDo.message);
-          }
-        })
-        .catch((error) => {
-          console.error("Error creating todo:", error);
-        });
+      const toDoRes = await addTodo(newToDoItem as ToDoState) 
+      if('data' in toDoRes){
+        appDispatch(updateToDoList(toDoRes.data.data))
+      }
+      // fetch("https://codeworks-thesis-4063bceaa74a.herokuapp.com/todo", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(newToDoItem),
+      // })
+      //   .then((response) => response.json())
+      //   .then((createdToDo) => {
+      //     if (createdToDo.success) {
+      //       setToDos((prevToDos) => [...prevToDos, createdToDo.data]);
+      //     } else {
+      //       alert(createdToDo.message);
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.error("Error creating todo:", error);
+      //   });
       setNewToDo({
         title: "",
         isDone: false,
