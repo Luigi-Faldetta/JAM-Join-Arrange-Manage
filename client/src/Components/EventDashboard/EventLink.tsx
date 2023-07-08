@@ -6,7 +6,7 @@ function EventLink({ eventid }: any) {
   const [isCopied, setisCopied] = useState(false);
 
   const handleCopyLink = () => {
-    const link = "https://jaminprogress.vercel.app//event/" + eventid;
+    const link = "https://jaminprogress.vercel.app/event/" + eventid;
     navigator.clipboard.writeText(link).catch((error) => {
       console.error("Failed to copy link:", error);
     });
