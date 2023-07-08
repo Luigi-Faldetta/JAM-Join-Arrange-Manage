@@ -16,7 +16,7 @@ const LandingPage = ({eventData}: any) => {
   };
   return (
     <section
-      className="overflow-y-hidden landing-page lg:mt-9"
+      className="flex flex-col md:flex-row overflow-y-hidden landing-page lg:mt-9"
       id="hero"
     >
       <div className="grid max-w-screen-xl px-4 mx-auto xl:gap-0 lg:py-16 lg:grid-cols-12">

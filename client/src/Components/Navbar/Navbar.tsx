@@ -47,7 +47,7 @@ function Navbar() {
 
   return (
     <div className="navbar-container bg-white flex justify-center" id="navbar">
-      <nav className="w-4/5 border-gray-200">
+      <nav className="w-11/12 md:w-4/5 border-gray-200">
         <div className="flex flex-wrap items-center justify-between mx-auto py-3">
           <div className="flex items-center">
             <Link to="/" className="flex mr-12 items-center">
@@ -178,7 +178,7 @@ function Navbar() {
               </div>
             )}
 
-            {location.pathname === "/" && (
+            {/* {location.pathname === "/" && (
               <button
                 data-collapse-toggle="mobile-menu-2"
                 type="button"
@@ -202,7 +202,7 @@ function Navbar() {
                   ></path>
                 </svg>
               </button>
-            )}
+            )} */}
           </div>
         </div>
       </nav>
