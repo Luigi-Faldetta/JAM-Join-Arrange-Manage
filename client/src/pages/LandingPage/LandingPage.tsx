@@ -1,5 +1,5 @@
-import LoginForm from "../../Components/LandingDashboard/LoginForm";
-import CreateUserForm from "../../Components/LandingDashboard/CreateUserForm";
+import LoginForm from "../../components/LandingDashboard/LoginForm";
+import CreateUserForm from "../../components/LandingDashboard/CreateUserForm";
 import "./LandingPage.css";
 import { useState } from "react";
 import { useIsLoggedIn } from "../../utils/useIsLoggedIn";
@@ -16,29 +16,29 @@ const LandingPage = ({eventData}: any) => {
   };
   return (
     <section
-      className="overflow-y-hidden landing-page dark:bg-gray-900 lg:mt-9"
+      className="flex flex-col md:flex-row overflow-y-hidden landing-page lg:mt-9"
       id="hero"
     >
       <div className="grid max-w-screen-xl px-4 mx-auto xl:gap-0 lg:py-16 lg:grid-cols-12">
-        <div className="mr-auto place-self-center lg:col-span-7">
+        <div className="mx-auto md:ml-12 place-self-center lg:col-span-7">
           {currentRoute === "/" ? (
             <>
-              <h1 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white">
+              <h1 className="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl text-black">
                 Join. Arrange. Manage.
               </h1>
-              <p className="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">
+              <p className="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl">
                 From splitting bills and organizing todos to planning all your
                 events.
               </p>
             </>
           ) : (
             <>
-            <h1 className="max-w-2xl mb-4 text-4xl font-bold tracking-tight leading-none md:text-5xl xl:text-3xl dark:text-white">
+            <h1 className="max-w-2xl mb-4 text-4xl font-bold tracking-tight leading-none md:text-5xl xl:text-3xl">
               You were invited to <span className="text-pink-500">
                 {eventData?.data.title}
                 </span>.
             </h1>
-            <h1 className="max-w-2xl mb-4 text-4xl font-bold tracking-tight leading-none md:text-5xl xl:text-3xl dark:text-white">
+            <h1 className="max-w-2xl mb-4 text-4xl font-bold tracking-tight leading-none md:text-5xl xl:text-3xl">
             If you want to join, please log in.
             </h1>
             </>
@@ -46,7 +46,7 @@ const LandingPage = ({eventData}: any) => {
           {!isLoggedIn ? (
             <button
               onClick={handleGetStartedClick}
-              className="hidden lg:inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-black rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
+              className="hidden lg:inline-flex items-center justify-center px-5 py-3 mr-3 text-base font-medium text-center text-black rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300"
             >
               Get started
               <svg

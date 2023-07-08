@@ -1,11 +1,11 @@
 import "./App.css";
-import Navbar from "./Components/Navbar/Navbar";
+import Navbar from "./components/Navbar/Navbar";
 import "./App.css";
 import { Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "./reduxFiles/store";
-import Logout from "./Components/Logout";
-import ChatContainer from "./Components/Chat/ChatContainer";
+import Logout from "./components/Logout";
+import ChatContainer from "./components/Chat/ChatContainer";
 
 function App() {
   const logoutState = useSelector((state: RootState) =>
@@ -18,7 +18,7 @@ function App() {
 
   return (
     <>
-      <div className="App">
+      <div className="App bg-white">
         <Navbar />
         {logoutState ? <Logout /> : null}
         {chatState.isOpen ? <ChatContainer /> : null}

@@ -57,7 +57,7 @@ function Chat() {
         <span className="sr-only">Open user menu</span>
         <HiOutlineChatBubbleLeftRight
           id="chat-icon"
-          className="w-8 h-8 md:hover:text-pink-500"
+          className="w-8 h-8 md:hover:text-pink-500 stroke-black"
         />
       </button>
       {chatDropdown && (

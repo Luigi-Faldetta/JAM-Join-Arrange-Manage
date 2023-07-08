@@ -47,7 +47,7 @@ function Navbar() {
 
   return (
     <div className="navbar-container bg-white flex justify-center" id="navbar">
-      <nav className="w-4/5 border-gray-200 dark:bg-gray-900">
+      <nav className="w-11/12 md:w-4/5 border-gray-200">
         <div className="flex flex-wrap items-center justify-between mx-auto py-3">
           <div className="flex items-center">
             <Link to="/" className="flex mr-12 items-center">
@@ -58,7 +58,7 @@ function Navbar() {
                 className="h-12 mr-3"
                 alt="JAM Logo"
               />
-              <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+              <span className="self-center text-2xl font-semibold whitespace-nowrap text-black">
                 JAM
               </span>
             </Link>
@@ -70,7 +70,7 @@ function Navbar() {
                 }`}
                 id="mobile-menu-2"
               >
-                <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white">
                   <li>
                     <Scroll
                       onClick={handleMobileMenu}
@@ -80,7 +80,7 @@ function Navbar() {
                       smooth={true}
                       offset={-190}
                       duration={500}
-                      className="block py-2 px-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
+                      className="block py-2 px-4 text-gray-900 md:hover:text-pink-500 md:p-0 "
                       aria-current="page"
                     >
                       Home
@@ -95,7 +95,7 @@ function Navbar() {
                       smooth={true}
                       offset={-72}
                       duration={500}
-                      className="block py-2 pl-3 pr-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
+                      className="block py-2 pl-3 pr-4 text-gray-900 md:hover:text-pink-500 md:p-0 "
                     >
                       About
                     </Scroll>
@@ -109,7 +109,7 @@ function Navbar() {
                       smooth={true}
                       offset={-100}
                       duration={500}
-                      className="block py-2 pl-3 pr-4 text-gray-900  md:hover:text-pink-500 md:p-0 "
+                      className="block py-2 pl-3 pr-4 text-gray-900 md:hover:text-pink-500 md:p-0 "
                     >
                       FAQs
                     </Scroll>
@@ -124,7 +124,7 @@ function Navbar() {
               <div className="flex items-center gap-5">
                 <Link
                   to="/user-dashboard"
-                  className="font-medium dashboard-btn  text-gray-900  md:hover:text-pink-500 md:p-0 "
+                  className="font-medium dashboard-btn  text-gray-900 md:hover:text-pink-500 md:p-0 "
                 >
                   Dashboard
                 </Link>
@@ -133,7 +133,7 @@ function Navbar() {
 
                 <button
                   type="button"
-                  className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                  className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300"
                   id="user-menu-button"
                   aria-expanded={showDropdown ? "true" : "false"}
                   onClick={handleAvatarClick}
@@ -166,7 +166,11 @@ function Navbar() {
                     </Link>
                   </li>
                   <li>
-                    <button id="signout-btn" onClick={handleSignOut} className="dropdown-item">
+                    <button
+                      id="signout-btn"
+                      onClick={handleSignOut}
+                      className="dropdown-item"
+                    >
                       Sign out
                     </button>
                   </li>
@@ -174,11 +178,11 @@ function Navbar() {
               </div>
             )}
 
-            {location.pathname === "/" && (
+            {/* {location.pathname === "/" && (
               <button
                 data-collapse-toggle="mobile-menu-2"
                 type="button"
-                className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
                 aria-controls="mobile-menu-2"
                 aria-expanded={showDropdownMobile ? "true" : "false"}
                 onClick={handleMobileMenu}
@@ -198,7 +202,7 @@ function Navbar() {
                   ></path>
                 </svg>
               </button>
-            )}
+            )} */}
           </div>
         </div>
       </nav>

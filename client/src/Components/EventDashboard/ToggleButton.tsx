@@ -79,7 +79,7 @@ export default function ToggleButton({
       <div className="">
         <button
           onClick={isJoined ? handleLeave : handleJoin}
-          className="btn flex bg-white items-center gap-2 px-4 ml-4 border-2 border-slate-200 rounded-md"
+          className="btn flex bg-white items-center gap-2 px-4 ml-4 border-2 border-slate-200 rounded-md text-black hover:bg-gray-100 hover:border-slate-100"
         >
           {isLoading ? (
             <ColorRing
@@ -94,11 +94,11 @@ export default function ToggleButton({
           ) : isJoined ? (
             <>
             LEAVE
-            <FaArrowRight size={16} className="fill-gray-300"/>
+            <FaArrowRight size={16} className="fill-gray-400"/>
             </>
           ) : (
             <>
-            <FaArrowLeft size={16} className="fill-pink-300"/>
+            <FaArrowLeft size={16} className="fill-pink-400"/>
             JOIN
             </>
           )}

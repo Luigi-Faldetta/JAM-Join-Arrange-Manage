@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDeleteEventMutation } from "../../services/ThesisDB";
 import { useDispatch } from "react-redux";
-import { ApiResponse } from "../../services/ApiResponseType";
 import { deleteEventFromList } from "../../reduxFiles/slices/events";
 
 interface DeleteEventProps {

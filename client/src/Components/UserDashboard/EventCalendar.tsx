@@ -65,7 +65,7 @@ function EventCalendar({ sortedEventList }: { sortedEventList: any }) {
         value={selectedDate}
         onChange={handleDateChange}
         tileContent={tileContent}
-        className=" p-2 shadow rounded-lg"
+        className="p-2 shadow rounded-lg"
         minDate={new Date()}
         tileClassName={tileClassName}
       />

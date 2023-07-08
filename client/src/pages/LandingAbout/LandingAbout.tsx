@@ -2,16 +2,16 @@ import "./LandingAbout.css";
 
 const LandingAbout = () => {
   return (
-    <div className="overflow-y-hidden about-page bg-#f3f4f6 mb-20 h-[58rem]" id="about">
+    <div className="overflow-y-hidden about-page mb-20 md:h-[58rem] bg-indigo-950" id="about">
       <div className="container">
         <div className="flex justify-center">
-          <h1 className=" text-3xl tracking-tight leading-none md:text-5xl xl:text-4xl text-gray-500 dark:text-gray-400 mb-20 mt-12">
+          <h1 className=" text-3xl tracking-tight leading-none md:text-5xl xl:text-4xl text-slate-300 mb-20 mt-12">
             About
           </h1>
         </div>
-        <div className="grid grid-cols-2 gap-8 text-lg">
+        <div className="flex flex-col md:grid grid-cols-2 gap-8 text-lg">
           <div className="grid-item">
-            <p className="paragraph">
+            <p className="paragraph text-slate-200">
               <h4>
                 JAM. - Join, Arrange, Manage - is an all-in-one application designed to streamline event organization and management. With J.A.M., users can easily create events, coordinate schedules, manage attendees, split bills, and efficiently collaborate on tasks. Additionally, J.A.M. offers a comprehensive to-do list feature that allows users to plan and prioritize their tasks, ensuring nothing is overlooked.
               </h4>
@@ -24,15 +24,15 @@ const LandingAbout = () => {
               alt="friends having pizza together"
             />
           </div>
-          <div className="grid-item">
+          <div className="grid-item order-last md:order-1 mb-20">
             <img
               className="image"
               src="https://media.istockphoto.com/id/869301564/photo/splitting-it-six-ways.jpg?s=612x612&w=0&k=20&c=i_rAQ1-4iyooawtB2bYKsrOMIRAzzrYpLzLmx0LNniQ="
               alt="friends splitting the bill"
             />
           </div>
-          <div className="grid-item">
-            <p className="paragraph">
+          <div className="grid-item order-2">
+            <p className="paragraph text-slate-200">
               <h4>
                 JAM offers a convenient bill splitting feature. With just a few clicks, users can effortlessly divide expenses among attendees, eliminating the hassle of manual calculations and ensuring a fair distribution of costs. No need to stress about who needs to pay what, JAM will handle all of that for you.
               </h4>

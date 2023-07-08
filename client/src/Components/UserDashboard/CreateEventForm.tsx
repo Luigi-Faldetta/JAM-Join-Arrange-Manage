@@ -82,7 +82,7 @@ function CreateEventForm() {
 
         <form
           method="dialog"
-          className="modal-box border-indigo-950 border-2 fixed mx-auto"
+          className="modal-box border-indigo-950 border-2 fixed mx-auto bg-white"
           onSubmit={handleFormSubmit}
         >
           <div
@@ -96,7 +96,7 @@ function CreateEventForm() {
             <div className="">
               <label
                 htmlFor="eventName"
-                className="block mb-2 text-md font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-md font-medium text-gray-900"
               >
                 Event Name
               </label>
@@ -110,10 +110,13 @@ function CreateEventForm() {
                           rounded-lg 
                           text-gray-900 text-sm 
                           focus:ring-blue-500 focus:border-blue-500 
-                          block w-full p-2.5 
-                          dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                          block w-full p-2.5 "
                 placeholder="Eg. 'Anna's houseparty...'"
                 required
+                autoComplete="off" // Disable autocomplete
+                autoCorrect="off" // Disable autocorrect
+                autoCapitalize="off" // Disable autocapitalize
+                spellCheck="false" // Disable spellcheck
               />
             </div>
           </div>
@@ -121,7 +124,7 @@ function CreateEventForm() {
           <div className="mb-4  w-full ">
             <label
               htmlFor="eventDateAndTime"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              className="block mb-2 text-sm font-medium text-gray-900"
             >
               Date & Time
             </label>
@@ -144,15 +147,15 @@ function CreateEventForm() {
                          focus:border-blue-500 
                          block 
                          w-full
-                         p-2.5 
-                         dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                         p-2.5"
+              autoComplete="off" // Disable autocomplete
             />
           </div>
 
           <div className="mb-6">
             <label
               htmlFor="eventDescription"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              className="block mb-2 text-sm font-medium text-gray-900"
             >
               Description
             </label>
@@ -166,16 +169,19 @@ function CreateEventForm() {
                           text-gray-900 text-sm 
                           rounded-lg 
                           focus:ring-blue-500 focus:border-blue-500 
-                          block w-full p-2.5 
-                          dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                          block w-full p-2.5"
               required
+              autoComplete="off" // Disable autocomplete
+              autoCorrect="off" // Disable autocorrect
+              autoCapitalize="off" // Disable autocapitalize
+              spellCheck="false" // Disable spellcheck
             />
           </div>
 
           <div className="mb-5">
             <label
               htmlFor="eventLocation"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              className="block mb-2 text-sm font-medium text-gray-900"
             >
               Location
             </label>
@@ -188,15 +194,18 @@ function CreateEventForm() {
                           text-gray-900 text-sm 
                           rounded-lg 
                           focus:ring-blue-500 focus:border-blue-500 
-                          block w-full p-2.5 
-                          dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                          block w-full p-2.5"
+              autoComplete="off" // Disable autocomplete
+              autoCorrect="off" // Disable autocorrect
+              autoCapitalize="off" // Disable autocapitalize
+              spellCheck="false" // Disable spellcheck
             />
           </div>
 
           <div className="mb-5">
             <label
               htmlFor="eventLocation"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              className="block mb-2 text-sm font-medium text-gray-900"
             >
               Image
             </label>
@@ -209,8 +218,7 @@ function CreateEventForm() {
             text-gray-900 text-sm 
             rounded-lg 
             focus:ring-blue-500 focus:border-blue-500 
-            block w-full 
-            dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+            block w-full "
               onChange={(e) => setEventFile(e.target.files?.[0]!)}
             />
           </div>
@@ -227,8 +235,7 @@ function CreateEventForm() {
                         text-sm 
                         px-5 py-2.5 
                         mt-8
-                        text-center 
-                        dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        text-center"
           >
             Create Event
           </button>
@@ -240,7 +247,7 @@ function CreateEventForm() {
   return (
     <>
       <button
-        className="btn border-2 border-indigo-900 hover:bg-indigo-900 hover:text-white text-sm w-1/3 self-end"
+        className="btn border-2 bg-white text-black border-indigo-900 hover:bg-indigo-900 hover:text-white text-sm w-1/3 self-end"
         type="button"
         onClick={(event) => {
           event.stopPropagation();

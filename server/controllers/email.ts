@@ -18,7 +18,7 @@ async function sendEmail(user: any, pw: string) {
     from: `"JAM - IT Department" <${process.env.JAM_EMAIL}>`,
     to: user.email,
     subject: `Password reset requested`,
-    html: `<p>Hi ${user.name}, here you can find your new temporary password:</p><code style="border:1px solid lightgrey; padding: 5px">${pw}</code><p>Please <a href="http://localhost:3000/">log in now</a> and update it</p><p>JAM</p>`,
+    html: `<p>Hi ${user.name}, here you can find your new temporary password:</p><code style="border:1px solid lightgrey; padding: 5px">${pw}</code><p>Please <a href="https://jaminprogress.vercel.app/">log in now</a> and update it</p><p>JAM</p>`,
   };
 
   try {

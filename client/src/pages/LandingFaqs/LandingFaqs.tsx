@@ -3,13 +3,13 @@ import { Accordion } from "flowbite-react";
 
 export default function LandingFaqs() {
   return (
-    <div className="mt-32 mb-96 flex flex-col items-center" id="faqs">
-      <p className="mb-20 text-3xl">Frequently asked questions</p>
+    <div className="mt-32 pb-24 flex flex-col items-center" id="faqs">
+      <p className="mb-20 text-3xl text-gray-500">Frequently asked questions</p>
       <Accordion className="w-2/3">
         <Accordion.Panel>
-          <Accordion.Title>How do I create a new event?</Accordion.Title>
-          <Accordion.Content>
-            <p className="mb-2 text-gray-500 dark:text-gray-400">
+          <Accordion.Title >How do I create a new event?</Accordion.Title>
+          <Accordion.Content className="bg-white">
+            <p className="mb-2 text-gray-500">
               <p>
                 To create a new event, click on the "Host Event" button or link
                 on the dashboard. Fill in the event details such as the title,
@@ -24,8 +24,8 @@ export default function LandingFaqs() {
           <Accordion.Title>
             How can I invite participants to my event?
           </Accordion.Title>
-          <Accordion.Content>
-            <p className="mb-2 text-gray-500 dark:text-gray-400">
+          <Accordion.Content className="bg-white">
+            <p className="mb-2 text-gray-500">
               <p>
                 After creating an event, you can invite participants by sharing
                 your unique event link with your friends in your favourite
@@ -39,8 +39,8 @@ export default function LandingFaqs() {
           <Accordion.Title>
             Can I split bills among event attendees?
           </Accordion.Title>
-          <Accordion.Content>
-            <p className="mb-2 text-gray-500 dark:text-gray-400">
+          <Accordion.Content className="bg-white">
+            <p className="mb-2 text-gray-500">
               <p>
                 Yes, you can split bills among event attendees. Each participant
                 can go to the expenses section of the event page to add an
@@ -54,8 +54,8 @@ export default function LandingFaqs() {
           <Accordion.Title>
             How do I create a to-do list for my event?
           </Accordion.Title>
-          <Accordion.Content>
-            <p className="mb-2 text-gray-500 dark:text-gray-400">
+          <Accordion.Content className="bg-white">
+            <p className="mb-2 text-gray-500">
               <p>
                 To create a to-do list for your event, navigate to the todos
                 sections of the event page. You can enter a new todo in the add
@@ -70,8 +70,8 @@ export default function LandingFaqs() {
           <Accordion.Title>
             Can I join existing events organized by others?
           </Accordion.Title>
-          <Accordion.Content>
-            <p className="mb-2 text-gray-500 dark:text-gray-400">
+          <Accordion.Content className="bg-white">
+            <p className="mb-2 text-gray-500">
               <p>
                 Yes, you can join existing events organized by others. Once the
                 host shares their event link with you simply log in or sign up

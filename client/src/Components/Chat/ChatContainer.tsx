@@ -96,9 +96,9 @@ function ChatContainer() {
   }, [data, isLoading]);
 
   return (
-    <div className="chat-container border-2 border-indigo-900 rounded-xl">
+    <div className="chat-container border-2 border-indigo-900 md:rounded-xl">
       <div className="chat-header">
-        <div className="chat-title w-full text-base text-center">{dataevent?.data.title}</div>
+        <div className="chat-title w-full text-base text-center text-black">{dataevent?.data.title}</div>
         <div className="close absolute right-4" onClick={() => dispatch(closeChat())}>
           ×
         </div>
