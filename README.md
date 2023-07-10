@@ -42,5 +42,7 @@ Any feedback or suggestions are welcome. Please reach us at jam.noreply@gmail.co
 **By Anna, Juliana, Chris, Marcelo, Luigi and Alejandro**  
 Anna Kucherenko - [Github](https://github.com/AnnaKucherenko1) - [LinkedIn](www.linkedin.com/in/anna-kucherenko1)
 
+Luigi Faldetta - [Github](https://github.com/luigi-faldetta) - [LinkedIn](https://www.linkedin.com/in/luigi-faldetta-a02ab817b/)
+
 ## Screenshots
 *(x5 max)*
