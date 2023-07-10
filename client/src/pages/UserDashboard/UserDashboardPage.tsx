@@ -69,16 +69,19 @@ function UserDashboardPage() {
 
     return (
       <>
-        {sortedEventList.map((event: EventState) => {
-          if (event.UserEvents[0].isHost === true) {
-            hasHostedEvents = true;
-            return <EventTile key={event.eventId} event={event} />;
+        <div className="w-full h-full">
+          {sortedEventList.map((event: EventState) => {
+            if (event.UserEvents[0].isHost === true) {
+              hasHostedEvents = true;
+              return <EventTile key={event.eventId} event={event} />;
+            }
+            return null;
+          })}
+          {!hasHostedEvents &&
+            <h2 className="text-center mt-6">You are hosting no events yet</h2>
           }
-          return null;
-        })}
-        {!hasHostedEvents &&
-          <div className="bg-red-500 w-full mt-20"></div>
-        }
+        </div>
+
       </>
     );
   }
@@ -119,7 +122,7 @@ function UserDashboardPage() {
                         {isCalendarVisible ? "Hide Calendar" : "Show Calendar"}
                       </button>
                       {isCalendarVisible && (
-                        <div className="popup-calendar absolute z-10 w-1/3 bg-white">
+                        <div className="popup-calendar absolute z-10 w-full bg-white">
                           <EventCalendar sortedEventList={sortedEventList} />
                         </div>
                       )}
