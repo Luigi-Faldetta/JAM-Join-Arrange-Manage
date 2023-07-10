@@ -65,30 +65,36 @@ function UserDashboardPage() {
   }
 
   function HostedEvents({ sortedEventList }: { sortedEventList: any }) {
+    let hasHostedEvents = false;
+
     return (
       <>
         {sortedEventList.map((event: EventState) => {
           if (event.UserEvents[0].isHost === true) {
+            hasHostedEvents = true;
             return <EventTile key={event.eventId} event={event} />;
           }
-          return (
-            <h3 key={event.eventId} className="w-full">
-              You are not hosting any events
-            </h3>
-          );
+          return null;
         })}
+        {!hasHostedEvents &&
+          <div className="bg-red-500 w-full mt-20"></div>
+        }
       </>
     );
   }
 
+
   return (
     <>
       <div className="flex flex-row justify-center align-top top-0 gap-14">
-        <div className="p-5 flex flex-col justify-start items-center gap-1 align-top w-1/3 h-screen">
+        <div
+          className={`p-5 flex flex-col justify-start items-center gap-1 align-top ${windowWidth < 1100 ? 'w-[240]' : 'w-1/3'
+            } h-screen`}
+        >
           <div className="bg-yellow-30">
             {isLoading && <h2>Loading...</h2>}
             {!isLoading && sortedEventList.length < 1 ? (
-              <div className="flex flex-col justify-center align-middle text-center">
+              <div className="flex flex-col justify-center align-middle text-center w-full">
                 <div className="self-center">
                   <img
                     src="sad-jam.png"
@@ -96,7 +102,7 @@ function UserDashboardPage() {
                     alt="Sad Jam"
                   />
                 </div>
-                <div>
+                <div className="w-full">
                   <h3>No upcoming events yet. Click "Host Event" to begin.</h3>
                 </div>
               </div>
@@ -107,7 +113,7 @@ function UserDashboardPage() {
                     <div>
                       <CreateEventForm></CreateEventForm>
                       <button
-                        className="btn bg-pink-500 text-white hover:bg-pink-700 w-1/2"
+                        className="btn bg-pink-500 text-white hover:bg-pink-700 w-1/2 mb-6"
                         onClick={toggleCalendar}
                       >
                         {isCalendarVisible ? "Hide Calendar" : "Show Calendar"}
@@ -153,7 +159,7 @@ function UserDashboardPage() {
         </div>
 
         {windowWidth > 1100 && (
-          <div className="p-5 flex flex-col justify-start items-center gap-1 align-top w-1/3 h-full">
+          <div className="p-5 flex flex-col justify-start items-end gap-1 align-top w-1/3 h-full">
             <CreateEventForm></CreateEventForm>
             <div className="popup-calendar">
               <EventCalendar sortedEventList={sortedEventList} />
