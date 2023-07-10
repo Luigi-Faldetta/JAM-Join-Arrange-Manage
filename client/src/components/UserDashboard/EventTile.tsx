@@ -41,8 +41,8 @@ function EventTile({ event }: { event: any }) {
           </h2>
           <div className="flex flex-row">
             {event.UserEvents &&
-            event.UserEvents.length &&
-            event.UserEvents[0].isHost === true ? (
+              event.UserEvents.length &&
+              event.UserEvents[0].isHost === true ? (
               <p className=" text-[10px] tracking-tight text-gray-500">
                 ⋆ You are hosting
               </p>
@@ -52,8 +52,6 @@ function EventTile({ event }: { event: any }) {
               </p>
             )}
           </div>
-          {/* {event.host === user.id ? <p>You are hosting</p>}*/}
-          {/* {event.attendees.length > 1 ? <p>{`${event.attendees.length} going`}</p>}*/}
         </div>
 
         <div className=" w-[270px] h-[120px] rounded-lg overflow-hidden items-center">
