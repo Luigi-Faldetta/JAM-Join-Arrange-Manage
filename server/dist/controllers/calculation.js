@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const expense_1 = __importDefault(require("../models/expense"));
 const user_1 = __importDefault(require("../models/user"));
 const userEvent_1 = __importDefault(require("../models/userEvent"));
+const utils_1 = require("../utils");
 const expenseSheet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         /**
@@ -52,16 +53,17 @@ const expenseSheet = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             //cleaner way to do this for sure.
             indExpenses.push({ name: user.name, owes: Math.round((perPerson - myTotalSpent) * 100) / 100 });
         });
-        res.status(200).json({
+        res.status(200).json((0, utils_1.resBody)(true, "200", {
             expenses: expenseList,
             attendees: userList,
             total: totalExpenses,
             perPerson,
             indExpenses,
-        });
+        }, "Expense Sheet Calculated"));
     }
     catch (error) {
         console.log(error);
+        res.status(400).json((0, utils_1.resBody)(true, "400", null, "Could not calculate Expenses"));
     }
 });
 exports.default = { expenseSheet };
