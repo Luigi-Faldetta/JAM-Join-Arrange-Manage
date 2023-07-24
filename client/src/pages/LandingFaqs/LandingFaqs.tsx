@@ -1,11 +1,44 @@
 "use client";
 import { Accordion } from "flowbite-react";
+import type { CustomFlowbiteTheme } from 'flowbite-react';
+
+const customTheme: CustomFlowbiteTheme['accordion'] = {
+  root: {
+    base: "divide-y divide-gray-200 border-gray-200",
+    flush: {
+      off: "rounded-lg border",
+      on: "border-b"
+    }
+  },
+  content: {
+    base: "py-5 px-5 last:rounded-b-lg first:rounded-t-lg"
+  },
+  title: {
+    arrow: {
+      base: "h-6 w-6 shrink-0",
+      open: {
+        off: "",
+        on: "rotate-270"
+      }
+    },
+    base: "flex w-full items-center justify-between first:rounded-t-lg last:rounded-b-lg py-5 px-5 text-left font-medium text-gray-500",
+    flush: {
+      off: "hover:bg-gray-100 focus:ring-4 focus:ring-gray-200",
+      on: "bg-transparent"
+    },
+    heading: "",
+    open: {
+      off: "",
+      on: "text-gray-900 bg-gray-100"
+    }
+  }
+};
 
 export default function LandingFaqs() {
   return (
-    <div className="mt-32 pb-24 flex flex-col items-center" id="faqs">
-      <p className="mb-20 text-3xl text-gray-500">Frequently asked questions</p>
-      <Accordion className="w-2/3">
+    <div className="pb-12 mt-12 min-h-screen flex flex-col justify-center items-center" id="faqs">
+      <p className="mb-12 text-3xl text-gray-500">Frequently asked questions</p>
+      <Accordion className="w-2/3" theme={customTheme}>
         <Accordion.Panel>
           <Accordion.Title className="dark:text-gray-600">How do I create a new event?</Accordion.Title>
           <Accordion.Content className="bg-white">
