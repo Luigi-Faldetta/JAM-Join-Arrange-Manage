@@ -62,11 +62,17 @@ function ChatContainer() {
       }
     });
   }, [socket]);
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    handleMessageSubmit(message);
+    setMessage('')
+  }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       event.preventDefault();
       handleMessageSubmit(message);
+      setMessage('')
     }
   };
 
@@ -74,7 +80,6 @@ function ChatContainer() {
     if (data && !isLoading) {
       dispatch(setMessages(data));
       if (messagesRef.current) {
-        // messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
         messagesRef.current.scrollIntoView({
           behavior: "smooth",
           block: "end",
@@ -84,46 +89,47 @@ function ChatContainer() {
   }, [data, isLoading]);
 
   return (
-    <div className="chat-container border-2 border-indigo-900 md:rounded-xl">
-      <div className="chat-header">
-        <div className="chat-title w-full text-base text-center text-black">{dataevent?.data.title}</div>
-        <div className="close absolute right-4" onClick={() => dispatch(closeChat())}>
-          ×
+    <form onSubmit={handleSubmit}>
+      <div className="chat-container border-2 border-indigo-900 md:rounded-xl">
+        <div className="chat-header">
+          <div className="chat-title w-full text-base text-center text-black">{dataevent?.data.title}</div>
+          <div className="close absolute right-4" onClick={() => dispatch(closeChat())}>
+            ×
+          </div>
+        </div>
+        <div className="chat-messages">
+          {isLoading ? (
+            <ColorRing
+              visible={true}
+              height="50%"
+              width="100%"
+              ariaLabel="blocks-loading"
+              wrapperStyle={{}}
+              wrapperClass="blocks-wrapper"
+              colors={["#ec4899", "#ec4899", "#ec4899", "#ec4899", "#ec4899"]}
+            />
+          ) : (
+            isSuccess && (
+              <Msg messages={messages} userId={userId} messagesRef={messagesRef} />
+            )
+          )}
+        </div>
+        <div className="input-container">
+          <input
+            className="bg-white border-slate-300 md:active:border-pink-500 md:focus:border-pink-500 w-5/6 py-4 px-3 rounded-xl xl-2 pr-2"
+            type="text"
+            placeholder="Type your message here..."
+            value={message}
+            onChange={(event) => setMessage(event.target.value)}
+            onKeyDown={handleKeyDown}
+            name="message"
+            autoComplete="off" // Disable autocomplete
+            autoCapitalize="off" // Disable autocapitalize
+          />
+          <VscSend className="absolute right-8 h-6 w-6 fill-pink-500" onClick={handleSubmit} />
         </div>
       </div>
-      <div className="chat-messages">
-        {isLoading ? (
-          <ColorRing
-            visible={true}
-            height="50%"
-            width="100%"
-            ariaLabel="blocks-loading"
-            wrapperStyle={{}}
-            wrapperClass="blocks-wrapper"
-            colors={["#ec4899", "#ec4899", "#ec4899", "#ec4899", "#ec4899"]}
-          />
-        ) : (
-          isSuccess && (
-            <Msg messages={messages} userId={userId} messagesRef={messagesRef} />
-          )
-        )}
-      </div>
-      <div className="input-container">
-        <input
-          className="bg-white border-slate-300 md:active:border-pink-500 md:focus:border-pink-500 w-5/6 py-4 px-3 rounded-xl xl-2 pr-2"
-          type="text"
-          placeholder="Type your message here..."
-          value={message}
-          onChange={(event) => setMessage(event.target.value)}
-          onKeyDown={handleKeyDown}
-          name="message"
-          autoComplete="off" // Disable autocomplete
-          autoCapitalize="off" // Disable autocapitalize
-          spellCheck="false" // Disable spellcheck
-        />
-        <VscSend className="absolute right-8 h-6 w-6 fill-pink-500"/>
-      </div>
-    </div>
+    </form>
   );
 }
 

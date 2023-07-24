@@ -43,9 +43,12 @@ Any feedback or suggestions are welcome. Please reach us at jam.noreply@gmail.co
 
 **By Anna, Juliana, Chris, Marcelo, Luigi and Alejandro**  
 
-Anna Kucherenko - [Github](https://github.com/AnnaKucherenko1) - [LinkedIn](www.linkedin.com/in/anna-kucherenko1)  
-Luigi Faldetta - [Github](https://github.com/luigi-faldetta) - [LinkedIn](https://www.linkedin.com/in/alejandro-pemu/)  
+Anna Kucherenko - [Github](https://github.com/AnnaKucherenko1) - [LinkedIn](www.linkedin.com/in/anna-kucherenko1)
+Luigi Faldetta - [Github](https://github.com/luigi-faldetta) - [LinkedIn](https://www.linkedin.com/in/luigi-faldetta-a02ab817b/)
 Alejandro Penalver Munita - [Github](https://github.com/alepemu) - [LinkedIn](https://www.linkedin.com/in/luigi-faldetta-a02ab817b/)
+Christopher Scheppele - [Github](https://github.com/cscheppele) - [LinkedIn](https://www.linkedin.com/in/christopher-scheppele-953006a0/)
+Juliana Ribas - [Github](https://github.com/jusoffiati) - [LinkedIn](https://www.linkedin.com/in/juliana-ribas-60b125134/)
+Marcelo Suarez Velarde - [Github](https://github.com/marce-msv) - [LinkedIn](https://www.linkedin.com/in/marcesv/)
 
 ## Screenshots
 *(x5 max)*
