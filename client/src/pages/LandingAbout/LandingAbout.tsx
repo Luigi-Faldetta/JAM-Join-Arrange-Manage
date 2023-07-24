@@ -2,10 +2,10 @@ import "./LandingAbout.css";
 
 const LandingAbout = () => {
   return (
-    <div className="overflow-y-hidden about-page mb-20 md:h-[58rem] bg-indigo-950" id="about">
+    <div className="flex justify-center items-center overflow-y-hidden about-page min-h-screen py-12 bg-indigo-950" id="about">
       <div className="container">
-        <div className="flex justify-center">
-          <h1 className=" text-3xl tracking-tight leading-none md:text-5xl xl:text-4xl text-slate-300 mb-20 mt-12">
+        <div className="flex justify-center items-center">
+          <h1 className=" text-3xl tracking-tight leading-none md:text-5xl xl:text-4xl text-slate-300 mb-12">
             About
           </h1>
         </div>
@@ -24,7 +24,7 @@ const LandingAbout = () => {
               alt="friends having pizza together"
             />
           </div>
-          <div className="grid-item order-last md:order-1 mb-20">
+          <div className="grid-item order-last md:order-1">
             <img
               className="image"
               src="https://media.istockphoto.com/id/869301564/photo/splitting-it-six-ways.jpg?s=612x612&w=0&k=20&c=i_rAQ1-4iyooawtB2bYKsrOMIRAzzrYpLzLmx0LNniQ="
