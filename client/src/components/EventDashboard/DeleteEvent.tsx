@@ -49,8 +49,8 @@ function DeleteEvent({ setDeleteModalOpen }: DeleteEventProps) {
 
         <div className="fixed inset-0 z-10 overflow-y-auto">
           <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-              <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+            <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg ">
+              <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 ">
                 <div className="sm:flex sm:items-start">
                   <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
                     <svg
@@ -91,7 +91,7 @@ function DeleteEvent({ setDeleteModalOpen }: DeleteEventProps) {
                 <button
                   onClick={handleDelete}
                   type="button"
-                  className=" inline-flex w-full justify-center px-3 py-2  focus:outline-none focus:ring-red-300 rounded-md bg-red-600 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-800 sm:ml-3 sm:w-auto"
+                  className=" inline-flex w-full justify-center px-3 py-2  focus:outline-none focus:ring-red-300 rounded-md bg-red-200 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-300 sm:ml-3 sm:w-auto"
                 >
                   Delete
                 </button>

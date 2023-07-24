@@ -28,7 +28,7 @@ function EditEvent({ setEditModalOpen, eventid }: any) {
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); 
+    event.preventDefault();
     const eventFormData: Partial<EventState> &
       Pick<EventState, "title" | "date" | "location" | "description"> = {
       title: event.currentTarget.eventName.value,
@@ -103,7 +103,7 @@ function EditEvent({ setEditModalOpen, eventid }: any) {
   return (
     <>
       <div
-        className="fixed inset-0 flex items-center justify-center z-50"
+        className="fixed inset-0 flex items-center justify-center z-50 bg-gray-500/50 transition-opacity backdrop-blur"
         aria-labelledby="modal-title"
         role="dialog"
         aria-modal="true"
@@ -172,7 +172,7 @@ function EditEvent({ setEditModalOpen, eventid }: any) {
                          block 
                          w-full
                          p-2.5"
-                         autoComplete="off" // Disable autocomplete
+              autoComplete="off" // Disable autocomplete
             />
           </div>
 

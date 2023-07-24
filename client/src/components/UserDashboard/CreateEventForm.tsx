@@ -47,7 +47,7 @@ function CreateEventForm() {
   };
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); 
+    event.preventDefault();
 
     const eventFormData: Partial<EventState> &
       Pick<EventState, "title" | "date" | "location" | "description"> = {
@@ -75,8 +75,8 @@ function CreateEventForm() {
 
   function createModal() {
     return open ? (
-      <dialog id="my_modal_3" className="modal h-screen" open={open}>
-        <div className="w-full h-full bg-gray-500 opacity-50 "> </div>
+      <dialog id="my_modal_3" className="modal h-screen " open={open}>
+        <div className="w-full h-full bg-gray-500/50 transition-opacity backdrop-blur "> </div>
 
         <form
           method="dialog"
