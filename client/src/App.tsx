@@ -15,10 +15,9 @@ function App() {
     state.chatReducer.valueOf()
   ) as { isOpen: boolean; eventId: string };
 
-
   return (
     <>
-      <div className="App bg-white">
+      <div className="App bg-white min-h-screen h-full">
         <Navbar />
         {logoutState ? <Logout /> : null}
         {chatState.isOpen ? <ChatContainer /> : null}

@@ -76,7 +76,9 @@ function CreateEventForm() {
   function createModal() {
     return open ? (
       <dialog id="my_modal_3" className="modal h-screen " open={open}>
-        <div className="w-full h-full bg-gray-500/50 transition-opacity backdrop-blur "> </div>
+        <div className="w-full h-full bg-gray-500/50 transition-opacity backdrop-blur ">
+          {" "}
+        </div>
 
         <form
           method="dialog"
@@ -243,17 +245,19 @@ function CreateEventForm() {
 
   return (
     <>
-      <button
-        className="btn bg-pink-100 text-slate-600 w-1/2 mb-6"
-        type="button"
-        onClick={(event) => {
-          event.stopPropagation();
-          setOpen((st) => !st);
-        }}
-      >
-        Host event
-      </button>
-      {createModal()}
+      <div className="w-full flex justify-center lg:justify-end">
+        <button
+          className="btn bg-pink-100 text-slate-600 w-1/2 mb-6 border-0 hover:bg-pink-500"
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            setOpen((st) => !st);
+          }}
+        >
+          Host event
+        </button>
+        {createModal()}
+      </div>
     </>
   );
 }
