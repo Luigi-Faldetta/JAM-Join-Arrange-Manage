@@ -1,5 +1,3 @@
-
-
 import CreateEventForm from "../../components/UserDashboard/CreateEventForm";
 import EventTile from "../../components/UserDashboard/EventTile";
 import { EventState } from "../../reduxFiles/slices/events";
@@ -32,10 +30,10 @@ function UserDashboardPage() {
       setWindowWidth(window.innerWidth);
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -77,24 +75,21 @@ function UserDashboardPage() {
             }
             return null;
           })}
-          {!hasHostedEvents &&
+          {!hasHostedEvents && (
             <h2 className="text-center mt-6">You are hosting no events yet</h2>
-          }
+          )}
         </div>
-
       </>
     );
   }
 
-
   return (
     <>
-      <div className="flex flex-row justify-center align-top top-0 gap-14">
+      <div className="flex lg:flex-row flex-col justify-center items-center lg:items-start lg:gap-10">
         <div
-          className={`p-5 flex flex-col justify-start items-center gap-1 align-top ${windowWidth < 1100 ? 'w-[240]' : 'w-1/3'
-            } h-screen`}
+          className={`p-5 flex flex-col justify-start items-center align-top w-[240] lg:w-1/3`}
         >
-          <div className="bg-yellow-30">
+          <div>
             {isLoading && <h2>Loading...</h2>}
             {!isLoading && sortedEventList.length < 1 ? (
               <div className="flex flex-col justify-center align-middle text-center w-full">
@@ -112,38 +107,24 @@ function UserDashboardPage() {
             ) : (
               sortedEventList.length >= 1 && (
                 <div className="w-full flex flex-col align-top justify-center">
-                  {windowWidth < 1100 && (
-                    <div>
-                      <CreateEventForm></CreateEventForm>
-                      <button
-                        className="btn bg-pink-500 text-white hover:bg-pink-700 w-1/2 mb-6"
-                        onClick={toggleCalendar}
-                      >
-                        {isCalendarVisible ? "Hide Calendar" : "Show Calendar"}
-                      </button>
-                      {isCalendarVisible && (
-                        <div className="popup-calendar absolute z-10 w-full bg-white">
-                          <EventCalendar sortedEventList={sortedEventList} />
-                        </div>
-                      )}
-                    </div>
-                  )}
                   <div>
                     <button
                       onClick={() => handleToggle("all")}
-                      className={`btn ${showAllEvents === "all"
-                        ? "bg-pink-500 text-white"
-                        : "bg-pink-100 text-slate-600"
-                        } hover:bg-pink-500 hover:text-white w-1/2 border-0`}
+                      className={`btn ${
+                        showAllEvents === "all"
+                          ? "bg-pink-500 text-white"
+                          : "bg-pink-100 text-slate-600"
+                      } hover:bg-pink-500 hover:text-white w-1/2 border-0`}
                     >
                       ALL
                     </button>
                     <button
                       onClick={() => handleToggle("host")}
-                      className={`btn ${showAllEvents === "host"
-                        ? "bg-pink-500 text-white"
-                        : "bg-pink-100 text-slate-600"
-                        } hover:bg-pink-500 hover:text-white w-1/2 border-0`}
+                      className={`btn ${
+                        showAllEvents === "host"
+                          ? "bg-pink-500 text-white"
+                          : "bg-pink-100 text-slate-600"
+                      } hover:bg-pink-500 hover:text-white w-1/2 border-0`}
                     >
                       HOSTING
                     </button>
@@ -161,14 +142,12 @@ function UserDashboardPage() {
           </div>
         </div>
 
-        {windowWidth > 1100 && (
-          <div className="p-5 flex flex-col justify-start items-end gap-1 align-top w-1/3 h-full">
-            <CreateEventForm></CreateEventForm>
-            <div className="popup-calendar">
-              <EventCalendar sortedEventList={sortedEventList} />
-            </div>
+        <div className="p-5 flex flex-col max-w-[500px] lg:w-1/3 h-full">
+          <CreateEventForm />
+          <div className="popup-calendar">
+            <EventCalendar sortedEventList={sortedEventList} />
           </div>
-        )}
+        </div>
       </div>
     </>
   );
