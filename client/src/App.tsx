@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "./reduxFiles/store";
 import Logout from "./components/Logout";
 import ChatContainer from "./components/Chat/ChatContainer";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   const logoutState = useSelector((state: RootState) =>
@@ -16,14 +17,15 @@ function App() {
   ) as { isOpen: boolean; eventId: string };
 
   return (
-    <>
-      <div className="App bg-white min-h-screen h-full">
-        <Navbar />
-        {logoutState ? <Logout /> : null}
-        {chatState.isOpen ? <ChatContainer /> : null}
+    <div className="App bg-white min-h-screen h-full flex flex-col">
+      <Navbar />
+      {logoutState ? <Logout /> : null}
+      {chatState.isOpen ? <ChatContainer /> : null}
+      <div className="flex-grow">
         <Outlet />
       </div>
-    </>
+      <Footer />
+    </div>
   );
 }
 

@@ -74,7 +74,7 @@ const ProfilePage = (): any => {
         );
 
         const uploadedImage = await res.json();
-        if (uploadedImage && uploadedImage.url) {
+        if (uploadedImage && uploadedImage.secure_url) {
           return uploadedImage;
         } else {
           console.log('Error uploading image');

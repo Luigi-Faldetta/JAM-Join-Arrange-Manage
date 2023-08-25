@@ -19,6 +19,7 @@ import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import LandingHero from "./pages/LandingHero/LandingHero";
 import EventDashboard from "./pages/EventDashboard/EventDashboard";
 import ForgotPasswordPage from "./pages/ForgotPassword/ForgotPasswordPage";
+import ContactUs from "./pages/ContactUs/ContactUs";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,6 +31,7 @@ const router = createBrowserRouter(
       <Route path="/event/:eventid" element={<EventDashboard />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/passwordreset" element={<ForgotPasswordPage />} />
+      <Route path="/contactus" element={<ContactUs />} />
     </Route>
   )
 );

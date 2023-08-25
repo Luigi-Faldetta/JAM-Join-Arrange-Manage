@@ -59,7 +59,7 @@ function CreateEventForm() {
 
     const image = await handleImageUpload();
 
-    if (image?.url) eventFormData.coverPic = image.url;
+    if (image?.secure_url) eventFormData.coverPic = image.url;
 
     const eventCreated = await addEvent({
       token: userToken as string,

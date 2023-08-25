@@ -20,7 +20,6 @@ export default function EventDashboard() {
   const { eventid } = useParams();
   const {
     data: eventData,
-    error,
     isLoading,
   } = useGetEventQuery(eventid as string);
 
@@ -51,6 +50,7 @@ export default function EventDashboard() {
     if (isJoinedCheck !== isJoined) {
       setIsJoined(isJoinedCheck);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventData, loggedUser]);
 
   return (
