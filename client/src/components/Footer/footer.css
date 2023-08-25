@@ -1,6 +1,7 @@
 .footerX {
   padding: 10px;
-  /* text-align: center; */
+  padding-left: 30px;
+  padding-right: 30px;
   display: flex;
   justify-content: space-between;
   bottom: 0;
