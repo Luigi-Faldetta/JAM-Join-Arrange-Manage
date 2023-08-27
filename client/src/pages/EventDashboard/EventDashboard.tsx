@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import Todos from "../../components/EventDashboard/Todos";
 import Expenses from "../../components/EventDashboard/Expenses";
 import Attendees from "../../components/EventDashboard/Attendees";
-import { useGetEventQuery } from "../../services/ThesisDB";
+import { useGetEventQuery } from "../../services/JamDB";
 import { useIsLoggedIn } from "../../utils/useIsLoggedIn";
 import { EventState } from "../../reduxFiles/slices/events";
 import "./EventDashboard.css";

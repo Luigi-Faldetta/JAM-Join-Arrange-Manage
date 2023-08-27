@@ -9,7 +9,7 @@ import { ExpenseSheet } from "./ApiResponseType";
 
 import { io } from "socket.io-client";
 // const URL = process.env.NODE_ENV!=="production" ? "http://localhost:3200/" :"https://codeworks-thesis-4063bceaa74a.herokuapp.com/";
-const URL = "https://codeworks-thesis-4063bceaa74a.herokuapp.com/";
+const URL = "https://join-arrange-manage-33613e3769a6.herokuapp.com/";
 
 export const socket = io(URL);
 

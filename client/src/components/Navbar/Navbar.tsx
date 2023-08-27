@@ -7,7 +7,7 @@ import { openLogout } from "../../reduxFiles/slices/logout";
 import { useIsLoggedIn } from "../../utils/useIsLoggedIn";
 import { useLocation } from "react-router-dom";
 import { useClickAway } from "@uidotdev/usehooks";
-import { useGetUserQuery } from "../../services/ThesisDB";
+import { useGetUserQuery } from "../../services/JamDB";
 import Chat from "../Chat/Chat";
 
 function Navbar() {
@@ -50,7 +50,7 @@ function Navbar() {
         <div className="flex flex-wrap items-center justify-between mx-auto py-3">
           <div className="flex items-center">
             <Link to="/" className="flex mr-12 items-center">
-              <img        
+              <img
                 src="https://res.cloudinary.com/dpzz6vn2w/image/upload/v1688644579/jam-strw_irm1ti.png"
                 className="h-12 mr-3"
                 alt="JAM Logo"
