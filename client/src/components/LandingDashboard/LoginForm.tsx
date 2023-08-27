@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { UserState, createUser } from "../../reduxFiles/slices/users";
-import { useLogInMutation } from "../../services/ThesisDB";
+import { useLogInMutation } from "../../services/JamDB";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function LoginForm() {

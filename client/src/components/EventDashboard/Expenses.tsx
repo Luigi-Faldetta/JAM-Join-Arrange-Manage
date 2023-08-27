@@ -4,7 +4,7 @@ import {
   fetchExpenseSheet,
   useAddExpenseMutation,
   useDeleteExpenseMutation,
-} from '../../services/ThesisDB';
+} from '../../services/JamDB';
 import { useParams } from 'react-router-dom';
 import { ApiResponse, ExpenseSheet } from '../../services/ApiResponseType';
 

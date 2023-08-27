@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {
   socket,
   useGetEventsQuery,
-} from "../../services/ThesisDB";
+} from "../../services/JamDB";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../../reduxFiles/store";
 import { setEventList } from "../../reduxFiles/slices/events";
@@ -73,8 +73,8 @@ function Chat() {
                   <div className="avatar-wrapper flex overflow-hidden border border-slate-300">
                     <img
                       className="avatar w-full h-full object-cover"
-                      src={event.coverPic? event.coverPic : 'https://res.cloudinary.com/dpzz6vn2w/image/upload/v1688544322/friends-placeholder_ljftyb.png'
-                    }
+                      src={event.coverPic ? event.coverPic : 'https://res.cloudinary.com/dpzz6vn2w/image/upload/v1688544322/friends-placeholder_ljftyb.png'
+                      }
                       alt={event.title}
                     />
                   </div>

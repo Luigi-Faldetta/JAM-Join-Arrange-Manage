@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { UserState, createUser } from "../../reduxFiles/slices/users";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { useAddUserMutation } from "../../services/ThesisDB";
+import { useAddUserMutation } from "../../services/JamDB";
 import { ApiResponse } from "../../services/ApiResponseType";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -48,7 +48,7 @@ function CreateUserForm() {
       const currentRoute = location.pathname;
       const res = await addNewUser(userFormData);
 
-      if ("data" in res && res.data.data ) {
+      if ("data" in res && res.data.data) {
         //@ts-ignore
         localStorage.setItem("token", res.data.data.userId);
       } else if ("error" in res && res.error) {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDeleteEventMutation } from "../../services/ThesisDB";
+import { useDeleteEventMutation } from "../../services/JamDB";
 import { useDispatch } from "react-redux";
 import { deleteEventFromList } from "../../reduxFiles/slices/events";
 

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useGetToDosQuery, useUpdateToDoMutation, useAddToDoMutation, useDeleteToDoMutation } from "../../services/ThesisDB";
+import { useGetToDosQuery, useUpdateToDoMutation, useAddToDoMutation, useDeleteToDoMutation } from "../../services/JamDB";
 import { ToDoState, addToToDoList, deleteToDoFromList, setToDoList, updateToDoList } from "../../reduxFiles/slices/toDos";
 import { useParams } from "react-router-dom";
 import { ImArrowRight, ImArrowLeft } from "react-icons/im";
@@ -49,8 +49,8 @@ export default function Todos(): JSX.Element {
         creatorId: creatorId,
         eventId: eventid,
       };
-      const toDoRes = await addTodo(newToDoItem as ToDoState) 
-      if('data' in toDoRes){
+      const toDoRes = await addTodo(newToDoItem as ToDoState)
+      if ('data' in toDoRes) {
         appDispatch(addToToDoList(toDoRes.data.data))
       }
       setNewToDo({
@@ -74,14 +74,14 @@ export default function Todos(): JSX.Element {
   };
 
 
-  const handleDeleteClick = (toDoId:string) => {
+  const handleDeleteClick = (toDoId: string) => {
     deleteTodo(toDoId);
     appDispatch(deleteToDoFromList(toDoId));
   };
 
-  const handleDoneClick = async (toDoId:string) => {
+  const handleDoneClick = async (toDoId: string) => {
     const index = toDoList.indexOf(toDoList.find(todo => todo.id === toDoId) as ToDoState)
-    await updateTodo({id:toDoId, isDone: !toDoList[index].isDone});
+    await updateTodo({ id: toDoId, isDone: !toDoList[index].isDone });
     appDispatch(updateToDoList(toDoId))
   };
 
@@ -133,7 +133,7 @@ export default function Todos(): JSX.Element {
               autoCorrect="off" // Disable autocorrect
               autoCapitalize="off" // Disable autocapitalize
               spellCheck="false" // Disable spellcheck
-          />
+            />
             <button
               type="submit"
               className="w-10 ml-2 font-bold rounded-full border border-gray-400 flex items-center justify-center"

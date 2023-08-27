@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useDeleteUserMutation } from '../services/ThesisDB';
+import { useDeleteUserMutation } from '../services/JamDB';
 
 function Delete({ setOpen }: { setOpen: (open: boolean) => void }) {
   const [deleteUser] = useDeleteUserMutation();

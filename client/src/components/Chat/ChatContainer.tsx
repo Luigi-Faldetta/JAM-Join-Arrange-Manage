@@ -9,7 +9,7 @@ import {
   useAddMsgMutation,
   useGetEventQuery,
   useGetMsgsQuery,
-} from "../../services/ThesisDB";
+} from "../../services/JamDB";
 import moment from "moment";
 import { MsgState, addMessage, setMessages } from "../../reduxFiles/slices/msg";
 import { ColorRing } from "react-loader-spinner";

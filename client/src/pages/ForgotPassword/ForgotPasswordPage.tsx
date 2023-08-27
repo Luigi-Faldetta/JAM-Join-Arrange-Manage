@@ -1,31 +1,31 @@
 import { useState } from "react";
-import { fetchLogin } from "../../services/ThesisDB";
+import { fetchLogin } from "../../services/JamDB";
 
 
 function ForgotPasswordPage() {
-    const [message, setMessage] = useState("");
-    const [isSuccess, setIsSuccess] = useState(false);
-    const [newEmail, setEmail] = useState("");
-    // const { data } = useForgotPasswordQuery(email);
-    const handleSubmit = (e: { preventDefault: () => void }) => {
-        e.preventDefault();
-        setEmail(newEmail)
-        fetchLogin(newEmail).then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            setMessage('We just sent you an email with further instructions.');
-            setIsSuccess(true);
-          } else {
-            setMessage('Incorrect email. Please try again.');
-            setIsSuccess(false);
-          }
-        })
-        .catch((error) => {
-          setMessage('An error occurred. Please try again later.');
+  const [message, setMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [newEmail, setEmail] = useState("");
+  // const { data } = useForgotPasswordQuery(email);
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    setEmail(newEmail)
+    fetchLogin(newEmail).then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          setMessage('We just sent you an email with further instructions.');
+          setIsSuccess(true);
+        } else {
+          setMessage('Incorrect email. Please try again.');
           setIsSuccess(false);
-        });
-        setEmail('')
-    };
+        }
+      })
+      .catch((error) => {
+        setMessage('An error occurred. Please try again later.');
+        setIsSuccess(false);
+      });
+    setEmail('')
+  };
 
   return (
     <section className="light:bg-white">

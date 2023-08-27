@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import './ProfilePage.css';
-import { useGetUserQuery } from '../../services/ThesisDB';
+import { useGetUserQuery } from '../../services/JamDB';
 import { UserState } from '../../reduxFiles/slices/users';
 import { useAuth } from '../../utils/useAuth';
-import { useUpdateUserMutation } from '../../services/ThesisDB';
+import { useUpdateUserMutation } from '../../services/JamDB';
 import Delete from '../../components/Delete';
 
 const ProfilePage = (): any => {
