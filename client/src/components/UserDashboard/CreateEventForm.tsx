@@ -7,7 +7,7 @@ import {
   setEvent,
   EventState,
 } from "../../reduxFiles/slices/events";
-import { useAddEventMutation } from "../../services/ThesisDB";
+import { useAddEventMutation } from "../../services/JamDB";
 import { ApiResponse } from "../../services/ApiResponseType";
 
 function CreateEventForm() {
