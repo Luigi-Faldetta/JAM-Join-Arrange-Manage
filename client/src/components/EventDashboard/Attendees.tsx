@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useGetUsersQuery } from "../../services/ThesisDB";
+import { useGetUsersQuery } from "../../services/JamDB";
 import { createUserList } from "../../reduxFiles/slices/users";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -19,7 +19,7 @@ export default function Attendees() {
     if (data) {
       const fetchedToDos = data.data;
       appDispatch(createUserList(fetchedToDos));
-      
+
     }
   }, [data]);
 
@@ -41,7 +41,7 @@ export default function Attendees() {
 
     for (let i = startIndex; i < endIndex; i++) {
 
-      
+
       renderedImages.push(
         <div key={i} className="flex flex-col shrink-0">
           <img

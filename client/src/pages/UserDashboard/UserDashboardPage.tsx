@@ -3,7 +3,7 @@ import EventTile from "../../components/UserDashboard/EventTile";
 import { EventState } from "../../reduxFiles/slices/events";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../../reduxFiles/store";
-import { useGetEventsQuery } from "../../services/ThesisDB";
+import { useGetEventsQuery } from "../../services/JamDB";
 import { useEffect, useState } from "react";
 import { setEventList } from "../../reduxFiles/slices/events";
 import moment from "moment";
@@ -110,21 +110,19 @@ function UserDashboardPage() {
                   <div>
                     <button
                       onClick={() => handleToggle("all")}
-                      className={`btn ${
-                        showAllEvents === "all"
+                      className={`btn ${showAllEvents === "all"
                           ? "bg-pink-500 text-white"
                           : "bg-pink-100 text-slate-600"
-                      } hover:bg-pink-500 hover:text-white w-1/2 border-0`}
+                        } hover:bg-pink-500 hover:text-white w-1/2 border-0`}
                     >
                       ALL
                     </button>
                     <button
                       onClick={() => handleToggle("host")}
-                      className={`btn ${
-                        showAllEvents === "host"
+                      className={`btn ${showAllEvents === "host"
                           ? "bg-pink-500 text-white"
                           : "bg-pink-100 text-slate-600"
-                      } hover:bg-pink-500 hover:text-white w-1/2 border-0`}
+                        } hover:bg-pink-500 hover:text-white w-1/2 border-0`}
                     >
                       HOSTING
                     </button>

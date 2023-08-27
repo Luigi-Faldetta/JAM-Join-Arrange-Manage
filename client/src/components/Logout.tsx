@@ -1,7 +1,7 @@
 import { closeLogout } from "../reduxFiles/slices/logout";
 import { useAppDispatch } from "../reduxFiles/store";
 import { useNavigate } from "react-router-dom";
-import { useLogOutQuery } from "../services/ThesisDB";
+import { useLogOutQuery } from "../services/JamDB";
 function Logout() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();

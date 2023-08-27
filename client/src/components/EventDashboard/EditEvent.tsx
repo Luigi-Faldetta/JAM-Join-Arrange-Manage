@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   useDeleteEventMutation,
   useUpdateEventMutation,
-} from "../../services/ThesisDB";
+} from "../../services/JamDB";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import {
