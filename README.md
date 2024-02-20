@@ -51,4 +51,23 @@ Juliana Ribas - [Github](https://github.com/jusoffiati) - [LinkedIn](https://www
 Marcelo Suarez Velarde - [Github](https://github.com/marce-msv) - [LinkedIn](https://www.linkedin.com/in/marcesv/)
 
 ## Screenshots
-*(x5 max)*
+
+Events Dashboard
+
+<img width="1207" alt="Screenshot 2024-02-19 at 13 35 53" src="https://github.com/Luigi-Faldetta/JAM-Join-Arrange-Manage/assets/113520179/1c1ed82f-99a6-44d1-be05-5f03183d4894">
+
+<hr>
+
+Todos Page
+
+<img width="1212" alt="Screenshot 2024-02-19 at 13 39 11" src="https://github.com/Luigi-Faldetta/JAM-Join-Arrange-Manage/assets/113520179/ce317682-d849-42a4-9af0-6034054625ce">
+
+<hr>
+
+Expenses Page
+
+<img width="1200" alt="Screenshot 2024-02-19 at 13 39 36" src="https://github.com/Luigi-Faldetta/JAM-Join-Arrange-Manage/assets/113520179/6d4cf59a-7916-4c75-9551-d303dea3b101">
+
+
+
+
