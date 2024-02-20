@@ -2,6 +2,10 @@
 
 Welcome to JAM! If you've made it this far you already know we are an event planning app aimed at making it easier to both plan get togethers with friends and split the cost of having them, be it a group trip to vegas or a movie night with pizza.  What you are really interested in is how we have made such an amazing app and you want to see this masterpiece of code, so let's take a look!
 
+## Visit our website
+
+JAM is now live at [jamwiz.app](https://www.jamwiz.app/)!
+
 ## Getting started
 
 First, clone the repository  
