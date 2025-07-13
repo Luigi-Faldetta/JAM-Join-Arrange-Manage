@@ -1,91 +1,109 @@
-import { closeLogout } from "../reduxFiles/slices/logout";
-import { useAppDispatch } from "../reduxFiles/store";
-import { useNavigate } from "react-router-dom";
-import { useLogOutQuery } from "../services/JamDB";
+import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useDispatch } from 'react-redux';
+import { closeLogout } from '../reduxFiles/slices/logout';
+import { useNavigate } from 'react-router-dom';
+import { FiLogOut, FiX, FiAlertTriangle, FiCheck } from 'react-icons/fi';
+
 function Logout() {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  function handleCloseLogout() {
-    dispatch(closeLogout());
-  }
-  function signOut() {
-    navigate("/");
-    window.location.reload();
+  const handleLogout = () => {
+    // Clear localStorage
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
+
+    // Close modal
     dispatch(closeLogout());
 
-  }
-  return (
-    <>
-      <div
-        className="relative z-10"
-        aria-labelledby="modal-title"
-        role="dialog"
-        aria-modal="true"
-      >
-        <div className="fixed inset-0 bg-gray-500/50 transition-opacity backdrop-blur"></div>
+    // Navigate to home
+    navigate('/');
 
-        <div className="fixed inset-0 z-10 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
-            <div className="relative transform overflow-hidden rounded-lg text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg border-indigo-950 border-2">
-              <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 ">
-                <div className="sm:flex sm:items-start">
-                  <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                    <svg
-                      className="h-6 w-6 text-white-600"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
-                      />
-                    </svg>
-                  </div>
-                  <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                    <h3
-                      className="text-base font-semibold leading-6 text-gray-900"
-                      id="modal-title"
-                    >
-                      Sign out
-                    </h3>
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-500">
-                        Are you sure you want to sign out?
-                      </p>
-                    </div>
-                  </div>
+    // Reload to clear any cached state
+    window.location.reload();
+  };
+
+  const handleCancel = () => {
+    dispatch(closeLogout());
+  };
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      >
+        {/* Backdrop */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+          onClick={handleCancel}
+        />
+
+        {/* Modal */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.9, y: 20 }}
+          className="relative bg-white rounded-3xl shadow-2xl border border-gray-200 w-full max-w-md"
+        >
+          {/* Header */}
+          <div className="p-6 text-center">
+            <div className="w-16 h-16 bg-gradient-to-r from-red-100 to-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <FiAlertTriangle className="w-8 h-8 text-red-600" />
+            </div>
+
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Sign Out</h2>
+            <p className="text-gray-600">
+              Are you sure you want to sign out of your account?
+            </p>
+          </div>
+
+          {/* Content */}
+          <div className="px-6 pb-6">
+            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6">
+              <div className="flex items-start space-x-3">
+                <FiLogOut className="w-5 h-5 text-yellow-600 mt-0.5" />
+                <div>
+                  <h3 className="text-sm font-medium text-yellow-800 mb-1">
+                    Before you go
+                  </h3>
+                  <p className="text-sm text-yellow-700">
+                    Make sure you've saved any important changes. You'll need to
+                    sign in again to access your account.
+                  </p>
                 </div>
               </div>
-              <div className="bg-gray-100 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                <button
-                  onClick={signOut}
-                  id="getout"
-                  type="button"
-                  className=" inline-flex w-full justify-center bg-white-600 px-3 py-2 rounded-md bg-red-100 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-200 sm:ml-3 sm:w-auto"
-                >
-                  Sign out
-                </button>
-                <button
-                  onClick={handleCloseLogout}
-                  id="cancel-getout"
-                  type="button"
-                  className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                >
-                  Cancel
-                </button>
-              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={handleCancel}
+                className="flex-1 flex items-center justify-center space-x-2 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-all duration-200 group"
+              >
+                <FiX className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
+                <span>Cancel</span>
+              </button>
+
+              <button
+                onClick={handleLogout}
+                className="flex-1 flex items-center justify-center space-x-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-medium py-3 px-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group"
+              >
+                <FiLogOut className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
+                <span>Sign Out</span>
+              </button>
             </div>
           </div>
-        </div>
-      </div>{" "}
-    </>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 }
-export default Logout;
 
+export default Logout;
