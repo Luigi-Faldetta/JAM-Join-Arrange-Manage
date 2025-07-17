@@ -9,7 +9,17 @@ import {
 } from '../../reduxFiles/slices/events';
 import { useAddEventMutation } from '../../services/JamDB';
 import { ApiResponse } from '../../services/ApiResponseType';
-import { motion, AnimatePresence } from 'framer-motion'; // <-- added
+import { motion, AnimatePresence } from 'framer-motion';
+
+// Import react-icons
+import {
+  FiPlus,
+  FiX,
+  FiCalendar,
+  FiMapPin,
+  FiFileText,
+  FiImage,
+} from 'react-icons/fi';
 
 function CreateEventForm() {
   const dispatch = useDispatch();
@@ -94,19 +104,22 @@ function CreateEventForm() {
               className="modal-box border-indigo-950 border-2 fixed mx-auto bg-white"
               onSubmit={handleFormSubmit}
             >
+              {/* Close Button with Icon */}
               <div
                 onClick={() => setOpen(false)}
-                className="btn btn-circle absolute right-2 top-2 bg-indigo-950 text-white hover:text-pink-500 hover:bg-indigo-950"
+                className="btn btn-circle absolute right-2 top-2 bg-indigo-950 text-white hover:text-pink-500 hover:bg-indigo-950 flex items-center justify-center"
+                style={{ cursor: 'pointer' }}
               >
-                ✕
+                <FiX size={20} />
               </div>
 
               <div className="flex flex-col justify-center text-center bg-gray-100 rounded-md p-4 mb-5">
                 <div className="">
                   <label
                     htmlFor="eventName"
-                    className="block mb-2 text-md font-medium text-gray-900"
+                    className="block mb-2 text-md font-medium text-gray-900 flex items-center gap-2"
                   >
+                    <FiPlus className="inline mr-1" />
                     Event Name
                   </label>
                   <input
@@ -132,8 +145,9 @@ function CreateEventForm() {
               <div className="mb-4  w-full ">
                 <label
                   htmlFor="eventDateAndTime"
-                  className="block mb-2 text-sm font-medium text-gray-900"
+                  className="block mb-2 text-sm font-medium text-gray-900 flex items-center gap-2"
                 >
+                  <FiCalendar className="inline mr-1" />
                   Date & Time
                 </label>
                 <DatePicker
@@ -163,8 +177,9 @@ function CreateEventForm() {
               <div className="mb-6">
                 <label
                   htmlFor="eventDescription"
-                  className="block mb-2 text-sm font-medium text-gray-900"
+                  className="block mb-2 text-sm font-medium text-gray-900 flex items-center gap-2"
                 >
+                  <FiFileText className="inline mr-1" />
                   Description
                 </label>
                 <input
@@ -188,8 +203,9 @@ function CreateEventForm() {
               <div className="mb-5">
                 <label
                   htmlFor="eventLocation"
-                  className="block mb-2 text-sm font-medium text-gray-900"
+                  className="block mb-2 text-sm font-medium text-gray-900 flex items-center gap-2"
                 >
+                  <FiMapPin className="inline mr-1" />
                   Location
                 </label>
                 <input
@@ -212,8 +228,9 @@ function CreateEventForm() {
               <div className="mb-5">
                 <label
                   htmlFor="eventLocation"
-                  className="block mb-2 text-sm font-medium text-gray-900"
+                  className="block mb-2 text-sm font-medium text-gray-900 flex items-center gap-2"
                 >
+                  <FiImage className="inline mr-1" />
                   Image
                 </label>
 
@@ -242,8 +259,9 @@ function CreateEventForm() {
                             text-sm 
                             px-5 py-2.5 
                             mt-8
-                            text-center"
+                            text-center flex items-center justify-center gap-2"
               >
+                <FiPlus className="inline mr-2" />
                 Create Event
               </button>
             </form>
@@ -257,13 +275,14 @@ function CreateEventForm() {
     <>
       <div className="w-full flex justify-center lg:justify-end">
         <button
-          className="btn bg-pink-100 text-slate-600 w-1/2 mb-6 border-0 hover:bg-pink-500"
+          className="btn bg-pink-100 text-slate-600 w-1/2 mb-6 border-0 hover:bg-pink-500 flex items-center justify-center gap-2"
           type="button"
           onClick={(event) => {
             event.stopPropagation();
             setOpen((st) => !st);
           }}
         >
+          <FiPlus className="inline mr-1" />
           Host event
         </button>
         {createModal()}
