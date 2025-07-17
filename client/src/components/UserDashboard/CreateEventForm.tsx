@@ -19,6 +19,7 @@ import {
   FiMapPin,
   FiFileText,
   FiImage,
+  FiLoader,
 } from 'react-icons/fi';
 
 function CreateEventForm() {
@@ -28,7 +29,20 @@ function CreateEventForm() {
   const [eventDate, setEventDate] = useState<Date | null>(null);
   const [open, setOpen] = useState(false);
   const [eventFile, setEventFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [addEvent] = useAddEventMutation();
+
+  // Generate image preview
+  useEffect(() => {
+    if (eventFile) {
+      const url = URL.createObjectURL(eventFile);
+      setPreviewUrl(url);
+      return () => URL.revokeObjectURL(url);
+    } else {
+      setPreviewUrl(null);
+    }
+  }, [eventFile]);
 
   const handleImageUpload = async () => {
     if (eventFile) {
@@ -59,6 +73,7 @@ function CreateEventForm() {
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true);
 
     const eventFormData: Partial<EventState> &
       Pick<EventState, 'title' | 'date' | 'location' | 'description'> = {
@@ -81,6 +96,7 @@ function CreateEventForm() {
       dispatch(setEvent(eventCreated.data.data));
       dispatch(addEventToList(eventCreated.data.data));
     }
+    setIsLoading(false);
     setOpen(false);
   };
 
@@ -233,7 +249,6 @@ function CreateEventForm() {
                   <FiImage className="inline mr-1" />
                   Image
                 </label>
-
                 <input
                   id="dropzone-file"
                   type="file"
@@ -245,6 +260,15 @@ function CreateEventForm() {
                 block w-full "
                   onChange={(e) => setEventFile(e.target.files?.[0]!)}
                 />
+                {previewUrl && (
+                  <div className="mt-2 flex justify-center">
+                    <img
+                      src={previewUrl}
+                      alt="Preview"
+                      className="h-28 object-cover rounded-lg border border-gray-200 shadow"
+                    />
+                  </div>
+                )}
               </div>
 
               <button
@@ -260,9 +284,19 @@ function CreateEventForm() {
                             px-5 py-2.5 
                             mt-8
                             text-center flex items-center justify-center gap-2"
+                disabled={isLoading}
               >
-                <FiPlus className="inline mr-2" />
-                Create Event
+                {isLoading ? (
+                  <>
+                    <FiLoader className="animate-spin mr-2" />
+                    Creating...
+                  </>
+                ) : (
+                  <>
+                    <FiPlus className="inline mr-2" />
+                    Create Event
+                  </>
+                )}
               </button>
             </form>
           </motion.dialog>
