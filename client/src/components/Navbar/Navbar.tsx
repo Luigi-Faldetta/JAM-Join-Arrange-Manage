@@ -2,12 +2,34 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Link as Scroll } from 'react-scroll';
 import { useIsLoggedIn } from '../../utils/useIsLoggedIn';
+import { useGetMeQuery } from '../../services/JamDB';
+import { useAppDispatch } from '../../reduxFiles/store';
+import { openLogout } from '../../reduxFiles/slices/logout';
+
+interface NavItem {
+  name: string;
+  to: string;
+  offset: number;
+}
+
+interface UserData {
+  profilePic?: string;
+  name?: string;
+}
 
 function Navbar() {
   const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
+  const [showDropdown, setShowDropdown] = useState<boolean>(false);
+
   const isLoggedIn = useIsLoggedIn();
+  const dispatch = useAppDispatch();
   const location = useLocation();
+
+  const { data } = useGetMeQuery(undefined, {
+    skip: !isLoggedIn,
+  }) as { data?: { data: UserData } };
+  const userData = data?.data;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,11 +39,20 @@ function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
+  const navItems: NavItem[] = [
     { name: 'Home', to: 'hero', offset: -190 },
     { name: 'About', to: 'about', offset: -72 },
     { name: 'FAQs', to: 'faqs', offset: -100 },
   ];
+
+  const handleSignOut = () => {
+    dispatch(openLogout());
+    setShowDropdown(false);
+  };
+
+  const handleDropdownToggle = () => {
+    setShowDropdown(!showDropdown);
+  };
 
   if (isLoggedIn && location.pathname.startsWith('/user-dashboard')) {
     return null;
