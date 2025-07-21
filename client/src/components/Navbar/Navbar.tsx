@@ -15,6 +15,7 @@ import { useGetMeQuery } from '../../services/JamDB';
 import { useAppDispatch } from '../../reduxFiles/store';
 import { openLogout } from '../../reduxFiles/slices/logout';
 
+// Types
 interface NavItem {
   name: string;
   to: string;
@@ -35,11 +36,13 @@ function Navbar() {
   const dispatch = useAppDispatch();
   const location = useLocation();
 
+  // Replace the old useGetUserQuery with useGetMeQuery
   const { data } = useGetMeQuery(undefined, {
     skip: !isLoggedIn,
   }) as { data?: { data: UserData } };
   const userData = data?.data;
 
+  // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -63,7 +66,21 @@ function Navbar() {
     setShowDropdown(!showDropdown);
   };
 
-  if (isLoggedIn && location.pathname.startsWith('/user-dashboard')) {
+  // Define routes where navbar should be hidden when logged in
+  const protectedRoutes = [
+    '/user-dashboard',
+    '/profile',
+    '/event', // Added event dashboard route
+    '/sso-callback',
+  ];
+
+  // Check if current route is a protected route
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    location.pathname.startsWith(route)
+  );
+
+  // Hide navbar if user is logged in and on a protected route
+  if (isLoggedIn && isProtectedRoute) {
     return null;
   }
 
@@ -77,6 +94,7 @@ function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
+          {/* Logo */}
           <div className="flex items-center space-x-3">
             <Link to="/" className="flex items-center space-x-3 group">
               <img
@@ -90,6 +108,7 @@ function Navbar() {
             </Link>
           </div>
 
+          {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
             {navItems.map((item) => (
               <div key={item.name}>
@@ -108,6 +127,7 @@ function Navbar() {
             ))}
           </div>
 
+          {/* Desktop Auth Section */}
           <div className="hidden lg:flex items-center space-x-4">
             {isLoggedIn ? (
               <div className="flex items-center space-x-4">
@@ -167,6 +187,7 @@ function Navbar() {
             )}
           </div>
 
+          {/* Mobile Menu Button */}
           <div className="lg:hidden">
             <button
               onClick={() => setShowMobileMenu(!showMobileMenu)}
@@ -182,6 +203,7 @@ function Navbar() {
         </div>
       </div>
 
+      {/* Mobile Menu */}
       {showMobileMenu && (
         <div className="lg:hidden bg-white/95 backdrop-blur-lg border-t border-gray-200/50">
           <div className="px-4 py-6 space-y-4">
