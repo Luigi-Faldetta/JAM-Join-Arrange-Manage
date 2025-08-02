@@ -33,6 +33,7 @@ jobs:
       - name: Run Claude Code
         id: claude
         uses: anthropics/claude-code-action@beta
+        continue-on-error: true
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
 
@@ -40,7 +41,9 @@ jobs:
           additional_permissions: |
             actions: read
           
-          # Optional: Specify model (defaults to Claude Sonnet 4, uncomment for Claude Opus 4)
+          # Model selection: Using Claude Sonnet 4 (default) for optimal balance of speed and quality
+          # Sonnet 4 is ideal for general coding tasks - faster than Opus with excellent code understanding
+          # Uncomment below for Claude Opus 4 if maximum reasoning depth is needed for complex tasks
           # model: "claude-opus-4-20250514"
           
           # Optional: Customize the trigger phrase (default: @claude)
@@ -49,16 +52,29 @@ jobs:
           # Optional: Trigger when specific user is assigned to an issue
           # assignee_trigger: "claude-bot"
           
-          # Optional: Allow Claude to run specific commands
-          # allowed_tools: "Bash(npm install),Bash(npm run build),Bash(npm run test:*),Bash(npm run lint:*)"
+          # Allow Claude to run tests, builds, and common dev commands
+          allowed_tools: "Bash(cd client && npm install),Bash(cd client && npm run build),Bash(cd client && npm test),Bash(cd server && npm install),Bash(cd server && npm run build),Bash(cd server && npm test)"
           
-          # Optional: Add custom instructions for Claude to customize its behavior for your project
-          # custom_instructions: |
-          #   Follow our coding standards
-          #   Ensure all new code has tests
-          #   Use TypeScript for new files
+          # Custom instructions for JAM project standards
+          custom_instructions: |
+            This is a TypeScript React + Node.js project with strict standards:
+            - Use TypeScript strict mode - no 'any' types
+            - Follow functional components with React hooks
+            - Use Redux Toolkit for state management
+            - Follow TailwindCSS for styling
+            - All functions need proper type annotations
+            - Write tests for new functionality
+            - Follow the existing code patterns and architecture
           
           # Optional: Custom environment variables for Claude
           # claude_env: |
           #   NODE_ENV: test
+
+      - name: Handle Claude Failure
+        if: failure() && steps.claude.outcome == 'failure'
+        run: |
+          echo "Claude execution failed. Check the logs above for details."
+          echo "This could be due to API rate limits, network issues, or configuration problems."
+          echo "The workflow will continue, but manual intervention may be needed."
+          exit 0
 
