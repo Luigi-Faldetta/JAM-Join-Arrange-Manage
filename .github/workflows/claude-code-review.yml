@@ -3,12 +3,14 @@ name: Claude Code Review
 on:
   pull_request:
     types: [opened, synchronize]
-    # Optional: Only run on specific file changes
-    # paths:
-    #   - "src/**/*.ts"
-    #   - "src/**/*.tsx"
-    #   - "src/**/*.js"
-    #   - "src/**/*.jsx"
+    # Only run on code changes to avoid unnecessary reviews on docs/config changes
+    paths:
+      - "client/src/**/*.ts"
+      - "client/src/**/*.tsx"
+      - "client/src/**/*.js"
+      - "client/src/**/*.jsx"
+      - "server/**/*.ts"
+      - "server/**/*.js"
 
 jobs:
   claude-review:
@@ -34,10 +36,13 @@ jobs:
       - name: Run Claude Code Review
         id: claude-review
         uses: anthropics/claude-code-action@beta
+        continue-on-error: true
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
 
-          # Optional: Specify model (defaults to Claude Sonnet 4, uncomment for Claude Opus 4)
+          # Model selection: Using Claude Sonnet 4 (default) for optimal balance of speed and quality
+          # Sonnet 4 is ideal for code reviews - faster than Opus with excellent code understanding
+          # Uncomment below for Claude Opus 4 if maximum reasoning depth is needed for complex reviews
           # model: "claude-opus-4-20250514"
           
           # Direct prompt for automated review (no @claude mention needed)
@@ -51,8 +56,8 @@ jobs:
             
             Be constructive and helpful in your feedback.
 
-          # Optional: Use sticky comments to make Claude reuse the same comment on subsequent pushes to the same PR
-          # use_sticky_comment: true
+          # Use sticky comments to avoid cluttering PR with multiple review comments
+          use_sticky_comment: true
           
           # Optional: Customize review based on file types
           # direct_prompt: |
@@ -68,11 +73,18 @@ jobs:
           #   'Welcome! Please review this PR from a first-time contributor. Be encouraging and provide detailed explanations for any suggestions.' ||
           #   'Please provide a thorough code review focusing on our coding standards and best practices.' }}
           
-          # Optional: Add specific tools for running tests or linting
-          # allowed_tools: "Bash(npm run test),Bash(npm run lint),Bash(npm run typecheck)"
+          # Enable Claude to run tests and checks for comprehensive review
+          allowed_tools: "Bash(cd client && npm test),Bash(cd client && npm run build),Bash(cd server && npm test),Bash(cd server && npm run build)"
           
           # Optional: Skip review for certain conditions
           # if: |
           #   !contains(github.event.pull_request.title, '[skip-review]') &&
           #   !contains(github.event.pull_request.title, '[WIP]')
+
+      - name: Handle Review Failure
+        if: failure() && steps.claude-review.outcome == 'failure'
+        run: |
+          echo "Claude code review failed. Check the logs above for details."
+          echo "This could be due to API rate limits, network issues, or configuration problems."
+          exit 0
 
