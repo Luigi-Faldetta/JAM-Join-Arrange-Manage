@@ -54,7 +54,7 @@ jobs:
             - Security concerns
             - Test coverage
             
-            Be constructive and helpful in your feedback.
+            Focus particularly on bugs and security issues. Only report on bugs and potential vulnerabilities you find. Be concise and constructive in your feedback.
 
           # Use sticky comments to avoid cluttering PR with multiple review comments
           use_sticky_comment: true
