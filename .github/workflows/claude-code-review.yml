@@ -1,0 +1,90 @@
+name: Claude Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    # Only run on code changes to avoid unnecessary reviews on docs/config changes
+    paths:
+      - "client/src/**/*.ts"
+      - "client/src/**/*.tsx"
+      - "client/src/**/*.js"
+      - "client/src/**/*.jsx"
+      - "server/**/*.ts"
+      - "server/**/*.js"
+
+jobs:
+  claude-review:
+    # Optional: Filter by PR author
+    # if: |
+    #   github.event.pull_request.user.login == 'external-contributor' ||
+    #   github.event.pull_request.user.login == 'new-developer' ||
+    #   github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR'
+    
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: read
+      id-token: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Run Claude Code Review
+        id: claude-review
+        uses: anthropics/claude-code-action@beta
+        continue-on-error: true
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+
+          # Model selection: Using Claude Sonnet 4 (default) for optimal balance of speed and quality
+          # Sonnet 4 is ideal for code reviews - faster than Opus with excellent code understanding
+          # Uncomment below for Claude Opus 4 if maximum reasoning depth is needed for complex reviews
+          # model: "claude-opus-4-20250514"
+          
+          # Direct prompt for automated review (no @claude mention needed)
+          direct_prompt: |
+            Please review this pull request and provide feedback on:
+            - Code quality and best practices
+            - Potential bugs or issues
+            - Performance considerations
+            - Security concerns
+            - Test coverage
+            
+            Focus particularly on bugs and security issues. Only report on bugs and potential vulnerabilities you find. Be concise and constructive in your feedback.
+
+          # Use sticky comments to avoid cluttering PR with multiple review comments
+          use_sticky_comment: true
+          
+          # Optional: Customize review based on file types
+          # direct_prompt: |
+          #   Review this PR focusing on:
+          #   - For TypeScript files: Type safety and proper interface usage
+          #   - For API endpoints: Security, input validation, and error handling
+          #   - For React components: Performance, accessibility, and best practices
+          #   - For tests: Coverage, edge cases, and test quality
+          
+          # Optional: Different prompts for different authors
+          # direct_prompt: |
+          #   ${{ github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR' && 
+          #   'Welcome! Please review this PR from a first-time contributor. Be encouraging and provide detailed explanations for any suggestions.' ||
+          #   'Please provide a thorough code review focusing on our coding standards and best practices.' }}
+          
+          # Enable Claude to run tests and checks for comprehensive review
+          allowed_tools: "Bash(cd client && npm test),Bash(cd client && npm run build),Bash(cd server && npm test),Bash(cd server && npm run build)"
+          
+          # Optional: Skip review for certain conditions
+          # if: |
+          #   !contains(github.event.pull_request.title, '[skip-review]') &&
+          #   !contains(github.event.pull_request.title, '[WIP]')
+
+      - name: Handle Review Failure
+        if: failure() && steps.claude-review.outcome == 'failure'
+        run: |
+          echo "Claude code review failed. Check the logs above for details."
+          echo "This could be due to API rate limits, network issues, or configuration problems."
+          exit 0
+
