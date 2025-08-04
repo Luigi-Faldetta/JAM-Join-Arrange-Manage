@@ -1,24 +1,22 @@
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useParams } from 'react-router-dom';
 import {
-  useGetEventQuery,
-  useGetUserQuery,
-  useJoinActivityMutation,
-  useLeaveActivityMutation,
-} from "../../services/JamDB";
-import { ColorRing } from 'react-loader-spinner'
-import { useSelector } from "react-redux";
-import { RootState, useAppDispatch } from "../../reduxFiles/store";
-import { UserState, deleteUserFromList, updateUserList } from "../../reduxFiles/slices/users";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa"
-import { EventState, addEventToList, deleteEventFromList } from "../../reduxFiles/slices/events";
-import { closeChat } from "../../reduxFiles/slices/chat";
+  useJoinEventMutation,
+  useLeaveEventMutation,
+} from '../../services/JamDB';
+import {
+  FiUserPlus,
+  FiUserMinus,
+  FiLoader,
+  FiCheck,
+  FiHeart,
+} from 'react-icons/fi';
 
-
-
-interface ToggleButton {
+interface ToggleButtonProps {
   isJoined: boolean;
-  loggedUser: string | null;
-  setIsJoined: (isJoined: boolean) => void;
+  loggedUser: string;
+  setIsJoined: (joined: boolean) => void;
   isLoading: boolean;
 }
 
@@ -27,83 +25,148 @@ export default function ToggleButton({
   loggedUser,
   setIsJoined,
   isLoading,
-}: ToggleButton) {
+}: ToggleButtonProps) {
   const { eventid } = useParams();
-  const navigate = useNavigate()
-  const [joinActivity] = useJoinActivityMutation();
-  const [leaveActivity] = useLeaveActivityMutation();
-  const eventId = eventid as string;
-  const appDispatch = useAppDispatch()
-  const token = localStorage.getItem("token") as string
-  const { data } = useGetUserQuery(token)
-  const eventData = useGetEventQuery(eventId);
-  const chatInfo = useSelector((state: RootState) => state.chatReducer)
+  const [joinEvent] = useJoinEventMutation();
+  const [leaveEvent] = useLeaveEventMutation();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
-  const handleJoin = () => {
-    onJoin(loggedUser as string, eventId as string).then(() =>
-      setIsJoined(true)
-    )
-    appDispatch(updateUserList(data?.data as UserState))
-    appDispatch(addEventToList(eventData.data?.data as EventState))
-  };
+  const handleToggle = async () => {
+    if (!loggedUser || isProcessing) return;
 
-  const onJoin = async (userId: string, eventId: string) => {
+    setIsProcessing(true);
+
     try {
-      await joinActivity({ userId, eventId });
+      if (isJoined) {
+        const result = await leaveEvent({
+          eventId: eventid as string,
+          userId: loggedUser,
+        });
+
+        if ('data' in result && result.data.success) {
+          setIsJoined(false);
+          setShowSuccess(true);
+          setTimeout(() => setShowSuccess(false), 2000);
+        }
+      } else {
+        const result = await joinEvent({
+          eventId: eventid as string,
+          userId: loggedUser,
+        });
+
+        if ('data' in result && result.data.success) {
+          setIsJoined(true);
+          setShowSuccess(true);
+          setTimeout(() => setShowSuccess(false), 2000);
+        }
+      }
     } catch (error) {
-      console.error(error);
+      console.error('Error toggling event participation:', error);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
-  const handleLeave = () => {
-    appDispatch(deleteUserFromList(token));
-    appDispatch(deleteEventFromList(eventId));
-    if (eventId === chatInfo.eventId) appDispatch(closeChat());
-    onLeave(loggedUser as string, eventId as string).then(() =>
-      setIsJoined(false)
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center">
+        <div className="w-32 h-12 bg-gray-100 rounded-xl animate-pulse"></div>
+      </div>
     );
-  };
-
-  const onLeave = async (userId: string, eventId: string) => {
-    try {
-      await leaveActivity({ userId, eventId })
-      navigate('/user-dashboard')
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  // JOIN / LEAVE
+  }
 
   return (
-    <div className="">
-      <button
-        onClick={isJoined ? handleLeave : handleJoin}
-        className="btn flex bg-white items-center gap-2 px-4 ml-4 border-2 border-slate-200 rounded-md text-black hover:bg-gray-100 hover:border-slate-100"
+    <div className="relative">
+      <motion.button
+        onClick={handleToggle}
+        disabled={isProcessing}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        className={`
+          relative overflow-hidden flex items-center justify-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 min-w-32 h-12
+          ${
+            isJoined
+              ? 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white shadow-lg hover:shadow-xl'
+              : 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white shadow-lg hover:shadow-xl'
+          }
+          ${isProcessing ? 'cursor-not-allowed opacity-70' : 'cursor-pointer'}
+        `}
       >
-        {isLoading ? (
-          <ColorRing
-            visible={true}
-            height="100%"
-            width="100%"
-            ariaLabel="blocks-loading"
-            wrapperStyle={{}}
-            wrapperClass="blocks-wrapper"
-            colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
-          />
-        ) : isJoined ? (
+        {/* Background Animation */}
+        <motion.div
+          className="absolute inset-0 bg-white/20"
+          initial={{ x: '-100%' }}
+          animate={{ x: isProcessing ? '100%' : '-100%' }}
+          transition={{ duration: 1, repeat: isProcessing ? Infinity : 0 }}
+        />
+
+        {/* Button Content */}
+        <AnimatePresence mode="wait">
+          {showSuccess ? (
+            <motion.div
+              key="success"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="flex items-center space-x-2"
+            >
+              <FiCheck className="w-4 h-4" />
+              <span>{isJoined ? 'Joined!' : 'Left!'}</span>
+            </motion.div>
+          ) : isProcessing ? (
+            <motion.div
+              key="loading"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="flex items-center space-x-2"
+            >
+              <FiLoader className="w-4 h-4 animate-spin" />
+              <span>{isJoined ? 'Leaving...' : 'Joining...'}</span>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="default"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="flex items-center space-x-2"
+            >
+              {isJoined ? (
+                <>
+                  <FiUserMinus className="w-4 h-4" />
+                  <span>Leave Event</span>
+                </>
+              ) : (
+                <>
+                  <FiUserPlus className="w-4 h-4" />
+                  <span>Join Event</span>
+                </>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.button>
+
+      {/* Status Indicator */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex items-center space-x-1 text-xs"
+      >
+        {isJoined ? (
           <>
-            LEAVE
-            <FaArrowRight size={16} className="fill-gray-400" />
+            <FiHeart className="w-3 h-3 text-red-500" />
+            <span className="text-gray-600">You're attending</span>
           </>
         ) : (
           <>
-            <FaArrowLeft size={16} className="fill-pink-400" />
-            JOIN
+            <FiHeart className="w-3 h-3 text-gray-400" />
+            <span className="text-gray-600">Not attending</span>
           </>
         )}
-      </button>
-
+      </motion.div>
     </div>
   );
 }

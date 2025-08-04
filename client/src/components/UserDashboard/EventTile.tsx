@@ -1,68 +1,213 @@
-import { Link } from "react-router-dom";
-import moment from "moment";
-import { FaLocationDot } from "react-icons/fa6";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
+import { EventState } from '../../reduxFiles/slices/events';
+import {
+  FiCalendar,
+  FiMapPin,
+  FiUsers,
+  FiStar,
+  FiClock,
+  FiArrowRight,
+} from 'react-icons/fi';
 
-function EventTile({ event }: { event: any }) {
-  const img = "./friends-placeholder.png";
-
-  return (
-    <>
-      <Link
-        to={`/event/${event.eventId}`}
-        className="flex flex-row w-full p-2 my-3 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100"
-      >
-        <div className="flex flex-col w-3/5 pr-3 justify-between">
-          <div>
-            {event.date ? (
-              <h3 className="text-pink-500 text-[13px] ">
-                {moment(event.date).format("ddd, Do MMM - h:mm a")}{" "}
-              </h3>
-            ) : (
-              <h3 className="text-pink-500 text-xs lg:text-sm">Date TBC</h3>
-            )}
-            {event.location ? (
-              <div className="flex align-bottom pt-1">
-                <FaLocationDot className="fill-gray-400 inline-block" />
-                <h3 className="text-sm lg:text-sm text-gray-500 inline-block pl-1">
-                  {event.location}
-                </h3>
-              </div>
-            ) : (
-              <div className="flex align-bottom pt-1">
-                <FaLocationDot className="fill-gray-400 inline-block" />
-                <h3 className="text-sm lg:text-sm text-gray-500 inline-block pl-1">
-                  Location TBC
-                </h3>
-              </div>
-            )}
-          </div>
-          <h2 className=" text-xl font-bold tracking-tight text-gray-900">
-            {event.title}
-          </h2>
-          <div className="flex flex-row">
-            {event.UserEvents &&
-              event.UserEvents.length &&
-              event.UserEvents[0].isHost === true ? (
-              <p className=" text-[10px] tracking-tight text-gray-500">
-                ⋆ You are hosting
-              </p>
-            ) : (
-              <p className=" text-[10px] tracking-tight text-gray-500">
-                ⋆ You are a guest
-              </p>
-            )}
-          </div>
-        </div>
-
-        <div className=" w-[270px] h-[120px] rounded-lg overflow-hidden items-center">
-          <img
-            className="object-cover w-full h-full"
-            src={event.coverPic ? event.coverPic : img}
-          ></img>
-        </div>
-      </Link>
-    </>
-  );
+interface EventTileProps {
+  event: EventState;
+  userId?: string;
+  viewMode?: 'grid' | 'list';
 }
 
-export default EventTile;
+export default function EventTile({
+  event,
+  userId,
+  viewMode = 'grid',
+}: EventTileProps) {
+  const navigate = useNavigate();
+
+  const isHost = event.UserEvents?.some(
+    (userEvent) => userEvent.userId === userId && userEvent.isHost
+  );
+
+  const attendeeCount = event.UserEvents?.length || 0;
+  const eventDate = moment(event.date);
+  const isUpcoming = eventDate.isAfter(moment());
+  const timeFromNow = eventDate.fromNow();
+
+  const handleEventClick = () => {
+    navigate(`/event-dashboard/${event.eventId}`);
+  };
+
+  if (viewMode === 'list') {
+    return (
+      <motion.div
+        whileHover={{ scale: 1.01 }}
+        whileTap={{ scale: 0.99 }}
+        onClick={handleEventClick}
+        className="bg-white rounded-2xl border border-gray-200 hover:border-purple-300 hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden"
+      >
+        <div className="flex items-center p-6">
+          {/* Event Image */}
+          <div className="flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden mr-6">
+            <img
+              src={
+                event.coverPic ||
+                'https://res.cloudinary.com/dpzz6vn2w/image/upload/v1688544322/friends-placeholder_ljftyb.png'
+              }
+              alt={event.title}
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          {/* Event Info */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start justify-between">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center space-x-2 mb-2">
+                  <h3 className="text-lg font-semibold text-gray-900 truncate">
+                    {event.title}
+                  </h3>
+                  {isHost && (
+                    <div className="flex items-center space-x-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-2 py-1 rounded-lg text-xs font-medium">
+                      <FiStar className="w-3 h-3" />
+                      <span>Host</span>
+                    </div>
+                  )}
+                  <div
+                    className={`px-2 py-1 rounded-lg text-xs font-medium ${
+                      isUpcoming
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-gray-100 text-gray-600'
+                    }`}
+                  >
+                    {isUpcoming ? 'Upcoming' : 'Past'}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-gray-600">
+                  <div className="flex items-center space-x-1">
+                    <FiCalendar className="w-4 h-4" />
+                    <span>{eventDate.format('MMM D, YYYY')}</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <FiClock className="w-4 h-4" />
+                    <span>{timeFromNow}</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <FiUsers className="w-4 h-4" />
+                    <span>{attendeeCount} attending</span>
+                  </div>
+                </div>
+
+                {event.location && (
+                  <div className="flex items-center space-x-1 text-sm text-gray-600 mt-1">
+                    <FiMapPin className="w-4 h-4" />
+                    <span className="truncate">{event.location}</span>
+                  </div>
+                )}
+              </div>
+
+              <FiArrowRight className="w-5 h-5 text-gray-400 ml-4 flex-shrink-0" />
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.div
+      whileHover={{ scale: 1.02, y: -5 }}
+      whileTap={{ scale: 0.98 }}
+      onClick={handleEventClick}
+      className="bg-white rounded-2xl shadow-lg border border-gray-200 hover:border-purple-300 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden group"
+    >
+      {/* Event Image */}
+      <div className="relative h-48 overflow-hidden">
+        <img
+          src={
+            event.coverPic ||
+            'https://res.cloudinary.com/dpzz6vn2w/image/upload/v1688544322/friends-placeholder_ljftyb.png'
+          }
+          alt={event.title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+        {/* Status Badges */}
+        <div className="absolute top-4 left-4 flex items-center space-x-2">
+          {isHost && (
+            <div className="flex items-center space-x-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1 rounded-full text-xs font-medium">
+              <FiStar className="w-3 h-3" />
+              <span>Host</span>
+            </div>
+          )}
+          <div
+            className={`px-3 py-1 rounded-full text-xs font-medium ${
+              isUpcoming ? 'bg-green-500 text-white' : 'bg-gray-500 text-white'
+            }`}
+          >
+            {isUpcoming ? 'Upcoming' : 'Past'}
+          </div>
+        </div>
+
+        {/* Attendee Count */}
+        <div className="absolute top-4 right-4 flex items-center space-x-1 bg-black/50 text-white px-3 py-1 rounded-full text-xs font-medium">
+          <FiUsers className="w-3 h-3" />
+          <span>{attendeeCount}</span>
+        </div>
+
+        {/* Event Title */}
+        <div className="absolute bottom-4 left-4 right-4">
+          <h3 className="text-xl font-bold text-white mb-1 line-clamp-2">
+            {event.title}
+          </h3>
+        </div>
+      </div>
+
+      {/* Event Details */}
+      <div className="p-6">
+        <div className="space-y-3">
+          {/* Date and Time */}
+          <div className="flex items-center space-x-2 text-gray-600">
+            <FiCalendar className="w-4 h-4" />
+            <span className="text-sm font-medium">
+              {eventDate.format('ddd, MMM D - h:mm A')}
+            </span>
+          </div>
+
+          {/* Time from now */}
+          <div className="flex items-center space-x-2 text-gray-600">
+            <FiClock className="w-4 h-4" />
+            <span className="text-sm">{timeFromNow}</span>
+          </div>
+
+          {/* Location */}
+          {event.location && (
+            <div className="flex items-center space-x-2 text-gray-600">
+              <FiMapPin className="w-4 h-4" />
+              <span className="text-sm truncate">{event.location}</span>
+            </div>
+          )}
+
+          {/* Description */}
+          {event.description && (
+            <p className="text-sm text-gray-600 line-clamp-2 mt-3">
+              {event.description}
+            </p>
+          )}
+        </div>
+
+        {/* Action Button */}
+        <div className="mt-6">
+          <div className="flex items-center justify-between text-purple-600 font-medium group-hover:text-purple-700 transition-colors duration-200">
+            <span>Manage Event</span>
+            <FiArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
