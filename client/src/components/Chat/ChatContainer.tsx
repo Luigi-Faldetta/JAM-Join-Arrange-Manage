@@ -38,7 +38,9 @@ function ChatContainer() {
   const data = _data?.data;
   const handleMessageSubmit = async (message: string) => {
     try {
-      socket.emit("newMessage", { userId, eventId, message });
+      if (socket) {
+        socket.emit("newMessage", { userId, eventId, message });
+      }
 
       if (isSuccess) {
         refetch();
@@ -51,17 +53,25 @@ function ChatContainer() {
   };
 
   useEffect(() => {
-    socket.on("newMessage", (res: any) => {
-      dispatch(addMessage(res.data));
-      if (messagesRef.current) {
-        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-        messagesRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "end",
-        });
-      }
-    });
-  }, [socket]);
+    if (socket) {
+      const handleNewMessage = (res: any) => {
+        dispatch(addMessage(res.data));
+        if (messagesRef.current) {
+          messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+          messagesRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "end",
+          });
+        }
+      };
+
+      socket.on("newMessage", handleNewMessage);
+      
+      return () => {
+        socket.off("newMessage", handleNewMessage);
+      };
+    }
+  }, [socket, dispatch]);
   const handleSubmit = (event: any) => {
     event.preventDefault();
     handleMessageSubmit(message);

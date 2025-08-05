@@ -11,10 +11,14 @@ import { io } from 'socket.io-client';
 const URL =
   process.env.NODE_ENV !== 'production'
     ? 'http://localhost:3200/'
-    : 'https://codeworks-thesis-4063bceaa74a.herokuapp.com/';
-// const URL = 'https://join-arrange-manage-33613e3769a6.herokuapp.com/';
+    : process.env.REACT_APP_API_URL || 'https://codeworks-thesis-4063bceaa74a.herokuapp.com/';
 
-export const socket = io(URL);
+// Only initialize socket if we have a valid URL and are not in a static build
+export const socket = typeof window !== 'undefined' ? io(URL, {
+  transports: ['websocket', 'polling'],
+  timeout: 20000,
+  forceNew: true
+}) : null;
 
 export const fetchExpenseSheet = async (eventId: string) => {
   return await fetch(URL + `calculate/${eventId}`);
