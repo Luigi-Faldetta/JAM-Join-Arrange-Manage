@@ -11,7 +11,7 @@ import { io } from 'socket.io-client';
 const URL =
   process.env.NODE_ENV !== 'production'
     ? process.env.REACT_APP_API_BASE_URL || 'http://localhost:3200/'
-    : process.env.REACT_APP_API_BASE_URL || 'https://codeworks-thesis-4063bceaa74a.herokuapp.com/';
+    : process.env.REACT_APP_API_BASE_URL || 'https://jam-join-arrange-manage-production.up.railway.app';
 
 // Only initialize socket if we have a valid URL and are not in a static build
 export const socket = typeof window !== 'undefined' ? io(URL, {
