@@ -26,7 +26,7 @@ import SSOCallback from './components/SSOCallback/SSOCallback';
 
 const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY as string;
 if (!clerkPubKey) {
-  throw new Error('Missing Clerk Publishable Key');
+  console.warn('Missing Clerk Publishable Key - some authentication features may not work');
 }
 
 function Layout() {
@@ -71,13 +71,22 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  return (
-    <ClerkProvider publishableKey={clerkPubKey}>
-      <Provider store={store}>
-        <RouterProvider router={router} />
-      </Provider>
-    </ClerkProvider>
+  const AppContent = () => (
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   );
+
+  if (clerkPubKey) {
+    return (
+      <ClerkProvider publishableKey={clerkPubKey}>
+        <AppContent />
+      </ClerkProvider>
+    );
+  }
+
+  // Fallback when Clerk is not configured
+  return <AppContent />;
 }
 
 export default App;
