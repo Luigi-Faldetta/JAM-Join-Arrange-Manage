@@ -1,56 +1,85 @@
 import routes from 'express';
 const router = routes.Router();
 
-import './models/modelDB'
-import { user, event, todo, expense, userEvent, session, calculation, eventChat, email } from './controllers/index'
+import './models/modelDB.js';
+import {
+  user,
+  event,
+  todo,
+  expense,
+  userEvent,
+  session,
+  calculation,
+  eventChat,
+  email,
+} from './controllers/index.js';
 
+// Health check - keeping your original format
 router.get('/health', (_req, res) => {
-    res.send({ health: 'Server runnning!! =)' })
-})
+  res.send({ health: 'Server runnning!! =)' });
+});
 
-// User
-router.post('/register', user.newUser)
-router.get('/user/:userid', user.getUser)
-router.patch('/user/:userid', user.updateUser)
-router.delete('/user/:userid', user.deleteUser)
-router.get('/users/:eventid', user.getAllUsers)
+// ============================================================================
+// USER ROUTES - EXACTLY AS ORIGINAL
+// ============================================================================
+router.post('/register', user.newUser);
+router.get('/user/:userid', user.getUser);
+router.patch('/user/:userid', user.updateUser);
+router.delete('/user/:userid', user.deleteUser);
+router.get('/users/:eventid', user.getAllUsers);
 
-// Event
-router.post('/newevent/:userid', event.newEvent)
-router.get('/event/:eventid', event.getEvent)
-router.patch('/event/:eventid', event.updateEvent)
-router.delete('/event/:eventid', event.deleteEvent)
-router.get('/events/:userid', event.getUserEvents)
+// ============================================================================
+// EVENT ROUTES - EXACTLY AS ORIGINAL
+// ============================================================================
+router.post('/newevent/:userid', event.newEvent); // RESTORED ORIGINAL
+router.get('/event/:eventid', event.getEvent);
+router.patch('/event/:eventid', event.updateEvent);
+router.delete('/event/:eventid', event.deleteEvent);
+router.get('/events/:userid', event.getUserEvents); // RESTORED ORIGINAL
 
-// Todo
-router.post('/todo', todo.newToDo)
-router.patch('/todo/:todoid', todo.updateToDo)
-router.delete('/todo/:todoid', todo.deleteToDo)
-router.get('/todos/:eventid', todo.getToDos)
+// ============================================================================
+// TODO ROUTES - EXACTLY AS ORIGINAL
+// ============================================================================
+router.post('/todo', todo.newToDo);
+router.patch('/todo/:todoid', todo.updateToDo);
+router.delete('/todo/:todoid', todo.deleteToDo);
+router.get('/todos/:eventid', todo.getToDos);
 
-// Expense
-router.post('/expense', expense.newExpense)
-router.delete('/expense/:expenseid', expense.deleteExpense)
-router.get('/expenses/:eventid', expense.getExpenses)
+// ============================================================================
+// EXPENSE ROUTES - EXACTLY AS ORIGINAL
+// ============================================================================
+router.post('/expense', expense.newExpense);
+router.delete('/expense/:expenseid', expense.deleteExpense);
+router.get('/expenses/:eventid', expense.getExpenses);
 
-// User event
-router.post('/useractivity', userEvent.joinEvent)
-router.patch('/useractivity', userEvent.updateEvent)
-router.delete('/useractivity', userEvent.leaveEvent)
+// ============================================================================
+// USER EVENT ROUTES - EXACTLY AS ORIGINAL
+// ============================================================================
+router.post('/useractivity', userEvent.joinEvent);
+router.patch('/useractivity', userEvent.updateEvent);
+router.delete('/useractivity', userEvent.leaveEvent);
 
-// Session
+// ============================================================================
+// SESSION ROUTES - EXACTLY AS ORIGINAL
+// ============================================================================
 router.post('/userlogin', session.logIn);
 router.get('/userlogout', session.logOut);
-router.get('/me', session.authorize, session.getUserInfo)
+router.get('/me', session.authorize, session.getUserInfo);
 
-// Calculation
-router.get('/calculate/:eventid', calculation.expenseSheet)
+// ============================================================================
+// CALCULATION ROUTES - EXACTLY AS ORIGINAL
+// ============================================================================
+router.get('/calculate/:eventid', calculation.expenseSheet);
 
-// Event chat
-router.get('/chat/:eventid', eventChat.getChat)
-router.post('/chat/', eventChat.newMessage)
+// ============================================================================
+// CHAT ROUTES - EXACTLY AS ORIGINAL
+// ============================================================================
+router.get('/chat/:eventid', eventChat.getChat);
+router.post('/chat/', eventChat.newMessage);
 
-// Email
-router.get('/passwordreset/:email', email.resetPassword)
+// ============================================================================
+// EMAIL ROUTES - EXACTLY AS ORIGINAL
+// ============================================================================
+router.get('/passwordreset/:email', email.resetPassword);
 
 export default router;

@@ -1,36 +1,38 @@
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
-// import { calculateExpenseSheet } from './expenseSheet';
-import store from '../store';
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface ExpenseState {
-    id?:string,
-    item: string;
-    cost: number;
-    eventId: string;
-    purchaserId: string;
+  expenseId?: string;
+  description: string;
+  amount: number;
+  eventId: string;
+  paidBy: string;
+  createdAt?: string;
+  User?: {
+    name: string;
+    profilePic?: string;
+  };
 }
 
-const initialExpenseState: ExpenseState = {
-    id:"",
-    item: "",
-    cost: 0,
-    eventId: "",
-    purchaserId: "",
-}
+const initialExpenseState: ExpenseState[] = [];
 
 export const expenseSlice = createSlice({
-    name: "expense",
-    initialState: initialExpenseState,
-    reducers: {
-        addExpense: (state, action: PayloadAction<Partial<ExpenseState> & Pick<ExpenseState, "cost" | "eventId" | "purchaserId" | "item">>) => { 
-            state= action.payload 
-        },
-    }
-})
+  name: 'expenses',
+  initialState: initialExpenseState,
+  reducers: {
+    setExpenseList: (state, action: PayloadAction<ExpenseState[]>) => {
+      return action.payload;
+    },
+    addExpense: (state, action: PayloadAction<ExpenseState>) => {
+      state.push(action.payload);
+    },
+    deleteExpense: (state, action: PayloadAction<string>) => {
+      return state.filter((expense) => expense.expenseId !== action.payload);
+    },
+  },
+});
 
-export const { addExpense } = expenseSlice.actions
+export const { setExpenseList, addExpense, deleteExpense } =
+  expenseSlice.actions;
 
-const expenseReducer = expenseSlice.reducer
-
-export default { expenseReducer }
+export default expenseSlice.reducer;

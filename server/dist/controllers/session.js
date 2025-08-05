@@ -33,8 +33,9 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
  */
 const logIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!req.body.email || !req.body.password) {
-        return res.status(400)
-            .json((0, utils_1.resBody)(false, "400", null, "Missing input data"));
+        return res
+            .status(400)
+            .json((0, utils_1.resBody)(false, '400', null, 'Missing input data'));
     }
     try {
         const user = yield associations_1.User.findOne({ where: { email: req.body.email } });
@@ -48,15 +49,15 @@ const logIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             httpOnly: false,
             secure: constants_js_1.__prod__,
             sameSite: 'strict',
-            maxAge: 1000 * 60 * 60 * 2 // 2h
+            maxAge: 1000 * 60 * 60 * 2, // 2h
         });
-        res.status(200)
+        res
+            .status(200)
             .json((0, utils_1.resBody)(true, null, user.userId, 'Logged in successfully'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.log(err);
-        res.status(401)
-            .json((0, utils_1.resBody)(false, null, null, err.message));
+        res.status(401).json((0, utils_1.resBody)(false, null, null, err.message));
     }
 });
 /**
@@ -66,15 +67,13 @@ const logOut = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         res.cookie('jwt', '', {
             httpOnly: false,
-            expires: new Date(0)
+            expires: new Date(0),
         });
-        res.status(200)
-            .json((0, utils_1.resBody)(true, null, null, 'Logged out successfully'));
+        res.status(200).json((0, utils_1.resBody)(true, null, null, 'Logged out successfully'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.log(err);
-        res.status(500)
-            .json((0, utils_1.resBody)(false, null, null, err.message));
+        res.status(500).json((0, utils_1.resBody)(false, null, null, err.message));
     }
 });
 /**
@@ -84,20 +83,28 @@ const authorize = (req, res, next) => __awaiter(void 0, void 0, void 0, function
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     if (token == null) {
-        return res.status(401)
-            .json((0, utils_1.resBody)(false, "401", null, 'Token is not present'));
+        return res
+            .status(401)
+            .json((0, utils_1.resBody)(false, '401', null, 'Token is not present'));
     }
     jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET, (err, payload) => __awaiter(void 0, void 0, void 0, function* () {
         if (err) {
             console.log(err);
-            return res.status(403)
-                .json((0, utils_1.resBody)(false, "403", null, 'Some error happened during the token verification'));
+            if (err.name === 'TokenExpiredError') {
+                return res
+                    .status(401)
+                    .json((0, utils_1.resBody)(false, '401', null, 'Session expired, please log in again.'));
+            }
+            return res
+                .status(403)
+                .json((0, utils_1.resBody)(false, '403', null, 'Some error happened during the token verification'));
         }
         // @ts-ignore
         const user = yield associations_1.User.findByPk(payload === null || payload === void 0 ? void 0 : payload.userId);
         if (!user) {
-            return res.status(403)
-                .json((0, utils_1.resBody)(false, "403", null, 'Some error happened during the user verification'));
+            return res
+                .status(403)
+                .json((0, utils_1.resBody)(false, '403', null, 'Some error happened during the user verification'));
         }
         const _a = Object.assign({}, user.dataValues), { password } = _a, safeUser = __rest(_a, ["password"]);
         // @ts-ignore
@@ -110,13 +117,13 @@ const authorize = (req, res, next) => __awaiter(void 0, void 0, void 0, function
  */
 const getUserInfo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        res.status(200)
+        res
+            .status(200)
             .json((0, utils_1.resBody)(true, null, req.user, 'User is logged'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.log(err);
-        res.status(500)
-            .json((0, utils_1.resBody)(false, null, null, err.message));
+        res.status(500).json((0, utils_1.resBody)(false, null, null, err.message));
     }
 });
 exports.default = { logIn, logOut, authorize, getUserInfo };

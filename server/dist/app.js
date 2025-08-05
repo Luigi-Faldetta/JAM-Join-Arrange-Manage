@@ -25,28 +25,32 @@ const app = (0, express_1.default)();
 exports.app = app;
 const server = http_1.default.createServer(app);
 exports.server = server;
-const corsOptions = { origin: true, credentials: true };
-const io = new socket_io_1.Server(server, { cors: corsOptions });
-exports.io = io;
-app.use((0, cors_1.default)());
+// Use the same CORS options for both Express and Socket.IO
+const corsOptions = {
+    origin: ['http://localhost:3000', process.env.FRONTEND_URL].filter((url) => typeof url === 'string'),
+    credentials: true,
+};
+app.use((0, cors_1.default)(corsOptions));
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use(router_js_1.default);
-io.on("connection", (socket) => {
-    socket.on("joinRoom", (info) => {
+const io = new socket_io_1.Server(server, { cors: corsOptions });
+exports.io = io;
+io.on('connection', (socket) => {
+    socket.on('joinRoom', (info) => {
         socket.join(info.eventId);
         console.log(`User ${info.userId} joined room: ${info.eventId}`);
     });
-    socket.on("leaveRoom", (eventId) => {
+    socket.on('leaveRoom', (eventId) => {
         socket.leave(eventId);
     });
-    socket.on("newMessage", ({ userId, eventId, message, }) => __awaiter(void 0, void 0, void 0, function* () {
+    socket.on('newMessage', ({ userId, eventId, message, }) => __awaiter(void 0, void 0, void 0, function* () {
         const msgCreated = yield (0, socketMessages_js_1.addMessageSocket)({
             message,
             userId,
             eventId,
         });
-        io.to(eventId).emit("newMessage", msgCreated);
+        io.to(eventId).emit('newMessage', msgCreated);
     }));
-    socket.on("disconnect", () => { });
+    socket.on('disconnect', () => { });
 });

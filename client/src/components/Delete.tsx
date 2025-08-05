@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDeleteUserMutation, useGetMeQuery } from '../services/JamDB';
 
@@ -5,15 +6,37 @@ function Delete({ setOpen }: { setOpen: (open: boolean) => void }) {
   const [deleteUser] = useDeleteUserMutation();
   const navigate = useNavigate();
 
-  // Get user data from token instead of using token as userId
-  const { data } = useGetMeQuery();
+  const { data, error } = useGetMeQuery();
+
+  // Use useEffect to close the modal if not authenticated
+  useEffect(() => {
+    if (
+      !data ||
+      (error &&
+        typeof error === 'object' &&
+        'status' in error &&
+        (error as { status?: number }).status === 401)
+    ) {
+      setOpen(false);
+    }
+  }, [data, error, setOpen]);
+
+  // Only render if user is authenticated
+  if (
+    !data ||
+    (error &&
+      typeof error === 'object' &&
+      'status' in error &&
+      (error as { status?: number }).status === 401)
+  ) {
+    return null;
+  }
 
   function handleCloseDelete() {
     setOpen(false);
   }
 
   async function handleDelete() {
-    // Use the actual userId from the user data, not the token
     const userId = data?.data?.userId;
 
     if (!userId) {
@@ -22,7 +45,7 @@ function Delete({ setOpen }: { setOpen: (open: boolean) => void }) {
     }
 
     try {
-      const res = await deleteUser(userId);
+      await deleteUser(userId);
       localStorage.removeItem('token');
       navigate('/');
       // window.location.reload();

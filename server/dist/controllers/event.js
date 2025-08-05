@@ -9,123 +9,152 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const associations_1 = require("../models/associations");
+const associations_js_1 = require("../models/associations.js");
 const uuid_1 = require("uuid");
 const utils_1 = require("../utils");
 /**
- * @param req needs body with at least {"title"}
+ * Create a new event - ORIGINAL SIGNATURE PRESERVED
+ * @param req needs body with at least {"title"} and params.userid
  */
 const newEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Validate userid parameter (keeping original validation)
     if (!(0, uuid_1.validate)(req.params.userid)) {
-        return res.status(400)
-            .json((0, utils_1.resBody)(false, "400", null, "Wrong uuid"));
+        return res.status(400).json((0, utils_1.resBody)(false, '400', null, 'Wrong uuid'));
     }
-    const user = yield associations_1.User.findOne({
-        where: { userId: req.params.userid }
+    // Check if user exists (keeping original validation)
+    const user = yield associations_js_1.User.findOne({
+        where: { userId: req.params.userid },
     });
     if (!user) {
-        return res.status(400)
-            .json((0, utils_1.resBody)(false, "400", null, "Wrong host id"));
+        return res.status(400).json((0, utils_1.resBody)(false, '400', null, 'Wrong host id'));
     }
+    // Validate required fields (keeping original validation)
     if (!req.body.title) {
-        return res.status(400)
-            .json((0, utils_1.resBody)(false, "400", null, "Missing input data"));
+        return res
+            .status(400)
+            .json((0, utils_1.resBody)(false, '400', null, 'Missing input data'));
     }
     try {
-        const event = yield associations_1.Event.create(req.body);
-        yield associations_1.UserEvent.create({ userId: req.params.userid, eventId: event.eventId, isHost: true });
-        const eventToReturn = yield associations_1.Event.findOne({
+        // Create event (enhanced with additional fields but backward compatible)
+        const eventData = {
+            eventId: (0, uuid_1.v4)(),
+            title: req.body.title,
+            description: req.body.description || null,
+            date: req.body.date || new Date(),
+            location: req.body.location || null,
+            coverPic: req.body.coverPic || null,
+            hostId: req.params.userid,
+        };
+        const event = yield associations_js_1.Event.create(eventData);
+        // Create host relationship (keeping original logic)
+        yield associations_js_1.UserEvent.create({
+            userId: req.params.userid,
+            eventId: event.eventId,
+            isHost: true,
+        });
+        // Return event in original format
+        const eventToReturn = yield associations_js_1.Event.findOne({
             where: { eventId: event.eventId },
             include: [
                 {
-                    model: associations_1.UserEvent,
+                    model: associations_js_1.UserEvent,
                     where: { userId: req.params.userid },
-                    attributes: ["isHost", "isGoing"],
+                    attributes: ['isHost', 'isGoing'],
                 },
             ],
         });
-        res.status(201)
+        res
+            .status(201)
             .json((0, utils_1.resBody)(true, null, eventToReturn, 'Event created and linked to host'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
-        res.status(500)
-            .json((0, utils_1.resBody)(false, "500", null, err.message));
+        res.status(500).json((0, utils_1.resBody)(false, '500', null, err.message));
     }
 });
 /**
+ * Get event by ID - ORIGINAL SIGNATURE PRESERVED
  * @param req needs req.params.eventid
  */
 const getEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const event = yield associations_1.Event.findOne({
+        const event = yield associations_js_1.Event.findOne({
             where: { eventId: req.params.eventid },
-            include: [{
-                    model: associations_1.UserEvent,
+            include: [
+                {
+                    model: associations_js_1.UserEvent,
                     attributes: ['userId', 'isHost', 'isGoing'],
-                    include: [{
-                            model: associations_1.User,
-                            attributes: ['name', 'profilePic']
-                        }]
-                }]
+                    include: [
+                        {
+                            model: associations_js_1.User,
+                            attributes: ['name', 'profilePic'],
+                        },
+                    ],
+                },
+            ],
         });
         if (!event) {
-            return res.status(404)
-                .json((0, utils_1.resBody)(false, "404", null, "No event found"));
+            return res
+                .status(404)
+                .json((0, utils_1.resBody)(false, '404', null, 'No event found'));
         }
-        res.status(200)
-            .json((0, utils_1.resBody)(true, null, event, 'Event fetched'));
+        res.status(200).json((0, utils_1.resBody)(true, null, event, 'Event fetched'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
-        res.status(500)
-            .json((0, utils_1.resBody)(false, "500", null, err.message));
+        res.status(500).json((0, utils_1.resBody)(false, '500', null, err.message));
     }
 });
 /**
+ * Update event - ORIGINAL SIGNATURE PRESERVED
  * @param req needs req.params.eventid and body with what has changed
  */
 const updateEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const updatedEvent = yield associations_1.Event.update(req.body, {
+        const updatedEvent = yield associations_js_1.Event.update(req.body, {
             where: { eventId: req.params.eventid },
-            returning: true
+            returning: true,
         });
-        res.status(200)
+        res
+            .status(200)
             .json((0, utils_1.resBody)(true, null, updatedEvent[1][0], 'Event updated'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
-        res.status(500)
-            .json((0, utils_1.resBody)(false, "500", null, err.message));
+        res.status(500).json((0, utils_1.resBody)(false, '500', null, err.message));
     }
 });
 /**
+ * Delete event - ORIGINAL SIGNATURE PRESERVED
  * @param req needs req.params.eventid
  */
 const deleteEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const eventExists = yield associations_1.Event.findOne({ where: { eventId: req.params.eventid } });
+        const eventExists = yield associations_js_1.Event.findOne({
+            where: { eventId: req.params.eventid },
+        });
         if (!eventExists) {
-            return res.status(400)
-                .json((0, utils_1.resBody)(false, '400', null, "Wrong event id"));
+            return res
+                .status(400)
+                .json((0, utils_1.resBody)(false, '400', null, 'Wrong event id'));
         }
-        const deletedEvent = yield associations_1.Event.destroy({ where: { eventId: req.params.eventid } });
-        res.status(200)
-            .json((0, utils_1.resBody)(true, null, deletedEvent, 'Event deleted'));
+        const deletedEvent = yield associations_js_1.Event.destroy({
+            where: { eventId: req.params.eventid },
+        });
+        res.status(200).json((0, utils_1.resBody)(true, null, deletedEvent, 'Event deleted'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
-        res.status(400)
-            .json((0, utils_1.resBody)(false, "500", null, err.message));
+        res.status(400).json((0, utils_1.resBody)(false, '500', null, err.message));
     }
 });
 /**
+ * Get user events - ORIGINAL SIGNATURE PRESERVED
  * @param req needs req.params.userid
  */
 const getUserEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const eventIds = yield associations_1.UserEvent.findAll({
+        const eventIds = yield associations_js_1.UserEvent.findAll({
             where: { userId: req.params.userid },
         });
         if (eventIds.length) {
@@ -133,16 +162,15 @@ const getUserEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             for (const event of eventIds) {
                 eventsArray.push(event.dataValues.eventId);
             }
-            const events = yield associations_1.Event.findAll({
+            const events = yield associations_js_1.Event.findAll({
                 where: { eventId: eventsArray },
                 include: {
-                    model: associations_1.UserEvent,
+                    model: associations_js_1.UserEvent,
                     where: { userId: req.params.userid },
-                    attributes: ['isHost', 'isGoing']
-                }
+                    attributes: ['isHost', 'isGoing'],
+                },
             });
-            res.status(200)
-                .json((0, utils_1.resBody)(true, null, events, 'User events fetched'));
+            res.status(200).json((0, utils_1.resBody)(true, null, events, 'User events fetched'));
         }
         else {
             throw new Error('No events where found');
@@ -150,8 +178,7 @@ const getUserEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
-        res.status(500)
-            .json((0, utils_1.resBody)(false, "500", null, err.message));
+        res.status(500).json((0, utils_1.resBody)(false, '500', null, err.message));
     }
 });
 exports.default = { newEvent, getEvent, updateEvent, deleteEvent, getUserEvents };

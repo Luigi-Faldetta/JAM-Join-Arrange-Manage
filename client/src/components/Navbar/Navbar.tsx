@@ -14,6 +14,7 @@ import { useIsLoggedIn } from '../../utils/useIsLoggedIn';
 import { useGetMeQuery } from '../../services/JamDB';
 import { useAppDispatch } from '../../reduxFiles/store';
 import { openLogout } from '../../reduxFiles/slices/logout';
+import { openAuthModal } from '../../reduxFiles/slices/authModal';
 
 // Types
 interface NavItem {
@@ -32,7 +33,7 @@ function Navbar() {
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
-  const isLoggedIn = useIsLoggedIn();
+  const { isLoggedIn } = useIsLoggedIn();
   const dispatch = useAppDispatch();
   const location = useLocation();
 
@@ -55,11 +56,16 @@ function Navbar() {
     { name: 'Home', to: 'hero', offset: -190 },
     { name: 'About', to: 'about', offset: -72 },
     { name: 'FAQs', to: 'faqs', offset: -100 },
+    { name: 'Get in touch', to: 'contact', offset: -100 },
   ];
 
   const handleSignOut = () => {
     dispatch(openLogout());
     setShowDropdown(false);
+  };
+
+  const handleSignInClick = () => {
+    dispatch(openAuthModal('signin'));
   };
 
   const handleDropdownToggle = () => {
@@ -180,8 +186,11 @@ function Navbar() {
               </div>
             ) : (
               <div>
-                <button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 font-medium">
-                  Get Started
+                <button 
+                  onClick={handleSignInClick}
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 font-medium"
+                >
+                  Sign In
                 </button>
               </div>
             )}
@@ -256,8 +265,14 @@ function Navbar() {
 
             {!isLoggedIn && (
               <div className="pt-4 border-t border-gray-200">
-                <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300">
-                  Get Started
+                <button 
+                  onClick={() => {
+                    handleSignInClick();
+                    setShowMobileMenu(false);
+                  }}
+                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300"
+                >
+                  Sign In
                 </button>
               </div>
             )}

@@ -86,13 +86,12 @@ function ContactUs() {
   ];
 
   return (
-    <section className="relative min-h-screen py-24 bg-gradient-to-br from-gray-50 via-white to-purple-50 overflow-hidden">
+    <section id="contact" className="relative min-h-screen pt-24 pb-24 bg-gradient-to-br from-gray-50 via-white to-purple-50 overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full blur-3xl opacity-20"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full blur-3xl opacity-20"></div>
       </div>
-
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16 opacity-0 animate-fadeInUp">
@@ -115,7 +114,7 @@ function ContactUs() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-16">
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Contact Form */}
           <div
             className="relative opacity-0 animate-fadeInLeft"
@@ -229,24 +228,40 @@ function ContactUs() {
           {/* Contact Information */}
           <div
             className="space-y-8 opacity-0 animate-fadeInRight"
-            style={{ animationDelay: '0.4s' }}
+            style={{ animationDelay: '0.3s' }}
           >
+            {/* Response Time - Moved to top */}
+            <div
+              className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-100 opacity-0 animate-fadeInUp"
+              style={{ animationDelay: '0.4s' }}
+            >
+              <div className="text-center">
+                <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <FiClock className="w-7 h-7 text-white" />
+                </div>
+                <h4 className="font-bold text-gray-900 mb-2 text-lg">Quick Response</h4>
+                <p className="text-gray-600">
+                  We typically respond to all inquiries within 24 hours during business days.
+                </p>
+              </div>
+            </div>
+
             {/* Contact Methods */}
-            <div className="space-y-6">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">
+            <div className="space-y-4">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">
                 Other ways to reach us
               </h3>
               {contactInfo.map((info, index) => (
                 <div
                   key={info.title}
-                  className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 group cursor-pointer hover:transform hover:scale-105 opacity-0 animate-fadeInUp"
+                  className="bg-white rounded-lg p-4 shadow-md border border-gray-100 hover:shadow-lg transition-all duration-300 group cursor-pointer opacity-0 animate-fadeInUp"
                   style={{ animationDelay: `${0.5 + index * 0.1}s` }}
                 >
-                  <div className="flex items-start space-x-4">
+                  <div className="flex items-center space-x-3">
                     <div
-                      className={`w-12 h-12 bg-gradient-to-r ${info.color} rounded-xl flex items-center justify-center flex-shrink-0`}
+                      className={`w-10 h-10 bg-gradient-to-r ${info.color} rounded-lg flex items-center justify-center flex-shrink-0`}
                     >
-                      <info.icon className="w-6 h-6 text-white" />
+                      <info.icon className="w-5 h-5 text-white" />
                     </div>
                     <div className="flex-1">
                       <h4 className="font-semibold text-gray-900 group-hover:text-purple-600 transition-colors duration-200">
@@ -255,64 +270,53 @@ function ContactUs() {
                       <p className="text-gray-600 text-sm mb-1">
                         {info.description}
                       </p>
-                      <p className="font-medium text-gray-900">{info.value}</p>
+                      <p className="font-medium text-gray-900 text-sm">{info.value}</p>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
+          </div>
+        </div>
 
-            {/* Office Information */}
-            <div
-              className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 border border-purple-100 opacity-0 animate-fadeInUp"
-              style={{ animationDelay: '0.7s' }}
-            >
-              <h3 className="text-xl font-bold text-gray-900 mb-6">
+        {/* Office Information - Moved below */}
+        <div
+          className="mt-16 max-w-2xl mx-auto opacity-0 animate-fadeInUp"
+          style={{ animationDelay: '0.8s' }}
+        >
+          <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 border border-purple-100">
+            <div className="text-center mb-6">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">
                 Visit our office
               </h3>
-              <div className="space-y-6">
-                {officeInfo.map((info, index) => (
-                  <div
-                    key={info.title}
-                    className="flex items-start space-x-3 opacity-0 animate-fadeInUp"
-                    style={{ animationDelay: `${0.8 + index * 0.1}s` }}
-                  >
-                    <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <info.icon className="w-4 h-4 text-purple-600" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">
-                        {info.title}
-                      </h4>
-                      <p className="text-gray-600 whitespace-pre-line">
-                        {info.value}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <p className="text-gray-600">
+                Come say hello! We'd love to meet you in person.
+              </p>
             </div>
-
-            {/* Response Time */}
-            <div
-              className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 opacity-0 animate-fadeInUp"
-              style={{ animationDelay: '1s' }}
-            >
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <FiClock className="w-8 h-8 text-white" />
+            <div className="grid md:grid-cols-2 gap-6">
+              {officeInfo.map((info, index) => (
+                <div
+                  key={info.title}
+                  className="flex items-start space-x-3 opacity-0 animate-fadeInUp"
+                  style={{ animationDelay: `${0.9 + index * 0.1}s` }}
+                >
+                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <info.icon className="w-5 h-5 text-purple-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-1">
+                      {info.title}
+                    </h4>
+                    <p className="text-gray-600 whitespace-pre-line text-sm">
+                      {info.value}
+                    </p>
+                  </div>
                 </div>
-                <h4 className="font-bold text-gray-900 mb-2">Quick Response</h4>
-                <p className="text-gray-600 text-sm">
-                  We typically respond to all inquiries within 24 hours during
-                  business days.
-                </p>
-              </div>
+              ))}
             </div>
           </div>
         </div>
-      </div>
-
+      </div>{' '}
       <style>{`
         @keyframes fadeInUp {
           from {

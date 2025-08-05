@@ -15,7 +15,7 @@ const User = modelDB_1.default.define('User', {
         type: sequelize_2.default.UUID,
         defaultValue: sequelize_2.default.UUIDV4,
         allowNull: false,
-        primaryKey: true
+        primaryKey: true,
     },
     name: {
         type: sequelize_1.DataTypes.STRING,
