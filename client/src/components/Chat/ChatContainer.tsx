@@ -68,7 +68,9 @@ function ChatContainer() {
       socket.on("newMessage", handleNewMessage);
       
       return () => {
-        socket.off("newMessage", handleNewMessage);
+        if (socket) {
+          socket.off("newMessage", handleNewMessage);
+        }
       };
     }
   }, [socket, dispatch]);
