@@ -396,4 +396,5 @@ function LandingAbout() {
     </section>
   );
 }
+
 export default LandingAbout;

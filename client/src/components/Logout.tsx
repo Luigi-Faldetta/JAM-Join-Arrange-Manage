@@ -1,18 +1,43 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { closeLogout } from '../reduxFiles/slices/logout';
 import { useNavigate } from 'react-router-dom';
-import { FiLogOut, FiX, FiAlertTriangle, FiCheck } from 'react-icons/fi';
+import { FiLogOut, FiX, FiAlertTriangle } from 'react-icons/fi';
+import { useGetMeQuery } from '../services/JamDB';
+import { clearAuthData } from '../services/ApiResponseType';
+import { RootState } from '../reduxFiles/store';
 
 function Logout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isLogoutModalOpen = useSelector((state: RootState) => state.logoutReducer?.valueOf());
+  const { data: userData, error } = useGetMeQuery(undefined, {
+    skip: !isLogoutModalOpen
+  });
+
+  // Use useEffect to close the modal if not authenticated
+  useEffect(() => {
+    if (
+      isLogoutModalOpen &&
+      (!userData ||
+        (error &&
+          typeof error === 'object' &&
+          'status' in error &&
+          (error as { status?: number }).status === 401))
+    ) {
+      dispatch(closeLogout());
+    }
+  }, [userData, error, dispatch, isLogoutModalOpen]);
+
+  // Only render if modal is open
+  if (!isLogoutModalOpen) {
+    return null;
+  }
 
   const handleLogout = () => {
-    // Clear localStorage
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    // Use centralized auth data clearing
+    clearAuthData();
 
     // Close modal
     dispatch(closeLogout());

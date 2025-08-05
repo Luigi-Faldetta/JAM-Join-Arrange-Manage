@@ -33,25 +33,25 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
-        return res.status(409)
-            .json((0, utils_1.resBody)(false, "409", null, "Missing input data"));
+        return res
+            .status(409)
+            .json((0, utils_1.resBody)(false, '409', null, 'Missing input data'));
     }
     const user = yield associations_1.User.findOne({ where: { email } });
     if (user)
-        return res.status(409)
-            .json((0, utils_1.resBody)(false, "409", null, "User already exists"));
+        return res
+            .status(409)
+            .json((0, utils_1.resBody)(false, '409', null, 'User already exists'));
     const inputPassword = password;
     try {
         const hash = yield bcrypt_1.default.hash(inputPassword, 10);
         const user = yield associations_1.User.create(Object.assign(Object.assign({}, req.body), { password: hash }));
         const _a = Object.assign({}, user.dataValues), { password } = _a, safeUser = __rest(_a, ["password"]);
-        res.status(201)
-            .json((0, utils_1.resBody)(true, null, safeUser, "User created"));
+        res.status(201).json((0, utils_1.resBody)(true, null, safeUser, 'User created'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
-        res.status(500)
-            .json((0, utils_1.resBody)(false, "500", null, err.message));
+        res.status(500).json((0, utils_1.resBody)(false, '500', null, err.message));
     }
 });
 /**
@@ -60,20 +60,17 @@ const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield associations_1.User.findOne({
-            where: { userId: req.params.userid }
+            where: { userId: req.params.userid },
         });
         if (!user) {
-            return res.status(404)
-                .json((0, utils_1.resBody)(false, "404", null, "No user found"));
+            return res.status(404).json((0, utils_1.resBody)(false, '404', null, 'No user found'));
         }
         const _b = Object.assign({}, user.dataValues), { password } = _b, safeUser = __rest(_b, ["password"]);
-        res.status(200)
-            .json((0, utils_1.resBody)(true, null, safeUser, "User fetched"));
+        res.status(200).json((0, utils_1.resBody)(true, null, safeUser, 'User fetched'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
-        res.status(400)
-            .json((0, utils_1.resBody)(false, "400", null, err.message));
+        res.status(400).json((0, utils_1.resBody)(false, '400', null, err.message));
     }
 });
 /**
@@ -81,16 +78,18 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
  */
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const userExists = yield associations_1.User.findOne({ where: { userId: req.params.userid } });
+        const userExists = yield associations_1.User.findOne({
+            where: { userId: req.params.userid },
+        });
         if (!userExists) {
-            return res.status(400)
-                .json((0, utils_1.resBody)(false, "400", null, "Wrong user id"));
+            return res.status(400).json((0, utils_1.resBody)(false, '400', null, 'Wrong user id'));
         }
         if (req.body.email) {
             const user = yield associations_1.User.findOne({ where: { email: req.body.email } });
             if (user) {
-                return res.status(409)
-                    .json((0, utils_1.resBody)(false, "409", null, "Email already exists"));
+                return res
+                    .status(409)
+                    .json((0, utils_1.resBody)(false, '409', null, 'Email already exists'));
             }
         }
         let updatedUser = [];
@@ -98,23 +97,21 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             const hash = yield bcrypt_1.default.hash(req.body.password, 10);
             updatedUser = yield associations_1.User.update(Object.assign(Object.assign({}, req.body), { password: hash }), {
                 where: { userId: req.params.userid },
-                returning: true
+                returning: true,
             });
         }
         else {
             updatedUser = yield associations_1.User.update(req.body, {
                 where: { userId: req.params.userid },
-                returning: true
+                returning: true,
             });
         }
         const _c = Object.assign({}, updatedUser[1][0].dataValues), { password } = _c, safeUpdatedUser = __rest(_c, ["password"]);
-        res.status(200)
-            .json((0, utils_1.resBody)(true, null, safeUpdatedUser, "User updated"));
+        res.status(200).json((0, utils_1.resBody)(true, null, safeUpdatedUser, 'User updated'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
-        res.status(500)
-            .json((0, utils_1.resBody)(false, "500", null, err.message));
+        res.status(500).json((0, utils_1.resBody)(false, '500', null, err.message));
     }
 });
 exports.updateUser = updateUser;
@@ -123,21 +120,20 @@ exports.updateUser = updateUser;
  */
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const userExists = yield associations_1.User.findOne({ where: { userId: req.params.userid } });
+        const userExists = yield associations_1.User.findOne({
+            where: { userId: req.params.userid },
+        });
         if (!userExists) {
-            return res.status(400)
-                .json((0, utils_1.resBody)(false, '400', null, "Wrong user id"));
+            return res.status(400).json((0, utils_1.resBody)(false, '400', null, 'Wrong user id'));
         }
         const deletedUser = yield associations_1.User.destroy({
-            where: { userId: req.params.userid }
+            where: { userId: req.params.userid },
         });
-        res.status(200)
-            .json((0, utils_1.resBody)(true, null, deletedUser, 'User deleted'));
+        res.status(200).json((0, utils_1.resBody)(true, null, deletedUser, 'User deleted'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
-        res.status(400)
-            .json((0, utils_1.resBody)(false, "400", null, err.message));
+        res.status(400).json((0, utils_1.resBody)(false, '400', null, err.message));
     }
 });
 exports.deleteUser = deleteUser;
@@ -147,7 +143,7 @@ exports.deleteUser = deleteUser;
 const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userIds = yield associations_1.UserEvent.findAll({
-            where: { eventId: req.params.eventid }
+            where: { eventId: req.params.eventid },
         });
         if (userIds.length) {
             const usersArray = [];
@@ -155,19 +151,17 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 usersArray.push(user.dataValues.userId);
             }
             const users = yield associations_1.User.findAll({
-                where: { userId: usersArray }
+                where: { userId: usersArray },
             });
-            res.status(200)
-                .json((0, utils_1.resBody)(true, null, users, 'Event users fetched'));
+            res.status(200).json((0, utils_1.resBody)(true, null, users, 'Event users fetched'));
         }
         else {
-            throw new Error("No users were found");
+            throw new Error('No users were found');
         }
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
-        res.status(500)
-            .json((0, utils_1.resBody)(false, "500", null, err.message));
+        res.status(500).json((0, utils_1.resBody)(false, '500', null, err.message));
     }
 });
 exports.default = { newUser, getUser, updateUser: exports.updateUser, deleteUser: exports.deleteUser, getAllUsers };
