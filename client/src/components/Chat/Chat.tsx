@@ -33,10 +33,12 @@ function Chat() {
   const handleEventClick = (eventId: string) => {
     if (eventId) {
       dispatch(openWithEventId(eventId));
-      socket.emit('joinRoom', {
-        userId: localStorage.getItem('token') || '',
-        eventId: eventId,
-      });
+      if (socket) {
+        socket.emit('joinRoom', {
+          userId: localStorage.getItem('token') || '',
+          eventId: eventId,
+        });
+      }
     }
     setChatDropdown(false);
   };
