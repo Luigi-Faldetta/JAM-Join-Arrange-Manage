@@ -10,9 +10,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
-const { __HEROKU__, NODE_ENV } = process.env;
-const sequelize = __HEROKU__
-    ? new sequelize_1.Sequelize(process.env.DB)
+const { DATABASE_URL, NODE_ENV } = process.env;
+const sequelize = DATABASE_URL
+    ? new sequelize_1.Sequelize(DATABASE_URL, {
+        dialect: 'postgres',
+        logging: false,
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false
+            }
+        }
+    })
     : NODE_ENV === 'test'
         ? new sequelize_1.Sequelize(process.env.TEST_DB, process.env.DB_USER, process.env.PW, {
             host: 'localhost',
@@ -30,7 +39,7 @@ NODE_ENV !== 'test' && (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // await sequelize.sync();
         yield sequelize.sync({ alter: true });
-        console.log(`Connected to database '${NODE_ENV === 'test' ? process.env.TEST_DB : process.env.DB_NAME}'`);
+        console.log(`Connected to database ${DATABASE_URL ? '(Railway PostgreSQL)' : `'${process.env.DB_NAME}'`}`);
     }
     catch (error) {
         console.error('Failed to connect with Database =(', error);
