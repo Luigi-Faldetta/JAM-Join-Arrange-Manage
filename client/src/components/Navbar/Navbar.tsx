@@ -55,8 +55,8 @@ function Navbar() {
   const navItems: NavItem[] = [
     { name: 'Home', to: 'hero', offset: -190 },
     { name: 'About', to: 'about', offset: -72 },
-    { name: 'FAQs', to: 'faqs', offset: -100 },
-    { name: 'Get in touch', to: 'contact', offset: -100 },
+    { name: 'FAQs', to: 'faq', offset: -110 },
+    { name: 'Get in touch', to: 'contact', offset: -110 },
   ];
 
   const handleSignOut = () => {
@@ -186,7 +186,7 @@ function Navbar() {
               </div>
             ) : (
               <div>
-                <button 
+                <button
                   onClick={handleSignInClick}
                   className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 font-medium"
                 >
@@ -265,7 +265,7 @@ function Navbar() {
 
             {!isLoggedIn && (
               <div className="pt-4 border-t border-gray-200">
-                <button 
+                <button
                   onClick={() => {
                     handleSignInClick();
                     setShowMobileMenu(false);
