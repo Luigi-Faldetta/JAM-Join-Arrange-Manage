@@ -27,10 +27,30 @@ const server = http_1.default.createServer(app);
 exports.server = server;
 // Use the same CORS options for both Express and Socket.IO
 const corsOptions = {
-    origin: ['http://localhost:3000', process.env.FRONTEND_URL].filter((url) => typeof url === 'string'),
+    origin: function (origin, callback) {
+        const allowedOrigins = [
+            'http://localhost:3000',
+            'https://localhost:3000',
+            process.env.FRONTEND_URL
+        ].filter((url) => typeof url === 'string');
+        // Allow requests with no origin (mobile apps, Postman, etc.)
+        if (!origin)
+            return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        }
+        else {
+            console.log(`CORS blocked origin: ${origin}`);
+            callback(new Error('Not allowed by CORS'), false);
+        }
+    },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 };
 app.use((0, cors_1.default)(corsOptions));
+// Handle preflight requests
+app.options('*', (0, cors_1.default)(corsOptions));
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use(router_js_1.default);
