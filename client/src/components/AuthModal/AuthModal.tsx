@@ -4,8 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { closeAuthModal, switchMode } from '../../reduxFiles/slices/authModal';
 import { RootState } from '../../reduxFiles/store';
 import { FiX, FiEye, FiEyeOff, FiMail, FiLock, FiUser, FiArrowRight } from 'react-icons/fi';
+import { FcGoogle } from 'react-icons/fc';
 import { useLogInMutation, useAddUserMutation } from '../../services/JamDB';
 import { useNavigate } from 'react-router-dom';
+import { useSignIn, useSignUp } from '@clerk/clerk-react';
 
 interface LoginFormData {
   email: string;
@@ -39,6 +41,10 @@ function AuthModal() {
   // API mutations
   const [loginUser] = useLogInMutation();
   const [createUser] = useAddUserMutation();
+
+  // Clerk OAuth hooks
+  const { signIn } = useSignIn();
+  const { signUp } = useSignUp();
 
   const handleClose = () => {
     dispatch(closeAuthModal());
@@ -122,6 +128,27 @@ function AuthModal() {
     } catch (error: any) {
       setErrorMessage(error?.data?.message || 'Account creation failed. Please try again.');
     } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleAuth = async () => {
+    if (!signIn || !signUp) return;
+    
+    setIsLoading(true);
+    setErrorMessage('');
+
+    try {
+      const authMethod = mode === 'signin' ? signIn : signUp;
+      
+      await authMethod.authenticateWithRedirect({
+        strategy: 'oauth_google',
+        redirectUrl: `${window.location.origin}/sso-callback`,
+        redirectUrlComplete: `${window.location.origin}/user-dashboard`,
+      });
+    } catch (error: any) {
+      console.error('Google OAuth error:', error);
+      setErrorMessage('Google sign-in failed. Please try again.');
       setIsLoading(false);
     }
   };
@@ -279,6 +306,30 @@ function AuthModal() {
                 )}
               </button>
             </form>
+
+            {/* Divider */}
+            <div className="flex items-center my-6">
+              <div className="flex-1 border-t border-gray-300"></div>
+              <span className="px-3 text-sm text-gray-500 bg-white">or</span>
+              <div className="flex-1 border-t border-gray-300"></div>
+            </div>
+
+            {/* Google Sign-in Button */}
+            <button
+              type="button"
+              onClick={handleGoogleAuth}
+              disabled={isLoading}
+              className="w-full flex items-center justify-center space-x-3 bg-white hover:bg-gray-50 disabled:bg-gray-100 border border-gray-300 hover:border-gray-400 text-gray-700 font-medium py-3 px-4 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 group"
+            >
+              {isLoading ? (
+                <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <>
+                  <FcGoogle className="w-5 h-5" />
+                  <span>{mode === 'signin' ? 'Sign in with Google' : 'Sign up with Google'}</span>
+                </>
+              )}
+            </button>
 
             {/* Switch mode */}
             <div className="mt-6 text-center">
