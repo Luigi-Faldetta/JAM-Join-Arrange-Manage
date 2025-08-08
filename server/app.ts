@@ -11,33 +11,33 @@ const app = express();
 const server = http.createServer(app);
 
 // Use the same CORS options for both Express and Socket.IO
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://localhost:3000',
+  'https://jam-app.es',
+  process.env.FRONTEND_URL
+].filter((url): url is string => typeof url === 'string');
+
+console.log('Server starting - Allowed origins:', allowedOrigins);
+
 const corsOptions = {
-  origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
-    const allowedOrigins = [
-      'http://localhost:3000',
-      'https://localhost:3000',
-      process.env.FRONTEND_URL
-    ].filter((url): url is string => typeof url === 'string');
-    
-    console.log(`CORS check - Origin: ${origin}, Allowed: ${allowedOrigins.join(', ')}`);
-    
-    // Allow requests with no origin (mobile apps, Postman, etc.)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.includes(origin)) {
-      console.log(`CORS allowed for origin: ${origin}`);
-      callback(null, true);
-    } else {
-      console.log(`CORS blocked origin: ${origin}`);
-      callback(null, false);
-    }
-  },
+  origin: allowedOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
+
+// Test endpoint to verify server is running
+app.get('/test-cors', (req, res) => {
+  res.json({ 
+    message: 'CORS test successful', 
+    origin: req.headers.origin,
+    allowedOrigins 
+  });
+});
 
 // Remove trailing slashes from all routes
 app.use((req, res, next) => {
