@@ -39,6 +39,17 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+// Remove trailing slashes from all routes
+app.use((req, res, next) => {
+  if (req.path.length > 1 && req.path.endsWith('/')) {
+    const newPath = req.path.slice(0, -1);
+    const query = req.url.slice(req.path.length);
+    res.redirect(301, newPath + query);
+  } else {
+    next();
+  }
+});
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(router);
