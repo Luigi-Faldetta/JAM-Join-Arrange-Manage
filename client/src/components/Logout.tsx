@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeLogout } from '../reduxFiles/slices/logout';
 import { useNavigate } from 'react-router-dom';
 import { FiLogOut, FiX, FiAlertTriangle } from 'react-icons/fi';
-import { useGetMeQuery } from '../services/JamDB';
 import { clearAuthData } from '../services/ApiResponseType';
 import { RootState } from '../reduxFiles/store';
 
@@ -12,23 +10,7 @@ function Logout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLogoutModalOpen = useSelector((state: RootState) => state.logoutReducer?.valueOf());
-  const { data: userData, error } = useGetMeQuery(undefined, {
-    skip: !isLogoutModalOpen
-  });
-
-  // Use useEffect to close the modal if not authenticated
-  useEffect(() => {
-    if (
-      isLogoutModalOpen &&
-      (!userData ||
-        (error &&
-          typeof error === 'object' &&
-          'status' in error &&
-          (error as { status?: number }).status === 401))
-    ) {
-      dispatch(closeLogout());
-    }
-  }, [userData, error, dispatch, isLogoutModalOpen]);
+  // Removed user verification - just let anyone log out
 
   // Only render if modal is open
   if (!isLogoutModalOpen) {
@@ -42,11 +24,8 @@ function Logout() {
     // Close modal
     dispatch(closeLogout());
 
-    // Navigate to home
+    // Navigate to home (React Router will handle this smoothly)
     navigate('/');
-
-    // Reload to clear any cached state
-    window.location.reload();
   };
 
   const handleCancel = () => {
