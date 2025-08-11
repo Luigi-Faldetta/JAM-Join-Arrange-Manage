@@ -1,5 +1,14 @@
 # CLAUDE.md - JAM Application Development Guide
 
+## 🚨 CRITICAL RULE: ALWAYS WORK ON TEST BRANCH 🚨
+
+**BEFORE MAKING ANY CHANGES:**
+```bash
+git checkout test
+```
+
+**NEVER make changes while on main branch. ALWAYS verify you're on test branch before editing any files.**
+
 ## Project Context
 
 JAM (Join. Arrange. Manage.) is a full-stack TypeScript event management application with the following architecture:
@@ -205,12 +214,22 @@ try {
 
 ## Development Workflow
 
+### Branch Management
+**⚠️ CRITICAL: NEVER MAKE ANY CHANGES ON THE MAIN BRANCH ⚠️**
+- **ALWAYS switch to `test` branch BEFORE making ANY changes**: `git checkout test`
+- **NEVER edit files while on main branch**
+- **NEVER commit directly to main branch**
+- Make all changes on `test` branch first
+- Test changes thoroughly on `test` branch
+- Only merge to `main` after thorough testing and user approval
+
 ### Before Committing
-1. Run TypeScript compilation: `npm run build`
-2. Run all tests: `npm test`
-3. Check code formatting (Prettier)
-4. Verify no console.log statements in production code
-5. Ensure proper error handling is implemented
+1. Switch to test branch: `git checkout test`
+2. Run TypeScript compilation: `npm run build`
+3. Run all tests: `npm test`
+4. Check code formatting (Prettier)
+5. Verify no console.log statements in production code
+6. Ensure proper error handling is implemented
 
 ### Git Commit Guidelines
 - **NO Claude references**: Remove any mentions of Claude, Anthropic, or AI assistance from commit messages

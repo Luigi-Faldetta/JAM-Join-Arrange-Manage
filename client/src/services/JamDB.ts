@@ -129,7 +129,7 @@ export const thesisDbApi = createApi({
       Partial<UserState> & Pick<UserState, 'name' | 'email' | 'password'>
     >({
       query: (user) => ({
-        url: 'register/',
+        url: 'register',
         method: 'POST',
         body: user,
         headers: { 'Content-type': 'application/json; charset=UTF-8' },
@@ -217,7 +217,7 @@ export const thesisDbApi = createApi({
       { eventId: string; task: string }
     >({
       query: ({ eventId, task }) => ({
-        url: 'todo/',
+        url: 'todo',
         method: 'POST',
         body: { eventId, task },
         headers: { 'Content-type': 'application/json; charset=UTF-8' },
@@ -230,7 +230,7 @@ export const thesisDbApi = createApi({
       Partial<ToDoState> & Pick<ToDoState, 'title'>
     >({
       query: (toDo) => ({
-        url: 'todo/',
+        url: 'todo',
         method: 'POST',
         body: toDo,
         headers: { 'Content-type': 'application/json; charset=UTF-8' },
@@ -296,7 +296,7 @@ export const thesisDbApi = createApi({
       Partial<MsgState> & Pick<MsgState, 'userId' | 'eventId' | 'message'>
     >({
       query: (msg) => ({
-        url: 'chat/',
+        url: 'chat',
         method: 'POST',
         body: msg,
         headers: { 'Content-type': 'application/json; charset=UTF-8' },
@@ -320,7 +320,7 @@ export const thesisDbApi = createApi({
       { userId: string; eventId: string }
     >({
       query: (ids) => ({
-        url: 'useractivity/',
+        url: 'useractivity',
         method: 'POST',
         body: ids,
         headers: { 'Content-type': 'application/json; charset=UTF-8' },
@@ -346,7 +346,7 @@ export const thesisDbApi = createApi({
       { userId: string; eventId: string }
     >({
       query: (ids) => ({
-        url: 'useractivity/',
+        url: 'useractivity',
         method: 'POST',
         body: ids,
         headers: { 'Content-type': 'application/json; charset=UTF-8' },
@@ -388,7 +388,7 @@ export const thesisDbApi = createApi({
       { email: string; password: string }
     >({
       query: (credentials) => ({
-        url: 'userLogin/',
+        url: 'userLogin',
         method: 'POST',
         body: credentials,
         headers: { 'Content-type': 'application/json; charset=UTF-8' },
