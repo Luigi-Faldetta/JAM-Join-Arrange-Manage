@@ -32,13 +32,18 @@ export const thesisDbApi = createApi({
   reducerPath: 'thesisDbApi',
   baseQuery: fetchBaseQuery({
     baseUrl: URL,
-    prepareHeaders: (headers) => {
+    prepareHeaders: (headers, { endpoint }) => {
       const token = localStorage.getItem('token');
       console.log('=== FRONTEND TOKEN DEBUG ===');
       console.log('Token from localStorage:', token ? `${token.substring(0, 20)}...` : 'null');
       console.log('Token length:', token ? token.length : 0);
       console.log('Setting authorization header:', token ? `Bearer ${token.substring(0, 20)}...` : 'none');
       console.log('================================');
+      
+      // Temporary debug alert for /me endpoint
+      if (endpoint === 'getMe') {
+        alert(`Preparing headers for /me:\nToken exists: ${token ? 'YES' : 'NO'}\nToken length: ${token ? token.length : 0}`);
+      }
       
       if (token) {
         headers.set('authorization', `Bearer ${token}`);
