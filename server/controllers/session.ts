@@ -28,7 +28,7 @@ const logIn = async (req: Request, res: Response) => {
 
     const token = jwt.sign(
       { userId: user.userId },
-      process.env.TOKEN_SECRET as string,
+      process.env.JWT_SECRET || process.env.TOKEN_SECRET as string,
       { expiresIn: '2h' }
     );
 
@@ -84,7 +84,7 @@ const authorize = async (req: Request, res: Response, next: NextFunction) => {
 
   jwt.verify(
     token,
-    process.env.TOKEN_SECRET as string,
+    process.env.JWT_SECRET || process.env.TOKEN_SECRET as string,
     async (err, payload) => {
       if (err) {
         console.log(err);
