@@ -32,14 +32,6 @@ const logIn = async (req: Request, res: Response) => {
       { expiresIn: '2h' }
     );
 
-    // Debug: Log token generation
-    console.log('=== LOGIN TOKEN DEBUG ===');
-    console.log('User ID:', user.userId);
-    console.log('Generated token:', token);
-    console.log('Token length:', token.length);
-    console.log('JWT_SECRET exists:', !!(process.env.JWT_SECRET || process.env.TOKEN_SECRET));
-    console.log('========================');
-
     res.cookie('jwt', token, {
       httpOnly: false,
       secure: __prod__,
@@ -84,15 +76,7 @@ const authorize = async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
-  // Debug: Log authorization attempt
-  console.log('=== AUTHORIZE MIDDLEWARE DEBUG ===');
-  console.log('Authorization header:', authHeader);
-  console.log('Extracted token:', token ? `${token.substring(0, 20)}...` : 'null');
-  console.log('Token length:', token ? token.length : 0);
-  console.log('===================================');
-
   if (token == null) {
-    console.log('Authorization failed: No token present');
     return res
       .status(401)
       .json(resBody(false, '401', null, 'Token is not present'));
@@ -102,13 +86,9 @@ const authorize = async (req: Request, res: Response, next: NextFunction) => {
     token,
     process.env.JWT_SECRET || process.env.TOKEN_SECRET as string,
     async (err, payload) => {
-      console.log('JWT verify callback - err:', err);
-      console.log('JWT verify callback - payload:', payload);
-      
       if (err) {
-        console.log('JWT verification error:', err);
+        console.log(err);
         if (err.name === 'TokenExpiredError') {
-          console.log('Token expired');
           return res
             .status(401)
             .json(
@@ -120,7 +100,6 @@ const authorize = async (req: Request, res: Response, next: NextFunction) => {
               )
             );
         }
-        console.log('JWT verification failed with error:', err.name, err.message);
         return res
           .status(403)
           .json(
@@ -164,13 +143,6 @@ const authorize = async (req: Request, res: Response, next: NextFunction) => {
 const getUserInfo = async (req: Request, res: Response) => {
   try {
     const user = (req as customRequest).user;
-    
-    // Debug: Log what we're returning
-    console.log('=== /ME ENDPOINT DEBUG ===');
-    console.log('User data:', user);
-    console.log('User name:', user?.name);
-    console.log('User email:', user?.email);
-    console.log('==========================');
     
     res
       .status(200)

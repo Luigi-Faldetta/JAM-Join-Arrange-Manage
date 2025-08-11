@@ -45,13 +45,6 @@ const logIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!validatedPass)
             throw new Error('Incorrect email/password');
         const token = jsonwebtoken_1.default.sign({ userId: user.userId }, process.env.JWT_SECRET || process.env.TOKEN_SECRET, { expiresIn: '2h' });
-        // Debug: Log token generation
-        console.log('=== LOGIN TOKEN DEBUG ===');
-        console.log('User ID:', user.userId);
-        console.log('Generated token:', token);
-        console.log('Token length:', token.length);
-        console.log('JWT_SECRET exists:', !!(process.env.JWT_SECRET || process.env.TOKEN_SECRET));
-        console.log('========================');
         res.cookie('jwt', token, {
             httpOnly: false,
             secure: constants_js_1.__prod__,
@@ -89,30 +82,19 @@ const logOut = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 const authorize = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-    // Debug: Log authorization attempt
-    console.log('=== AUTHORIZE MIDDLEWARE DEBUG ===');
-    console.log('Authorization header:', authHeader);
-    console.log('Extracted token:', token ? `${token.substring(0, 20)}...` : 'null');
-    console.log('Token length:', token ? token.length : 0);
-    console.log('===================================');
     if (token == null) {
-        console.log('Authorization failed: No token present');
         return res
             .status(401)
             .json((0, utils_1.resBody)(false, '401', null, 'Token is not present'));
     }
     jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET || process.env.TOKEN_SECRET, (err, payload) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log('JWT verify callback - err:', err);
-        console.log('JWT verify callback - payload:', payload);
         if (err) {
-            console.log('JWT verification error:', err);
+            console.log(err);
             if (err.name === 'TokenExpiredError') {
-                console.log('Token expired');
                 return res
                     .status(401)
                     .json((0, utils_1.resBody)(false, '401', null, 'Session expired, please log in again.'));
             }
-            console.log('JWT verification failed with error:', err.name, err.message);
             return res
                 .status(403)
                 .json((0, utils_1.resBody)(false, '403', null, 'Some error happened during the token verification'));
@@ -136,12 +118,6 @@ const authorize = (req, res, next) => __awaiter(void 0, void 0, void 0, function
 const getUserInfo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = req.user;
-        // Debug: Log what we're returning
-        console.log('=== /ME ENDPOINT DEBUG ===');
-        console.log('User data:', user);
-        console.log('User name:', user === null || user === void 0 ? void 0 : user.name);
-        console.log('User email:', user === null || user === void 0 ? void 0 : user.email);
-        console.log('==========================');
         res
             .status(200)
             .json((0, utils_1.resBody)(true, null, user, 'User is logged'));
