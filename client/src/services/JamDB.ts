@@ -35,7 +35,9 @@ export const thesisDbApi = createApi({
     prepareHeaders: (headers, { getState }) => {
       const token = localStorage.getItem('token');
       if (token) {
-        headers.set('authorization', `Bearer ${token}`);
+        // Clean token in case it has extra quotes or spaces
+        const cleanToken = token.replace(/["']/g, '').trim();
+        headers.set('authorization', `Bearer ${cleanToken}`);
       }
       return headers;
     },
@@ -56,12 +58,16 @@ export const thesisDbApi = createApi({
 
     // User Profile & Authentication
     getMe: build.query<ApiResponse<UserState>, void>({
-      query: () => ({
-        url: 'me',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
-      }),
+      query: () => {
+        const token = localStorage.getItem('token');
+        const cleanToken = token ? token.replace(/["']/g, '').trim() : '';
+        return {
+          url: 'me',
+          headers: {
+            'Authorization': `Bearer ${cleanToken}`,
+          },
+        };
+      },
       providesTags: ['Me'],
     }),
 

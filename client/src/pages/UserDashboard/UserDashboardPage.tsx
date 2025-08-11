@@ -48,9 +48,10 @@ export default function UserDashboardPage() {
     // Manual API call as fallback
     const token = localStorage.getItem('token');
     if (token) {
+      const cleanToken = token.replace(/["']/g, '').trim();
       fetch(`${process.env.REACT_APP_API_BASE_URL || 'https://jam-join-arrange-manage-production.up.railway.app'}/me`, {
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${cleanToken}`
         }
       })
       .then(res => {
@@ -169,7 +170,7 @@ export default function UserDashboardPage() {
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
               <div className="mb-6 lg:mb-0">
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-2">
-                  Welcome back, {user?.name || 'User'}!
+                  Welcome back, {user?.name?.split(' ')[0] || 'User'}!
                 </h1>
                 <p className="text-gray-600 text-lg">
                   Manage your events and connect with friends
