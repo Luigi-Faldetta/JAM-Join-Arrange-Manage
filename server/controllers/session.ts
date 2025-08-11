@@ -143,14 +143,6 @@ const authorize = async (req: Request, res: Response, next: NextFunction) => {
 const getUserInfo = async (req: Request, res: Response) => {
   try {
     const user = (req as customRequest).user;
-    
-    // Debug logging
-    console.log('=== GET USER INFO DEBUG ===');
-    console.log('User object:', JSON.stringify(user, null, 2));
-    console.log('User name:', user?.name);
-    console.log('User email:', user?.email);
-    console.log('===========================');
-    
     res
       .status(200)
       .json(resBody(true, null, user, 'User is logged'));
