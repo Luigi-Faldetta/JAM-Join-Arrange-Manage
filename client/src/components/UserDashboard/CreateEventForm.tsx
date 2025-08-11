@@ -8,7 +8,7 @@ import {
   setEvent,
   EventState,
 } from '../../reduxFiles/slices/events';
-import { useAddEventMutation } from '../../services/JamDB';
+import { useAddEventMutation, useGetMeQuery } from '../../services/JamDB';
 import {
   FiPlus,
   FiX,
@@ -29,6 +29,8 @@ function CreateEventForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [addEvent] = useAddEventMutation();
+  const { data: userData } = useGetMeQuery();
+  const userId = userData?.data?.userId;
 
   const handleImageUpload = async () => {
     if (eventFile) {
@@ -61,12 +63,19 @@ function CreateEventForm() {
     event.preventDefault();
     setIsLoading(true);
 
+    if (!userId) {
+      console.error('User ID not available');
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const eventFormData: Partial<EventState> & Pick<EventState, 'title'> = {
+      const eventFormData: Partial<EventState> & Pick<EventState, 'title'> & { userId: string } = {
         title: event.currentTarget.eventName.value,
         date: eventDate,
         location: event.currentTarget.eventLocation.value,
         description: event.currentTarget.eventDescription.value,
+        userId: userId || '',
       };
 
       const image = await handleImageUpload();

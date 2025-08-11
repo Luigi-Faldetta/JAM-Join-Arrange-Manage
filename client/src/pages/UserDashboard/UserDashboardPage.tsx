@@ -38,7 +38,7 @@ export default function UserDashboardPage() {
   const userId = user?.userId;
 
   // Get events
-  const { data: eventsData, isLoading } = useGetEventsQuery(undefined, {
+  const { data: eventsData, isLoading } = useGetEventsQuery(userId || '', {
     skip: !userId,
   });
 
