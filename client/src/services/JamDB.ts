@@ -54,8 +54,14 @@ export const thesisDbApi = createApi({
 
     // User Profile & Authentication
     getMe: build.query<ApiResponse<UserState>, void>({
-      query: () => ({ url: 'me' }),
+      query: () => ({ 
+        url: 'me',
+        // Force refetch to ensure fresh token is used
+        cache: 'no-cache'
+      }),
       providesTags: ['Me'],
+      // Keep cache for only 1 second to ensure fresh data
+      keepUnusedDataFor: 1,
     }),
 
     updateMe: build.mutation<

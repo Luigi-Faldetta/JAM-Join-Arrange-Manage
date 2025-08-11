@@ -26,13 +26,9 @@ const logIn = async (req: Request, res: Response) => {
     );
     if (!validatedPass) throw new Error('Incorrect email/password');
 
-    const secret = process.env.JWT_SECRET || process.env.TOKEN_SECRET as string;
-    console.log('Login - JWT secret exists:', !!secret);
-    console.log('Login - Using which env var:', process.env.JWT_SECRET ? 'JWT_SECRET' : 'TOKEN_SECRET');
-    
     const token = jwt.sign(
       { userId: user.userId },
-      secret,
+      process.env.JWT_SECRET || process.env.TOKEN_SECRET as string,
       { expiresIn: '2h' }
     );
 
@@ -86,17 +82,12 @@ const authorize = async (req: Request, res: Response, next: NextFunction) => {
       .json(resBody(false, '401', null, 'Token is not present'));
   }
 
-  const verifySecret = process.env.JWT_SECRET || process.env.TOKEN_SECRET as string;
-  console.log('Authorize - JWT secret exists:', !!verifySecret);
-  console.log('Authorize - Using which env var:', process.env.JWT_SECRET ? 'JWT_SECRET' : 'TOKEN_SECRET');
-  
   jwt.verify(
     token,
-    verifySecret,
+    process.env.JWT_SECRET || process.env.TOKEN_SECRET as string,
     async (err, payload) => {
       if (err) {
-        console.log('JWT verification error:', err);
-        console.log('Using JWT_SECRET:', !!verifySecret);
+        console.log(err);
         if (err.name === 'TokenExpiredError') {
           return res
             .status(401)
