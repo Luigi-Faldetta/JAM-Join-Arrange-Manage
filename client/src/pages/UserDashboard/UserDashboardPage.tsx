@@ -31,36 +31,21 @@ export default function UserDashboardPage() {
     'all'
   );
   const [searchTerm, setSearchTerm] = useState('');
+  const [manualUserData, setManualUserData] = useState<any>(null);
 
-  // Get user data - refetch on mount to ensure fresh token
-  const { data: userData, refetch: refetchMe, error: meError, isLoading: meLoading, isError: meIsError } = useGetMeQuery(undefined, {
-    refetchOnMountOrArgChange: true,
-    refetchOnFocus: true,
-    refetchOnReconnect: true
-  });
-  const user = userData?.data;
+  // Get user data
+  const { data: userData, refetch: refetchMe, error: meError, isLoading: meLoading, isError: meIsError } = useGetMeQuery();
+  
+  // Use manual data as fallback when RTK Query fails
+  const user = userData?.data || manualUserData;
   const userId = user?.userId;
   
-  // Debug logging
-  useEffect(() => {
-    console.log('=== USER DASHBOARD DEBUG ===');
-    console.log('meLoading:', meLoading);
-    console.log('meIsError:', meIsError);
-    console.log('meError:', meError);
-    console.log('userData:', userData);
-    console.log('userData?.data:', userData?.data);
-    console.log('user:', user);
-    console.log('user?.name:', user?.name);
-    console.log('user?.userId:', user?.userId);
-    console.log('Token in localStorage:', localStorage.getItem('token') ? 'YES' : 'NO');
-    console.log('============================');
-  }, [userData, user, meError, meLoading, meIsError]);
   
   // Force refetch on component mount
   useEffect(() => {
     refetchMe();
     
-    // Manual API call for debugging
+    // Manual API call as fallback
     const token = localStorage.getItem('token');
     if (token) {
       fetch(`${process.env.REACT_APP_API_BASE_URL || 'https://jam-join-arrange-manage-production.up.railway.app'}/me`, {
@@ -69,17 +54,17 @@ export default function UserDashboardPage() {
         }
       })
       .then(res => {
-        console.log('=== MANUAL /ME CALL DEBUG ===');
-        console.log('Response status:', res.status);
-        console.log('Response ok:', res.ok);
         return res.json();
       })
       .then(data => {
-        console.log('Response data:', data);
-        console.log('=============================');
+        
+        // Set manual data as fallback
+        if (data.success && data.data) {
+          setManualUserData(data.data);
+        }
       })
       .catch(err => {
-        console.error('Manual /me call error:', err);
+        // Silently handle error - RTK Query should work now
       });
     }
   }, [refetchMe]);

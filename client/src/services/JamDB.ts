@@ -32,13 +32,15 @@ export const thesisDbApi = createApi({
   reducerPath: 'thesisDbApi',
   baseQuery: fetchBaseQuery({
     baseUrl: URL,
-    prepareHeaders: (headers) => {
+    prepareHeaders: (headers, { getState }) => {
       const token = localStorage.getItem('token');
       if (token) {
         headers.set('authorization', `Bearer ${token}`);
       }
       return headers;
     },
+    // Force RTK Query to always make fresh requests
+    credentials: 'same-origin',
   }),
   tagTypes: [
     'EventState',
@@ -54,14 +56,13 @@ export const thesisDbApi = createApi({
 
     // User Profile & Authentication
     getMe: build.query<ApiResponse<UserState>, void>({
-      query: () => ({ 
+      query: () => ({
         url: 'me',
-        // Force refetch to ensure fresh token is used
-        cache: 'no-cache'
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
       }),
       providesTags: ['Me'],
-      // Keep cache for only 1 second to ensure fresh data
-      keepUnusedDataFor: 1,
     }),
 
     updateMe: build.mutation<
