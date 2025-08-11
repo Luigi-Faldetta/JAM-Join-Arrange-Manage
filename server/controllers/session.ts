@@ -32,6 +32,14 @@ const logIn = async (req: Request, res: Response) => {
       { expiresIn: '2h' }
     );
 
+    // Debug: Log token generation
+    console.log('=== LOGIN TOKEN DEBUG ===');
+    console.log('User ID:', user.userId);
+    console.log('Generated token:', token);
+    console.log('Token length:', token.length);
+    console.log('JWT_SECRET exists:', !!(process.env.JWT_SECRET || process.env.TOKEN_SECRET));
+    console.log('========================');
+
     res.cookie('jwt', token, {
       httpOnly: false,
       secure: __prod__,
@@ -41,7 +49,7 @@ const logIn = async (req: Request, res: Response) => {
 
     res
       .status(200)
-      .json(resBody(true, null, user.userId, 'Logged in successfully'));
+      .json(resBody(true, null, token, 'Logged in successfully'));
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.log(err);
     res.status(401).json(resBody(false, null, null, err.message));
@@ -142,9 +150,18 @@ const authorize = async (req: Request, res: Response, next: NextFunction) => {
  */
 const getUserInfo = async (req: Request, res: Response) => {
   try {
+    const user = (req as customRequest).user;
+    
+    // Debug: Log what we're returning
+    console.log('=== /ME ENDPOINT DEBUG ===');
+    console.log('User data:', user);
+    console.log('User name:', user?.name);
+    console.log('User email:', user?.email);
+    console.log('==========================');
+    
     res
       .status(200)
-      .json(resBody(true, null, (req as customRequest).user, 'User is logged'));
+      .json(resBody(true, null, user, 'User is logged'));
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.log(err);
     res.status(500).json(resBody(false, null, null, err.message));
