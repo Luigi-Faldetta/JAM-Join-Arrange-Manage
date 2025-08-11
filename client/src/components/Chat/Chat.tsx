@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { socket, useGetEventsQuery } from '../../services/JamDB';
+import { socket, useGetEventsQuery, useGetMeQuery } from '../../services/JamDB';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../reduxFiles/store';
 import { setEventList } from '../../reduxFiles/slices/events';
@@ -11,9 +11,11 @@ import './chatContainer.css';
 function Chat() {
   const [chatDropdown, setChatDropdown] = useState(false);
   const userToken = localStorage.getItem('token');
+  const { data: userData } = useGetMeQuery();
+  const userId = userData?.data?.userId;
   const eventList = useSelector((state: RootState) => state.eventListReducer);
-  const { data, error, isLoading } = useGetEventsQuery(undefined, {
-    skip: !userToken,
+  const { data, error, isLoading } = useGetEventsQuery(userId || '', {
+    skip: !userToken || !userId,
   });
   const ref = useClickAway(() => {
     setChatDropdown(false);

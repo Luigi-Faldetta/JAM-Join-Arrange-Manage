@@ -84,7 +84,15 @@ const authorize = async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
+  // Debug: Log authorization attempt
+  console.log('=== AUTHORIZE MIDDLEWARE DEBUG ===');
+  console.log('Authorization header:', authHeader);
+  console.log('Extracted token:', token ? `${token.substring(0, 20)}...` : 'null');
+  console.log('Token length:', token ? token.length : 0);
+  console.log('===================================');
+
   if (token == null) {
+    console.log('Authorization failed: No token present');
     return res
       .status(401)
       .json(resBody(false, '401', null, 'Token is not present'));
@@ -94,9 +102,13 @@ const authorize = async (req: Request, res: Response, next: NextFunction) => {
     token,
     process.env.JWT_SECRET || process.env.TOKEN_SECRET as string,
     async (err, payload) => {
+      console.log('JWT verify callback - err:', err);
+      console.log('JWT verify callback - payload:', payload);
+      
       if (err) {
-        console.log(err);
+        console.log('JWT verification error:', err);
         if (err.name === 'TokenExpiredError') {
+          console.log('Token expired');
           return res
             .status(401)
             .json(
@@ -108,6 +120,7 @@ const authorize = async (req: Request, res: Response, next: NextFunction) => {
               )
             );
         }
+        console.log('JWT verification failed with error:', err.name, err.message);
         return res
           .status(403)
           .json(

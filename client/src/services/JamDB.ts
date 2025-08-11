@@ -75,10 +75,10 @@ export const thesisDbApi = createApi({
 
     addEvent: build.mutation<
       ApiResponse<EventState>,
-      Partial<EventState> & Pick<EventState, 'title'>
+      Partial<EventState> & Pick<EventState, 'title'> & { userId: string }
     >({
-      query: (event) => ({
-        url: `newevent`,
+      query: ({ userId, ...event }) => ({
+        url: `newevent/${userId}`,
         method: 'POST',
         body: event,
         headers: { 'Content-type': 'application/json; charset=UTF-8' },
@@ -86,8 +86,8 @@ export const thesisDbApi = createApi({
       invalidatesTags: ['EventState'],
     }),
 
-    getEvents: build.query<ApiResponse<EventState[]>, void>({
-      query: () => ({ url: `events` }),
+    getEvents: build.query<ApiResponse<EventState[]>, string>({
+      query: (userId) => ({ url: `events/${userId}` }),
       providesTags: ['EventState'],
     }),
 
@@ -388,7 +388,7 @@ export const thesisDbApi = createApi({
       { email: string; password: string }
     >({
       query: (credentials) => ({
-        url: 'userLogin',
+        url: 'userlogin',
         method: 'POST',
         body: credentials,
         headers: { 'Content-type': 'application/json; charset=UTF-8' },
