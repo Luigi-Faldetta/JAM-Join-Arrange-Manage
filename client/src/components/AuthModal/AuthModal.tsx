@@ -81,6 +81,10 @@ function AuthModal() {
         localStorage.setItem('token', result.data);
         console.log('Token stored, verifying:', localStorage.getItem('token') ? 'success' : 'failed');
         console.log('======================================');
+        
+        // Temporary debug alert
+        alert(`Auth Modal - Token stored: ${localStorage.getItem('token') ? 'YES' : 'NO'}\nToken length: ${result.data ? result.data.length : 0}`);
+        
         handleClose();
         navigate('/user-dashboard');
       } else {
