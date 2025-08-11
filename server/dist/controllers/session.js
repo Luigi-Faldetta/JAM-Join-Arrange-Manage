@@ -44,10 +44,7 @@ const logIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const validatedPass = yield bcrypt_1.default.compare(req.body.password, user.password);
         if (!validatedPass)
             throw new Error('Incorrect email/password');
-        const secret = process.env.JWT_SECRET || process.env.TOKEN_SECRET;
-        console.log('Login - JWT secret exists:', !!secret);
-        console.log('Login - Using which env var:', process.env.JWT_SECRET ? 'JWT_SECRET' : 'TOKEN_SECRET');
-        const token = jsonwebtoken_1.default.sign({ userId: user.userId }, secret, { expiresIn: '2h' });
+        const token = jsonwebtoken_1.default.sign({ userId: user.userId }, process.env.JWT_SECRET || process.env.TOKEN_SECRET, { expiresIn: '2h' });
         res.cookie('jwt', token, {
             httpOnly: false,
             secure: constants_js_1.__prod__,
@@ -90,13 +87,9 @@ const authorize = (req, res, next) => __awaiter(void 0, void 0, void 0, function
             .status(401)
             .json((0, utils_1.resBody)(false, '401', null, 'Token is not present'));
     }
-    const verifySecret = process.env.JWT_SECRET || process.env.TOKEN_SECRET;
-    console.log('Authorize - JWT secret exists:', !!verifySecret);
-    console.log('Authorize - Using which env var:', process.env.JWT_SECRET ? 'JWT_SECRET' : 'TOKEN_SECRET');
-    jsonwebtoken_1.default.verify(token, verifySecret, (err, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET || process.env.TOKEN_SECRET, (err, payload) => __awaiter(void 0, void 0, void 0, function* () {
         if (err) {
-            console.log('JWT verification error:', err);
-            console.log('Using JWT_SECRET:', !!verifySecret);
+            console.log(err);
             if (err.name === 'TokenExpiredError') {
                 return res
                     .status(401)
