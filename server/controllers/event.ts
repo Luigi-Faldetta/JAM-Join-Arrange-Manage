@@ -183,7 +183,8 @@ const getUserEvents = async (req: Request, res: Response) => {
 
       res.status(200).json(resBody(true, null, events, 'User events fetched'));
     } else {
-      throw new Error('No events where found');
+      // Return empty array instead of throwing error when user has no events
+      res.status(200).json(resBody(true, null, [], 'No events found'));
     }
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.error(err);

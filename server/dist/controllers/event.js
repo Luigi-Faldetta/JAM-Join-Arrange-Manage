@@ -173,7 +173,8 @@ const getUserEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             res.status(200).json((0, utils_1.resBody)(true, null, events, 'User events fetched'));
         }
         else {
-            throw new Error('No events where found');
+            // Return empty array instead of throwing error when user has no events
+            res.status(200).json((0, utils_1.resBody)(true, null, [], 'No events found'));
         }
     }
     catch (err) {
