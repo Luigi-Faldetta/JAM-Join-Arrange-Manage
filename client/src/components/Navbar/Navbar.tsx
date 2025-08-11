@@ -4,11 +4,8 @@ import { Link as Scroll } from 'react-scroll';
 import {
   FiMenu,
   FiX,
-  FiLogOut,
 } from 'react-icons/fi';
-import { useIsLoggedIn } from '../../utils/useIsLoggedIn';
 import { useAppDispatch } from '../../reduxFiles/store';
-import { openLogout } from '../../reduxFiles/slices/logout';
 import { openAuthModal } from '../../reduxFiles/slices/authModal';
 
 // Types
@@ -22,12 +19,10 @@ function Navbar() {
   const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
 
-  const { isLoggedIn } = useIsLoggedIn();
   const dispatch = useAppDispatch();
   const location = useLocation();
 
-
-  // Handle scroll effect
+  // Handle scroll effect (must be called before any conditional returns)
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -36,6 +31,11 @@ function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Only show navbar on landing page (root path)
+  if (location.pathname !== '/') {
+    return null;
+  }
+
   const navItems: NavItem[] = [
     { name: 'Home', to: 'hero', offset: -190 },
     { name: 'About', to: 'about', offset: -72 },
@@ -43,66 +43,11 @@ function Navbar() {
     { name: 'Get in touch', to: 'contact', offset: -110 },
   ];
 
-  const handleSignOut = () => {
-    dispatch(openLogout());
-  };
-
   const handleSignInClick = () => {
     dispatch(openAuthModal('signin'));
   };
 
 
-  // Define routes where navbar should be hidden when logged in
-  const protectedRoutes = [
-    '/user-dashboard',
-    '/profile',
-    '/event', // Added event dashboard route
-    '/sso-callback',
-  ];
-
-  // Check if current route is a protected route
-  const isProtectedRoute = protectedRoutes.some((route) =>
-    location.pathname.startsWith(route)
-  );
-
-  // Hide navbar if user is logged in and on a protected route
-  if (isLoggedIn && isProtectedRoute) {
-    return null;
-  }
-
-  // Show simplified navbar when logged in
-  if (isLoggedIn) {
-    return (
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200/50 shadow-lg shadow-gray-900/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 lg:h-20">
-            {/* Logo */}
-            <div className="flex items-center space-x-3">
-              <Link to="/" className="flex items-center space-x-3 group">
-                <img
-                  src="/jam-strw.png"
-                  alt="JAM Logo"
-                  className="w-10 h-10 rounded-xl group-hover:scale-105 transition-transform duration-300"
-                />
-                <span className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-                  JAM
-                </span>
-              </Link>
-            </div>
-
-            {/* Sign Out Button */}
-            <button
-              onClick={handleSignOut}
-              className="flex items-center px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg font-medium transition-all duration-200"
-            >
-              <FiLogOut className="mr-2 h-4 w-4" />
-              Sign out
-            </button>
-          </div>
-        </div>
-      </nav>
-    );
-  }
 
   return (
     <nav

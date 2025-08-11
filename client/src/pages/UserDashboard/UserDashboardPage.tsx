@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../reduxFiles/store';
 import { setEventList } from '../../reduxFiles/slices/events';
+import { openLogout } from '../../reduxFiles/slices/logout';
 import { useGetEventsQuery, useGetMeQuery } from '../../services/JamDB';
 import CreateEventForm from '../../components/UserDashboard/CreateEventForm';
 import EventTile from '../../components/UserDashboard/EventTile';
@@ -18,10 +18,10 @@ import {
   FiList,
   FiFilter,
   FiSearch,
+  FiLogOut,
 } from 'react-icons/fi';
 
 export default function UserDashboardPage() {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const eventList = useSelector((state: RootState) => state.eventListReducer);
 
@@ -108,8 +108,23 @@ export default function UserDashboardPage() {
     },
   ];
 
+  const handleSignOut = () => {
+    dispatch(openLogout());
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50">
+      {/* Sign Out Button */}
+      <div className="absolute top-4 right-4 z-50">
+        <button
+          onClick={handleSignOut}
+          className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 font-medium"
+        >
+          <FiLogOut className="w-4 h-4" />
+          <span>Sign Out</span>
+        </button>
+      </div>
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Section */}
         <motion.div
@@ -208,7 +223,7 @@ export default function UserDashboardPage() {
           className="bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden"
         >
           {/* Events Header */}
-          <div className="bg-gradient-to-r from-gray-900 to-gray-700 px-8 py-6">
+          <div className="bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-6">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
               <div className="mb-4 lg:mb-0">
                 <h2 className="text-2xl font-bold text-white mb-2">
