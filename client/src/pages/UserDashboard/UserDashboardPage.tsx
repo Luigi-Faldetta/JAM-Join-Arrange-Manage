@@ -145,6 +145,29 @@ export default function UserDashboardPage() {
               </div>
 
               <div className="flex items-center space-x-4">
+                {/* Temporary debug button */}
+                <button
+                  onClick={async () => {
+                    const token = localStorage.getItem('token');
+                    console.log('Token in localStorage:', token ? `${token.substring(0, 20)}...` : 'null');
+                    
+                    try {
+                      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL || 'https://jam-join-arrange-manage-production.up.railway.app'}/debug-auth`, {
+                        headers: {
+                          'Authorization': token ? `Bearer ${token}` : ''
+                        }
+                      });
+                      const data = await response.json();
+                      console.log('Debug auth response:', data);
+                      alert(`Debug Auth:\nToken in localStorage: ${token ? 'YES' : 'NO'}\nServer received header: ${data.hasToken ? 'YES' : 'NO'}\nHeader length: ${data.tokenLength}`);
+                    } catch (error) {
+                      console.error('Debug auth error:', error);
+                    }
+                  }}
+                  className="px-4 py-2 bg-gray-500 text-white rounded-lg"
+                >
+                  Debug Auth
+                </button>
                 <CreateEventForm />
                 <button
                   onClick={() => setShowCalendar(!showCalendar)}

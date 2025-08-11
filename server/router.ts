@@ -66,6 +66,20 @@ router.post('/userlogin', session.logIn);
 router.get('/userlogout', session.logOut);
 router.get('/me', session.authorize, session.getUserInfo);
 
+// Temporary debug endpoint
+router.get('/debug-auth', (req, res) => {
+  const authHeader = req.headers['authorization'];
+  console.log('=== DEBUG AUTH ENDPOINT ===');
+  console.log('Authorization header:', authHeader);
+  console.log('Headers:', JSON.stringify(req.headers, null, 2));
+  console.log('===========================');
+  res.json({ 
+    authHeader: authHeader || 'none',
+    hasToken: !!authHeader,
+    tokenLength: authHeader ? authHeader.length : 0
+  });
+});
+
 // ============================================================================
 // CALCULATION ROUTES - EXACTLY AS ORIGINAL
 // ============================================================================
