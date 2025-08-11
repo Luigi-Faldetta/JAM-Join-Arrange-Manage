@@ -41,6 +41,17 @@ export default function UserDashboardPage() {
   const user = userData?.data;
   const userId = user?.userId;
   
+  // Debug logging
+  useEffect(() => {
+    console.log('=== USER DASHBOARD DEBUG ===');
+    console.log('userData:', userData);
+    console.log('userData?.data:', userData?.data);
+    console.log('user:', user);
+    console.log('user?.name:', user?.name);
+    console.log('user?.userId:', user?.userId);
+    console.log('============================');
+  }, [userData, user]);
+  
   // Force refetch on component mount
   useEffect(() => {
     refetchMe();

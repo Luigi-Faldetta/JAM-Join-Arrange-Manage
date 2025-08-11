@@ -118,6 +118,12 @@ const authorize = (req, res, next) => __awaiter(void 0, void 0, void 0, function
 const getUserInfo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = req.user;
+        // Debug logging
+        console.log('=== GET USER INFO DEBUG ===');
+        console.log('User object:', JSON.stringify(user, null, 2));
+        console.log('User name:', user === null || user === void 0 ? void 0 : user.name);
+        console.log('User email:', user === null || user === void 0 ? void 0 : user.email);
+        console.log('===========================');
         res
             .status(200)
             .json((0, utils_1.resBody)(true, null, user, 'User is logged'));
