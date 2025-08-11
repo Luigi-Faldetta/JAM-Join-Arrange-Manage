@@ -1,10 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Link as Scroll } from 'react-scroll';
-import {
-  FiMenu,
-  FiX,
-} from 'react-icons/fi';
+import { FiMenu, FiX } from 'react-icons/fi';
 import { useAppDispatch } from '../../reduxFiles/store';
 import { openAuthModal } from '../../reduxFiles/slices/authModal';
 
@@ -39,15 +35,27 @@ function Navbar() {
   const navItems: NavItem[] = [
     { name: 'Home', to: 'hero', offset: -190 },
     { name: 'About', to: 'about', offset: -72 },
-    { name: 'FAQs', to: 'faq', offset: -110 },
-    { name: 'Get in touch', to: 'contact', offset: -110 },
+    { name: 'FAQs', to: 'faq', offset: -80 },
+    { name: 'Get in touch', to: 'contact', offset: -80 },
   ];
+
+  // Custom scroll handler to fix offset issues
+  const handleScrollToSection = (targetId: string) => {
+    const element = document.getElementById(targetId);
+    const navItem = navItems.find((item) => item.to === targetId);
+
+    if (element && navItem) {
+      const offsetTop = element.offsetTop + navItem.offset; // Use individual offset values
+      window.scrollTo({
+        top: offsetTop,
+        behavior: 'smooth',
+      });
+    }
+  };
 
   const handleSignInClick = () => {
     dispatch(openAuthModal('signin'));
   };
-
-
 
   return (
     <nav
@@ -77,17 +85,13 @@ function Navbar() {
           <div className="hidden lg:flex items-center space-x-8">
             {navItems.map((item) => (
               <div key={item.name}>
-                <Scroll
-                  to={item.to}
-                  spy={true}
-                  smooth={true}
-                  offset={item.offset}
-                  duration={500}
+                <button
+                  onClick={() => handleScrollToSection(item.to)}
                   className="relative px-4 py-2 text-gray-700 hover:text-purple-600 font-medium cursor-pointer transition-colors duration-200 group"
                 >
                   {item.name}
                   <span className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-purple-600 to-pink-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></span>
-                </Scroll>
+                </button>
               </div>
             ))}
           </div>
@@ -124,17 +128,15 @@ function Navbar() {
           <div className="px-4 py-6 space-y-4">
             {navItems.map((item) => (
               <div key={item.name}>
-                <Scroll
-                  to={item.to}
-                  spy={true}
-                  smooth={true}
-                  offset={item.offset}
-                  duration={500}
-                  onClick={() => setShowMobileMenu(false)}
-                  className="block px-4 py-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg font-medium cursor-pointer transition-all duration-200"
+                <button
+                  onClick={() => {
+                    handleScrollToSection(item.to);
+                    setShowMobileMenu(false);
+                  }}
+                  className="block w-full text-left px-4 py-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg font-medium cursor-pointer transition-all duration-200"
                 >
                   {item.name}
-                </Scroll>
+                </button>
               </div>
             ))}
 

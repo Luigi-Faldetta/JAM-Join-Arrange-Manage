@@ -203,7 +203,20 @@ export const removeAuthToken = (): void => {
 export const clearAuthData = (): void => {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
+  
+  // Clear all localStorage items
   localStorage.clear();
+  
+  // Clear sessionStorage as well for complete cleanup
+  sessionStorage.clear();
+  
+  // Clear any Clerk-related storage
+  const allKeys = Object.keys(localStorage);
+  allKeys.forEach(key => {
+    if (key.startsWith('clerk-') || key.includes('clerk')) {
+      localStorage.removeItem(key);
+    }
+  });
 };
 
 export const isAuthenticated = (): boolean => {

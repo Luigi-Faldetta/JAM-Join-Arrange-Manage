@@ -5,10 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { FiLogOut, FiX, FiAlertTriangle } from 'react-icons/fi';
 import { clearAuthData } from '../services/ApiResponseType';
 import { RootState } from '../reduxFiles/store';
+import { useClerk } from '@clerk/clerk-react';
 
 function Logout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { signOut } = useClerk();
   const isLogoutModalOpen = useSelector((state: RootState) => state.logoutReducer?.valueOf());
   // Removed user verification - just let anyone log out
 
@@ -17,7 +19,16 @@ function Logout() {
     return null;
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      // Sign out from Clerk first if available
+      if (signOut) {
+        await signOut();
+      }
+    } catch (error) {
+      console.log('Clerk signOut error (non-critical):', error);
+    }
+    
     // Use centralized auth data clearing
     clearAuthData();
 
