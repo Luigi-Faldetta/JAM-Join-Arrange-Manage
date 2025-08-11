@@ -44,7 +44,7 @@ const logIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const validatedPass = yield bcrypt_1.default.compare(req.body.password, user.password);
         if (!validatedPass)
             throw new Error('Incorrect email/password');
-        const token = jsonwebtoken_1.default.sign({ userId: user.userId }, process.env.TOKEN_SECRET, { expiresIn: '2h' });
+        const token = jsonwebtoken_1.default.sign({ userId: user.userId }, process.env.JWT_SECRET || process.env.TOKEN_SECRET, { expiresIn: '2h' });
         res.cookie('jwt', token, {
             httpOnly: false,
             secure: constants_js_1.__prod__,
@@ -87,7 +87,7 @@ const authorize = (req, res, next) => __awaiter(void 0, void 0, void 0, function
             .status(401)
             .json((0, utils_1.resBody)(false, '401', null, 'Token is not present'));
     }
-    jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET, (err, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET || process.env.TOKEN_SECRET, (err, payload) => __awaiter(void 0, void 0, void 0, function* () {
         if (err) {
             console.log(err);
             if (err.name === 'TokenExpiredError') {

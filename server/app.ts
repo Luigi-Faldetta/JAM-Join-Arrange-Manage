@@ -15,13 +15,24 @@ const allowedOrigins = [
   'http://localhost:3000',
   'https://localhost:3000',
   'https://jam-app.es',
+  'https://www.jam-app.es',
   process.env.FRONTEND_URL
-].filter((url): url is string => typeof url === 'string');
+].filter((url): url is string => typeof url === 'string' && url.length > 0);
 
 console.log('Server starting - Allowed origins:', allowedOrigins);
 
 const corsOptions = {
-  origin: allowedOrigins,
+  origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
+    // Allow requests with no origin (e.g., mobile apps, Postman)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log('CORS blocked origin:', origin);
+      callback(null, false);
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
