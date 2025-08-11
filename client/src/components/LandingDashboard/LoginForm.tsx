@@ -40,7 +40,11 @@ function LoginForm() {
       const result = await loginUser(userFormData).unwrap();
 
       if (result.success && result.data) {
+        console.log('=== LOGIN SUCCESS DEBUG ===');
+        console.log('Storing token:', result.data ? `${result.data.substring(0, 20)}...` : 'null');
         localStorage.setItem('token', result.data);
+        console.log('Token stored, verifying:', localStorage.getItem('token') ? 'success' : 'failed');
+        console.log('============================');
         navigate('/user-dashboard');
       } else {
         setPasswordMatch(false);

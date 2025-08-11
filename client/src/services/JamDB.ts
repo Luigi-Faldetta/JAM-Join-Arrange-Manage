@@ -34,6 +34,12 @@ export const thesisDbApi = createApi({
     baseUrl: URL,
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('token');
+      console.log('=== FRONTEND TOKEN DEBUG ===');
+      console.log('Token from localStorage:', token ? `${token.substring(0, 20)}...` : 'null');
+      console.log('Token length:', token ? token.length : 0);
+      console.log('Setting authorization header:', token ? `Bearer ${token.substring(0, 20)}...` : 'none');
+      console.log('================================');
+      
       if (token) {
         headers.set('authorization', `Bearer ${token}`);
       }
