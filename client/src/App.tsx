@@ -40,7 +40,7 @@ function Layout() {
       </main>
       <Footer />
       <Logout />
-      <Delete setOpen={setDeleteOpen} />
+      {deleteOpen && <Delete setOpen={setDeleteOpen} />}
       <AuthModal />
     </div>
   );
