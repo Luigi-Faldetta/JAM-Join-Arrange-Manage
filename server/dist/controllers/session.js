@@ -45,6 +45,13 @@ const logIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!validatedPass)
             throw new Error('Incorrect email/password');
         const token = jsonwebtoken_1.default.sign({ userId: user.userId }, process.env.JWT_SECRET || process.env.TOKEN_SECRET, { expiresIn: '2h' });
+        // Debug: Log token generation
+        console.log('=== LOGIN TOKEN DEBUG ===');
+        console.log('User ID:', user.userId);
+        console.log('Generated token:', token);
+        console.log('Token length:', token.length);
+        console.log('JWT_SECRET exists:', !!(process.env.JWT_SECRET || process.env.TOKEN_SECRET));
+        console.log('========================');
         res.cookie('jwt', token, {
             httpOnly: false,
             secure: constants_js_1.__prod__,
@@ -53,7 +60,7 @@ const logIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
         res
             .status(200)
-            .json((0, utils_1.resBody)(true, null, user.userId, 'Logged in successfully'));
+            .json((0, utils_1.resBody)(true, null, token, 'Logged in successfully'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.log(err);
@@ -117,9 +124,16 @@ const authorize = (req, res, next) => __awaiter(void 0, void 0, void 0, function
  */
 const getUserInfo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const user = req.user;
+        // Debug: Log what we're returning
+        console.log('=== /ME ENDPOINT DEBUG ===');
+        console.log('User data:', user);
+        console.log('User name:', user === null || user === void 0 ? void 0 : user.name);
+        console.log('User email:', user === null || user === void 0 ? void 0 : user.email);
+        console.log('==========================');
         res
             .status(200)
-            .json((0, utils_1.resBody)(true, null, req.user, 'User is logged'));
+            .json((0, utils_1.resBody)(true, null, user, 'User is logged'));
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.log(err);
