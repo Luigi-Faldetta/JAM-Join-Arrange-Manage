@@ -51,6 +51,7 @@ const newEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             userId: req.params.userid,
             eventId: event.eventId,
             isHost: true,
+            isGoing: true, // Hosts should be attending their own events
         });
         // Return event in original format
         const eventToReturn = yield associations_js_1.Event.findOne({
@@ -59,7 +60,7 @@ const newEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 {
                     model: associations_js_1.UserEvent,
                     where: { userId: req.params.userid },
-                    attributes: ['isHost', 'isGoing'],
+                    attributes: ['userId', 'isHost', 'isGoing'],
                 },
             ],
         });
@@ -151,9 +152,18 @@ const deleteEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 /**
  * Get user events - ORIGINAL SIGNATURE PRESERVED
  * @param req needs req.params.userid
+ * Updated: Now includes userId in response and fixes host isGoing status
  */
 const getUserEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        // Fix existing host relationships to have isGoing: true (retroactive fix)
+        yield associations_js_1.UserEvent.update({ isGoing: true }, {
+            where: {
+                userId: req.params.userid,
+                isHost: true,
+                isGoing: false
+            }
+        });
         const eventIds = yield associations_js_1.UserEvent.findAll({
             where: { userId: req.params.userid },
         });
@@ -167,7 +177,7 @@ const getUserEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 include: {
                     model: associations_js_1.UserEvent,
                     where: { userId: req.params.userid },
-                    attributes: ['isHost', 'isGoing'],
+                    attributes: ['userId', 'isHost', 'isGoing'], // Include userId for filtering
                 },
             });
             res.status(200).json((0, utils_1.resBody)(true, null, events, 'User events fetched'));
