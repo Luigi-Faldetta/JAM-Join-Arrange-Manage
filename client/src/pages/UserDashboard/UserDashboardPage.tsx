@@ -71,9 +71,16 @@ export default function UserDashboardPage() {
   }, [refetchMe]);
 
   // Get events
-  const { data: eventsData, isLoading } = useGetEventsQuery(userId || '', {
+  const { data: eventsData, isLoading, refetch: refetchEvents } = useGetEventsQuery(userId || '', {
     skip: !userId,
   });
+
+  // Force refetch events when userId changes
+  useEffect(() => {
+    if (userId) {
+      refetchEvents();
+    }
+  }, [userId, refetchEvents]);
 
   useEffect(() => {
     if (eventsData?.data) {
@@ -98,7 +105,7 @@ export default function UserDashboardPage() {
       );
     } else if (filterMode === 'attending') {
       return event.UserEvents?.some(
-        (userEvent) => userEvent.userId === userId && !userEvent.isHost
+        (userEvent) => userEvent.userId === userId && userEvent.isGoing && !userEvent.isHost
       );
     }
 
@@ -112,7 +119,11 @@ export default function UserDashboardPage() {
       (userEvent) => userEvent.userId === userId && userEvent.isHost
     )
   ).length;
-  const attendingEvents = totalEvents - hostingEvents;
+  const attendingEvents = eventList.filter((event) =>
+    event.UserEvents?.some(
+      (userEvent) => userEvent.userId === userId && userEvent.isGoing && !userEvent.isHost
+    )
+  ).length;
 
   const stats = [
     {
@@ -202,6 +213,12 @@ export default function UserDashboardPage() {
                 >
                   <FiCalendar className="w-4 h-4" />
                   <span>Calendar</span>
+                </button>
+                <button
+                  onClick={() => refetchEvents()}
+                  className="flex items-center space-x-2 px-4 py-3 rounded-xl font-medium bg-green-100 hover:bg-green-200 text-green-700 transition-all duration-200"
+                >
+                  <span>Refresh Data</span>
                 </button>
               </div>
             </div>
