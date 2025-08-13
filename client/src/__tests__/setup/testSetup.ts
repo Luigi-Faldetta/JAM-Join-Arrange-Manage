@@ -1,7 +1,3 @@
-// jest-dom adds custom jest matchers for asserting on DOM nodes.
-// allows you to do things like:
-// expect(element).toHaveTextContent(/react/i)
-// learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 
 // Mock IntersectionObserver
@@ -39,8 +35,8 @@ Object.defineProperty(window, 'matchMedia', {
     matches: false,
     media: query,
     onchange: null,
-    addListener: jest.fn(),
-    removeListener: jest.fn(),
+    addListener: jest.fn(), // deprecated
+    removeListener: jest.fn(), // deprecated
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
     dispatchEvent: jest.fn(),
@@ -83,11 +79,38 @@ Object.defineProperty(global.performance, 'now', {
   value: jest.fn(() => Date.now()),
 });
 
+// Suppress console errors for expected test failures
+const originalError = console.error;
+beforeAll(() => {
+  console.error = jest.fn((message) => {
+    // Only suppress specific expected errors in tests
+    if (
+      typeof message === 'string' &&
+      (message.includes('Warning: ReactDOM.render is deprecated') ||
+       message.includes('Warning: componentWillReceiveProps') ||
+       message.includes('act(...) is not supported'))
+    ) {
+      return;
+    }
+    originalError(message);
+  });
+});
+
+afterAll(() => {
+  console.error = originalError;
+});
+
 // Clean up after each test
 afterEach(() => {
   jest.clearAllMocks();
+  // Clear localStorage
+  localStorage.clear();
+  // Clear sessionStorage
+  sessionStorage.clear();
 });
 
 // Mock environment variables for tests
 process.env.REACT_APP_API_BASE_URL = 'http://localhost:3200';
 process.env.NODE_ENV = 'test';
+
+export {};
