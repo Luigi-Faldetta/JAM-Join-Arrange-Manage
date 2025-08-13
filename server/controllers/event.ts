@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
-import { Event, User, UserEvent } from '../models/associations.js';
+import { Event, User, UserEvent, EventChat } from '../models/associations.js';
+import Todo from '../models/todo.js';
+import Expense from '../models/expense.js';
 import { validate as uuidValidate, v4 as uuidv4 } from 'uuid';
 import { resBody } from '../utils';
 import { Op } from 'sequelize';
@@ -146,6 +148,22 @@ const deleteEvent = async (req: Request, res: Response) => {
         .json(resBody(false, '400', null, 'Wrong event id'));
     }
 
+    // Delete related records first to avoid foreign key constraint errors
+    await Promise.all([
+      // Delete all todos related to this event
+      Todo.destroy({ where: { eventId: req.params.eventid } }),
+      
+      // Delete all expenses related to this event  
+      Expense.destroy({ where: { eventId: req.params.eventid } }),
+      
+      // Delete all user-event relationships
+      UserEvent.destroy({ where: { eventId: req.params.eventid } }),
+      
+      // Delete all event chat messages
+      EventChat.destroy({ where: { eventId: req.params.eventid } }),
+    ]);
+
+    // Now delete the event itself
     const deletedEvent = await Event.destroy({
       where: { eventId: req.params.eventid },
     });
@@ -153,13 +171,14 @@ const deleteEvent = async (req: Request, res: Response) => {
     res.status(200).json(resBody(true, null, deletedEvent, 'Event deleted'));
   } catch (err: any) {
     process.env.NODE_ENV !== 'test' && console.error(err);
-    res.status(400).json(resBody(false, '500', null, err.message));
+    res.status(500).json(resBody(false, '500', null, err.message));
   }
 };
 
 /**
  * Get user events - ORIGINAL SIGNATURE PRESERVED
  * @param req needs req.params.userid
+ * Updated: Now includes userId in response and fixes host isGoing status
  */
 const getUserEvents = async (req: Request, res: Response) => {
   try {

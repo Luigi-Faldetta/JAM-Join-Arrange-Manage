@@ -8,8 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const associations_js_1 = require("../models/associations.js");
+const todo_js_1 = __importDefault(require("../models/todo.js"));
+const expense_js_1 = __importDefault(require("../models/expense.js"));
 const uuid_1 = require("uuid");
 const utils_1 = require("../utils");
 /**
@@ -139,6 +144,18 @@ const deleteEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 .status(400)
                 .json((0, utils_1.resBody)(false, '400', null, 'Wrong event id'));
         }
+        // Delete related records first to avoid foreign key constraint errors
+        yield Promise.all([
+            // Delete all todos related to this event
+            todo_js_1.default.destroy({ where: { eventId: req.params.eventid } }),
+            // Delete all expenses related to this event  
+            expense_js_1.default.destroy({ where: { eventId: req.params.eventid } }),
+            // Delete all user-event relationships
+            associations_js_1.UserEvent.destroy({ where: { eventId: req.params.eventid } }),
+            // Delete all event chat messages
+            associations_js_1.EventChat.destroy({ where: { eventId: req.params.eventid } }),
+        ]);
+        // Now delete the event itself
         const deletedEvent = yield associations_js_1.Event.destroy({
             where: { eventId: req.params.eventid },
         });
@@ -146,7 +163,7 @@ const deleteEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
     catch (err) {
         process.env.NODE_ENV !== 'test' && console.error(err);
-        res.status(400).json((0, utils_1.resBody)(false, '500', null, err.message));
+        res.status(500).json((0, utils_1.resBody)(false, '500', null, err.message));
     }
 });
 /**
