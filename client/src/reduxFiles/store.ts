@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import eventReducers from './slices/events';
+import eventReducers, { EventState } from './slices/events';
 import expenseReducer from './slices/expenses';
 import toDoListReducer from './slices/toDos';
 import userReducers from './slices/users';

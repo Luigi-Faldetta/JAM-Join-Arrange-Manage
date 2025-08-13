@@ -451,6 +451,13 @@ export const thesisDbApi = createApi({
       },
     }),
 
+    resetPassword: build.mutation<ApiResponse<null>, { email: string }>({
+      query: ({ email }) => ({
+        url: `passwordreset/${email}`,
+        method: 'GET',
+      }),
+    }),
+
     logOut: build.query<ApiResponse<null>, null>({
       query: () => ({ url: `userlogout` }),
     }),
@@ -499,6 +506,7 @@ export const {
 
   //login & logout
   useLogInMutation,
+  useResetPasswordMutation,
   useSocialLoginMutation,
   useLogOutQuery,
 

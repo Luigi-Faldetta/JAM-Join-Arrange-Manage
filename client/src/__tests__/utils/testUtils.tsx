@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { configureStore, PreloadedState } from '@reduxjs/toolkit';
 import { thesisDbApi } from '../../services/JamDB';
-import eventsReducer, { EventState } from '../../reduxFiles/slices/events';
+import eventReducers, { EventState } from '../../reduxFiles/slices/events';
 import logoutReducer from '../../reduxFiles/slices/logout';
 import authModalReducer from '../../reduxFiles/slices/authModal';
 import usersReducer from '../../reduxFiles/slices/users';
@@ -18,7 +18,8 @@ import { RootState } from '../../reduxFiles/store';
 export function setupStore(preloadedState?: Partial<RootState>) {
   return configureStore({
     reducer: {
-      eventListReducer: eventsReducer,
+      eventListReducer: eventReducers.eventListReducer,
+      eventReducer: eventReducers.eventReducer,
       logoutReducer: logoutReducer,
       authModalReducer: authModalReducer,
       userListReducer: usersReducer,
@@ -127,7 +128,7 @@ export const createMockExpense = (overrides = {}) => ({
 });
 
 // Mock API response factory
-export const createMockApiResponse = <T>(data: T, overrides = {}) => ({
+export const createMockApiResponse = <T,>(data: T, overrides = {}) => ({
   success: true,
   data,
   message: 'Success',
