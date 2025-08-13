@@ -7,7 +7,7 @@ import { FiX, FiEye, FiEyeOff, FiMail, FiLock, FiUser, FiArrowRight } from 'reac
 import { FcGoogle } from 'react-icons/fc';
 import { useLogInMutation, useAddUserMutation, useResetPasswordMutation } from '../../services/JamDB';
 import { useNavigate } from 'react-router-dom';
-import { useSignIn, useSignUp } from '@clerk/clerk-react';
+import { useSignIn } from '@clerk/clerk-react';
 
 interface LoginFormData {
   email: string;
@@ -49,9 +49,8 @@ function AuthModal() {
   const [createUser] = useAddUserMutation();
   const [resetPassword, { isLoading: isResetLoading }] = useResetPasswordMutation();
 
-  // Clerk OAuth hooks
+  // Clerk OAuth hook
   const { signIn } = useSignIn();
-  const { signUp } = useSignUp();
 
   const handleClose = () => {
     dispatch(closeAuthModal());
@@ -144,22 +143,21 @@ function AuthModal() {
   };
 
   const handleGoogleAuth = async () => {
-    if (!signIn || !signUp) return;
+    if (!signIn) return;
     
     setIsLoading(true);
     setErrorMessage('');
 
     try {
-      const authMethod = mode === 'signin' ? signIn : signUp;
-      
-      await authMethod.authenticateWithRedirect({
+      // Always use signIn - Clerk will automatically create account if user doesn't exist
+      await signIn.authenticateWithRedirect({
         strategy: 'oauth_google',
         redirectUrl: `${window.location.origin}/sso-callback`,
         redirectUrlComplete: `${window.location.origin}/user-dashboard`,
       });
     } catch (error: any) {
       console.error('Google OAuth error:', error);
-      setErrorMessage('Google sign-in failed. Please try again.');
+      setErrorMessage('Google authentication failed. Please try again.');
       setIsLoading(false);
     }
   };
@@ -387,7 +385,7 @@ function AuthModal() {
               ) : (
                 <>
                   <FcGoogle className="w-5 h-5" />
-                  <span>{mode === 'signin' ? 'Sign in with Google' : 'Sign up with Google'}</span>
+                  <span>Continue with Google</span>
                 </>
               )}
             </button>
