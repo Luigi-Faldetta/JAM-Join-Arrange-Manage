@@ -6,7 +6,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import UserDashboardPage from './UserDashboardPage';
 import { thesisDbApi } from '../../services/JamDB';
 import eventsReducer from '../../reduxFiles/slices/events';
-import logoutReducer from '../../reduxFiles/slices/logout';
+import { logoutReducer } from '../../reduxFiles/slices/logout';
 
 // Mock framer-motion
 jest.mock('framer-motion', () => ({
@@ -53,7 +53,7 @@ const mockEvents = [
     description: 'Description 1',
     date: new Date('2025-08-20'),
     location: 'Location 1',
-    hostId: 'user1',
+    eventHost: 'user1',
     UserEvents: [
       { userId: 'user1', isHost: true, isGoing: true },
       { userId: 'user2', isHost: false, isGoing: true },
@@ -65,7 +65,7 @@ const mockEvents = [
     description: 'Description 2',
     date: new Date('2025-08-25'),
     location: 'Location 2',
-    hostId: 'user2',
+    eventHost: 'user2',
     UserEvents: [
       { userId: 'user1', isHost: false, isGoing: true },
       { userId: 'user2', isHost: true, isGoing: true },

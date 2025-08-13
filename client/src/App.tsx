@@ -23,26 +23,34 @@ import LoginForm from './components/LandingDashboard/LoginForm';
 import CreateUserForm from './components/LandingDashboard/CreateUserForm';
 import ContactUs from './pages/ContactUs/ContactUs';
 import SSOCallback from './components/SSOCallback/SSOCallback';
+import { useClerkSync } from './hooks/useClerkSync';
 
 const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY as string;
 if (!clerkPubKey) {
   console.warn('Missing Clerk Publishable Key - some authentication features may not work');
 }
 
+function ClerkSyncWrapper({ children }: { children: React.ReactNode }) {
+  useClerkSync();
+  return <>{children}</>;
+}
+
 function Layout() {
   const [deleteOpen, setDeleteOpen] = React.useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50">
-      <Navbar />
-      <main className="flex-1">
-        <Outlet />
-      </main>
-      <Footer />
-      <Logout />
-      {deleteOpen && <Delete setOpen={setDeleteOpen} />}
-      <AuthModal />
-    </div>
+    <ClerkSyncWrapper>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50">
+        <Navbar />
+        <main className="flex-1">
+          <Outlet />
+        </main>
+        <Footer />
+        <Logout />
+        {deleteOpen && <Delete setOpen={setDeleteOpen} />}
+        <AuthModal />
+      </div>
+    </ClerkSyncWrapper>
   );
 }
 

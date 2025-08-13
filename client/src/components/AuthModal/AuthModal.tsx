@@ -5,7 +5,7 @@ import { closeAuthModal, switchMode } from '../../reduxFiles/slices/authModal';
 import { RootState } from '../../reduxFiles/store';
 import { FiX, FiEye, FiEyeOff, FiMail, FiLock, FiUser, FiArrowRight } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
-import { useLogInMutation, useAddUserMutation } from '../../services/JamDB';
+import { useLogInMutation, useAddUserMutation, useResetPasswordMutation } from '../../services/JamDB';
 import { useNavigate } from 'react-router-dom';
 import { useSignIn, useSignUp } from '@clerk/clerk-react';
 
@@ -31,6 +31,12 @@ function AuthModal() {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [passwordMatch, setPasswordMatch] = useState(true);
+  
+  // Reset password modal state
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetMessage, setResetMessage] = useState('');
+  const [resetSuccess, setResetSuccess] = useState(false);
 
   // Form refs
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -41,6 +47,7 @@ function AuthModal() {
   // API mutations
   const [loginUser] = useLogInMutation();
   const [createUser] = useAddUserMutation();
+  const [resetPassword, { isLoading: isResetLoading }] = useResetPasswordMutation();
 
   // Clerk OAuth hooks
   const { signIn } = useSignIn();
@@ -51,6 +58,10 @@ function AuthModal() {
     setErrorMessage('');
     setSuccessMessage('');
     setPasswordMatch(true);
+    setShowResetModal(false);
+    setResetEmail('');
+    setResetMessage('');
+    setResetSuccess(false);
   };
 
   const handleSwitchMode = () => {
@@ -153,6 +164,44 @@ function AuthModal() {
     }
   };
 
+  const handleShowResetModal = () => {
+    setShowResetModal(true);
+    setResetMessage('');
+    setResetSuccess(false);
+  };
+
+  const handleResetPasswordSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!resetEmail) {
+      setResetMessage('Please enter your email address.');
+      return;
+    }
+
+    try {
+      const result = await resetPassword({ email: resetEmail }).unwrap();
+      if (result.success) {
+        setResetMessage('We just sent you an email with a temporary password. Please check your email and sign in again.');
+        setResetSuccess(true);
+        setResetEmail('');
+      } else {
+        setResetMessage('Email not found. Please check your email address.');
+        setResetSuccess(false);
+      }
+    } catch (error: any) {
+      console.error('Password reset error:', error);
+      const errorMessage = error?.data?.message || 'An error occurred. Please try again later.';
+      setResetMessage(errorMessage);
+      setResetSuccess(false);
+    }
+  };
+
+  const handleBackToSignIn = () => {
+    setShowResetModal(false);
+    setResetMessage('');
+    setResetSuccess(false);
+    setResetEmail('');
+  };
+
   if (!isOpen || !mode) return null;
 
   return (
@@ -173,12 +222,13 @@ function AuthModal() {
         />
 
         {/* Modal */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="relative bg-white rounded-3xl shadow-2xl border border-gray-200 w-full max-w-md max-h-[90vh] overflow-y-auto"
-        >
+        {!showResetModal && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            className="relative bg-white rounded-3xl shadow-2xl border border-gray-200 w-full max-w-md max-h-[90vh] overflow-y-auto"
+          >
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-gray-200">
             <h2 className="text-2xl font-bold text-gray-900">
@@ -271,7 +321,7 @@ function AuthModal() {
                   <div className="mt-2">
                     <button
                       type="button"
-                      onClick={() => navigate('/forgot-password')}
+                      onClick={handleShowResetModal}
                       className="text-sm text-purple-600 hover:text-purple-700 transition-colors duration-200"
                     >
                       Reset password
@@ -356,6 +406,107 @@ function AuthModal() {
             </div>
           </div>
         </motion.div>
+        )}
+
+        {/* Reset Password Modal - overlays the main modal */}
+        {showResetModal && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            className="relative bg-white rounded-3xl shadow-2xl border border-gray-200 w-full max-w-sm"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <h2 className="text-lg font-bold text-gray-900">Reset Password</h2>
+              <button
+                onClick={handleClose}
+                className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+              >
+                <FiX className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 p-4">
+              {!resetSuccess ? (
+                <>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Enter your email address and we'll send you a temporary password to reset your account.
+                  </p>
+                  
+                  <form onSubmit={handleResetPasswordSubmit}>
+                    <div className="mb-3">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Email Address
+                      </label>
+                      <div className="relative">
+                        <FiMail className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                        <input
+                          type="email"
+                          value={resetEmail}
+                          onChange={(e) => setResetEmail(e.target.value)}
+                          required
+                          className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 text-sm"
+                          placeholder="Enter your email address"
+                        />
+                      </div>
+                    </div>
+
+                    {resetMessage && !resetSuccess && (
+                      <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-xs">
+                        {resetMessage}
+                      </div>
+                    )}
+
+                    <div className="flex space-x-2">
+                      <button
+                        type="submit"
+                        disabled={isResetLoading}
+                        className="flex-1 flex items-center justify-center space-x-1.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-medium py-2 px-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 group text-sm"
+                      >
+                        {isResetLoading ? (
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        ) : (
+                          <>
+                            <span>Send Reset Email</span>
+                            <FiArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform duration-200" />
+                          </>
+                        )}
+                      </button>
+                      
+                      <button
+                        type="button"
+                        onClick={handleBackToSignIn}
+                        className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium rounded-lg hover:bg-gray-100 transition-all duration-200 text-sm"
+                      >
+                        Back
+                      </button>
+                    </div>
+                  </form>
+                </>
+              ) : (
+                <>
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <FiMail className="w-6 h-6 text-green-600" />
+                    </div>
+                    <h3 className="text-base font-semibold text-gray-900 mb-2">Check Your Email</h3>
+                    <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-xs">
+                      {resetMessage}
+                    </div>
+                    <button
+                      onClick={handleBackToSignIn}
+                      className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium py-2 px-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm"
+                    >
+                      Back to Sign In
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          </motion.div>
+        )}
       </motion.div>
     </AnimatePresence>
   );

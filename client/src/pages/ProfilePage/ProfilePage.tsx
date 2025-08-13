@@ -21,7 +21,7 @@ import {
 export default function ProfilePage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { data: userData, isLoading } = useGetMeQuery();
+  const { data: userData, isLoading, refetch: refetchMe } = useGetMeQuery();
   const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
 
   const [formData, setFormData] = useState({
@@ -37,17 +37,46 @@ export default function ProfilePage() {
   const [showError, setShowError] = useState('');
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [manualUserData, setManualUserData] = useState<any>(null);
+
+  // Use manual data as fallback when RTK Query fails
+  const user = userData?.data || manualUserData;
 
   useEffect(() => {
-    if (userData?.data) {
+    if (user) {
       setFormData((prev) => ({
         ...prev,
-        name: userData.data.name || '',
-        email: userData.data.email || '',
-        phone: userData.data.phone || '',
+        name: user.name || '',
+        email: user.email || '',
+        phone: user.phone || '',
       }));
     }
-  }, [userData]);
+  }, [user]);
+
+  // Refetch user data on mount and add manual fallback
+  useEffect(() => {
+    refetchMe();
+    
+    // Manual API call as fallback
+    const token = localStorage.getItem('token');
+    if (token) {
+      const cleanToken = token.replace(/["']/g, '').trim();
+      fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3200'}/me`, {
+        headers: {
+          'Authorization': `Bearer ${cleanToken}`
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.data) {
+          setManualUserData(data.data);
+        }
+      })
+      .catch(err => {
+        console.error('Manual fetch error:', err);
+      });
+    }
+  }, [refetchMe]);
 
   const calculatePasswordStrength = (password: string) => {
     let strength = 0;
@@ -71,8 +100,10 @@ export default function ProfilePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!userData?.data?.userId) {
+    if (!user?.userId) {
       setShowError('User data not loaded. Please refresh the page.');
+      // Try to refetch user data
+      refetchMe();
       return;
     }
 
@@ -93,15 +124,15 @@ export default function ProfilePage() {
       const updateData: any = {};
       
       // Only include fields that have changed
-      if (formData.name !== userData?.data?.name) {
+      if (formData.name !== user?.name) {
         updateData.name = formData.name;
       }
       
-      if (formData.email !== userData?.data?.email) {
+      if (formData.email !== user?.email) {
         updateData.email = formData.email;
       }
       
-      if (formData.phone !== userData?.data?.phone) {
+      if (formData.phone !== user?.phone) {
         updateData.phone = formData.phone;
       }
 
@@ -118,7 +149,7 @@ export default function ProfilePage() {
 
       const result = await updateUser({
         ...updateData,
-        userId: userData?.data?.userId || '',
+        userId: user?.userId || '',
       });
 
       console.log('Form update result:', result);
@@ -161,16 +192,16 @@ export default function ProfilePage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const currentUser = userData?.data;
-    
     // Check if user data is available
-    if (!currentUser?.userId) {
-      console.error('User data not available:', currentUser);
+    if (!user?.userId) {
+      console.error('User data not available:', user);
       setShowError('User data not loaded. Please refresh the page.');
+      // Try to refetch
+      refetchMe();
       return;
     }
 
-    console.log('Uploading image for user:', currentUser.userId);
+    console.log('Uploading image for user:', user.userId);
     setUploadingImage(true);
     setShowError('');
 
@@ -199,7 +230,7 @@ export default function ProfilePage() {
 
       // Update user profile with new image URL
       const updatePayload = {
-        userId: currentUser.userId,
+        userId: user.userId,
         profilePic: uploadedImage.secure_url,
       };
       console.log('Updating user with payload:', updatePayload);
@@ -242,7 +273,6 @@ export default function ProfilePage() {
     );
   }
 
-  const user = userData?.data;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50">

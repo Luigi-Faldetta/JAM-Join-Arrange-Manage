@@ -461,6 +461,20 @@ export const thesisDbApi = createApi({
     logOut: build.query<ApiResponse<null>, null>({
       query: () => ({ url: `userlogout` }),
     }),
+
+    // Clerk User Sync
+    syncClerkUser: build.mutation<
+      ApiResponse<{ user: UserState; token: string }>,
+      { clerkId: string; email: string; name: string; profilePic?: string }
+    >({
+      query: (body) => ({
+        url: 'auth/clerk-sync',
+        method: 'POST',
+        body,
+        headers: { 'Content-type': 'application/json; charset=UTF-8' },
+      }),
+      invalidatesTags: ['Me', 'UserState'],
+    }),
   }),
 });
 
@@ -509,6 +523,7 @@ export const {
   useResetPasswordMutation,
   useSocialLoginMutation,
   useLogOutQuery,
+  useSyncClerkUserMutation,
 
   //msg
   useAddMsgMutation,
