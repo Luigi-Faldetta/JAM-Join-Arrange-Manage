@@ -71,16 +71,9 @@ export default function UserDashboardPage() {
   }, [refetchMe]);
 
   // Get events
-  const { data: eventsData, isLoading, refetch: refetchEvents } = useGetEventsQuery(userId || '', {
+  const { data: eventsData, isLoading } = useGetEventsQuery(userId || '', {
     skip: !userId,
   });
-
-  // Force refetch events when userId changes
-  useEffect(() => {
-    if (userId) {
-      refetchEvents();
-    }
-  }, [userId, refetchEvents]);
 
   useEffect(() => {
     if (eventsData?.data) {
@@ -105,7 +98,7 @@ export default function UserDashboardPage() {
       );
     } else if (filterMode === 'attending') {
       return event.UserEvents?.some(
-        (userEvent) => userEvent.userId === userId && userEvent.isGoing && !userEvent.isHost
+        (userEvent) => userEvent.userId === userId && userEvent.isGoing
       );
     }
 
@@ -121,7 +114,7 @@ export default function UserDashboardPage() {
   ).length;
   const attendingEvents = eventList.filter((event) =>
     event.UserEvents?.some(
-      (userEvent) => userEvent.userId === userId && userEvent.isGoing && !userEvent.isHost
+      (userEvent) => userEvent.userId === userId && userEvent.isGoing
     )
   ).length;
 
@@ -213,49 +206,6 @@ export default function UserDashboardPage() {
                 >
                   <FiCalendar className="w-4 h-4" />
                   <span>Calendar</span>
-                </button>
-                <button
-                  onClick={async () => {
-                    console.log('=== DEBUG API CALL ===');
-                    console.log('Current NODE_ENV:', process.env.NODE_ENV);
-                    console.log('REACT_APP_API_BASE_URL:', process.env.REACT_APP_API_BASE_URL);
-                    
-                    const baseUrl = process.env.NODE_ENV !== 'production'
-                      ? process.env.REACT_APP_API_BASE_URL || 'http://localhost:3200'
-                      : process.env.REACT_APP_API_BASE_URL || 'https://jam-join-arrange-manage-production.up.railway.app';
-                    
-                    console.log('Using API URL:', baseUrl);
-                    console.log('Full API call URL:', `${baseUrl}/events/${userId}`);
-                    
-                    // Make direct API call to see what we get
-                    if (userId) {
-                      const token = localStorage.getItem('token');
-                      const cleanToken = token?.replace(/["']/g, '').trim();
-                      
-                      try {
-                        const response = await fetch(`${baseUrl}/events/${userId}`, {
-                          headers: {
-                            'Authorization': `Bearer ${cleanToken}`
-                          }
-                        });
-                        console.log('Response status:', response.status);
-                        const data = await response.json();
-                        console.log('Raw API response:', data);
-                        
-                        if (data.success && data.data && data.data.length > 0) {
-                          console.log('First event UserEvents:', data.data[0].UserEvents);
-                        }
-                      } catch (error) {
-                        console.error('Direct API call failed:', error);
-                      }
-                    }
-                    
-                    // Also trigger RTK Query refetch
-                    refetchEvents();
-                  }}
-                  className="flex items-center space-x-2 px-4 py-3 rounded-xl font-medium bg-green-100 hover:bg-green-200 text-green-700 transition-all duration-200"
-                >
-                  <span>Debug API Call</span>
                 </button>
               </div>
             </div>
