@@ -267,6 +267,17 @@ function AuthModal() {
                     {showPassword ? <FiEyeOff className="w-5 h-5" /> : <FiEye className="w-5 h-5" />}
                   </button>
                 </div>
+                {mode === 'signin' && (
+                  <div className="mt-2">
+                    <button
+                      type="button"
+                      onClick={() => navigate('/forgot-password')}
+                      className="text-sm text-purple-600 hover:text-purple-700 transition-colors duration-200"
+                    >
+                      Reset password
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Repeat password field for signup */}
