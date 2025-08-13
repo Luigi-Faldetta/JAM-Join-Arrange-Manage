@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -92,17 +93,18 @@ function CreateEventForm() {
 
       console.log('Event creation result:', eventCreated);
 
+      // Always close the modal and reset form after submission
+      setOpen(false);
+      
+      // Reset form
+      setEventDate(null);
+      setEventFile(null);
+      setPreviewUrl(null);
+      event.currentTarget.reset();
+
       if ('data' in eventCreated && eventCreated.data.success) {
         dispatch(setEvent(eventCreated.data.data));
         dispatch(addEventToList(eventCreated.data.data));
-
-        // Reset form
-        setEventDate(null);
-        setEventFile(null);
-        setPreviewUrl(null);
-        event.currentTarget.reset();
-
-        setOpen(false);
         console.log('Event created successfully!');
       } else {
         console.error('Event creation failed:', eventCreated);
@@ -127,33 +129,35 @@ function CreateEventForm() {
   };
 
   const createModal = () => {
-    return (
+    if (!open) return null;
+
+    return createPortal(
       <AnimatePresence>
         {open && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 z-[999999] flex items-center justify-center p-4"
           >
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm"
               onClick={() => setOpen(false)}
             />
 
-            {/* Modal */}
+            {/* Modal Container - This ensures proper centering */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative bg-white rounded-3xl shadow-2xl border border-gray-200 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+              className="relative z-10 bg-white rounded-3xl shadow-2xl border border-gray-200 w-full max-w-2xl max-h-[95vh] overflow-hidden"
             >
               {/* Header */}
-              <div className="bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-6 rounded-t-3xl">
+              <div className="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-4 rounded-t-3xl">
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-2xl font-bold text-white">
@@ -171,7 +175,7 @@ function CreateEventForm() {
               </div>
 
               {/* Form */}
-              <form onSubmit={handleFormSubmit} className="p-8 space-y-6">
+              <form onSubmit={handleFormSubmit} className="p-6 space-y-4 max-h-[calc(95vh-120px)] overflow-y-auto">
                 {/* Event Name */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -180,7 +184,7 @@ function CreateEventForm() {
                   <input
                     name="eventName"
                     maxLength={50}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white text-gray-900 placeholder:text-gray-500"
                     placeholder="e.g., Anna's Birthday Party"
                     required
                     autoComplete="off"
@@ -203,7 +207,7 @@ function CreateEventForm() {
                       dateFormat="EEE, MMM d 'at' h:mm aa"
                       minDate={new Date()}
                       wrapperClassName="w-full"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white text-gray-900 placeholder:text-gray-500"
                       autoComplete="off"
                     />
                   </div>
@@ -218,7 +222,7 @@ function CreateEventForm() {
                     <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
                       name="eventLocation"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white text-gray-900 placeholder:text-gray-500"
                       placeholder="e.g., 123 Rainbow Lane, City"
                       autoComplete="off"
                     />
@@ -234,8 +238,8 @@ function CreateEventForm() {
                     <FiFileText className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                     <textarea
                       name="eventDescription"
-                      rows={4}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 resize-none"
+                      rows={3}
+                      className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 resize-none bg-white text-gray-900 placeholder:text-gray-500"
                       placeholder="Tell people what to expect at your event..."
                       autoComplete="off"
                     />
@@ -253,7 +257,7 @@ function CreateEventForm() {
                       <img
                         src={previewUrl}
                         alt="Event preview"
-                        className="w-full h-48 object-cover rounded-xl border border-gray-200"
+                        className="w-full h-32 object-cover rounded-xl border border-gray-200"
                       />
                       <button
                         type="button"
@@ -277,7 +281,7 @@ function CreateEventForm() {
                       />
                       <label
                         htmlFor="event-image"
-                        className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-purple-500 hover:bg-purple-50 transition-all duration-200 group"
+                        className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-purple-500 hover:bg-purple-50 transition-all duration-200 group"
                       >
                         <FiImage className="w-8 h-8 text-gray-400 group-hover:text-purple-500 mb-2" />
                         <span className="text-sm text-gray-600 group-hover:text-purple-600">
@@ -292,7 +296,7 @@ function CreateEventForm() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {isLoading ? (
                     <>
@@ -310,7 +314,8 @@ function CreateEventForm() {
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+      document.body
     );
   };
 
