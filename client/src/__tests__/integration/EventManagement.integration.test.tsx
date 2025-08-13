@@ -121,7 +121,8 @@ let mockDeleteEventMutation: jest.Mock;
 const createMockStore = () => {
   return configureStore({
     reducer: {
-      eventListReducer: eventsReducer,
+      eventListReducer: eventsReducer.eventListReducer,
+      eventReducer: eventsReducer.eventReducer,
       logoutReducer: logoutReducer,
       [thesisDbApi.reducerPath]: thesisDbApi.reducer,
     },
