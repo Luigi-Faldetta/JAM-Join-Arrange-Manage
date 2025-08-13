@@ -18,15 +18,31 @@ export function useClerkSync() {
     });
 
     const syncUser = async () => {
-      // Only sync if user is loaded, signed in, and we have user data
-      if (!userLoaded || !isSignedIn || !user) {
-        console.log('useClerkSync: Skipping sync', {
-          userLoaded,
-          isSignedIn,
-          userExists: !!user,
-        });
+      // Wait for Clerk to fully load before proceeding
+      if (!userLoaded) {
+        console.log('useClerkSync: Waiting for Clerk to load');
         return;
       }
+
+      // If user is not signed in and Clerk is loaded, we can proceed with other logic
+      if (!isSignedIn) {
+        console.log('useClerkSync: User not signed in, clearing any existing tokens');
+        const existingToken = localStorage.getItem('token');
+        if (existingToken) {
+          localStorage.removeItem('token');
+          console.log('useClerkSync: Removed stale token');
+        }
+        return;
+      }
+
+      // Only sync if user is loaded, signed in, and we have user data
+      if (!user) {
+        console.log('useClerkSync: No user data available yet');
+        return;
+      }
+
+      // Add a small delay to ensure Clerk OAuth flow is fully completed
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       // Check if we already have a token (meaning user is already synced)
       const existingToken = localStorage.getItem('token');
@@ -39,7 +55,11 @@ export function useClerkSync() {
         console.log('useClerkSync: Validating existing token');
         // Verify the token is still valid by checking if we can fetch user data
         try {
-          const response = await fetch(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:3200'}/me`, {
+          const baseUrl = process.env.NODE_ENV !== 'production'
+            ? process.env.REACT_APP_API_BASE_URL || 'http://localhost:3200'
+            : process.env.REACT_APP_API_BASE_URL || 'https://jam-join-arrange-manage-production.up.railway.app';
+          
+          const response = await fetch(`${baseUrl}/me`, {
             headers: {
               'Authorization': `Bearer ${existingToken}`
             }
@@ -75,10 +95,12 @@ export function useClerkSync() {
         if (result.success && result.data) {
           // Store the JWT token
           localStorage.setItem('token', result.data.token);
-          console.log('Clerk user synced successfully, token stored:', result.data.token);
+          console.log('Clerk user synced successfully, token stored');
           
-          // Force refetch of user data
-          window.location.href = '/user-dashboard';
+          // Small delay to ensure token is stored before navigation
+          setTimeout(() => {
+            navigate('/user-dashboard');
+          }, 100);
         } else {
           console.error('Sync failed - unexpected response:', result);
         }

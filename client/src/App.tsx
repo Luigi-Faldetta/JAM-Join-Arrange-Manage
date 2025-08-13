@@ -87,7 +87,17 @@ function App() {
 
   if (clerkPubKey) {
     return (
-      <ClerkProvider publishableKey={clerkPubKey}>
+      <ClerkProvider 
+        publishableKey={clerkPubKey}
+        appearance={{
+          baseTheme: undefined,
+          variables: { 
+            colorPrimary: '#8B5CF6' // Purple theme
+          }
+        }}
+        signInUrl="/login"
+        signUpUrl="/signup"
+      >
         <AppContent />
       </ClerkProvider>
     );

@@ -53,7 +53,11 @@ export default function UserDashboardPage() {
     if (token) {
       const cleanToken = token.replace(/["']/g, '').trim();
       console.log('UserDashboard: Making manual /me request');
-      fetch(`${process.env.REACT_APP_API_BASE_URL || 'https://jam-join-arrange-manage-production.up.railway.app'}/me`, {
+      const baseUrl = process.env.NODE_ENV !== 'production'
+        ? process.env.REACT_APP_API_BASE_URL || 'http://localhost:3200'
+        : process.env.REACT_APP_API_BASE_URL || 'https://jam-join-arrange-manage-production.up.railway.app';
+      
+      fetch(`${baseUrl}/me`, {
         headers: {
           'Authorization': `Bearer ${cleanToken}`
         }
@@ -226,7 +230,7 @@ export default function UserDashboardPage() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
         >
-          {stats.map((stat, index) => (
+          {stats.map((stat) => (
             <div
               key={stat.title}
               className={`bg-gradient-to-br ${stat.bgColor} rounded-2xl p-6 border ${stat.borderColor}`}
