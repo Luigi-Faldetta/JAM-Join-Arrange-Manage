@@ -45,7 +45,7 @@ const mockEvent: EventState = {
   date: new Date('2025-08-15T18:00:00'),
   location: 'Test Location',
   coverPic: 'https://example.com/test-image.jpg',
-  hostId: 'user1',
+  eventHost: 'user1',
   UserEvents: [
     {
       userId: 'user1',
@@ -201,7 +201,7 @@ describe('EventTile Component', () => {
 
   describe('Edge Cases', () => {
     it('handles event without UserEvents array', () => {
-      const eventWithoutUserEvents = { ...mockEvent, UserEvents: undefined };
+      const eventWithoutUserEvents = { ...mockEvent, UserEvents: [] };
       render(
         <MockWrapper>
           <EventTile event={eventWithoutUserEvents} userId="user1" viewMode="grid" />
@@ -213,7 +213,7 @@ describe('EventTile Component', () => {
     });
 
     it('handles event without location', () => {
-      const eventWithoutLocation = { ...mockEvent, location: undefined };
+      const eventWithoutLocation = { ...mockEvent, location: null };
       render(
         <MockWrapper>
           <EventTile event={eventWithoutLocation} userId="user1" viewMode="list" />
@@ -225,7 +225,7 @@ describe('EventTile Component', () => {
     });
 
     it('handles event without description', () => {
-      const eventWithoutDescription = { ...mockEvent, description: undefined };
+      const eventWithoutDescription = { ...mockEvent, description: null };
       render(
         <MockWrapper>
           <EventTile event={eventWithoutDescription} userId="user1" viewMode="grid" />

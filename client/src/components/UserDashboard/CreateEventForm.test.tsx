@@ -194,7 +194,7 @@ describe('CreateEventForm Component', () => {
     const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
     fireEvent.change(fileInput, { target: { files: [file] } });
 
-    expect(fileInput.files![0]).toBe(file);
+    expect((fileInput as HTMLInputElement).files![0]).toBe(file);
   });
 
   it('closes modal when close button is clicked', () => {
@@ -305,7 +305,7 @@ describe('CreateEventForm Component', () => {
 
     await waitFor(() => {
       // Check if FileReader was used to create preview
-      expect(fileInput.files![0]).toBe(file);
+      expect((fileInput as HTMLInputElement).files![0]).toBe(file);
     });
   });
 
