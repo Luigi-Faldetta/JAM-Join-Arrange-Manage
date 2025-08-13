@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { useGetMeQuery, useUpdateUserMutation } from '../../services/JamDB';
-import PictureUpload from '../../components/PictureUpload';
+import { useAppDispatch } from '../../reduxFiles/store';
+import { openLogout } from '../../reduxFiles/slices/logout';
 import {
   FiUser,
   FiMail,
-  FiPhone,
   FiLock,
   FiSave,
   FiLoader,
   FiCheck,
   FiAlertCircle,
-  FiCamera,
   FiShield,
+  FiUploadCloud,
+  FiArrowLeft,
+  FiLogOut,
 } from 'react-icons/fi';
 
 export default function ProfilePage() {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { data: userData, isLoading } = useGetMeQuery();
   const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
 
@@ -31,6 +36,7 @@ export default function ProfilePage() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState('');
   const [passwordStrength, setPasswordStrength] = useState(0);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   useEffect(() => {
     if (userData?.data) {
@@ -65,6 +71,11 @@ export default function ProfilePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!userData?.data?.userId) {
+      setShowError('User data not loaded. Please refresh the page.');
+      return;
+    }
+
     if (
       formData.newPassword &&
       formData.newPassword !== formData.confirmPassword
@@ -79,20 +90,53 @@ export default function ProfilePage() {
     }
 
     try {
-      const updateData: any = {
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-      };
+      const updateData: any = {};
+      
+      // Only include fields that have changed
+      if (formData.name !== userData?.data?.name) {
+        updateData.name = formData.name;
+      }
+      
+      if (formData.email !== userData?.data?.email) {
+        updateData.email = formData.email;
+      }
+      
+      if (formData.phone !== userData?.data?.phone) {
+        updateData.phone = formData.phone;
+      }
 
       if (formData.newPassword) {
         updateData.currentPassword = formData.currentPassword;
         updateData.newPassword = formData.newPassword;
       }
+      
+      // Don't make API call if nothing changed
+      if (Object.keys(updateData).length === 0) {
+        setShowError('No changes to save.');
+        return;
+      }
 
-      const result = await updateUser(updateData);
+      const result = await updateUser({
+        ...updateData,
+        userId: userData?.data?.userId || '',
+      });
 
-      if ('data' in result && result.data.success) {
+      console.log('Form update result:', result);
+
+      if ('error' in result) {
+        console.error('Form update error:', result.error);
+        // Check for specific error messages
+        if ((result.error as any)?.status === 409) {
+          const errorMessage = (result.error as any)?.data?.message;
+          if (errorMessage === 'Email already exists') {
+            setShowError('This email is already in use by another account.');
+          } else {
+            setShowError(errorMessage || 'Failed to update profile. Please try again.');
+          }
+        } else {
+          setShowError('Failed to update profile. Please try again.');
+        }
+      } else if ('data' in result && result.data.success) {
         setShowSuccess(true);
         setFormData((prev) => ({
           ...prev,
@@ -106,6 +150,84 @@ export default function ProfilePage() {
       }
     } catch (error) {
       setShowError('An error occurred while updating your profile.');
+    }
+  };
+
+  const handleSignOut = () => {
+    dispatch(openLogout());
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const currentUser = userData?.data;
+    
+    // Check if user data is available
+    if (!currentUser?.userId) {
+      console.error('User data not available:', currentUser);
+      setShowError('User data not loaded. Please refresh the page.');
+      return;
+    }
+
+    console.log('Uploading image for user:', currentUser.userId);
+    setUploadingImage(true);
+    setShowError('');
+
+    try {
+      // Create FormData for image upload
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'tdzb6v4z'); // Cloudinary preset from PictureUpload component
+      formData.append('cloud_name', 'de4bu4ijj'); // Cloudinary cloud name
+
+      // Upload to Cloudinary
+      const cloudinaryRes = await fetch(
+        'https://api.cloudinary.com/v1_1/de4bu4ijj/image/upload',
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
+      if (!cloudinaryRes.ok) {
+        throw new Error('Failed to upload image');
+      }
+
+      const uploadedImage = await cloudinaryRes.json();
+      console.log('Cloudinary upload successful:', uploadedImage.secure_url);
+
+      // Update user profile with new image URL
+      const updatePayload = {
+        userId: currentUser.userId,
+        profilePic: uploadedImage.secure_url,
+      };
+      console.log('Updating user with payload:', updatePayload);
+      
+      const result = await updateUser(updatePayload);
+      console.log('Update result:', result);
+
+      if ('error' in result) {
+        console.error('Update error:', result.error);
+        // Check if it's a 409 conflict but the update was successful
+        if ((result.error as any)?.status === 409) {
+          // The image was likely saved, so show success
+          setShowSuccess(true);
+          setTimeout(() => setShowSuccess(false), 3000);
+        } else {
+          setShowError('Failed to update profile picture');
+        }
+      } else if ('data' in result && result.data.success) {
+        setShowSuccess(true);
+        setTimeout(() => setShowSuccess(false), 3000);
+      } else {
+        setShowError('Failed to update profile picture');
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      setShowError('Failed to upload image. Please try again.');
+    } finally {
+      setUploadingImage(false);
     }
   };
 
@@ -124,6 +246,27 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50">
+      {/* Top Navigation Buttons */}
+      <div className="absolute top-4 left-4 z-50">
+        <button
+          onClick={() => navigate('/user-dashboard')}
+          className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 font-medium"
+        >
+          <FiArrowLeft className="w-4 h-4" />
+          <span>Back to Dashboard</span>
+        </button>
+      </div>
+      
+      <div className="absolute top-4 right-4 z-50">
+        <button
+          onClick={handleSignOut}
+          className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 font-medium"
+        >
+          <FiLogOut className="w-4 h-4" />
+          <span>Sign Out</span>
+        </button>
+      </div>
+
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <motion.div
@@ -154,10 +297,8 @@ export default function ProfilePage() {
                 src={user?.profilePic || '/no-profile-picture-icon.png'}
                 alt="Profile"
                 className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
+                key={user?.profilePic} // Force re-render when profile pic changes
               />
-              <div className="absolute bottom-2 right-2">
-                <PictureUpload eventFile={null} setEventFile={() => {}} />
-              </div>
             </div>
             <h2 className="text-2xl font-bold text-white mt-4">{user?.name}</h2>
             <p className="text-purple-100">{user?.email}</p>
@@ -243,6 +384,46 @@ export default function ProfilePage() {
                       placeholder="Enter your email address"
                     />
                   </div>
+                </div>
+
+                {/* Profile Picture Section */}
+                <div className="mt-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Profile Picture
+                  </label>
+                  <div className="flex items-center space-x-4">
+                    <img
+                      src={user?.profilePic || '/no-profile-picture-icon.png'}
+                      alt="Current profile"
+                      className="w-20 h-20 rounded-full object-cover border-2 border-gray-300"
+                    />
+                    <label
+                      htmlFor="profile-picture-upload"
+                      className={`flex items-center space-x-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg cursor-pointer transition-all duration-200 ${
+                        uploadingImage ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
+                    >
+                      {uploadingImage ? (
+                        <FiLoader className="w-5 h-5 animate-spin" />
+                      ) : (
+                        <FiUploadCloud className="w-5 h-5" />
+                      )}
+                      <span className="text-sm font-medium">
+                        {uploadingImage ? 'Uploading...' : 'Upload Photo'}
+                      </span>
+                    </label>
+                    <input
+                      id="profile-picture-upload"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      disabled={uploadingImage}
+                      onChange={handleImageUpload}
+                    />
+                  </div>
+                  <p className="mt-2 text-xs text-gray-500">
+                    JPG, PNG or GIF. Max size of 5MB.
+                  </p>
                 </div>
               </div>
 
