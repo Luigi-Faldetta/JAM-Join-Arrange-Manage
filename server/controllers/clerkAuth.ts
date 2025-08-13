@@ -28,8 +28,8 @@ const syncClerkUser = async (req: Request, res: Response) => {
         name,
         email,
         password: clerkId, // This won't be used for authentication
-        phone: null, // Phone is optional for OAuth users
-        profilePic: profilePic || null,
+        phone: '', // Empty string for optional phone field
+        profilePic: profilePic || '',
       });
     }
 
