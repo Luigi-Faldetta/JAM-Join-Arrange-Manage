@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import moment from 'moment';
 import ToggleButton from './ToggleButton';
 import EventLink from './EventLink';
@@ -271,14 +271,13 @@ export default function EventData({
       </div>
 
       {/* Modals */}
-      <AnimatePresence>
-        {showEditModal && (
-          <EditEvent
-            eventData={eventData}
-            onClose={() => setShowEditModal(false)}
-          />
-        )}
+      <EditEvent
+        open={showEditModal}
+        setOpen={setShowEditModal}
+        eventData={event}
+      />
 
+      <AnimatePresence>
         {showDeleteModal && (
           <DeleteEvent
             eventId={event.eventId}

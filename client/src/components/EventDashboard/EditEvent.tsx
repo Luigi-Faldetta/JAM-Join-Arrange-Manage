@@ -1,265 +1,339 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { useDispatch } from 'react-redux';
 import {
-  useDeleteEventMutation,
-  useUpdateEventMutation,
-} from "../../services/JamDB";
-import { useState } from "react";
-import DatePicker from "react-datepicker";
-import {
-  addEventToList,
   EventState,
   updateEvent,
-} from "../../reduxFiles/slices/events";
-import { RootState } from "../../reduxFiles/store";
+} from '../../reduxFiles/slices/events';
+import { useUpdateEventMutation } from '../../services/JamDB';
+import {
+  FiX,
+  FiCalendar,
+  FiMapPin,
+  FiFileText,
+  FiImage,
+  FiLoader,
+  FiSave,
+} from 'react-icons/fi';
 
 interface EditEventProps {
-  setEditModalOpen: (isOpen: boolean) => void;
+  open: boolean;
+  setOpen: (isOpen: boolean) => void;
+  eventData: any;
 }
 
-function EditEvent({ setEditModalOpen, eventid }: any) {
-  const eventInfo = useSelector((state: RootState) => state.eventReducer);
+function EditEvent({ open, setOpen, eventData }: EditEventProps) {
   const dispatch = useDispatch();
   const [eventFile, setEventFile] = useState<File | null>(null);
-  const navigate = useNavigate();
   const [eventDate, setEventDate] = useState<Date | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [title, setTitle] = useState('');
+  const [location, setLocation] = useState('');
+  const [description, setDescription] = useState('');
   const [patchEvent] = useUpdateEventMutation();
-  const [title, setTitle] = useState("");
-  const [location, setLocation] = useState("");
-  const [description, setDescription] = useState("");
+
+  // Initialize form with existing event data
+  useEffect(() => {
+    if (eventData && open) {
+      setTitle(eventData.title || '');
+      setLocation(eventData.location || '');
+      setDescription(eventData.description || '');
+      setEventDate(eventData.date ? new Date(eventData.date) : null);
+      setPreviewUrl(eventData.coverPic || null);
+    }
+  }, [eventData, open]);
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const eventFormData: Partial<EventState> &
-      Pick<EventState, "title" | "date" | "location" | "description"> = {
-      title: event.currentTarget.eventName.value,
-      date: eventDate,
-      location: event.currentTarget.eventLocation.value,
-      description: null,
-      eventId: eventid,
-    };
+    setIsLoading(true);
 
-    const image = await handleImageUpload();
+    try {
+      const eventFormData: Partial<EventState> = {
+        eventId: eventData?.eventId,
+      };
 
-    eventFormData.eventId = eventid;
-    if (image?.url) eventFormData.coverPic = image.url;
-    if (title !== "") {
-      eventFormData.title = title;
-    } else {
-      //@ts-ignore
-      delete eventFormData.title;
-    }
+      // Only include fields that have been modified
+      if (title.trim() && title !== eventData?.title) {
+        eventFormData.title = title.trim();
+      }
+      if (location.trim() && location !== eventData?.location) {
+        eventFormData.location = location.trim();
+      }
+      if (description.trim() && description !== eventData?.description) {
+        eventFormData.description = description.trim();
+      }
+      if (eventDate && eventDate.getTime() !== new Date(eventData?.date || '').getTime()) {
+        eventFormData.date = eventDate;
+      }
 
-    if (eventDate !== null) {
-      eventFormData.date = eventDate;
-    } else {
-      //@ts-ignore
-      delete eventFormData.date;
-    }
-    if (location !== "") {
-      eventFormData.location = location;
-    } else {
-      //@ts-ignore
-      delete eventFormData.location;
-    }
-    if (description !== "") {
-      eventFormData.description = description;
-    } else {
-      //@ts-ignore
-      delete eventFormData.description;
-    }
+      const image = await handleImageUpload();
+      if (image?.secure_url) {
+        eventFormData.coverPic = image.secure_url;
+      }
 
-    const eventChanged = await patchEvent(eventFormData);
-    if ("data" in eventChanged && eventChanged.data.success) {
-      dispatch(updateEvent(eventChanged.data.data));
+      console.log('Updating event with data:', eventFormData);
+
+      const eventChanged = await patchEvent(eventFormData);
+      
+      if ('data' in eventChanged && eventChanged.data.success) {
+        dispatch(updateEvent(eventChanged.data.data));
+        console.log('Event updated successfully!');
+      } else {
+        console.error('Event update failed:', eventChanged);
+      }
+      
+      handleClose();
+    } catch (error) {
+      console.error('Error updating event:', error);
+    } finally {
+      setIsLoading(false);
     }
-    setEditModalOpen(false);
   };
   const handleImageUpload = async () => {
     if (eventFile) {
       const data = new FormData();
-      data.append("file", eventFile);
-      data.append("upload_preset", "tdzb6v4z");
-      data.append("cloud_name", "de4bu4ijj");
+      data.append('file', eventFile);
+      data.append('upload_preset', 'tdzb6v4z');
+      data.append('cloud_name', 'de4bu4ijj');
 
       try {
         const res = await fetch(
-          "https://api.cloudinary.com/v1_1/de4bu4ijj/image/upload",
+          'https://api.cloudinary.com/v1_1/de4bu4ijj/image/upload',
           {
-            method: "post",
+            method: 'post',
             body: data,
           }
         );
 
         const uploadedImage = await res.json();
-
         return uploadedImage;
       } catch (error) {
         console.log(error);
+        return null;
       }
     } else {
-      return;
+      return null;
     }
   };
-  return (
-    <>
-      <div
-        className="fixed inset-0 flex items-center justify-center z-50 bg-gray-500/50 transition-opacity backdrop-blur"
-        aria-labelledby="modal-title"
-        role="dialog"
-        aria-modal="true"
-      >
-        <form
-          method=""
-          className="modal-box border-indigo-950 border-2 bg-white"
-          onSubmit={handleFormSubmit}
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setEventFile(file);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setPreviewUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    // Reset form
+    setTitle('');
+    setLocation('');
+    setDescription('');
+    setEventDate(null);
+    setEventFile(null);
+    setPreviewUrl(null);
+  };
+
+  if (!open) return null;
+  return createPortal(
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[999999] flex items-center justify-center p-4"
         >
-          <div
-            onClick={() => setEditModalOpen(false)}
-            className="btn btn-circle absolute right-2 top-2 bg-indigo-950 text-white hover:text-pink-500 hover:bg-indigo-950"
-          >
-            ✕
-          </div>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={handleClose}
+          />
 
-          <div className="flex flex-col justify-center text-center bg-gray-100 rounded-md p-4 mb-5">
-            <div className="">
-              <label
-                htmlFor="eventName"
-                className="block mb-2 text-md font-medium text-gray-900"
-              >
-                Event Name
-              </label>
-              <input
-                id="eventName"
-                name="eventName"
-                maxLength={30}
-                onChange={(e) => setTitle(e.target.value)}
-                className="shadow-sm 
-              
-                          bg-gray-50 border border-gray-300 
-                          rounded-lg 
-                          text-gray-900 text-sm 
-                          focus:ring-blue-500 focus:border-blue-500 
-                          block w-full p-2.5"
-                placeholder="Eg. 'Anna's houseparty...'"
-              />
+          {/* Modal Container */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            className="relative z-10 bg-white rounded-3xl shadow-2xl border border-gray-200 w-full max-w-2xl max-h-[95vh] overflow-hidden"
+          >
+            {/* Header */}
+            <div className="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-4 rounded-t-3xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-white">
+                    Edit Event
+                  </h2>
+                  <p className="text-purple-100">Update your event details</p>
+                </div>
+                <button
+                  onClick={handleClose}
+                  className="p-2 text-white hover:bg-white/20 rounded-xl transition-colors duration-200"
+                >
+                  <FiX className="w-6 h-6" />
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div className="mb-4  w-full ">
-            <label
-              htmlFor="eventDateAndTime"
-              className="block mb-2 text-sm font-medium text-gray-900"
-            >
-              Date & Time
-            </label>
-            <DatePicker
-              selectsStart
-              placeholderText="Select date & time"
-              showTimeSelect
-              id="event-date"
-              selected={eventDate}
-              onChange={(date) => setEventDate(date)}
-              dateFormat="EEE MMM d 🗓 h:mm aa 🕣"
-              minDate={new Date()}
-              wrapperClassName="w-full"
-              className="shadow-sm
-                         bg-gray-50 
-                         border border-gray-300 
-                         text-gray-900 text-sm 
-                         rounded-lg 
-                         focus:ring-blue-500 
-                         focus:border-blue-500 
-                         block 
-                         w-full
-                         p-2.5"
-              autoComplete="off" // Disable autocomplete
-            />
-          </div>
+            {/* Form */}
+            <form onSubmit={handleFormSubmit} className="p-6 space-y-4 max-h-[calc(95vh-120px)] overflow-y-auto">
+              {/* Event Name */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Event Name *
+                </label>
+                <input
+                  name="eventName"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  maxLength={50}
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white text-gray-900 placeholder:text-gray-500"
+                  placeholder="e.g., Anna's Birthday Party"
+                  required
+                  autoComplete="off"
+                />
+              </div>
 
-          <div className="mb-6">
-            <label
-              htmlFor="eventDescription"
-              className="block mb-2 text-sm font-medium text-gray-900"
-            >
-              Description
-            </label>
-            <input
-              type="eventDescription"
-              id="eventDescription"
-              name="eventDescription"
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Eg. 'Music will be pumping, the dance floor will be on fire' "
-              className="shadow-sm 
-                          bg-gray-50 border border-gray-300 
-                          text-gray-900 text-sm 
-                          rounded-lg 
-                          focus:ring-blue-500 focus:border-blue-500 
-                          block w-full p-2.5"
-            />
-          </div>
+              {/* Date & Time */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Date & Time *
+                </label>
+                <div className="relative">
+                  <FiCalendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <DatePicker
+                    selectsStart
+                    placeholderText="Select date & time"
+                    showTimeSelect
+                    selected={eventDate}
+                    onChange={(date) => setEventDate(date)}
+                    dateFormat="EEE, MMM d 'at' h:mm aa"
+                    minDate={new Date()}
+                    wrapperClassName="w-full"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white text-gray-900 placeholder:text-gray-500"
+                    autoComplete="off"
+                  />
+                </div>
+              </div>
 
-          <div className="mb-5">
-            <label
-              htmlFor="eventLocation"
-              className="block mb-2 text-sm font-medium text-gray-900"
-            >
-              Location
-            </label>
-            <input
-              id="eventLocation"
-              name="eventLocation"
-              onChange={(e) => setLocation(e.target.value)}
-              placeholder="Eg. '12345 Rainbow Lane...'"
-              className="shadow-sm 
-                          bg-gray-50 border border-gray-300 
-                          text-gray-900 text-sm 
-                          rounded-lg 
-                          focus:ring-blue-500 focus:border-blue-500 
-                          block w-full p-2.5"
-            />
-          </div>
+              {/* Location */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Location
+                </label>
+                <div className="relative">
+                  <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    name="eventLocation"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white text-gray-900 placeholder:text-gray-500"
+                    placeholder="e.g., 123 Rainbow Lane, City"
+                    autoComplete="off"
+                  />
+                </div>
+              </div>
 
-          <div className="mb-5">
-            <label
-              htmlFor="eventLocation"
-              className="block mb-2 text-sm font-medium text-gray-900"
-            >
-              Image
-            </label>
+              {/* Description */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Description
+                </label>
+                <div className="relative">
+                  <FiFileText className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                  <textarea
+                    name="eventDescription"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    rows={3}
+                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 resize-none bg-white text-gray-900 placeholder:text-gray-500"
+                    placeholder="Tell people what to expect at your event..."
+                    autoComplete="off"
+                  />
+                </div>
+              </div>
 
-            <input
-              id="dropzone-file"
-              type="file"
-              className="shadow-sm 
-            bg-gray-50 border border-gray-300 
-            text-gray-900 text-sm 
-            rounded-lg 
-            focus:ring-blue-500 focus:border-blue-500 
-            block w-full"
-              onChange={(e) => setEventFile(e.target.files?.[0]!)}
-            />
-          </div>
+              {/* Image Upload */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Event Image
+                </label>
 
-          <button
-            id="create-event-btn"
-            type="submit"
-            className="text-white hover:text-pink-500
+                {previewUrl ? (
+                  <div className="relative">
+                    <img
+                      src={previewUrl}
+                      alt="Event preview"
+                      className="w-full h-32 object-cover rounded-xl border border-gray-200"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPreviewUrl(eventData?.coverPic || null);
+                        setEventFile(null);
+                      }}
+                      className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-200"
+                    >
+                      <FiX className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="relative">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="hidden"
+                      id="event-image"
+                    />
+                    <label
+                      htmlFor="event-image"
+                      className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-purple-500 hover:bg-purple-50 transition-all duration-200 group"
+                    >
+                      <FiImage className="w-8 h-8 text-gray-400 group-hover:text-purple-500 mb-2" />
+                      <span className="text-sm text-gray-600 group-hover:text-purple-600">
+                        Click to upload event image
+                      </span>
+                    </label>
+                  </div>
+                )}
+              </div>
 
-                        bg-gradient-to-r from-indigo-900 to-indigo-950  
-                        focus:ring-4 focus:outline-none focus:ring-blue-300 
-                        font-medium 
-                        w-full
-                        rounded-lg 
-                        text-sm 
-                        px-5 py-2.5 
-                        mt-8
-                        text-center"
-          >
-            Edit Event
-          </button>
-        </form>
-      </div>{" "}
-    </>
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {isLoading ? (
+                  <>
+                    <FiLoader className="w-5 h-5 animate-spin" />
+                    <span>Updating Event...</span>
+                  </>
+                ) : (
+                  <>
+                    <FiSave className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
+                    <span>Update Event</span>
+                  </>
+                )}
+              </button>
+            </form>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>,
+    document.body
   );
 }
 export default EditEvent;
