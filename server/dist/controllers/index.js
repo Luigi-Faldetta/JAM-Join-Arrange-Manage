@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.email = exports.eventChat = exports.calculation = exports.session = exports.userEvent = exports.expense = exports.todo = exports.event = exports.user = void 0;
+exports.clerkAuth = exports.email = exports.eventChat = exports.calculation = exports.session = exports.userEvent = exports.expense = exports.todo = exports.event = exports.user = void 0;
 const user_1 = __importDefault(require("./user"));
 exports.user = user_1.default;
 const event_1 = __importDefault(require("./event"));
@@ -22,3 +22,5 @@ const eventChat_1 = __importDefault(require("./eventChat"));
 exports.eventChat = eventChat_1.default;
 const email_1 = __importDefault(require("./email"));
 exports.email = email_1.default;
+const clerkAuth_1 = __importDefault(require("./clerkAuth"));
+exports.clerkAuth = clerkAuth_1.default;

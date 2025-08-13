@@ -37,6 +37,7 @@ export function useClerkSync() {
           clerkId: user.id,
           email: user.primaryEmailAddress?.emailAddress,
           name: user.fullName || user.firstName || 'User',
+          profilePic: user.imageUrl,
         });
 
         const result = await syncClerkUser({
@@ -46,20 +47,28 @@ export function useClerkSync() {
           profilePic: user.imageUrl,
         }).unwrap();
 
+        console.log('Sync result:', result);
+
         if (result.success && result.data) {
           // Store the JWT token
           localStorage.setItem('token', result.data.token);
-          console.log('Clerk user synced successfully');
+          console.log('Clerk user synced successfully, token stored:', result.data.token);
           
-          // Navigate to user dashboard
-          navigate('/user-dashboard');
+          // Force refetch of user data
+          window.location.href = '/user-dashboard';
+        } else {
+          console.error('Sync failed - unexpected response:', result);
         }
       } catch (error: any) {
+        console.error('Clerk sync error details:', {
+          status: error?.status,
+          data: error?.data,
+          message: error?.message,
+          error
+        });
+        
         if (error?.status === 404) {
           console.error('Clerk sync endpoint not found. This feature may not be deployed yet.');
-          // For now, create a temporary solution
-          // You should deploy the backend changes to fix this
-          console.warn('Using fallback authentication method...');
         } else {
           console.error('Failed to sync Clerk user:', error);
         }
