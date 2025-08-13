@@ -11,10 +11,7 @@ import { EventState } from '../../reduxFiles/slices/events';
 import LandingPage from '../LandingPage/LandingPage';
 import {
   FiArrowLeft,
-  FiHome,
-  FiUser,
   FiLogOut,
-  FiCalendar,
   FiUsers,
   FiDollarSign,
   FiCheckSquare,
@@ -63,7 +60,18 @@ export default function EventDashboard() {
     dispatch(openLogout());
   };
 
-  if (!isLoggedIn || isLoading || !eventData) {
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg">Loading event...</p>
+        </div>
+      </div>
+    );
+  }
+  
+  if (!isLoggedIn || !eventData) {
     return <LandingPage eventData={eventData} />;
   }
 
@@ -91,19 +99,12 @@ export default function EventDashboard() {
               <div className="hidden md:block w-px h-8 bg-gray-300"></div>
 
               <div className="flex items-center space-x-4">
-                <div className="relative">
-                  <img
-                    src="https://res.cloudinary.com/dpzz6vn2w/image/upload/v1688644579/jam-strw_irm1ti.png"
-                    alt="JAM Logo"
-                    className="w-12 h-12 rounded-xl shadow-lg"
-                  />
-                </div>
                 <div>
                   <h1 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent truncate max-w-xs sm:max-w-md">
                     {eventData.data.title}
                   </h1>
                   <p className="text-sm text-gray-500 hidden sm:block">
-                    Event Management
+                    {eventData.data.location || 'Location not specified'}
                   </p>
                 </div>
               </div>
@@ -134,10 +135,14 @@ export default function EventDashboard() {
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => navigate('/profile')}
-                  className="p-3 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-200 group"
+                  className="w-10 h-10 rounded-full overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border-2 border-gray-200 hover:border-purple-400"
                   title="Profile"
                 >
-                  <FiUser className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
+                  <img
+                    src={user?.profilePic || '/no-profile-picture-icon.png'}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
                 </button>
 
                 <button
