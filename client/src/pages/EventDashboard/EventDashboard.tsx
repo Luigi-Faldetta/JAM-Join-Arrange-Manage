@@ -218,10 +218,6 @@ export default function EventDashboard() {
                   </button>
                 </div>
 
-                <div className="flex items-center space-x-2 text-white">
-                  <FiSettings className="w-5 h-5" />
-                  <span className="text-sm font-medium">Event Management</span>
-                </div>
               </div>
             </div>
 

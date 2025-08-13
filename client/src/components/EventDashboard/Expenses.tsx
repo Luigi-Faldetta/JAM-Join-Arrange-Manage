@@ -18,6 +18,7 @@ import {
   FiLoader,
   FiTrendingUp,
   FiCalendar,
+  FiCheckCircle,
 } from 'react-icons/fi';
 
 interface Expense {
@@ -446,51 +447,128 @@ export default function Expenses() {
         </div>
       </div>
 
-      {/* Expense Breakdown by User */}
+      {/* Expense Charts */}
       {Object.keys(expensesByUser).length > 0 && (
-        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-          <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">
-              Expense Breakdown by Person
-            </h3>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Spending Breakdown Chart */}
+          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+            <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Spending Breakdown
+              </h3>
+            </div>
+
+            <div className="p-6">
+              <div className="space-y-4">
+                {Object.entries(expensesByUser).map(([userId, userData]) => {
+                  const percentage = (userData.total / totalAmount) * 100;
+                  return (
+                    <div key={userId} className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <img
+                            src={userData.profilePic || '/no-profile-picture-icon.png'}
+                            alt={userData.name}
+                            className="w-8 h-8 rounded-full object-cover"
+                          />
+                          <span className="font-medium text-gray-900">
+                            {userData.name}
+                          </span>
+                        </div>
+                        <span className="text-sm font-semibold text-gray-700">
+                          ${userData.total.toFixed(2)} ({percentage.toFixed(1)}%)
+                        </span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div
+                          className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-500"
+                          style={{ width: `${percentage}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
 
-          <div className="p-6">
-            <div className="space-y-4">
-              {Object.entries(expensesByUser).map(([userId, userData]) => (
-                <div
-                  key={userId}
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-xl"
-                >
-                  <div className="flex items-center space-x-3">
-                    <img
-                      src={
-                        userData.profilePic || '/no-profile-picture-icon.png'
-                      }
-                      alt={userData.name}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                    <div>
-                      <p className="font-medium text-gray-900">
-                        {userData.name}
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        {userData.count} expenses
-                      </p>
-                    </div>
-                  </div>
+          {/* Payment Balance Chart */}
+          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+            <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Payment Balance
+              </h3>
+              <p className="text-sm text-gray-600 mt-1">
+                Who owes money and who is owed
+              </p>
+            </div>
 
-                  <div className="text-right">
-                    <div className="text-lg font-semibold text-gray-900">
-                      ${userData.total.toFixed(2)}
-                    </div>
-                    <div className="text-sm text-gray-600">
-                      {((userData.total / totalAmount) * 100).toFixed(1)}% of
-                      total
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <div className="p-6">
+              <div className="space-y-4">
+                {(() => {
+                  const numPeople = Object.keys(expensesByUser).length;
+                  const averagePerPerson = totalAmount / numPeople;
+                  
+                  return Object.entries(expensesByUser).map(([userId, userData]) => {
+                    const balance = userData.total - averagePerPerson;
+                    const isOwed = balance > 0;
+                    const absBalance = Math.abs(balance);
+                    
+                    if (absBalance < 0.01) return null; // Skip if balance is essentially zero
+                    
+                    return (
+                      <div key={userId} className="flex items-center justify-between p-4 rounded-xl" 
+                           style={{ backgroundColor: isOwed ? '#f0fdf4' : '#fef2f2' }}>
+                        <div className="flex items-center space-x-3">
+                          <img
+                            src={userData.profilePic || '/no-profile-picture-icon.png'}
+                            alt={userData.name}
+                            className="w-10 h-10 rounded-full object-cover"
+                          />
+                          <div>
+                            <p className="font-medium text-gray-900">
+                              {userData.name}
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              Paid ${userData.total.toFixed(2)} • Fair share: ${averagePerPerson.toFixed(2)}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="text-right">
+                          <div className={`text-lg font-semibold ${isOwed ? 'text-green-600' : 'text-red-600'}`}>
+                            {isOwed ? '+' : '-'}${absBalance.toFixed(2)}
+                          </div>
+                          <div className={`text-sm ${isOwed ? 'text-green-600' : 'text-red-600'}`}>
+                            {isOwed ? 'Is owed' : 'Owes'}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }).filter(Boolean);
+                })()}
+                
+                {(() => {
+                  const numPeople = Object.keys(expensesByUser).length;
+                  const averagePerPerson = totalAmount / numPeople;
+                  const hasImbalances = Object.values(expensesByUser).some(
+                    userData => Math.abs(userData.total - averagePerPerson) >= 0.01
+                  );
+                  
+                  if (!hasImbalances) {
+                    return (
+                      <div className="text-center py-6 text-gray-500">
+                        <div className="w-12 h-12 bg-green-100 rounded-full mx-auto mb-3 flex items-center justify-center">
+                          <FiCheckCircle className="w-6 h-6 text-green-600" />
+                        </div>
+                        <p className="font-medium">All balanced!</p>
+                        <p className="text-sm">Everyone has paid their fair share</p>
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
+              </div>
             </div>
           </div>
         </div>
