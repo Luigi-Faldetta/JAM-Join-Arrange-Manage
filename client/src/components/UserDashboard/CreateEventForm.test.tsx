@@ -45,7 +45,8 @@ global.fetch = jest.fn();
 const createMockStore = () => {
   return configureStore({
     reducer: {
-      eventListReducer: eventsReducer,
+      eventListReducer: eventsReducer.eventListReducer,
+      eventReducer: eventsReducer.eventReducer,
       [thesisDbApi.reducerPath]: thesisDbApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
