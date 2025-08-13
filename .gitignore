@@ -8,3 +8,7 @@ node_modules
 .env.development
 server/.env
 client/.env
+
+# Documentation files that shouldn't be public
+CLAUDE.md
+Claude Coding Guidelines for JAM Application.md
