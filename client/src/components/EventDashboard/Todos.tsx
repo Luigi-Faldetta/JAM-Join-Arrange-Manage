@@ -8,8 +8,9 @@ import {
   useCreateTodoMutation,
   useUpdateTodoMutation,
   useDeleteTodoMutation,
+  useGetMeQuery,
 } from '../../services/JamDB';
-import { setToDoList } from '../../reduxFiles/slices/toDos';
+import { setToDoList, addToToDoList, deleteToDoFromList, updateToDoList, editToDoInList } from '../../reduxFiles/slices/toDos';
 import {
   FiPlus,
   FiCheck,
@@ -44,20 +45,24 @@ export default function Todos() {
   const { eventid } = useParams();
   const dispatch = useAppDispatch();
 
+  // Get raw Redux state for deletion operations
+  const rawTodosFromRedux = useSelector((state: RootState) => state.toDoListReducer);
+  
   // Select and map Redux state to UI type
-  const todos = useSelector((state: RootState) =>
-    Array.isArray(state.toDoListReducer)
+  const todos = useSelector((state: RootState) => {
+    console.log('Redux todos state:', state.toDoListReducer);
+    return Array.isArray(state.toDoListReducer)
       ? state.toDoListReducer
-          .filter((todo): todo is ToDoState => typeof todo.id === 'string')
+          .filter((todo): todo is ToDoState => typeof todo.id === 'string' || typeof todo.id === 'number')
           .map((todo) => ({
-            todoId: todo.id!,
+            todoId: String(todo.id!),
             task: todo.title,
             isCompleted: todo.isDone,
             createdAt: '', // Fill if available
             updatedAt: '', // Fill if available
           }))
       : []
-  );
+  });
 
   const [newTask, setNewTask] = useState('');
   const [editingTodo, setEditingTodo] = useState<string | null>(null);
@@ -65,32 +70,102 @@ export default function Todos() {
   const [isAddingTask, setIsAddingTask] = useState(false);
 
   // API hooks
-  const { data: todosData, isLoading } = useGetTodosQuery(eventid as string);
+  const { data: todosData, isLoading, error: todosError, refetch: refetchTodos } = useGetTodosQuery(eventid as string, {
+    // Skip the initial query if we have no todos in Redux to avoid initial 500 error
+    skip: false // Always query for now
+  });
+  const { data: userData } = useGetMeQuery();
   const [createTodo, { isLoading: isCreating }] = useCreateTodoMutation();
   const [updateTodo, { isLoading: isUpdating }] = useUpdateTodoMutation();
   const [deleteTodo, { isLoading: isDeleting }] = useDeleteTodoMutation();
 
   useEffect(() => {
-    if (todosData?.data) {
-      dispatch(setToDoList(todosData.data));
+    console.log('Todos useEffect triggered with:', { todosData, todosError });
+    
+    // Prioritize successful data over errors
+    if (todosData?.data && Array.isArray(todosData.data)) {
+      if (todosData.data.length > 0) {
+        console.log('Setting todos data:', todosData.data);
+        console.log('Sample todo item structure:', todosData.data[0]);
+        dispatch(setToDoList(todosData.data));
+      } else {
+        // Handle empty array response
+        console.log('Setting empty todos - received empty array');
+        dispatch(setToDoList([]));
+      }
+    } else if (todosError && 'status' in todosError && todosError.status === 500 && !todosData?.data) {
+      // Only handle error if there's no successful data
+      const errorMessage = (todosError.data as any)?.message;
+      if (errorMessage === 'No todos were found') {
+        console.log('No todos found for this event (expected when event has no todos)');
+        dispatch(setToDoList([]));
+      } else {
+        console.error('Unexpected 500 error:', errorMessage);
+        dispatch(setToDoList([]));
+      }
     }
-  }, [todosData, dispatch]);
+  }, [todosData, todosError, dispatch]);
 
   const pendingTodos = todos.filter((todo) => !todo.isCompleted);
   const completedTodos = todos.filter((todo) => todo.isCompleted);
 
   const handleAddTask = async () => {
-    if (!newTask.trim() || isCreating) return;
+    if (!newTask.trim() || isCreating || !userData?.data?.userId) return;
+
+    console.log('Creating todo with data:', {
+      eventId: eventid as string,
+      title: newTask.trim(),
+      creatorId: userData.data.userId,
+    });
 
     try {
       const result = await createTodo({
         eventId: eventid as string,
-        task: newTask.trim(),
+        title: newTask.trim(),
+        creatorId: userData.data.userId,
       });
 
-      if ('data' in result && result.data.success) {
-        setNewTask('');
-        setIsAddingTask(false);
+      console.log('Todo creation result:', result);
+      console.log('Todo creation result type:', typeof result);
+      console.log('Todo creation result keys:', Object.keys(result));
+
+      if ('data' in result) {
+        console.log('Result has data:', result.data);
+        if (result.data && result.data.success) {
+          console.log('Todo created successfully');
+          
+          // Add the new todo to Redux store immediately
+          console.log('Backend returned todo data:', result.data.data);
+          
+          const newTodoForStore = {
+            id: (result.data.data as any)?.id || Date.now().toString(),
+            title: newTask.trim(),
+            isDone: false,
+            creatorId: userData.data.userId,
+            eventId: eventid as string,
+          };
+          
+          console.log('Adding new todo to store:', newTodoForStore);
+          dispatch(addToToDoList(newTodoForStore));
+          
+          console.log('Current Redux todos state after dispatch:', todos);
+          
+          setNewTask('');
+          setIsAddingTask(false);
+          
+          // Also refetch to ensure backend consistency
+          console.log('Refetching todos for consistency...');
+          refetchTodos().then((refetchResult) => {
+            console.log('Refetch todos result:', refetchResult);
+          });
+        } else {
+          console.log('Todo creation data exists but not successful:', result.data);
+        }
+      } else if ('error' in result) {
+        console.error('Todo creation failed with error:', result.error);
+        console.error('Error details:', JSON.stringify(result.error, null, 2));
+      } else {
+        console.log('Unexpected result format:', result);
       }
     } catch (error) {
       console.error('Error creating todo:', error);
@@ -99,12 +174,23 @@ export default function Todos() {
 
   const handleToggleComplete = async (todoId: string, isCompleted: boolean) => {
     try {
+      // Find the original todo in Redux state to get the correct ID
+      const originalTodo = Array.isArray(rawTodosFromRedux) 
+        ? rawTodosFromRedux.find((t: ToDoState) => String(t.id) === todoId)
+        : null;
+        
+      if (originalTodo) {
+        // Optimistically update the todo completion status
+        dispatch(updateToDoList(String(originalTodo.id)));
+      }
+      
       await updateTodo({
         todoId,
         isCompleted: !isCompleted,
       });
     } catch (error) {
       console.error('Error updating todo:', error);
+      // Could revert optimistic update on error if needed
     }
   };
 
@@ -112,22 +198,63 @@ export default function Todos() {
     if (!editText.trim()) return;
 
     try {
+      // Find the original todo in Redux state to get the correct ID
+      const originalTodo = Array.isArray(rawTodosFromRedux) 
+        ? rawTodosFromRedux.find((t: ToDoState) => String(t.id) === todoId)
+        : null;
+        
+      if (originalTodo) {
+        // Optimistically update the todo text
+        dispatch(editToDoInList({ 
+          id: String(originalTodo.id), 
+          title: editText.trim() 
+        }));
+      }
+      
       await updateTodo({
         todoId,
         task: editText.trim(),
       });
+      
       setEditingTodo(null);
       setEditText('');
     } catch (error) {
       console.error('Error updating todo:', error);
+      // Could revert optimistic update on error if needed
     }
   };
 
   const handleDeleteTodo = async (todoId: string) => {
     try {
-      await deleteTodo(todoId);
+      console.log('Deleting todo with ID:', todoId);
+      
+      // Find the original todo in Redux state to get the correct ID
+      const originalTodo = Array.isArray(rawTodosFromRedux) 
+        ? rawTodosFromRedux.find((t: ToDoState) => String(t.id) === todoId)
+        : null;
+      
+      if (originalTodo) {
+        console.log('Found original todo with ID:', originalTodo.id, 'Type:', typeof originalTodo.id);
+        console.log('Dispatching deleteToDoFromList with ID:', String(originalTodo.id));
+        // Optimistically remove from Redux store first using the original ID
+        dispatch(deleteToDoFromList(String(originalTodo.id)));
+        console.log('Dispatch completed');
+      } else {
+        console.error('Could not find original todo in Redux state with ID:', todoId);
+        console.log('Available todos in Redux:', rawTodosFromRedux);
+        return;
+      }
+      
+      // Delete the todo
+      const result = await deleteTodo(todoId);
+      console.log('Delete todo result:', result);
+      
+      // Success - the optimistic deletion already removed it from Redux
+      console.log('Todo deleted successfully');
     } catch (error) {
       console.error('Error deleting todo:', error);
+      // If delete failed, we should revert the optimistic update
+      // But for simplicity, we'll let the next refetch restore the state
     }
   };
 
@@ -188,7 +315,7 @@ export default function Todos() {
               value={newTask}
               onChange={(e) => setNewTask(e.target.value)}
               placeholder="Enter task description..."
-              className="flex-1 px-4 py-3 border border-purple-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="flex-1 px-4 py-3 border border-purple-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 placeholder:text-gray-500"
               onKeyPress={(e) => e.key === 'Enter' && handleAddTask()}
               autoFocus
             />
@@ -334,21 +461,21 @@ export default function Todos() {
                         onClick={() =>
                           handleToggleComplete(todo.todoId, todo.isCompleted)
                         }
-                        className="p-1 text-green-600 hover:text-gray-400 transition-colors duration-200"
+                        className="p-2 text-green-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-all duration-200 group"
+                        title="Mark as incomplete"
                       >
-                        <FiCheckCircle className="w-5 h-5" />
+                        <FiCheckCircle className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
                       </button>
                       <span className="text-gray-700 line-through flex-1">
                         {todo.task}
                       </span>
                     </div>
 
-                    <button
-                      onClick={() => handleDeleteTodo(todo.todoId)}
-                      className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200"
-                    >
-                      <FiTrash2 className="w-4 h-4" />
-                    </button>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-xs text-gray-500 px-2 py-1 bg-gray-100 rounded-full">
+                        Completed
+                      </span>
+                    </div>
                   </div>
                 </motion.div>
               ))}
