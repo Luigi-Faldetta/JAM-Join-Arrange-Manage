@@ -12,6 +12,7 @@ import {
   calculation,
   eventChat,
   email,
+  clerkAuth,
 } from './controllers/index.js';
 
 // Health check - keeping your original format
@@ -65,6 +66,7 @@ router.delete('/useractivity', userEvent.leaveEvent);
 router.post('/userlogin', session.logIn);
 router.get('/userlogout', session.logOut);
 router.get('/me', session.authorize, session.getUserInfo);
+router.post('/auth/clerk-sync', clerkAuth.syncClerkUser);
 
 // ============================================================================
 // CALCULATION ROUTES - EXACTLY AS ORIGINAL

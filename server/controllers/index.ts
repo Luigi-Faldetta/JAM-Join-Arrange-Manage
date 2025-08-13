@@ -7,5 +7,6 @@ import session from './session'
 import calculation from './calculation'
 import eventChat from './eventChat';
 import email from './email'
+import clerkAuth from './clerkAuth'
 
-export { user, event, todo, expense, userEvent, session, calculation, eventChat, email }
+export { user, event, todo, expense, userEvent, session, calculation, eventChat, email, clerkAuth }

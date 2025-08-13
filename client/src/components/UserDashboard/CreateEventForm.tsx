@@ -19,6 +19,7 @@ import {
   FiImage,
   FiLoader,
   FiCheck,
+  FiAlertCircle,
 } from 'react-icons/fi';
 
 function CreateEventForm() {
@@ -29,8 +30,9 @@ function CreateEventForm() {
   const [eventFile, setEventFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [addEvent] = useAddEventMutation();
-  const { data: userData } = useGetMeQuery();
+  const { data: userData, refetch: refetchMe } = useGetMeQuery();
   const userId = userData?.data?.userId;
 
   const handleImageUpload = async () => {
@@ -63,10 +65,15 @@ function CreateEventForm() {
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
+    setErrorMessage(null);
 
     if (!userId) {
       console.error('User ID not available');
+      setErrorMessage('Unable to identify user. Please refresh the page and try again.');
       setIsLoading(false);
+      
+      // Try to refetch user data
+      refetchMe();
       return;
     }
 
@@ -176,6 +183,14 @@ function CreateEventForm() {
 
               {/* Form */}
               <form onSubmit={handleFormSubmit} className="p-6 space-y-4 max-h-[calc(95vh-120px)] overflow-y-auto">
+                {/* Error Message */}
+                {errorMessage && (
+                  <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm flex items-center">
+                    <FiAlertCircle className="w-5 h-5 mr-2 flex-shrink-0" />
+                    {errorMessage}
+                  </div>
+                )}
+                
                 {/* Event Name */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">

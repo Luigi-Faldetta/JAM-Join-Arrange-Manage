@@ -14,23 +14,25 @@ const transporter = nodemailer.createTransport({
 });
 
 async function sendEmail(user: any, pw: string) {
+  // Check if email credentials are configured
+  if (!process.env.JAM_EMAIL || !process.env.JAM_PW) {
+    throw new Error('Email credentials not configured. Please set JAM_EMAIL and JAM_PW environment variables.');
+  }
+
   const mailOptions = {
     from: `"JAM - IT Department" <${process.env.JAM_EMAIL}>`,
     to: user.email,
     subject: `Password reset requested`,
-    html: `<p>Hi ${user.name}, here you can find your new temporary password:</p><code style="border:1px solid lightgrey; padding: 5px">${pw}</code><p>Please <a href="https://jaminprogress.vercel.app/">log in now</a> and update it</p><p>JAM</p>`,
+    html: `<p>Hi ${user.name}, here you can find your new temporary password:</p><code style="border:1px solid lightgrey; padding: 5px">${pw}</code><p>Please <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}">log in now</a> and update it</p><p>JAM</p>`,
   };
 
   try {
-    await transporter.sendMail(mailOptions, function (error, info) {
-      if (!error) {
-        console.log('Email sent: ' + info.response);
-      } else {
-        console.log(error);
-      }
-    });
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent: ' + info.response);
+    return info;
   } catch (error) {
-    console.log(error);
+    console.error('Failed to send email:', error);
+    throw error;
   }
 }
 
@@ -68,9 +70,16 @@ const resetPassword = async (req: Request, res: Response) => {
       });
 
   } catch (err: any) {
-    process.env.NODE_ENV !== 'test' && console.error(err);
-    res.status(500)
-      .json({ message: err.message });
+    process.env.NODE_ENV !== 'test' && console.error('Password reset error:', err);
+    
+    // Return appropriate error message
+    if (err.message && err.message.includes('Email credentials not configured')) {
+      res.status(500)
+        .json(resBody(false, "500", null, "Email service not configured. Please contact support."));
+    } else {
+      res.status(500)
+        .json(resBody(false, "500", null, "Failed to send password reset email. Please try again later."));
+    }
   }
 }
 
