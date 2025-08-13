@@ -28,22 +28,44 @@ export const fetchLogin = async (email: string) => {
   return await fetch(URL + `passwordreset/${email}`);
 };
 
+const baseQuery = fetchBaseQuery({
+  baseUrl: URL,
+  prepareHeaders: (headers, { getState }) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      // Clean token in case it has extra quotes or spaces
+      const cleanToken = token.replace(/["']/g, '').trim();
+      headers.set('authorization', `Bearer ${cleanToken}`);
+    }
+    return headers;
+  },
+  // Force RTK Query to always make fresh requests
+  credentials: 'same-origin',
+});
+
+// Custom base query that suppresses certain 500 errors
+const baseQueryWithErrorSuppression: typeof baseQuery = async (args, api, extraOptions) => {
+  const result = await baseQuery(args, api, extraOptions);
+  
+  // Suppress console logging for expected "No items found" 500 errors
+  if (result.error && 
+      result.error.status === 500 && 
+      result.error.data &&
+      typeof result.error.data === 'object' &&
+      'message' in result.error.data) {
+    const message = (result.error.data as any).message;
+    if (message === 'No expenses were found' || message === 'No todos were found') {
+      // Don't log these expected errors to console
+      return result;
+    }
+  }
+  
+  return result;
+};
+
 export const thesisDbApi = createApi({
   reducerPath: 'thesisDbApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: URL,
-    prepareHeaders: (headers, { getState }) => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        // Clean token in case it has extra quotes or spaces
-        const cleanToken = token.replace(/["']/g, '').trim();
-        headers.set('authorization', `Bearer ${cleanToken}`);
-      }
-      return headers;
-    },
-    // Force RTK Query to always make fresh requests
-    credentials: 'same-origin',
-  }),
+  baseQuery: baseQueryWithErrorSuppression,
   tagTypes: [
     'EventState',
     'ExpenseState',
@@ -184,12 +206,12 @@ export const thesisDbApi = createApi({
 
     createExpense: build.mutation<
       ApiResponse<ExpenseState>,
-      { eventId: string; description: string; amount: number }
+      { eventId: string; item: string; cost: number; purchaserId: string }
     >({
-      query: ({ eventId, description, amount }) => ({
+      query: ({ eventId, item, cost, purchaserId }) => ({
         url: 'expense',
         method: 'POST',
-        body: { eventId, description, amount },
+        body: { eventId, item, cost, purchaserId },
         headers: { 'Content-type': 'application/json; charset=UTF-8' },
       }),
       invalidatesTags: ['ExpenseState'],
@@ -220,22 +242,23 @@ export const thesisDbApi = createApi({
         url: `expense/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['ExpenseState'],
+      // Don't automatically invalidate - let components handle state updates  
+      invalidatesTags: [],
     }),
 
     //Todos
 
     createTodo: build.mutation<
       ApiResponse<ToDoState>,
-      { eventId: string; task: string }
+      { eventId: string; title: string; creatorId: string }
     >({
-      query: ({ eventId, task }) => ({
+      query: ({ eventId, title, creatorId }) => ({
         url: 'todo',
         method: 'POST',
-        body: { eventId, task },
+        body: { eventId, title, isDone: false, creatorId },
         headers: { 'Content-type': 'application/json; charset=UTF-8' },
       }),
-      invalidatesTags: ['ToDoState'],
+      invalidatesTags: [],
     }),
 
     addToDo: build.mutation<
@@ -248,7 +271,7 @@ export const thesisDbApi = createApi({
         body: toDo,
         headers: { 'Content-type': 'application/json; charset=UTF-8' },
       }),
-      invalidatesTags: ['ToDoState'],
+      invalidatesTags: [],
     }),
 
     getTodos: build.query<ApiResponse<ToDoState[]>, string>({
@@ -265,13 +288,24 @@ export const thesisDbApi = createApi({
       ApiResponse<ToDoState>,
       { todoId: string; task?: string; isCompleted?: boolean }
     >({
-      query: ({ todoId, ...patch }) => ({
-        url: `todo/${todoId}`,
-        method: 'PATCH',
-        body: patch,
-        headers: { 'Content-type': 'application/json; charset=UTF-8' },
-      }),
-      invalidatesTags: ['ToDoState'],
+      query: ({ todoId, task, isCompleted, ...patch }) => {
+        // Transform field names to match backend expectations
+        const transformedBody: any = { ...patch };
+        if (task !== undefined) {
+          transformedBody.title = task;
+        }
+        if (isCompleted !== undefined) {
+          transformedBody.isDone = isCompleted;
+        }
+        
+        return {
+          url: `todo/${todoId}`,
+          method: 'PATCH',
+          body: transformedBody,
+          headers: { 'Content-type': 'application/json; charset=UTF-8' },
+        };
+      },
+      invalidatesTags: [],
     }),
 
     updateToDo: build.mutation<
@@ -284,7 +318,7 @@ export const thesisDbApi = createApi({
         body: patch,
         headers: { 'Content-type': 'application/json; charset=UTF-8' },
       }),
-      invalidatesTags: ['ToDoState'],
+      invalidatesTags: [],
     }),
 
     deleteTodo: build.mutation<ApiResponse<number>, string>({
@@ -292,7 +326,8 @@ export const thesisDbApi = createApi({
         url: `todo/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['ToDoState'],
+      // Don't automatically invalidate - let components handle state updates
+      invalidatesTags: [],
     }),
 
     deleteToDo: build.mutation<ApiResponse<number>, string>({
