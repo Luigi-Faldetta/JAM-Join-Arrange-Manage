@@ -10,13 +10,33 @@ export function useClerkSync() {
   const [syncClerkUser] = useSyncClerkUserMutation();
 
   useEffect(() => {
+    console.log('useClerkSync: Effect triggered', {
+      userLoaded,
+      isSignedIn,
+      userExists: !!user,
+      userId: user?.id,
+    });
+
     const syncUser = async () => {
       // Only sync if user is loaded, signed in, and we have user data
-      if (!userLoaded || !isSignedIn || !user) return;
+      if (!userLoaded || !isSignedIn || !user) {
+        console.log('useClerkSync: Skipping sync', {
+          userLoaded,
+          isSignedIn,
+          userExists: !!user,
+        });
+        return;
+      }
 
       // Check if we already have a token (meaning user is already synced)
       const existingToken = localStorage.getItem('token');
+      console.log('useClerkSync: Token check', {
+        tokenExists: !!existingToken,
+        tokenPreview: existingToken ? existingToken.substring(0, 20) + '...' : 'none',
+      });
+      
       if (existingToken) {
+        console.log('useClerkSync: Validating existing token');
         // Verify the token is still valid by checking if we can fetch user data
         try {
           const response = await fetch(`${process.env.REACT_APP_API_BASE_URL || 'http://localhost:3200'}/me`, {
@@ -25,10 +45,13 @@ export function useClerkSync() {
             }
           });
           if (response.ok) {
+            console.log('useClerkSync: Existing token is valid, no sync needed');
             return; // Token is valid, no need to sync
+          } else {
+            console.log('useClerkSync: Existing token is invalid, proceeding with sync');
           }
         } catch (e) {
-          // Token is invalid, continue with sync
+          console.log('useClerkSync: Token validation failed, proceeding with sync');
         }
       }
 
