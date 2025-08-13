@@ -43,30 +43,37 @@ export default function UserDashboardPage() {
   
   // Force refetch on component mount
   useEffect(() => {
+    console.log('UserDashboard: Checking authentication state');
+    const token = localStorage.getItem('token');
+    console.log('UserDashboard: Token from localStorage:', token ? 'Present' : 'Missing');
+    
     refetchMe();
     
     // Manual API call as fallback
-    const token = localStorage.getItem('token');
     if (token) {
       const cleanToken = token.replace(/["']/g, '').trim();
+      console.log('UserDashboard: Making manual /me request');
       fetch(`${process.env.REACT_APP_API_BASE_URL || 'https://jam-join-arrange-manage-production.up.railway.app'}/me`, {
         headers: {
           'Authorization': `Bearer ${cleanToken}`
         }
       })
       .then(res => {
+        console.log('UserDashboard: /me response status:', res.status);
         return res.json();
       })
       .then(data => {
-        
+        console.log('UserDashboard: /me response data:', data);
         // Set manual data as fallback
         if (data.success && data.data) {
           setManualUserData(data.data);
         }
       })
       .catch(err => {
-        // Silently handle error - RTK Query should work now
+        console.error('UserDashboard: Manual /me request failed:', err);
       });
+    } else {
+      console.warn('UserDashboard: No token found in localStorage');
     }
   }, [refetchMe]);
 

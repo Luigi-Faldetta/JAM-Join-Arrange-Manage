@@ -52,6 +52,7 @@ router.delete('/useractivity', index_js_1.userEvent.leaveEvent);
 router.post('/userlogin', index_js_1.session.logIn);
 router.get('/userlogout', index_js_1.session.logOut);
 router.get('/me', index_js_1.session.authorize, index_js_1.session.getUserInfo);
+router.post('/auth/clerk-sync', index_js_1.clerkAuth.syncClerkUser);
 // ============================================================================
 // CALCULATION ROUTES - EXACTLY AS ORIGINAL
 // ============================================================================
