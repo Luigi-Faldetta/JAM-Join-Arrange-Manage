@@ -41,8 +41,9 @@ export function useClerkSync() {
         return;
       }
 
-      // Add a small delay to ensure Clerk OAuth flow is fully completed
-      await new Promise(resolve => setTimeout(resolve, 100));
+      // Add a longer delay to ensure Clerk OAuth flow is fully completed
+      // This helps with slow loading issues during Google OAuth
+      await new Promise(resolve => setTimeout(resolve, 500));
 
       // Check if we already have a token (meaning user is already synced)
       const existingToken = localStorage.getItem('token');
