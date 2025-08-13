@@ -50,6 +50,7 @@ const newEvent = async (req: Request, res: Response) => {
       userId: req.params.userid,
       eventId: event.eventId,
       isHost: true,
+      isGoing: true, // Hosts should be attending their own events
     });
 
     // Return event in original format
@@ -59,7 +60,7 @@ const newEvent = async (req: Request, res: Response) => {
         {
           model: UserEvent,
           where: { userId: req.params.userid },
-          attributes: ['isHost', 'isGoing'],
+          attributes: ['userId', 'isHost', 'isGoing'],
         },
       ],
     });
@@ -162,6 +163,18 @@ const deleteEvent = async (req: Request, res: Response) => {
  */
 const getUserEvents = async (req: Request, res: Response) => {
   try {
+    // Fix existing host relationships to have isGoing: true (retroactive fix)
+    await UserEvent.update(
+      { isGoing: true },
+      { 
+        where: { 
+          userId: req.params.userid, 
+          isHost: true,
+          isGoing: false 
+        } 
+      }
+    );
+
     const eventIds = await UserEvent.findAll({
       where: { userId: req.params.userid },
     });
@@ -177,7 +190,7 @@ const getUserEvents = async (req: Request, res: Response) => {
         include: {
           model: UserEvent,
           where: { userId: req.params.userid },
-          attributes: ['isHost', 'isGoing'],
+          attributes: ['userId', 'isHost', 'isGoing'], // Include userId for filtering
         },
       });
 
