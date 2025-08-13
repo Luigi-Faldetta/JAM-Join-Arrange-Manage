@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { RootState, useAppDispatch } from '../../reduxFiles/store';
 import { setEventList } from '../../reduxFiles/slices/events';
 import { openLogout } from '../../reduxFiles/slices/logout';
@@ -9,11 +10,9 @@ import CreateEventForm from '../../components/UserDashboard/CreateEventForm';
 import EventTile from '../../components/UserDashboard/EventTile';
 import EventCalendar from '../../components/UserDashboard/EventCalendar';
 import {
-  FiPlus,
   FiCalendar,
   FiUsers,
   FiStar,
-  FiTrendingUp,
   FiGrid,
   FiList,
   FiFilter,
@@ -23,6 +22,7 @@ import {
 
 export default function UserDashboardPage() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const eventList = useSelector((state: RootState) => state.eventListReducer);
 
   const [showCalendar, setShowCalendar] = useState(false);
@@ -147,8 +147,21 @@ export default function UserDashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50">
-      {/* Sign Out Button */}
-      <div className="absolute top-4 right-4 z-50">
+      {/* Profile and Sign Out Buttons */}
+      <div className="absolute top-4 right-4 z-50 flex items-center space-x-3">
+        {/* Profile Button */}
+        <button
+          onClick={() => navigate('/profile')}
+          className="w-10 h-10 rounded-full overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-gray-200 hover:border-purple-400"
+        >
+          <img
+            src={user?.profilePic || '/no-profile-picture-icon.png'}
+            alt="Profile"
+            className="w-full h-full object-cover"
+          />
+        </button>
+        
+        {/* Sign Out Button */}
         <button
           onClick={handleSignOut}
           className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 font-medium"
