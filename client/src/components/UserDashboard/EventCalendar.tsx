@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import moment from 'moment';
 import {
   FiChevronLeft,
@@ -23,6 +23,8 @@ interface EventCalendarProps {
 
 function EventCalendar({ sortedEventList }: EventCalendarProps) {
   const [currentDate, setCurrentDate] = useState(moment());
+  const [hoveredDay, setHoveredDay] = useState<moment.Moment | null>(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
 
   const startOfMonth = currentDate.clone().startOf('month');
   const endOfMonth = currentDate.clone().endOf('month');
@@ -58,6 +60,22 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
 
   const isCurrentMonth = (date: moment.Moment) => {
     return date.month() === currentDate.month();
+  };
+
+  const handleDayMouseEnter = (date: moment.Moment, event: React.MouseEvent) => {
+    const dayEvents = getEventsForDay(date);
+    if (dayEvents.length > 0) {
+      const rect = event.currentTarget.getBoundingClientRect();
+      setTooltipPosition({
+        x: rect.left + rect.width / 2 - 20, // Shift slightly to the left
+        y: rect.top - 140, // Move a bit higher
+      });
+      setHoveredDay(date);
+    }
+  };
+
+  const handleDayMouseLeave = () => {
+    setHoveredDay(null);
   };
 
   return (
@@ -126,6 +144,8 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
                   }
                   ${!isInCurrentMonth ? 'opacity-40' : ''}
                 `}
+                onMouseEnter={(e) => handleDayMouseEnter(date, e)}
+                onMouseLeave={handleDayMouseLeave}
               >
                 <div
                   className={`
@@ -241,6 +261,89 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
           </div>
         </div>
       </div>
+
+      {/* Event Tooltip */}
+      <AnimatePresence>
+        {hoveredDay && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 10 }}
+            transition={{ duration: 0.2 }}
+            className="fixed z-[9999] pointer-events-none"
+            style={{
+              left: `${tooltipPosition.x}px`,
+              top: `${tooltipPosition.y}px`,
+              transform: 'translateX(-50%)',
+            }}
+          >
+            <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 p-4 max-w-xs">
+              {/* Tooltip Header */}
+              <div className="flex items-center space-x-2 mb-3">
+                <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
+                  <FiCalendar className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-900 text-sm">
+                    {hoveredDay.format('MMMM D, YYYY')}
+                  </h4>
+                  <p className="text-xs text-gray-500">
+                    {getEventsForDay(hoveredDay).length} event{getEventsForDay(hoveredDay).length !== 1 ? 's' : ''}
+                  </p>
+                </div>
+              </div>
+
+              {/* Events List */}
+              <div className="space-y-3">
+                {getEventsForDay(hoveredDay).slice(0, 3).map((event, index) => {
+                  const eventTime = moment(event.date);
+                  const isHost = event.UserEvents?.[0]?.isHost;
+                  
+                  return (
+                    <div key={index} className="space-y-1">
+                      <div className="flex items-center space-x-2">
+                        <div 
+                          className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                            isHost ? 'bg-purple-600' : 'bg-blue-500'
+                          }`}
+                        />
+                        <h5 className="font-medium text-gray-900 text-sm truncate">
+                          {event.title}
+                        </h5>
+                      </div>
+                      
+                      <div className="ml-4 space-y-1">
+                        <div className="flex items-center space-x-2 text-xs text-gray-600">
+                          <FiClock className="w-3 h-3 flex-shrink-0" />
+                          <span>{eventTime.format('h:mm A')}</span>
+                        </div>
+                        
+                        {event.location && (
+                          <div className="flex items-center space-x-2 text-xs text-gray-600">
+                            <FiMapPin className="w-3 h-3 flex-shrink-0" />
+                            <span className="truncate">{event.location}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+                
+                {getEventsForDay(hoveredDay).length > 3 && (
+                  <div className="text-xs text-gray-500 text-center pt-2 border-t border-gray-100">
+                    +{getEventsForDay(hoveredDay).length - 3} more event{getEventsForDay(hoveredDay).length - 3 !== 1 ? 's' : ''}
+                  </div>
+                )}
+              </div>
+
+              {/* Tooltip Arrow */}
+              <div className="absolute left-1/2 top-full transform -translate-x-1/2">
+                <div className="w-3 h-3 bg-white border-r border-b border-gray-200 rotate-45 -mt-1.5"></div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
