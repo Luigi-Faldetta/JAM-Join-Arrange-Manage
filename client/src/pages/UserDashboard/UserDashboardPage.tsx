@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '@clerk/clerk-react';
 import { RootState, useAppDispatch } from '../../reduxFiles/store';
 import { setEventList } from '../../reduxFiles/slices/events';
 import { openLogout } from '../../reduxFiles/slices/logout';
@@ -35,12 +36,22 @@ export default function UserDashboardPage() {
   const [hasReceivedManualData, setHasReceivedManualData] = useState(false);
   const [loadingTimeout, setLoadingTimeout] = useState(false);
 
-  // Get user data
+  // Get Clerk user data
+  const { user: clerkUser, isLoaded: clerkLoaded } = useUser();
+  
+  // Get user data from API
   const { data: userData, refetch: refetchMe, error: meError, isLoading: meLoading, isError: meIsError } = useGetMeQuery();
   
-  // Use manual data as fallback when RTK Query fails
+  // Use Clerk data as primary source, then API data, then manual data
   const user = userData?.data || manualUserData;
   const userId = user?.userId;
+  
+  // Create user display data from Clerk when available
+  const displayUser = {
+    ...user,
+    name: user?.name || clerkUser?.fullName || clerkUser?.firstName || 'User',
+    profilePic: user?.profilePic || clerkUser?.imageUrl || '/no-profile-picture-icon.png'
+  };
   
   
   // Force refetch on component mount and periodically to ensure Google OAuth users get their data
@@ -200,22 +211,29 @@ export default function UserDashboardPage() {
     dispatch(openLogout());
   };
 
-  // Show loading state while waiting for user data (especially important for Google OAuth)
+  // Show loading state - use Clerk data if available to avoid waiting
   const hasValidUserData = user && user.name && user.name !== 'User';
   const hasDataFromEitherSource = userData?.data || hasReceivedManualData || (manualUserData && manualUserData.name);
-  const isLoadingUserData = (!hasValidUserData || !hasDataFromEitherSource) && !loadingTimeout;
+  const hasClerkUserData = clerkLoaded && clerkUser && (clerkUser.fullName || clerkUser.firstName);
+  
+  // Only show loading if we don't have any user data from any source and haven't timed out
+  const isLoadingUserData = (!hasValidUserData && !hasDataFromEitherSource && !hasClerkUserData) && !loadingTimeout;
 
   // Debug logging to help diagnose loading issues
   console.log('UserDashboard Loading State:', {
     hasValidUserData,
     hasDataFromEitherSource,
+    hasClerkUserData,
     isLoadingUserData,
     userName: user?.name,
+    clerkUserName: clerkUser?.fullName || clerkUser?.firstName,
+    displayUserName: displayUser?.name,
     hasUserDataFromRTK: !!userData?.data,
     hasReceivedManualData,
     manualUserData,
     userData: userData?.data,
-    loadingTimeout
+    loadingTimeout,
+    clerkLoaded
   });
 
   // Timeout failsafe - if loading takes more than 10 seconds, force continue
@@ -225,7 +243,7 @@ export default function UserDashboardPage() {
         console.warn('Loading timeout reached, forcing dashboard to show');
         setLoadingTimeout(true);
       }
-    }, 10000); // 10 second timeout
+    }, 3000); // 3 second timeout (reduced since we use Clerk data immediately)
 
     return () => clearTimeout(timer);
   }, [isLoadingUserData]);
@@ -242,7 +260,7 @@ export default function UserDashboardPage() {
               Loading your dashboard...
             </h2>
             <p className="text-gray-600">
-              Please wait while we fetch your profile information.
+              Syncing your profile information...
             </p>
           </div>
         </div>
@@ -260,7 +278,7 @@ export default function UserDashboardPage() {
           className="w-10 h-10 rounded-full overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-gray-200 hover:border-purple-400"
         >
           <img
-            src={user?.profilePic || '/no-profile-picture-icon.png'}
+            src={displayUser?.profilePic || '/no-profile-picture-icon.png'}
             alt="Profile"
             className="w-full h-full object-cover"
           />
@@ -288,7 +306,7 @@ export default function UserDashboardPage() {
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
               <div className="mb-6 lg:mb-0">
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-2">
-                  Welcome back, {user?.name?.split(' ')[0] || 'User'}!
+                  Welcome back, {displayUser?.name?.split(' ')[0] || 'User'}!
                 </h1>
                 <p className="text-gray-600 text-lg">
                   Manage your events and connect with friends
