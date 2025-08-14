@@ -90,8 +90,22 @@ export default function SharedEventPage() {
             className="bg-white rounded-3xl shadow-xl overflow-hidden mb-8"
           >
             {/* Event Cover Image or Gradient */}
-            <div className="h-64 bg-gradient-to-r from-purple-600 to-pink-600 relative">
-              <div className="absolute inset-0 bg-black/20"></div>
+            <div className="h-64 relative overflow-hidden">
+              {event.coverPic ? (
+                <>
+                  <img 
+                    src={event.coverPic} 
+                    alt={event.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+                </>
+              ) : (
+                <>
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600"></div>
+                  <div className="absolute inset-0 bg-black/20"></div>
+                </>
+              )}
               <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
                 <h1 className="text-4xl font-bold mb-2">{event.title}</h1>
                 {event.description && (
@@ -161,9 +175,15 @@ export default function SharedEventPage() {
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   Want to join this event?
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-600 mb-4">
                   Sign in or create an account to view full event details and confirm your attendance.
                 </p>
+                <button
+                  onClick={() => dispatch(openAuthModal('signin'))}
+                  className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+                >
+                  Sign in to Join Event
+                </button>
               </div>
             </div>
           </motion.div>
