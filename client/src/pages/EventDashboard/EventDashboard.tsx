@@ -188,6 +188,29 @@ export default function EventDashboard() {
       </div>
     );
   }
+
+  // Show loading state while waiting for user data (especially important for Google OAuth)
+  const isLoadingUserData = isLoggedIn && (!user || !user.name || (!userData?.data && !hasReceivedManualData));
+
+  if (isLoadingUserData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-xl border border-gray-200 p-8 max-w-md w-full mx-4">
+          <div className="text-center">
+            <div className="w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            </div>
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+              Loading your profile...
+            </h2>
+            <p className="text-gray-600">
+              Please wait while we fetch your profile information.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
   
   if (!isLoggedIn || !eventData) {
     return <LandingPage eventData={eventData} />;
