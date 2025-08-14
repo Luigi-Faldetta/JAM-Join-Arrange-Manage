@@ -277,7 +277,7 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50">
       {/* Top Navigation Buttons */}
-      <div className="absolute top-4 left-4 z-50">
+      <div className="absolute top-4 left-4 z-50 mb-6 sm:mb-0">
         <button
           onClick={() => navigate('/user-dashboard')}
           className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 font-medium"
@@ -287,7 +287,7 @@ export default function ProfilePage() {
         </button>
       </div>
       
-      <div className="absolute top-4 right-4 z-50">
+      <div className="absolute top-4 right-4 z-50 mb-6 sm:mb-0">
         <button
           onClick={handleSignOut}
           className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 font-medium"

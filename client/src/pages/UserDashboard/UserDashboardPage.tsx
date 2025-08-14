@@ -163,7 +163,7 @@ export default function UserDashboardPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50">
       {/* Profile and Sign Out Buttons */}
-      <div className="absolute top-4 right-4 z-50 flex items-center space-x-3">
+      <div className="absolute top-4 right-4 z-50 flex items-center space-x-3 mb-6 sm:mb-0">
         {/* Profile Button */}
         <button
           onClick={() => navigate('/profile')}
@@ -223,6 +223,28 @@ export default function UserDashboardPage() {
           </div>
         </motion.div>
 
+        {/* Calendar Section */}
+        <AnimatePresence>
+          {showCalendar && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="mb-8"
+            >
+              <EventCalendar
+                sortedEventList={eventList
+                  .filter((e) => typeof e.eventId === 'string')
+                  .map((e) => ({
+                    ...(e as any),
+                    eventId: e.eventId as string,
+                  }))}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Stats Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -253,28 +275,6 @@ export default function UserDashboardPage() {
             </div>
           ))}
         </motion.div>
-
-        {/* Calendar Section */}
-        <AnimatePresence>
-          {showCalendar && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="mb-8"
-            >
-              <EventCalendar
-                sortedEventList={eventList
-                  .filter((e) => typeof e.eventId === 'string')
-                  .map((e) => ({
-                    ...(e as any),
-                    eventId: e.eventId as string,
-                  }))}
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {/* Events Section */}
         <motion.div
