@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import EventData from '../../components/EventDashboard/EventData';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import Todos from '../../components/EventDashboard/Todos';
 import Expenses from '../../components/EventDashboard/Expenses';
 import Attendees from '../../components/EventDashboard/Attendees';
-import { useGetEventQuery, useGetMeQuery } from '../../services/JamDB';
+import { useGetEventQuery, useGetMeQuery, useJoinEventMutation } from '../../services/JamDB';
 import { useIsLoggedIn } from '../../utils/useIsLoggedIn';
 import { EventState } from '../../reduxFiles/slices/events';
 import LandingPage from '../LandingPage/LandingPage';
@@ -25,8 +25,10 @@ export default function EventDashboard() {
   const [userIsHost, setUserIsHost] = useState<boolean>(false);
   const [showTodos, setShowTodos] = useState<boolean>(true);
   const [isJoined, setIsJoined] = useState<boolean>(false);
+  const [hasAutoJoined, setHasAutoJoined] = useState<boolean>(false);
 
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useAppDispatch();
 
   // Replace token usage with proper user data
@@ -36,7 +38,8 @@ export default function EventDashboard() {
 
   const isLoggedIn = useIsLoggedIn();
   const { eventid } = useParams();
-  const { data: eventData, isLoading } = useGetEventQuery(eventid as string);
+  const { data: eventData, isLoading, refetch: refetchEvent } = useGetEventQuery(eventid as string);
+  const [joinEvent] = useJoinEventMutation();
 
   useEffect(() => {
     if (!loggedUserId || !eventData?.data?.UserEvents) return;
@@ -51,6 +54,40 @@ export default function EventDashboard() {
     );
     setIsJoined(isJoinedCheck);
   }, [eventData, loggedUserId]);
+
+  // Auto-join logic for users coming from shared links
+  useEffect(() => {
+    const autoJoinEvent = async () => {
+      // Check if user came from a shared event link
+      const urlParams = new URLSearchParams(location.search);
+      const cameFromSharedLink = location.state?.fromSharedLink || 
+        urlParams.get('fromSharedLink') === 'true' ||
+        (document.referrer && document.referrer.includes(`/event/${eventid}`));
+      
+      if (!hasAutoJoined && !isJoined && loggedUserId && eventid && cameFromSharedLink && !userIsHost) {
+        setHasAutoJoined(true);
+        
+        try {
+          const result = await joinEvent({
+            eventId: eventid,
+            userId: loggedUserId,
+          });
+          
+          if ('data' in result && result.data.success) {
+            // Refetch event data to update attendees list
+            refetchEvent();
+            setIsJoined(true);
+          }
+        } catch (error) {
+          console.error('Error auto-joining event:', error);
+        }
+      }
+    };
+
+    if (loggedUserId && eventData && !isLoading) {
+      autoJoinEvent();
+    }
+  }, [loggedUserId, eventData, isLoading, hasAutoJoined, isJoined, userIsHost, eventid, joinEvent, refetchEvent, location.state, location.search]);
 
   const handleBackToDashboard = () => {
     navigate('/user-dashboard');

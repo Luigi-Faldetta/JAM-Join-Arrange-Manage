@@ -93,7 +93,10 @@ function AuthModal() {
         // Check if user came from an event page
         if (location.pathname.startsWith('/event/')) {
           const eventId = location.pathname.split('/')[2];
-          navigate(`/event-dashboard/${eventId}`, { replace: true });
+          navigate(`/event-dashboard/${eventId}`, { 
+            replace: true,
+            state: { fromSharedLink: true }
+          });
         } else {
           navigate('/user-dashboard');
         }
@@ -159,7 +162,7 @@ function AuthModal() {
     try {
       // Always use signIn - Clerk will automatically create account if user doesn't exist
       const redirectUrlComplete = location.pathname.startsWith('/event/')
-        ? `${window.location.origin}${location.pathname}`
+        ? `${window.location.origin}/event-dashboard/${location.pathname.split('/')[2]}?fromSharedLink=true`
         : `${window.location.origin}/user-dashboard`;
         
       await signIn.authenticateWithRedirect({
