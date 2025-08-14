@@ -35,6 +35,7 @@ export default function UserDashboardPage() {
   const [manualUserData, setManualUserData] = useState<any>(null);
   const [hasReceivedManualData, setHasReceivedManualData] = useState(false);
   const [loadingTimeout, setLoadingTimeout] = useState(false);
+  const [localEvents, setLocalEvents] = useState<any[]>([]);
 
   // Get Clerk user data
   const { user: clerkUser, isLoaded: clerkLoaded } = useUser();
@@ -162,16 +163,32 @@ export default function UserDashboardPage() {
     eventListLength: eventList.length,
     eventsError: eventsError,
     hasManualUserData: !!manualUserData,
-    hasUserData: !!userData?.data
+    hasUserData: !!userData?.data,
+    // Debug Redux state mismatch
+    eventsDataArray: eventsData?.data,
+    reduxEventList: eventList
   });
 
   // Update event list when events data changes
   useEffect(() => {
     if (eventsData?.data) {
       console.log('UserDashboard: Setting event list with', eventsData.data.length, 'events');
+      console.log('UserDashboard: Events data to dispatch:', eventsData.data);
       dispatch(setEventList(eventsData.data));
+      
+      // Also set local events as backup
+      setLocalEvents(eventsData.data);
+      
+      // Force re-render by updating component state if Redux isn't updating properly
+      setTimeout(() => {
+        console.log('UserDashboard: Checking if Redux updated - eventList length:', eventList.length);
+        if (eventList.length === 0 && eventsData.data.length > 0) {
+          console.warn('UserDashboard: Redux state not updated, forcing another dispatch');
+          dispatch(setEventList(eventsData.data));
+        }
+      }, 100);
     }
-  }, [eventsData, dispatch]);
+  }, [eventsData, dispatch, eventList.length]);
   
   // Refetch events whenever userId changes from undefined to a real value
   const [lastUserId, setLastUserId] = useState<string | undefined>(undefined);
@@ -203,9 +220,12 @@ export default function UserDashboardPage() {
     }
   }, [userData?.data?.userId, manualUserData?.userId, lastUserId, eventList.length, refetchEvents]);
   
+  // Use events from Redux state, with local events as fallback (moved up to avoid reference issues)
+  const eventsToUse = eventList.length > 0 ? eventList : localEvents;
+  
   // Final fallback: If we have userId but still no events after reasonable time, keep retrying
   useEffect(() => {
-    if (userId && userId !== 'no-user-id' && eventList.length === 0) {
+    if (userId && userId !== 'no-user-id' && eventsToUse.length === 0) {
       console.log('UserDashboard: Final fallback - have userId but no events, setting up polling');
       
       const pollInterval = setInterval(() => {
@@ -224,17 +244,24 @@ export default function UserDashboardPage() {
         clearTimeout(timeout);
       };
     }
-  }, [userId, eventList.length, refetchEvents]);
+  }, [userId, eventsToUse.length, refetchEvents]);
   
   // Stop polling when events are loaded
   useEffect(() => {
-    if (eventList.length > 0) {
+    if (eventsToUse.length > 0) {
       console.log('UserDashboard: Events loaded, any active polling will be cleaned up on next render');
     }
-  }, [eventList.length]);
+  }, [eventsToUse.length]);
+
+  // Debug logging for event source selection
+  console.log('UserDashboard: Using events for filtering:', {
+    reduxEventCount: eventList.length,
+    localEventCount: localEvents.length,
+    usingSource: eventList.length > 0 ? 'redux' : 'local'
+  });
 
   // Filter events based on current filter mode
-  const filteredEvents = eventList.filter((event) => {
+  const filteredEvents = eventsToUse.filter((event) => {
     // Search filter
     if (
       searchTerm &&
@@ -246,27 +273,27 @@ export default function UserDashboardPage() {
     // Role filter
     if (filterMode === 'hosting') {
       return event.UserEvents?.some(
-        (userEvent) => userEvent.userId === userId && userEvent.isHost
+        (userEvent: any) => userEvent.userId === userId && userEvent.isHost
       );
     } else if (filterMode === 'attending') {
       return event.UserEvents?.some(
-        (userEvent) => userEvent.userId === userId && userEvent.isGoing
+        (userEvent: any) => userEvent.userId === userId && userEvent.isGoing
       );
     }
 
     return true;
   });
 
-  // Calculate stats
-  const totalEvents = eventList.length;
-  const hostingEvents = eventList.filter((event) =>
+  // Calculate stats using the same event source
+  const totalEvents = eventsToUse.length;
+  const hostingEvents = eventsToUse.filter((event) =>
     event.UserEvents?.some(
-      (userEvent) => userEvent.userId === userId && userEvent.isHost
+      (userEvent: any) => userEvent.userId === userId && userEvent.isHost
     )
   ).length;
-  const attendingEvents = eventList.filter((event) =>
+  const attendingEvents = eventsToUse.filter((event) =>
     event.UserEvents?.some(
-      (userEvent) => userEvent.userId === userId && userEvent.isGoing
+      (userEvent: any) => userEvent.userId === userId && userEvent.isGoing
     )
   ).length;
 
@@ -432,7 +459,7 @@ export default function UserDashboardPage() {
               className="mb-8"
             >
               <EventCalendar
-                sortedEventList={eventList
+                sortedEventList={eventsToUse
                   .filter((e) => typeof e.eventId === 'string')
                   .map((e) => ({
                     ...(e as any),
