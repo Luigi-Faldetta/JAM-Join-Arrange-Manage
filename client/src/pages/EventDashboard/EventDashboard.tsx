@@ -148,28 +148,7 @@ export default function EventDashboard() {
             </div>
 
             {/* Right side - User info and actions */}
-            <div className="flex items-center space-x-4">
-              {/* User Profile */}
-              {user && (
-                <div className="hidden sm:flex items-center space-x-3">
-                  <img
-                    src={user?.profilePic || '/no-profile-picture-icon.png'}
-                    alt="Profile"
-                    className="w-10 h-10 rounded-full object-cover ring-2 ring-purple-100"
-                  />
-                  <div className="hidden md:block">
-                    <div className="text-sm font-medium text-gray-900">
-                      {user?.name}
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {userIsHost ? 'Host' : 'Attendee'}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Action Buttons */}
-              <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2">
                 <button
                   onClick={() => navigate('/profile')}
                   className="w-10 h-10 rounded-full overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border-2 border-gray-200 hover:border-purple-400"
@@ -192,7 +171,6 @@ export default function EventDashboard() {
                     Sign Out
                   </span>
                 </button>
-              </div>
             </div>
           </div>
         </div>
