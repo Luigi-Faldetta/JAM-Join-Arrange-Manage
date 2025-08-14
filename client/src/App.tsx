@@ -19,6 +19,7 @@ import LandingPage from './pages/LandingPage/LandingPage';
 import UserDashboardPage from './pages/UserDashboard/UserDashboardPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import EventDashboard from './pages/EventDashboard/EventDashboard';
+import SharedEventPage from './pages/SharedEventPage/SharedEventPage';
 import LoginForm from './components/LandingDashboard/LoginForm';
 import CreateUserForm from './components/LandingDashboard/CreateUserForm';
 import ContactUs from './pages/ContactUs/ContactUs';
@@ -59,7 +60,7 @@ const router = createBrowserRouter(
     <Route path="/" element={<Layout />}>
       {/* Public Routes */}
       <Route index element={<LandingPage />} />
-      <Route path="event/:eventid" element={<LandingPage />} />
+      <Route path="event/:eventid" element={<SharedEventPage />} />
       <Route path="contact" element={<ContactUs />} />
 
       {/* Auth Routes */}
