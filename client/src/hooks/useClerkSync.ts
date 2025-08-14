@@ -47,7 +47,7 @@ export function useClerkSync() {
 
       // Check if we already have a token (meaning user is already synced)
       const existingToken = localStorage.getItem('token');
-      const isGoogleOAuth = user.externalAccounts?.some(account => account.provider === 'oauth_google');
+      const isGoogleOAuth = user.externalAccounts?.some(account => account.provider === 'google');
       
       console.log('useClerkSync: Token check', {
         tokenExists: !!existingToken,
