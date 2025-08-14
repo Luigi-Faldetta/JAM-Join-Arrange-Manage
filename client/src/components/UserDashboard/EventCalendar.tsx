@@ -69,21 +69,34 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
       const tooltipWidth = 320; // Approximate width of tooltip
-      const tooltipHeight = 200; // Approximate height of tooltip
+      const tooltipHeight = Math.min(200, dayEvents.length * 60 + 80); // Dynamic height based on events
+      const scrollY = window.scrollY;
+      const scrollX = window.scrollX;
       
-      let x = rect.left + rect.width / 2;
-      let y = rect.top - tooltipHeight - 10; // 10px gap above the cell
+      // Calculate initial position centered above the cell
+      let x = rect.left + scrollX + rect.width / 2;
+      let y = rect.top + scrollY - tooltipHeight - 10; // 10px gap above the cell
       
       // Adjust x position to keep tooltip in viewport
-      if (x - tooltipWidth / 2 < 10) {
-        x = tooltipWidth / 2 + 10; // Keep 10px from left edge
-      } else if (x + tooltipWidth / 2 > viewportWidth - 10) {
-        x = viewportWidth - tooltipWidth / 2 - 10; // Keep 10px from right edge
+      const leftBoundary = scrollX + 10;
+      const rightBoundary = scrollX + viewportWidth - 10;
+      
+      if (x - tooltipWidth / 2 < leftBoundary) {
+        x = leftBoundary + tooltipWidth / 2; // Keep 10px from left edge
+      } else if (x + tooltipWidth / 2 > rightBoundary) {
+        x = rightBoundary - tooltipWidth / 2; // Keep 10px from right edge
       }
       
       // If tooltip would be cut off at top, show below the cell instead
-      if (y < 10) {
-        y = rect.bottom + 10;
+      const topBoundary = scrollY + 10;
+      if (y < topBoundary) {
+        y = rect.bottom + scrollY + 10;
+        
+        // Double check if there's enough space below
+        if (y + tooltipHeight > scrollY + viewportHeight - 10) {
+          // Not enough space above or below, position in the middle of viewport
+          y = scrollY + (viewportHeight - tooltipHeight) / 2;
+        }
       }
       
       setTooltipPosition({ x, y });
