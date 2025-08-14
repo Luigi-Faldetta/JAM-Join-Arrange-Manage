@@ -134,6 +134,11 @@ export default function UserDashboardPage() {
     }
   }, [user, userId, refetchMe, hasReceivedManualData]);
 
+  // Get events - refetch when userId becomes available (moved up to declare refetchEvents)
+  const { data: eventsData, isLoading, refetch: refetchEvents } = useGetEventsQuery(userId || '', {
+    skip: !userId,
+  });
+
   // Force component update and refetch events when manual data is received
   useEffect(() => {
     if (hasReceivedManualData && manualUserData) {
@@ -145,11 +150,6 @@ export default function UserDashboardPage() {
       }
     }
   }, [hasReceivedManualData, manualUserData, refetchEvents]);
-
-  // Get events - refetch when userId becomes available
-  const { data: eventsData, isLoading, refetch: refetchEvents } = useGetEventsQuery(userId || '', {
-    skip: !userId,
-  });
   
   // Debug logging for events loading
   console.log('Events Loading State:', {
