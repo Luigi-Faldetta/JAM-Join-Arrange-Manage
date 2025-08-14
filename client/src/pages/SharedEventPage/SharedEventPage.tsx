@@ -24,9 +24,12 @@ export default function SharedEventPage() {
   }, [isLoggedIn, eventLoading, eventData, dispatch]);
 
   useEffect(() => {
-    // If user is logged in, redirect to event dashboard
+    // If user is logged in, redirect to event dashboard with state
     if (isLoggedIn && eventData && userData) {
-      navigate(`/event-dashboard/${eventid}`, { replace: true });
+      navigate(`/event-dashboard/${eventid}`, { 
+        replace: true,
+        state: { fromSharedLink: true }
+      });
     }
   }, [isLoggedIn, eventData, userData, eventid, navigate]);
 
