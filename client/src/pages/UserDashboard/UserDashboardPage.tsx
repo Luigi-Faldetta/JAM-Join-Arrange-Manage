@@ -41,7 +41,7 @@ export default function UserDashboardPage() {
   const userId = user?.userId;
   
   
-  // Force refetch on component mount
+  // Force refetch on component mount and periodically to ensure Google OAuth users get their data
   useEffect(() => {
     console.log('UserDashboard: Checking authentication state');
     const token = localStorage.getItem('token');
@@ -49,15 +49,12 @@ export default function UserDashboardPage() {
     
     refetchMe();
     
-    // Manual API call as fallback
+    // Manual API call as fallback (using same URL pattern as ProfilePage)
     if (token) {
       const cleanToken = token.replace(/["']/g, '').trim();
       console.log('UserDashboard: Making manual /me request');
-      const baseUrl = process.env.NODE_ENV !== 'production'
-        ? process.env.REACT_APP_API_BASE_URL || 'http://localhost:3200'
-        : process.env.REACT_APP_API_BASE_URL || 'https://jam-join-arrange-manage-production.up.railway.app';
       
-      fetch(`${baseUrl}/me`, {
+      fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3200'}/me`, {
         headers: {
           'Authorization': `Bearer ${cleanToken}`
         }
@@ -80,6 +77,19 @@ export default function UserDashboardPage() {
       console.warn('UserDashboard: No token found in localStorage');
     }
   }, [refetchMe]);
+
+  // Additional effect to refetch user data when user object is incomplete (for Google OAuth users)
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token && (!user || !user.name || !user.profilePic)) {
+      console.log('UserDashboard: User data incomplete, refetching...');
+      // Small delay to allow any pending auth to complete
+      const timer = setTimeout(() => {
+        refetchMe();
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [user, refetchMe]);
 
   // Get events
   const { data: eventsData, isLoading } = useGetEventsQuery(userId || '', {
