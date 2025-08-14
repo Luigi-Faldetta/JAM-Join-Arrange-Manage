@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
 import { useUser, useAuth } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
-import { useSyncClerkUserMutation } from '../services/JamDB';
+import { useSyncClerkUserMutation, thesisDbApi } from '../services/JamDB';
+import { useAppDispatch } from '../reduxFiles/store';
 
 export function useClerkSync() {
   const { user, isLoaded: userLoaded } = useUser();
   const { isSignedIn } = useAuth();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [syncClerkUser] = useSyncClerkUserMutation();
 
   useEffect(() => {
@@ -124,9 +126,14 @@ export function useClerkSync() {
           localStorage.setItem('token', result.data.token);
           console.log('Clerk user synced successfully, token stored');
           
-          // Small delay to ensure token is stored before navigation
+          // Clear all RTK Query cache to force fresh requests with new token
+          console.log('Clearing RTK Query cache...');
+          dispatch(thesisDbApi.util.resetApiState());
+          
+          // Small delay then force reload to ensure token is picked up
           setTimeout(() => {
-            navigate('/user-dashboard');
+            console.log('Forcing page reload to apply new authentication token...');
+            window.location.href = '/user-dashboard';
           }, 100);
         } else {
           console.error('Sync failed - unexpected response:', result);
@@ -148,5 +155,5 @@ export function useClerkSync() {
     };
 
     syncUser();
-  }, [userLoaded, isSignedIn, user, syncClerkUser, navigate]);
+  }, [userLoaded, isSignedIn, user, syncClerkUser, navigate, dispatch]);
 }
