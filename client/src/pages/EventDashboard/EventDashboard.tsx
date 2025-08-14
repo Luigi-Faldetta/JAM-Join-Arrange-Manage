@@ -28,6 +28,7 @@ export default function EventDashboard() {
   const [hasAutoJoined, setHasAutoJoined] = useState<boolean>(false);
   const [manualUserData, setManualUserData] = useState<any>(null);
   const [hasReceivedManualData, setHasReceivedManualData] = useState(false);
+  const [loadingTimeout, setLoadingTimeout] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -191,8 +192,8 @@ export default function EventDashboard() {
 
   // Show loading state while waiting for user data (especially important for Google OAuth)
   const hasValidUserData = user && user.name && user.name !== 'User';
-  const hasDataFromEitherSource = userData?.data || hasReceivedManualData;
-  const isLoadingUserData = isLoggedIn && (!hasValidUserData || !hasDataFromEitherSource);
+  const hasDataFromEitherSource = userData?.data || hasReceivedManualData || (manualUserData && manualUserData.name);
+  const isLoadingUserData = isLoggedIn && (!hasValidUserData || !hasDataFromEitherSource) && !loadingTimeout;
 
   // Debug logging to help diagnose loading issues
   console.log('EventDashboard Loading State:', {
@@ -201,8 +202,23 @@ export default function EventDashboard() {
     isLoadingUserData,
     userName: user?.name,
     hasUserDataFromRTK: !!userData?.data,
-    hasReceivedManualData
+    hasReceivedManualData,
+    manualUserData,
+    userData: userData?.data,
+    loadingTimeout
   });
+
+  // Timeout failsafe - if loading takes more than 10 seconds, force continue
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (isLoadingUserData) {
+        console.warn('Loading timeout reached, forcing event dashboard to show');
+        setLoadingTimeout(true);
+      }
+    }, 10000); // 10 second timeout
+
+    return () => clearTimeout(timer);
+  }, [isLoadingUserData]);
 
   if (isLoadingUserData) {
     return (

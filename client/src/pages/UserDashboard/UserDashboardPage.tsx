@@ -33,6 +33,7 @@ export default function UserDashboardPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [manualUserData, setManualUserData] = useState<any>(null);
   const [hasReceivedManualData, setHasReceivedManualData] = useState(false);
+  const [loadingTimeout, setLoadingTimeout] = useState(false);
 
   // Get user data
   const { data: userData, refetch: refetchMe, error: meError, isLoading: meLoading, isError: meIsError } = useGetMeQuery();
@@ -201,8 +202,8 @@ export default function UserDashboardPage() {
 
   // Show loading state while waiting for user data (especially important for Google OAuth)
   const hasValidUserData = user && user.name && user.name !== 'User';
-  const hasDataFromEitherSource = userData?.data || hasReceivedManualData;
-  const isLoadingUserData = !hasValidUserData || !hasDataFromEitherSource;
+  const hasDataFromEitherSource = userData?.data || hasReceivedManualData || (manualUserData && manualUserData.name);
+  const isLoadingUserData = (!hasValidUserData || !hasDataFromEitherSource) && !loadingTimeout;
 
   // Debug logging to help diagnose loading issues
   console.log('UserDashboard Loading State:', {
@@ -211,8 +212,23 @@ export default function UserDashboardPage() {
     isLoadingUserData,
     userName: user?.name,
     hasUserDataFromRTK: !!userData?.data,
-    hasReceivedManualData
+    hasReceivedManualData,
+    manualUserData,
+    userData: userData?.data,
+    loadingTimeout
   });
+
+  // Timeout failsafe - if loading takes more than 10 seconds, force continue
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (isLoadingUserData) {
+        console.warn('Loading timeout reached, forcing dashboard to show');
+        setLoadingTimeout(true);
+      }
+    }, 10000); // 10 second timeout
+
+    return () => clearTimeout(timer);
+  }, [isLoadingUserData]);
 
   if (isLoadingUserData) {
     return (
