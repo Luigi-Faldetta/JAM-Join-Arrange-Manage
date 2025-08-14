@@ -9,6 +9,7 @@ import { useGetEventQuery, useGetMeQuery, useJoinEventMutation } from '../../ser
 import { useIsLoggedIn } from '../../utils/useIsLoggedIn';
 import { EventState } from '../../reduxFiles/slices/events';
 import LandingPage from '../LandingPage/LandingPage';
+import { useUser } from '@clerk/clerk-react';
 import {
   FiArrowLeft,
   FiLogOut,
@@ -34,11 +35,21 @@ export default function EventDashboard() {
   const location = useLocation();
   const dispatch = useAppDispatch();
 
+  // Get Clerk user data
+  const { user: clerkUser, isLoaded: clerkLoaded } = useUser();
+  
   // Replace token usage with proper user data and add manual fallback
   const { data: userData, refetch: refetchMe } = useGetMeQuery();
   // Use manual data as fallback when RTK Query fails
   const user = userData?.data || manualUserData;
   const loggedUserId = user?.userId;
+  
+  // Create user display data from Clerk when available
+  const displayUser = {
+    ...user,
+    name: user?.name || clerkUser?.fullName || clerkUser?.firstName || 'User',
+    profilePic: user?.profilePic || clerkUser?.imageUrl || '/no-profile-picture-icon.png'
+  };
 
   const isLoggedIn = useIsLoggedIn();
   const { eventid } = useParams();
@@ -182,7 +193,7 @@ export default function EventDashboard() {
         console.warn('Loading timeout reached, forcing event dashboard to show');
         setLoadingTimeout(true);
       }
-    }, 10000); // 10 second timeout
+    }, 3000); // 3 second timeout (reduced since we use Clerk data immediately)
 
     return () => clearTimeout(timer);
   }, [isLoggedIn, user, userData?.data, hasReceivedManualData, manualUserData, loadingTimeout]);
@@ -206,22 +217,29 @@ export default function EventDashboard() {
     );
   }
 
-  // Show loading state while waiting for user data (especially important for Google OAuth)
+  // Show loading state - use Clerk data if available to avoid waiting
   const hasValidUserData = user && user.name && user.name !== 'User';
   const hasDataFromEitherSource = userData?.data || hasReceivedManualData || (manualUserData && manualUserData.name);
-  const isLoadingUserData = isLoggedIn && (!hasValidUserData || !hasDataFromEitherSource) && !loadingTimeout;
+  const hasClerkUserData = clerkLoaded && clerkUser && (clerkUser.fullName || clerkUser.firstName);
+  
+  // Only show loading if we don't have any user data from any source and haven't timed out
+  const isLoadingUserData = isLoggedIn && (!hasValidUserData && !hasDataFromEitherSource && !hasClerkUserData) && !loadingTimeout;
 
   // Debug logging to help diagnose loading issues
   console.log('EventDashboard Loading State:', {
     hasValidUserData,
     hasDataFromEitherSource,
+    hasClerkUserData,
     isLoadingUserData,
     userName: user?.name,
+    clerkUserName: clerkUser?.fullName || clerkUser?.firstName,
+    displayUserName: displayUser?.name,
     hasUserDataFromRTK: !!userData?.data,
     hasReceivedManualData,
     manualUserData,
     userData: userData?.data,
-    loadingTimeout
+    loadingTimeout,
+    clerkLoaded
   });
 
   if (isLoadingUserData) {
@@ -236,7 +254,7 @@ export default function EventDashboard() {
               Loading your profile...
             </h2>
             <p className="text-gray-600">
-              Please wait while we fetch your profile information.
+              Syncing your profile information...
             </p>
           </div>
         </div>
@@ -291,7 +309,7 @@ export default function EventDashboard() {
                   title="Profile"
                 >
                   <img
-                    src={user?.profilePic || '/no-profile-picture-icon.png'}
+                    src={displayUser?.profilePic || '/no-profile-picture-icon.png'}
                     alt="Profile"
                     className="w-full h-full object-cover"
                   />
