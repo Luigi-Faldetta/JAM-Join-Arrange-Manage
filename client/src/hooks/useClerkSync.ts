@@ -47,9 +47,14 @@ export function useClerkSync() {
 
       // Check if we already have a token (meaning user is already synced)
       const existingToken = localStorage.getItem('token');
+      const isGoogleOAuth = user.externalAccounts?.some(account => account.provider === 'oauth_google');
+      
       console.log('useClerkSync: Token check', {
         tokenExists: !!existingToken,
         tokenPreview: existingToken ? existingToken.substring(0, 20) + '...' : 'none',
+        isGoogleOAuth: isGoogleOAuth,
+        userName: user.fullName,
+        userEmail: user.primaryEmailAddress?.emailAddress,
       });
       
       if (existingToken) {
@@ -57,22 +62,43 @@ export function useClerkSync() {
         // Verify the token is still valid by checking if we can fetch user data
         try {
           const baseUrl = process.env.NODE_ENV !== 'production'
-            ? process.env.REACT_APP_API_BASE_URL || 'http://localhost:3200'
+            ? process.env.REACT_APP_API_BASE_URL || 'http://localhost:3200/'
             : process.env.REACT_APP_API_BASE_URL || 'https://jam-join-arrange-manage-production.up.railway.app';
           
-          const response = await fetch(`${baseUrl}/me`, {
+          const apiUrl = baseUrl.endsWith('/') ? `${baseUrl}me` : `${baseUrl}/me`;
+          const cleanToken = existingToken.replace(/["']/g, '').trim();
+          
+          const response = await fetch(apiUrl, {
             headers: {
-              'Authorization': `Bearer ${existingToken}`
+              'Authorization': `Bearer ${cleanToken}`,
+              'Content-Type': 'application/json'
             }
           });
+          
+          console.log('useClerkSync: Token validation response:', response.status);
+          
           if (response.ok) {
-            console.log('useClerkSync: Existing token is valid, no sync needed');
-            return; // Token is valid, no need to sync
+            const data = await response.json();
+            if (data.success && data.data && data.data.name && data.data.email) {
+              console.log('useClerkSync: Existing token is valid with complete user data, no sync needed');
+              return; // Token is valid with complete data, no need to sync
+            } else {
+              console.log('useClerkSync: Token valid but user data incomplete, proceeding with sync');
+            }
           } else {
-            console.log('useClerkSync: Existing token is invalid, proceeding with sync');
+            console.log('useClerkSync: Existing token is invalid (status:', response.status, '), proceeding with sync');
           }
         } catch (e) {
-          console.log('useClerkSync: Token validation failed, proceeding with sync');
+          console.log('useClerkSync: Token validation failed with error:', e, 'proceeding with sync');
+        }
+      }
+
+      // For Google OAuth users, force re-sync if we don't have complete Clerk data
+      if (isGoogleOAuth && (!user.fullName || !user.primaryEmailAddress?.emailAddress)) {
+        console.log('useClerkSync: Google OAuth user with incomplete Clerk data, forcing sync...');
+        // Remove existing token to force fresh sync
+        if (existingToken) {
+          localStorage.removeItem('token');
         }
       }
 
