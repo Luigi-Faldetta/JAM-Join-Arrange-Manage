@@ -76,6 +76,10 @@ export default function UserDashboardPage() {
         // Set manual data as fallback
         if (data.success && data.data) {
           setManualUserData(data.data);
+          // Force RTK Query to refetch to update cache
+          setTimeout(() => {
+            refetchMe();
+          }, 100);
         }
       })
       .catch(err => {
@@ -91,11 +95,16 @@ export default function UserDashboardPage() {
     const token = localStorage.getItem('token');
     if (token && (!user || !user.name || !user.profilePic)) {
       console.log('UserDashboard: User data incomplete, refetching...');
-      // Small delay to allow any pending auth to complete
-      const timer = setTimeout(() => {
-        refetchMe();
-      }, 1000);
-      return () => clearTimeout(timer);
+      
+      // Retry multiple times with increasing delays for Google OAuth
+      const retryAttempts = [500, 1500, 3000]; // Try after 0.5s, 1.5s, and 3s
+      
+      retryAttempts.forEach((delay, index) => {
+        setTimeout(() => {
+          console.log(`UserDashboard: Retry attempt ${index + 1} for user data`);
+          refetchMe();
+        }, delay);
+      });
     }
   }, [user, refetchMe]);
 
