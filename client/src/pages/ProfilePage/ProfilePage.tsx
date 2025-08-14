@@ -61,9 +61,17 @@ export default function ProfilePage() {
     const token = localStorage.getItem('token');
     if (token) {
       const cleanToken = token.replace(/["']/g, '').trim();
-      fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3200'}/me`, {
+      // Use the same URL pattern as RTK Query
+      const baseUrl = process.env.NODE_ENV !== 'production'
+        ? process.env.REACT_APP_API_BASE_URL || 'http://localhost:3200/'
+        : process.env.REACT_APP_API_BASE_URL || 'https://jam-join-arrange-manage-production.up.railway.app';
+      
+      const apiUrl = baseUrl.endsWith('/') ? `${baseUrl}me` : `${baseUrl}/me`;
+      
+      fetch(apiUrl, {
         headers: {
-          'Authorization': `Bearer ${cleanToken}`
+          'Authorization': `Bearer ${cleanToken}`,
+          'Content-Type': 'application/json'
         }
       })
       .then(res => res.json())
@@ -297,7 +305,7 @@ export default function ProfilePage() {
         </button>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-20 sm:pt-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

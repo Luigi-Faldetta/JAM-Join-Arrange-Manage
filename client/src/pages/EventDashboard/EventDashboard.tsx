@@ -56,9 +56,17 @@ export default function EventDashboard() {
       const cleanToken = token.replace(/["']/g, '').trim();
       console.log('EventDashboard: Making manual /me request');
       
-      fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3200'}/me`, {
+      // Use the same URL pattern as RTK Query
+      const baseUrl = process.env.NODE_ENV !== 'production'
+        ? process.env.REACT_APP_API_BASE_URL || 'http://localhost:3200/'
+        : process.env.REACT_APP_API_BASE_URL || 'https://jam-join-arrange-manage-production.up.railway.app';
+      
+      const apiUrl = baseUrl.endsWith('/') ? `${baseUrl}me` : `${baseUrl}/me`;
+      
+      fetch(apiUrl, {
         headers: {
-          'Authorization': `Bearer ${cleanToken}`
+          'Authorization': `Bearer ${cleanToken}`,
+          'Content-Type': 'application/json'
         }
       })
       .then(res => {
