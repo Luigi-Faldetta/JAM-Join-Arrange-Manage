@@ -41,6 +41,11 @@ export default function EventDashboard() {
   // Check for token availability
   const [hasToken, setHasToken] = useState(!!localStorage.getItem('token'));
   
+  // Replace token usage with proper user data and add manual fallback - skip until token exists (moved up to declare refetchMe)
+  const { data: userData, refetch: refetchMe } = useGetMeQuery(undefined, {
+    skip: !hasToken,
+  });
+  
   // Listen for token updates from Clerk sync
   useEffect(() => {
     const handleTokenUpdate = () => {
@@ -60,11 +65,6 @@ export default function EventDashboard() {
     window.addEventListener('tokenUpdated', handleTokenUpdate);
     return () => window.removeEventListener('tokenUpdated', handleTokenUpdate);
   }, [hasToken, refetchMe]);
-  
-  // Replace token usage with proper user data and add manual fallback - skip until token exists
-  const { data: userData, refetch: refetchMe } = useGetMeQuery(undefined, {
-    skip: !hasToken,
-  });
   // Use manual data as fallback when RTK Query fails
   const user = userData?.data || manualUserData;
   const loggedUserId = user?.userId;

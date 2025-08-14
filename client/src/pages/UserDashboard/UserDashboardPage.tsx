@@ -43,6 +43,11 @@ export default function UserDashboardPage() {
   // Check for token availability
   const [hasToken, setHasToken] = useState(!!localStorage.getItem('token'));
   
+  // Get user data from API - skip until token exists (moved up to declare refetchMe)
+  const { data: userData, refetch: refetchMe, error: meError, isLoading: meLoading, isError: meIsError } = useGetMeQuery(undefined, {
+    skip: !hasToken,
+  });
+  
   // Listen for token updates from Clerk sync
   useEffect(() => {
     const handleTokenUpdate = () => {
@@ -62,11 +67,6 @@ export default function UserDashboardPage() {
     window.addEventListener('tokenUpdated', handleTokenUpdate);
     return () => window.removeEventListener('tokenUpdated', handleTokenUpdate);
   }, [hasToken, refetchMe]);
-  
-  // Get user data from API - skip until token exists
-  const { data: userData, refetch: refetchMe, error: meError, isLoading: meLoading, isError: meIsError } = useGetMeQuery(undefined, {
-    skip: !hasToken,
-  });
   
   // Use Clerk data as primary source, then API data, then manual data
   const user = userData?.data || manualUserData;
