@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useGetEventQuery, useGetMeQuery } from '../../services/JamDB';
@@ -53,8 +53,9 @@ export default function SharedEventPage() {
   }
 
   const event = eventData.data;
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+  const formatDate = (date: Date | string) => {
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    return dateObj.toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -62,8 +63,9 @@ export default function SharedEventPage() {
     });
   };
 
-  const formatTime = (dateString: string) => {
-    return new Date(dateString).toLocaleTimeString('en-US', {
+  const formatTime = (date: Date | string) => {
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    return dateObj.toLocaleTimeString('en-US', {
       hour: 'numeric',
       minute: '2-digit',
       hour12: true,
@@ -108,10 +110,10 @@ export default function SharedEventPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Date & Time</h3>
-                    <p className="text-gray-600">{formatDate(event.dateTime)}</p>
+                    <p className="text-gray-600">{event.date ? formatDate(event.date) : 'Date to be announced'}</p>
                     <p className="text-gray-600 flex items-center mt-1">
                       <FiClock className="w-4 h-4 mr-1" />
-                      {formatTime(event.dateTime)}
+                      {event.date ? formatTime(event.date) : 'Time to be announced'}
                     </p>
                   </div>
                 </div>
