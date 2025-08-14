@@ -6,7 +6,7 @@ import { RootState } from '../../reduxFiles/store';
 import { FiX, FiEye, FiEyeOff, FiMail, FiLock, FiUser, FiArrowRight } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
 import { useLogInMutation, useAddUserMutation, useResetPasswordMutation } from '../../services/JamDB';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useSignIn } from '@clerk/clerk-react';
 
 interface LoginFormData {
@@ -23,6 +23,7 @@ interface CreateUserFormData {
 function AuthModal() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { isOpen, mode } = useSelector((state: RootState) => state.authModalReducer);
 
   // Form state
@@ -88,7 +89,14 @@ function AuthModal() {
       if (result.success && result.data) {
         localStorage.setItem('token', result.data);
         handleClose();
-        navigate('/user-dashboard');
+        
+        // Check if user came from an event page
+        if (location.pathname.startsWith('/event/')) {
+          const eventId = location.pathname.split('/')[2];
+          navigate(`/event-dashboard/${eventId}`, { replace: true });
+        } else {
+          navigate('/user-dashboard');
+        }
       } else {
         setPasswordMatch(false);
         setErrorMessage('Invalid email or password. Please try again.');
@@ -150,10 +158,14 @@ function AuthModal() {
 
     try {
       // Always use signIn - Clerk will automatically create account if user doesn't exist
+      const redirectUrlComplete = location.pathname.startsWith('/event/')
+        ? `${window.location.origin}${location.pathname}`
+        : `${window.location.origin}/user-dashboard`;
+        
       await signIn.authenticateWithRedirect({
         strategy: 'oauth_google',
         redirectUrl: `${window.location.origin}/sso-callback`,
-        redirectUrlComplete: `${window.location.origin}/user-dashboard`,
+        redirectUrlComplete: redirectUrlComplete,
       });
     } catch (error: any) {
       console.error('Google OAuth error:', error);
