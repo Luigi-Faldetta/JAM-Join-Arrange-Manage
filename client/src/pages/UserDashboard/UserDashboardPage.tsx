@@ -40,8 +40,33 @@ export default function UserDashboardPage() {
   // Get Clerk user data
   const { user: clerkUser, isLoaded: clerkLoaded } = useUser();
   
-  // Get user data from API
-  const { data: userData, refetch: refetchMe, error: meError, isLoading: meLoading, isError: meIsError } = useGetMeQuery();
+  // Check for token availability
+  const [hasToken, setHasToken] = useState(!!localStorage.getItem('token'));
+  
+  // Listen for token updates from Clerk sync
+  useEffect(() => {
+    const handleTokenUpdate = () => {
+      console.log('UserDashboard: Token update event received');
+      const newToken = localStorage.getItem('token');
+      if (newToken && !hasToken) {
+        console.log('UserDashboard: Token now available, enabling queries');
+        setHasToken(true);
+        // Trigger refetches now that token is available
+        setTimeout(() => {
+          console.log('UserDashboard: Refetching user data and events');
+          refetchMe();
+        }, 100);
+      }
+    };
+    
+    window.addEventListener('tokenUpdated', handleTokenUpdate);
+    return () => window.removeEventListener('tokenUpdated', handleTokenUpdate);
+  }, [hasToken, refetchMe]);
+  
+  // Get user data from API - skip until token exists
+  const { data: userData, refetch: refetchMe, error: meError, isLoading: meLoading, isError: meIsError } = useGetMeQuery(undefined, {
+    skip: !hasToken,
+  });
   
   // Use Clerk data as primary source, then API data, then manual data
   const user = userData?.data || manualUserData;
@@ -135,10 +160,9 @@ export default function UserDashboardPage() {
     }
   }, [user, userId, refetchMe, hasReceivedManualData]);
 
-  // Get events - don't skip initially to ensure RTK Query is properly initialized
-  const { data: eventsData, isLoading, refetch: refetchEvents, error: eventsError } = useGetEventsQuery(userId || 'no-user-id', {
-    // Don't skip - let the query run and handle empty userId on backend
-    skip: false,
+  // Get events - skip until we have both token and userId
+  const { data: eventsData, isLoading, refetch: refetchEvents, error: eventsError } = useGetEventsQuery(userId || '', {
+    skip: !hasToken || !userId,
   });
 
   // Force component update and refetch events when manual data is received

@@ -30,12 +30,16 @@ export const fetchLogin = async (email: string) => {
 
 const baseQuery = fetchBaseQuery({
   baseUrl: URL,
-  prepareHeaders: (headers, { getState }) => {
+  prepareHeaders: (headers, { getState, endpoint }) => {
+    // Always read fresh token from localStorage for each request
     const token = localStorage.getItem('token');
     if (token) {
       // Clean token in case it has extra quotes or spaces
       const cleanToken = token.replace(/["']/g, '').trim();
       headers.set('authorization', `Bearer ${cleanToken}`);
+      console.log(`RTK Query: Using token for ${endpoint} (${cleanToken.substring(0, 20)}...)`);
+    } else {
+      console.log(`RTK Query: No token available for ${endpoint}`);
     }
     return headers;
   },
