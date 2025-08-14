@@ -134,9 +134,10 @@ export default function UserDashboardPage() {
     }
   }, [user, userId, refetchMe, hasReceivedManualData]);
 
-  // Get events - refetch when userId becomes available (moved up to declare refetchEvents)
-  const { data: eventsData, isLoading, refetch: refetchEvents } = useGetEventsQuery(userId || '', {
-    skip: !userId,
+  // Get events - don't skip initially to ensure RTK Query is properly initialized
+  const { data: eventsData, isLoading, refetch: refetchEvents, error: eventsError } = useGetEventsQuery(userId || 'no-user-id', {
+    // Don't skip - let the query run and handle empty userId on backend
+    skip: false,
   });
 
   // Force component update and refetch events when manual data is received
@@ -158,7 +159,10 @@ export default function UserDashboardPage() {
     eventsDataExists: !!eventsData?.data,
     eventsCount: eventsData?.data?.length || 0,
     isLoadingEvents: isLoading,
-    eventListLength: eventList.length
+    eventListLength: eventList.length,
+    eventsError: eventsError,
+    hasManualUserData: !!manualUserData,
+    hasUserData: !!userData?.data
   });
 
   // Update event list when events data changes
@@ -169,22 +173,65 @@ export default function UserDashboardPage() {
     }
   }, [eventsData, dispatch]);
   
-  // Additional effect to refetch events when userId becomes available
-  useEffect(() => {
-    if (userId && !isLoading && (!eventsData || !eventsData.data)) {
-      console.log('UserDashboard: userId available but no events data, refetching...');
-      refetchEvents();
-    }
-  }, [userId, isLoading, eventsData, refetchEvents]);
+  // Refetch events whenever userId changes from undefined to a real value
+  const [lastUserId, setLastUserId] = useState<string | undefined>(undefined);
   
-  // Aggressive events refetch when any user data source provides userId
   useEffect(() => {
-    const userIdFromAnySource = userData?.data?.userId || manualUserData?.userId;
-    if (userIdFromAnySource && eventList.length === 0 && !isLoading) {
-      console.log('UserDashboard: Found userId from any source, ensuring events are loaded:', userIdFromAnySource);
+    if (userId && userId !== 'no-user-id' && userId !== lastUserId) {
+      console.log('UserDashboard: userId changed, refetching events:', { oldUserId: lastUserId, newUserId: userId });
+      setLastUserId(userId);
       refetchEvents();
     }
-  }, [userData?.data?.userId, manualUserData?.userId, eventList.length, isLoading, refetchEvents]);
+  }, [userId, lastUserId, refetchEvents]);
+  
+  // Monitor for userId becoming available from any source
+  useEffect(() => {
+    const userIdFromRTK = userData?.data?.userId;
+    const userIdFromManual = manualUserData?.userId;
+    const foundUserId = userIdFromRTK || userIdFromManual;
+    
+    if (foundUserId && foundUserId !== lastUserId && eventList.length === 0) {
+      console.log('UserDashboard: Found userId from any source, triggering events refetch:', {
+        foundUserId,
+        fromRTK: userIdFromRTK,
+        fromManual: userIdFromManual,
+        lastUserId,
+        eventListLength: eventList.length
+      });
+      setLastUserId(foundUserId);
+      refetchEvents();
+    }
+  }, [userData?.data?.userId, manualUserData?.userId, lastUserId, eventList.length, refetchEvents]);
+  
+  // Final fallback: If we have userId but still no events after reasonable time, keep retrying
+  useEffect(() => {
+    if (userId && userId !== 'no-user-id' && eventList.length === 0) {
+      console.log('UserDashboard: Final fallback - have userId but no events, setting up polling');
+      
+      const pollInterval = setInterval(() => {
+        console.log('UserDashboard: Polling for events...');
+        refetchEvents();
+      }, 2000); // Poll every 2 seconds
+      
+      // Stop polling after 20 seconds or when we get events
+      const timeout = setTimeout(() => {
+        console.log('UserDashboard: Stopping events polling after 20 seconds');
+        clearInterval(pollInterval);
+      }, 20000);
+      
+      return () => {
+        clearInterval(pollInterval);
+        clearTimeout(timeout);
+      };
+    }
+  }, [userId, eventList.length, refetchEvents]);
+  
+  // Stop polling when events are loaded
+  useEffect(() => {
+    if (eventList.length > 0) {
+      console.log('UserDashboard: Events loaded, any active polling will be cleaned up on next render');
+    }
+  }, [eventList.length]);
 
   // Filter events based on current filter mode
   const filteredEvents = eventList.filter((event) => {
