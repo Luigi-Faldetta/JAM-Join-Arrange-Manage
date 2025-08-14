@@ -190,7 +190,19 @@ export default function EventDashboard() {
   }
 
   // Show loading state while waiting for user data (especially important for Google OAuth)
-  const isLoadingUserData = isLoggedIn && (!user || !user.name || (!userData?.data && !hasReceivedManualData));
+  const hasValidUserData = user && user.name && user.name !== 'User';
+  const hasDataFromEitherSource = userData?.data || hasReceivedManualData;
+  const isLoadingUserData = isLoggedIn && (!hasValidUserData || !hasDataFromEitherSource);
+
+  // Debug logging to help diagnose loading issues
+  console.log('EventDashboard Loading State:', {
+    hasValidUserData,
+    hasDataFromEitherSource,
+    isLoadingUserData,
+    userName: user?.name,
+    hasUserDataFromRTK: !!userData?.data,
+    hasReceivedManualData
+  });
 
   if (isLoadingUserData) {
     return (
