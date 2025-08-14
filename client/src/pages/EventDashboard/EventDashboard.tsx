@@ -171,6 +171,22 @@ export default function EventDashboard() {
     }
   }, [loggedUserId, eventData, isLoading, hasAutoJoined, isJoined, userIsHost, eventid, joinEvent, refetchEvent, location.state, location.search]);
 
+  // Timeout failsafe - if loading takes more than 10 seconds, force continue
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const hasValidUserData = user && user.name && user.name !== 'User';
+      const hasDataFromEitherSource = userData?.data || hasReceivedManualData || (manualUserData && manualUserData.name);
+      const currentlyLoadingUserData = isLoggedIn && (!hasValidUserData || !hasDataFromEitherSource) && !loadingTimeout;
+      
+      if (currentlyLoadingUserData) {
+        console.warn('Loading timeout reached, forcing event dashboard to show');
+        setLoadingTimeout(true);
+      }
+    }, 10000); // 10 second timeout
+
+    return () => clearTimeout(timer);
+  }, [isLoggedIn, user, userData?.data, hasReceivedManualData, manualUserData, loadingTimeout]);
+
   const handleBackToDashboard = () => {
     navigate('/user-dashboard');
   };
@@ -207,18 +223,6 @@ export default function EventDashboard() {
     userData: userData?.data,
     loadingTimeout
   });
-
-  // Timeout failsafe - if loading takes more than 10 seconds, force continue
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (isLoadingUserData) {
-        console.warn('Loading timeout reached, forcing event dashboard to show');
-        setLoadingTimeout(true);
-      }
-    }, 10000); // 10 second timeout
-
-    return () => clearTimeout(timer);
-  }, [isLoadingUserData]);
 
   if (isLoadingUserData) {
     return (
