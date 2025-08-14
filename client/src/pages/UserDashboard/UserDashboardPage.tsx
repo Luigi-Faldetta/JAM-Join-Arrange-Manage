@@ -41,7 +41,7 @@ export default function UserDashboardPage() {
   const userId = user?.userId;
   
   
-  // Force refetch on component mount
+  // Force refetch on component mount and periodically to ensure Google OAuth users get their data
   useEffect(() => {
     console.log('UserDashboard: Checking authentication state');
     const token = localStorage.getItem('token');
@@ -49,15 +49,12 @@ export default function UserDashboardPage() {
     
     refetchMe();
     
-    // Manual API call as fallback
+    // Manual API call as fallback (using same URL pattern as ProfilePage)
     if (token) {
       const cleanToken = token.replace(/["']/g, '').trim();
       console.log('UserDashboard: Making manual /me request');
-      const baseUrl = process.env.NODE_ENV !== 'production'
-        ? process.env.REACT_APP_API_BASE_URL || 'http://localhost:3200'
-        : process.env.REACT_APP_API_BASE_URL || 'https://jam-join-arrange-manage-production.up.railway.app';
       
-      fetch(`${baseUrl}/me`, {
+      fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3200'}/me`, {
         headers: {
           'Authorization': `Bearer ${cleanToken}`
         }
@@ -80,6 +77,19 @@ export default function UserDashboardPage() {
       console.warn('UserDashboard: No token found in localStorage');
     }
   }, [refetchMe]);
+
+  // Additional effect to refetch user data when user object is incomplete (for Google OAuth users)
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token && (!user || !user.name || !user.profilePic)) {
+      console.log('UserDashboard: User data incomplete, refetching...');
+      // Small delay to allow any pending auth to complete
+      const timer = setTimeout(() => {
+        refetchMe();
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [user, refetchMe]);
 
   // Get events
   const { data: eventsData, isLoading } = useGetEventsQuery(userId || '', {
@@ -163,7 +173,7 @@ export default function UserDashboardPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50">
       {/* Profile and Sign Out Buttons */}
-      <div className="absolute top-4 right-4 z-50 flex items-center space-x-3">
+      <div className="absolute top-4 right-4 z-50 flex items-center space-x-3 mb-6 sm:mb-0">
         {/* Profile Button */}
         <button
           onClick={() => navigate('/profile')}
@@ -223,6 +233,28 @@ export default function UserDashboardPage() {
           </div>
         </motion.div>
 
+        {/* Calendar Section */}
+        <AnimatePresence>
+          {showCalendar && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="mb-8"
+            >
+              <EventCalendar
+                sortedEventList={eventList
+                  .filter((e) => typeof e.eventId === 'string')
+                  .map((e) => ({
+                    ...(e as any),
+                    eventId: e.eventId as string,
+                  }))}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Stats Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -253,28 +285,6 @@ export default function UserDashboardPage() {
             </div>
           ))}
         </motion.div>
-
-        {/* Calendar Section */}
-        <AnimatePresence>
-          {showCalendar && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="mb-8"
-            >
-              <EventCalendar
-                sortedEventList={eventList
-                  .filter((e) => typeof e.eventId === 'string')
-                  .map((e) => ({
-                    ...(e as any),
-                    eventId: e.eventId as string,
-                  }))}
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {/* Events Section */}
         <motion.div

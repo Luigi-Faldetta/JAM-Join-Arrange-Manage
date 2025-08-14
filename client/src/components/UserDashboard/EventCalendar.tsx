@@ -66,10 +66,27 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
     const dayEvents = getEventsForDay(date);
     if (dayEvents.length > 0) {
       const rect = event.currentTarget.getBoundingClientRect();
-      setTooltipPosition({
-        x: rect.left + rect.width / 2 - 20, // Shift slightly to the left
-        y: rect.top - 140, // Move a bit higher
-      });
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      const tooltipWidth = 320; // Approximate width of tooltip
+      const tooltipHeight = 200; // Approximate height of tooltip
+      
+      let x = rect.left + rect.width / 2;
+      let y = rect.top - tooltipHeight - 10; // 10px gap above the cell
+      
+      // Adjust x position to keep tooltip in viewport
+      if (x - tooltipWidth / 2 < 10) {
+        x = tooltipWidth / 2 + 10; // Keep 10px from left edge
+      } else if (x + tooltipWidth / 2 > viewportWidth - 10) {
+        x = viewportWidth - tooltipWidth / 2 - 10; // Keep 10px from right edge
+      }
+      
+      // If tooltip would be cut off at top, show below the cell instead
+      if (y < 10) {
+        y = rect.bottom + 10;
+      }
+      
+      setTooltipPosition({ x, y });
       setHoveredDay(date);
     }
   };

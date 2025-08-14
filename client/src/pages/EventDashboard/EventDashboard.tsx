@@ -26,20 +26,72 @@ export default function EventDashboard() {
   const [showTodos, setShowTodos] = useState<boolean>(true);
   const [isJoined, setIsJoined] = useState<boolean>(false);
   const [hasAutoJoined, setHasAutoJoined] = useState<boolean>(false);
+  const [manualUserData, setManualUserData] = useState<any>(null);
 
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
 
-  // Replace token usage with proper user data
-  const { data: userData } = useGetMeQuery();
-  const loggedUserId = userData?.data?.userId;
-  const user = userData?.data;
+  // Replace token usage with proper user data and add manual fallback
+  const { data: userData, refetch: refetchMe } = useGetMeQuery();
+  // Use manual data as fallback when RTK Query fails
+  const user = userData?.data || manualUserData;
+  const loggedUserId = user?.userId;
 
   const isLoggedIn = useIsLoggedIn();
   const { eventid } = useParams();
   const { data: eventData, isLoading, refetch: refetchEvent } = useGetEventQuery(eventid as string);
   const [joinEvent] = useJoinEventMutation();
+
+  // Force refetch user data on component mount to ensure Google OAuth users get their data
+  useEffect(() => {
+    console.log('EventDashboard: Checking authentication state');
+    const token = localStorage.getItem('token');
+    console.log('EventDashboard: Token from localStorage:', token ? 'Present' : 'Missing');
+    
+    refetchMe();
+    
+    // Manual API call as fallback (using same URL pattern as ProfilePage)
+    if (token) {
+      const cleanToken = token.replace(/["']/g, '').trim();
+      console.log('EventDashboard: Making manual /me request');
+      
+      fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:3200'}/me`, {
+        headers: {
+          'Authorization': `Bearer ${cleanToken}`
+        }
+      })
+      .then(res => {
+        console.log('EventDashboard: /me response status:', res.status);
+        return res.json();
+      })
+      .then(data => {
+        console.log('EventDashboard: /me response data:', data);
+        // Set manual data as fallback
+        if (data.success && data.data) {
+          setManualUserData(data.data);
+        }
+      })
+      .catch(err => {
+        console.error('EventDashboard: Manual /me request failed:', err);
+      });
+    } else {
+      console.warn('EventDashboard: No token found in localStorage');
+    }
+  }, [refetchMe]);
+
+  // Additional effect to refetch user data when user object is incomplete (for Google OAuth users)
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token && (!user || !user.name || !user.profilePic)) {
+      console.log('EventDashboard: User data incomplete, refetching...');
+      // Small delay to allow any pending auth to complete
+      const timer = setTimeout(() => {
+        refetchMe();
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [user, refetchMe]);
 
   useEffect(() => {
     if (!loggedUserId || !eventData?.data?.UserEvents) return;
