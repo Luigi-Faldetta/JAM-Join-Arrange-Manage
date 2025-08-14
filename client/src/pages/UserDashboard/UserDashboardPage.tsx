@@ -105,15 +105,25 @@ export default function UserDashboardPage() {
     }
   }, [refetchMe]);
 
-  // Additional effect to refetch user data when user object is incomplete (for Google OAuth users)
+  // Additional effect to refetch user data when user object is incomplete or missing userId (for Google OAuth users)
   useEffect(() => {
     const token = localStorage.getItem('token');
-    // Only retry if we haven't received manual data and user data is still incomplete
-    if (token && !hasReceivedManualData && (!user || !user.name || !user.profilePic)) {
-      console.log('UserDashboard: User data incomplete, refetching...');
+    // Retry if we haven't received manual data and user data is incomplete OR if we don't have userId
+    const needsRetry = token && !hasReceivedManualData && (
+      (!user || !user.name || !user.profilePic) || // Missing basic user data
+      (!userId) // Missing userId which is critical for loading events
+    );
+    
+    if (needsRetry) {
+      console.log('UserDashboard: User data incomplete or missing userId, refetching...', {
+        hasUser: !!user,
+        hasName: !!user?.name,
+        hasProfilePic: !!user?.profilePic,
+        hasUserId: !!userId
+      });
       
       // Retry multiple times with increasing delays for Google OAuth
-      const retryAttempts = [500, 1500, 3000]; // Try after 0.5s, 1.5s, and 3s
+      const retryAttempts = [500, 1500, 3000, 5000]; // Try after 0.5s, 1.5s, 3s, and 5s
       
       retryAttempts.forEach((delay, index) => {
         setTimeout(() => {
@@ -122,26 +132,59 @@ export default function UserDashboardPage() {
         }, delay);
       });
     }
-  }, [user, refetchMe, hasReceivedManualData]);
+  }, [user, userId, refetchMe, hasReceivedManualData]);
 
-  // Force component update when manual data is received
+  // Force component update and refetch events when manual data is received
   useEffect(() => {
     if (hasReceivedManualData && manualUserData) {
       console.log('UserDashboard: Manual data received, forcing component update');
-      // The state change should trigger re-render automatically
+      // Refetch events when we get the userId from manual data
+      if (manualUserData.userId) {
+        console.log('UserDashboard: Refetching events with userId:', manualUserData.userId);
+        refetchEvents();
+      }
     }
-  }, [hasReceivedManualData, manualUserData]);
+  }, [hasReceivedManualData, manualUserData, refetchEvents]);
 
-  // Get events
-  const { data: eventsData, isLoading } = useGetEventsQuery(userId || '', {
+  // Get events - refetch when userId becomes available
+  const { data: eventsData, isLoading, refetch: refetchEvents } = useGetEventsQuery(userId || '', {
     skip: !userId,
   });
+  
+  // Debug logging for events loading
+  console.log('Events Loading State:', {
+    userId: userId,
+    hasUserId: !!userId,
+    eventsDataExists: !!eventsData?.data,
+    eventsCount: eventsData?.data?.length || 0,
+    isLoadingEvents: isLoading,
+    eventListLength: eventList.length
+  });
 
+  // Update event list when events data changes
   useEffect(() => {
     if (eventsData?.data) {
+      console.log('UserDashboard: Setting event list with', eventsData.data.length, 'events');
       dispatch(setEventList(eventsData.data));
     }
   }, [eventsData, dispatch]);
+  
+  // Additional effect to refetch events when userId becomes available
+  useEffect(() => {
+    if (userId && !isLoading && (!eventsData || !eventsData.data)) {
+      console.log('UserDashboard: userId available but no events data, refetching...');
+      refetchEvents();
+    }
+  }, [userId, isLoading, eventsData, refetchEvents]);
+  
+  // Aggressive events refetch when any user data source provides userId
+  useEffect(() => {
+    const userIdFromAnySource = userData?.data?.userId || manualUserData?.userId;
+    if (userIdFromAnySource && eventList.length === 0 && !isLoading) {
+      console.log('UserDashboard: Found userId from any source, ensuring events are loaded:', userIdFromAnySource);
+      refetchEvents();
+    }
+  }, [userData?.data?.userId, manualUserData?.userId, eventList.length, isLoading, refetchEvents]);
 
   // Filter events based on current filter mode
   const filteredEvents = eventList.filter((event) => {
