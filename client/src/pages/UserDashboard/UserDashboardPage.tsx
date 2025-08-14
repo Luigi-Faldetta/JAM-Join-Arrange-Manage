@@ -32,6 +32,7 @@ export default function UserDashboardPage() {
   );
   const [searchTerm, setSearchTerm] = useState('');
   const [manualUserData, setManualUserData] = useState<any>(null);
+  const [hasReceivedManualData, setHasReceivedManualData] = useState(false);
 
   // Get user data
   const { data: userData, refetch: refetchMe, error: meError, isLoading: meLoading, isError: meIsError } = useGetMeQuery();
@@ -75,7 +76,9 @@ export default function UserDashboardPage() {
         console.log('UserDashboard: /me response data:', data);
         // Set manual data as fallback
         if (data.success && data.data) {
+          console.log('UserDashboard: Setting manual user data:', data.data);
           setManualUserData(data.data);
+          setHasReceivedManualData(true);
           // Force RTK Query to refetch to update cache
           setTimeout(() => {
             refetchMe();
@@ -93,7 +96,8 @@ export default function UserDashboardPage() {
   // Additional effect to refetch user data when user object is incomplete (for Google OAuth users)
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (token && (!user || !user.name || !user.profilePic)) {
+    // Only retry if we haven't received manual data and user data is still incomplete
+    if (token && !hasReceivedManualData && (!user || !user.name || !user.profilePic)) {
       console.log('UserDashboard: User data incomplete, refetching...');
       
       // Retry multiple times with increasing delays for Google OAuth
@@ -106,7 +110,15 @@ export default function UserDashboardPage() {
         }, delay);
       });
     }
-  }, [user, refetchMe]);
+  }, [user, refetchMe, hasReceivedManualData]);
+
+  // Force component update when manual data is received
+  useEffect(() => {
+    if (hasReceivedManualData && manualUserData) {
+      console.log('UserDashboard: Manual data received, forcing component update');
+      // The state change should trigger re-render automatically
+    }
+  }, [hasReceivedManualData, manualUserData]);
 
   // Get events
   const { data: eventsData, isLoading } = useGetEventsQuery(userId || '', {

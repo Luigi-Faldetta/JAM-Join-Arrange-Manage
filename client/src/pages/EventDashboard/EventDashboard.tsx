@@ -27,6 +27,7 @@ export default function EventDashboard() {
   const [isJoined, setIsJoined] = useState<boolean>(false);
   const [hasAutoJoined, setHasAutoJoined] = useState<boolean>(false);
   const [manualUserData, setManualUserData] = useState<any>(null);
+  const [hasReceivedManualData, setHasReceivedManualData] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -77,7 +78,9 @@ export default function EventDashboard() {
         console.log('EventDashboard: /me response data:', data);
         // Set manual data as fallback
         if (data.success && data.data) {
+          console.log('EventDashboard: Setting manual user data:', data.data);
           setManualUserData(data.data);
+          setHasReceivedManualData(true);
           // Force RTK Query to refetch to update cache
           setTimeout(() => {
             refetchMe();
@@ -95,7 +98,8 @@ export default function EventDashboard() {
   // Additional effect to refetch user data when user object is incomplete (for Google OAuth users)
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (token && (!user || !user.name || !user.profilePic)) {
+    // Only retry if we haven't received manual data and user data is still incomplete
+    if (token && !hasReceivedManualData && (!user || !user.name || !user.profilePic)) {
       console.log('EventDashboard: User data incomplete, refetching...');
       
       // Retry multiple times with increasing delays for Google OAuth
@@ -108,7 +112,15 @@ export default function EventDashboard() {
         }, delay);
       });
     }
-  }, [user, refetchMe]);
+  }, [user, refetchMe, hasReceivedManualData]);
+
+  // Force component update when manual data is received
+  useEffect(() => {
+    if (hasReceivedManualData && manualUserData) {
+      console.log('EventDashboard: Manual data received, forcing component update');
+      // The state change should trigger re-render automatically
+    }
+  }, [hasReceivedManualData, manualUserData]);
 
   useEffect(() => {
     if (!loggedUserId || !eventData?.data?.UserEvents) return;
