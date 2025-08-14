@@ -77,14 +77,14 @@ export default function ToggleButton({
   }
 
   return (
-    <div className="relative">
+    <div className="space-y-2">
       <motion.button
         onClick={handleToggle}
         disabled={isProcessing}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         className={`
-          relative overflow-hidden flex items-center justify-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 min-w-32 h-12
+          relative overflow-hidden flex items-center justify-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 min-w-32 h-12 w-full
           ${
             isJoined
               ? 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white shadow-lg hover:shadow-xl'
@@ -153,7 +153,7 @@ export default function ToggleButton({
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex items-center space-x-1 text-xs"
+        className="flex items-center justify-center space-x-1 text-xs"
       >
         {isJoined ? (
           <>
