@@ -56,7 +56,7 @@ function Logout() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+          className="absolute inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm"
           onClick={handleCancel}
         />
 
@@ -65,30 +65,30 @@ function Logout() {
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="relative bg-white rounded-3xl shadow-2xl border border-gray-200 w-full max-w-md"
+          className="relative bg-white dark:bg-gray-800 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md"
         >
           {/* Header */}
           <div className="p-6 text-center">
-            <div className="w-16 h-16 bg-gradient-to-r from-red-100 to-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <FiAlertTriangle className="w-8 h-8 text-red-600" />
+            <div className="w-16 h-16 bg-gradient-to-r from-red-100 to-orange-100 dark:from-red-900/30 dark:to-orange-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <FiAlertTriangle className="w-8 h-8 text-red-600 dark:text-red-400" />
             </div>
 
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Sign Out</h2>
-            <p className="text-gray-600">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Sign Out</h2>
+            <p className="text-gray-600 dark:text-gray-300">
               Are you sure you want to sign out of your account?
             </p>
           </div>
 
           {/* Content */}
           <div className="px-6 pb-6">
-            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6">
+            <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4 mb-6">
               <div className="flex items-start space-x-3">
-                <FiLogOut className="w-5 h-5 text-yellow-600 mt-0.5" />
+                <FiLogOut className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5" />
                 <div>
-                  <h3 className="text-sm font-medium text-yellow-800 mb-1">
+                  <h3 className="text-sm font-medium text-yellow-800 dark:text-yellow-200 mb-1">
                     Before you go
                   </h3>
-                  <p className="text-sm text-yellow-700">
+                  <p className="text-sm text-yellow-700 dark:text-yellow-300">
                     Make sure you've saved any important changes. You'll need to
                     sign in again to access your account.
                   </p>
@@ -100,7 +100,7 @@ function Logout() {
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={handleCancel}
-                className="flex-1 flex items-center justify-center space-x-2 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-all duration-200 group"
+                className="flex-1 flex items-center justify-center space-x-2 px-4 py-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-medium rounded-xl transition-all duration-200 group"
               >
                 <FiX className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
                 <span>Cancel</span>
