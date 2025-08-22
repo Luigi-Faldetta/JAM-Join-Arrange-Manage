@@ -64,7 +64,13 @@ export default function UserDashboardPage() {
         // Trigger refetches now that token is available
         setTimeout(() => {
           console.log('UserDashboard: Refetching user data and events');
-          refetchMe();
+          if (refetchMe) {
+            try {
+              refetchMe();
+            } catch (error) {
+              console.warn('Failed to refetch user data:', error);
+            }
+          }
         }, 100);
       }
     };
@@ -92,8 +98,12 @@ export default function UserDashboardPage() {
     console.log('UserDashboard: Token from localStorage:', token ? 'Present' : 'Missing');
     
     // Only refetch if query has been started (token exists)
-    if (hasToken) {
-      refetchMe();
+    if (hasToken && refetchMe) {
+      try {
+        refetchMe();
+      } catch (error) {
+        console.warn('Failed to refetch user data:', error);
+      }
     }
     
     // Manual API call as fallback (using same URL pattern as ProfilePage)
@@ -127,8 +137,12 @@ export default function UserDashboardPage() {
           setHasReceivedManualData(true);
           // Force RTK Query to refetch to update cache
           setTimeout(() => {
-            if (hasToken) {
-              refetchMe();
+            if (hasToken && refetchMe) {
+              try {
+                refetchMe();
+              } catch (error) {
+                console.warn('Failed to refetch user data:', error);
+              }
             }
           }, 100);
         }
@@ -164,8 +178,12 @@ export default function UserDashboardPage() {
       retryAttempts.forEach((delay, index) => {
         setTimeout(() => {
           console.log(`UserDashboard: Retry attempt ${index + 1} for user data`);
-          if (hasToken) {
-            refetchMe();
+          if (hasToken && refetchMe) {
+            try {
+              refetchMe();
+            } catch (error) {
+              console.warn('Failed to refetch user data:', error);
+            }
           }
         }, delay);
       });
