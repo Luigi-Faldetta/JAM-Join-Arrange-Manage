@@ -9,12 +9,14 @@ import { useDispatch } from 'react-redux';
 import { logoutReducer } from './slices/logout';
 import { chatReducer } from './slices/chat';
 import { authModalReducer } from './slices/authModal';
+import preferencesReducer from './slices/preferences';
 
 const store = configureStore({
   reducer: {
     chatReducer,
     logoutReducer,
     authModalReducer,
+    preferencesReducer,
     msgListReducer: msgReducers.msgListReducer,
     msgReducer: msgReducers.msgReducer,
     eventListReducer: eventReducers.eventListReducer,
