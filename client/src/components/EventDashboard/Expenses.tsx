@@ -504,69 +504,172 @@ export default function Expenses() {
             </div>
 
             <div className="p-6">
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {(() => {
-                  const numPeople = Object.keys(expensesByUser).length;
+                  // Get all event attendees, not just those who have paid
+                  const allAttendees = eventUsersData?.data || [];
+                  const numPeople = allAttendees.length;
+                  
+                  if (numPeople === 0) return null;
+                  
                   const averagePerPerson = totalAmount / numPeople;
                   
-                  return Object.entries(expensesByUser).map(([userId, userData]) => {
-                    const balance = userData.total - averagePerPerson;
-                    const isOwed = balance > 0;
-                    const absBalance = Math.abs(balance);
+                  // Calculate balances for each person (including those who haven't paid)
+                  const balances = allAttendees.map((user: any) => {
+                    const userExpenses = expensesByUser[user.userId];
+                    const paid = userExpenses?.total || 0;
                     
-                    if (absBalance < 0.01) return null; // Skip if balance is essentially zero
-                    
-                    return (
-                      <div key={userId} className="flex items-center justify-between p-4 rounded-xl" 
-                           style={{ backgroundColor: isOwed ? '#f0fdf4' : '#fef2f2' }}>
-                        <div className="flex items-center space-x-3">
-                          <img
-                            src={userData.profilePic || '/no-profile-picture-icon.png'}
-                            alt={userData.name}
-                            className="w-10 h-10 rounded-full object-cover"
-                          />
-                          <div>
-                            <p className="font-medium text-gray-900">
-                              {userData.name}
-                            </p>
-                            <p className="text-sm text-gray-600">
-                              Paid ${userData.total.toFixed(2)} • Fair share: ${averagePerPerson.toFixed(2)}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="text-right">
-                          <div className={`text-lg font-semibold ${isOwed ? 'text-green-600' : 'text-red-600'}`}>
-                            {isOwed ? '+' : '-'}${absBalance.toFixed(2)}
-                          </div>
-                          <div className={`text-sm ${isOwed ? 'text-green-600' : 'text-red-600'}`}>
-                            {isOwed ? 'Is owed' : 'Owes'}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  }).filter(Boolean);
-                })()}
-                
-                {(() => {
-                  const numPeople = Object.keys(expensesByUser).length;
-                  const averagePerPerson = totalAmount / numPeople;
-                  const hasImbalances = Object.values(expensesByUser).some(
-                    userData => Math.abs(userData.total - averagePerPerson) >= 0.01
-                  );
+                    return {
+                      userId: user.userId,
+                      name: user.name || 'Unknown User',
+                      profilePic: user.profilePic,
+                      paid: paid,
+                      balance: paid - averagePerPerson,
+                    };
+                  });
                   
-                  if (!hasImbalances) {
-                    return (
-                      <div className="text-center py-6 text-gray-500">
-                        <div className="w-12 h-12 bg-green-100 rounded-full mx-auto mb-3 flex items-center justify-center">
-                          <FiCheckCircle className="w-6 h-6 text-green-600" />
-                        </div>
-                        <p className="font-medium">All balanced!</p>
-                        <p className="text-sm">Everyone has paid their fair share</p>
-                      </div>
-                    );
+                  // Separate creditors (who are owed) and debtors (who owe)
+                  const creditors = balances.filter(p => p.balance > 0.01).sort((a, b) => b.balance - a.balance);
+                  const debtors = balances.filter(p => p.balance < -0.01).sort((a, b) => a.balance - b.balance);
+                  
+                  // Calculate who should pay whom using a simplified algorithm
+                  const transactions: Array<{ from: typeof balances[0]; to: typeof balances[0]; amount: number }> = [];
+                  
+                  let i = 0, j = 0;
+                  while (i < creditors.length && j < debtors.length) {
+                    const creditor = creditors[i];
+                    const debtor = debtors[j];
+                    
+                    const amount = Math.min(creditor.balance, -debtor.balance);
+                    
+                    if (amount > 0.01) {
+                      transactions.push({
+                        from: debtor,
+                        to: creditor,
+                        amount: amount,
+                      });
+                    }
+                    
+                    creditor.balance -= amount;
+                    debtor.balance += amount;
+                    
+                    if (Math.abs(creditor.balance) < 0.01) i++;
+                    if (Math.abs(debtor.balance) < 0.01) j++;
                   }
-                  return null;
+                  
+                  // Show individual balances first
+                  const hasImbalances = balances.some(p => Math.abs(p.paid - averagePerPerson) >= 0.01);
+                  
+                  return (
+                    <>
+                      {/* Summary */}
+                      {totalAmount > 0 && (
+                        <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                          <div className="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <p className="text-gray-600">Total Event Cost</p>
+                              <p className="text-lg font-semibold text-gray-900">${totalAmount.toFixed(2)}</p>
+                            </div>
+                            <div>
+                              <p className="text-gray-600">Fair Share per Person</p>
+                              <p className="text-lg font-semibold text-purple-600">${averagePerPerson.toFixed(2)}</p>
+                            </div>
+                          </div>
+                          <p className="text-xs text-gray-500 mt-2">Split equally among {numPeople} attendee{numPeople !== 1 ? 's' : ''}</p>
+                        </div>
+                      )}
+                      
+                      {/* Individual Balances */}
+                      <div className="space-y-3">
+                        <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Individual Balances</h4>
+                        {balances.map((person) => {
+                          const balance = person.paid - averagePerPerson;
+                          const isOwed = balance > 0;
+                          const absBalance = Math.abs(balance);
+                          
+                          if (absBalance < 0.01) return null;
+                          
+                          return (
+                            <div key={person.userId} className="flex items-center justify-between p-3 rounded-lg" 
+                                 style={{ backgroundColor: isOwed ? '#f0fdf4' : '#fef2f2' }}>
+                              <div className="flex items-center space-x-3">
+                                <img
+                                  src={person.profilePic || '/no-profile-picture-icon.png'}
+                                  alt={person.name}
+                                  className="w-8 h-8 rounded-full object-cover"
+                                />
+                                <div>
+                                  <p className="font-medium text-gray-900 text-sm">
+                                    {person.name}
+                                  </p>
+                                  <p className="text-xs text-gray-600">
+                                    {person.paid > 0 ? `Paid $${person.paid.toFixed(2)}` : 'No expenses yet'}
+                                  </p>
+                                </div>
+                              </div>
+                              
+                              <div className="text-right">
+                                <div className={`text-sm font-semibold ${isOwed ? 'text-green-600' : 'text-red-600'}`}>
+                                  {isOwed ? '+' : '-'}${absBalance.toFixed(2)}
+                                </div>
+                                <div className={`text-xs ${isOwed ? 'text-green-600' : 'text-red-600'}`}>
+                                  {isOwed ? 'Is owed' : 'Owes'}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        }).filter(Boolean)}
+                      </div>
+                      
+                      {/* Settlement Transactions */}
+                      {transactions.length > 0 && (
+                        <div className="space-y-3 mt-6">
+                          <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Suggested Settlements</h4>
+                          <div className="bg-blue-50 p-3 rounded-lg">
+                            <p className="text-xs text-blue-700 mb-3">To settle all balances, make these payments:</p>
+                            {transactions.map((transaction, index) => (
+                              <div key={index} className="flex items-center justify-between p-3 bg-white rounded-lg mb-2 last:mb-0 shadow-sm">
+                                <div className="flex items-center space-x-3 flex-1">
+                                  <img
+                                    src={transaction.from.profilePic || '/no-profile-picture-icon.png'}
+                                    alt={transaction.from.name}
+                                    className="w-8 h-8 rounded-full object-cover"
+                                  />
+                                  <div className="flex-1">
+                                    <p className="text-sm font-medium text-gray-900">{transaction.from.name}</p>
+                                    <p className="text-xs text-gray-500">pays</p>
+                                  </div>
+                                  <div className="text-center px-2">
+                                    <div className="text-lg font-bold text-blue-600">${transaction.amount.toFixed(2)}</div>
+                                    <div className="text-xs text-gray-500">to</div>
+                                  </div>
+                                  <div className="flex-1 text-right">
+                                    <p className="text-sm font-medium text-gray-900">{transaction.to.name}</p>
+                                  </div>
+                                  <img
+                                    src={transaction.to.profilePic || '/no-profile-picture-icon.png'}
+                                    alt={transaction.to.name}
+                                    className="w-8 h-8 rounded-full object-cover"
+                                  />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* All Balanced Message */}
+                      {!hasImbalances && (
+                        <div className="text-center py-6 text-gray-500">
+                          <div className="w-12 h-12 bg-green-100 rounded-full mx-auto mb-3 flex items-center justify-center">
+                            <FiCheckCircle className="w-6 h-6 text-green-600" />
+                          </div>
+                          <p className="font-medium">All balanced!</p>
+                          <p className="text-sm">Everyone has paid their fair share</p>
+                        </div>
+                      )}
+                    </>
+                  );
                 })()}
               </div>
             </div>
