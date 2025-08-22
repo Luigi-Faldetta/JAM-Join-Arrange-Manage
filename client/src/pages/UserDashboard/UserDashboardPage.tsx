@@ -19,7 +19,9 @@ import {
   FiFilter,
   FiSearch,
   FiLogOut,
+  FiSettings,
 } from 'react-icons/fi';
+import SettingsModal from '../../components/SettingsModal/SettingsModal';
 
 export default function UserDashboardPage() {
   const dispatch = useAppDispatch();
@@ -36,6 +38,7 @@ export default function UserDashboardPage() {
   const [hasReceivedManualData, setHasReceivedManualData] = useState(false);
   const [loadingTimeout, setLoadingTimeout] = useState(false);
   const [localEvents, setLocalEvents] = useState<any[]>([]);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
 
   // Get Clerk user data
   const { user: clerkUser, isLoaded: clerkLoaded } = useUser();
@@ -426,6 +429,15 @@ export default function UserDashboardPage() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50">
       {/* Profile and Sign Out Buttons */}
       <div className="absolute top-4 right-4 z-50 flex items-center space-x-3 mb-6 sm:mb-0">
+        {/* Settings Button */}
+        <button
+          onClick={() => setShowSettingsModal(true)}
+          className="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-200 group border border-gray-200 hover:border-purple-400"
+          title="Settings"
+        >
+          <FiSettings className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" />
+        </button>
+        
         {/* Profile Button */}
         <button
           onClick={() => navigate('/profile')}
@@ -677,6 +689,12 @@ export default function UserDashboardPage() {
           </div>
         </motion.div>
       </div>
+      
+      {/* Settings Modal */}
+      <SettingsModal 
+        isOpen={showSettingsModal} 
+        onClose={() => setShowSettingsModal(false)} 
+      />
     </div>
   );
 }

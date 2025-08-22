@@ -21,6 +21,7 @@ import {
 } from 'react-icons/fi';
 import { useAppDispatch } from '../../reduxFiles/store';
 import { openLogout } from '../../reduxFiles/slices/logout';
+import SettingsModal from '../../components/SettingsModal/SettingsModal';
 
 export default function EventDashboard() {
   const [userIsHost, setUserIsHost] = useState<boolean>(false);
@@ -30,6 +31,7 @@ export default function EventDashboard() {
   const [manualUserData, setManualUserData] = useState<any>(null);
   const [hasReceivedManualData, setHasReceivedManualData] = useState(false);
   const [loadingTimeout, setLoadingTimeout] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -329,6 +331,14 @@ export default function EventDashboard() {
             {/* Right side - User info and actions */}
             <div className="flex items-center space-x-2">
                 <button
+                  onClick={() => setShowSettingsModal(true)}
+                  className="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-200 group border border-gray-200 hover:border-purple-400"
+                  title="Settings"
+                >
+                  <FiSettings className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" />
+                </button>
+
+                <button
                   onClick={() => navigate('/profile')}
                   className="w-10 h-10 rounded-full overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border-2 border-gray-200 hover:border-purple-400"
                   title="Profile"
@@ -481,6 +491,12 @@ export default function EventDashboard() {
           </motion.div>
         </div>
       </div>
+      
+      {/* Settings Modal */}
+      <SettingsModal 
+        isOpen={showSettingsModal} 
+        onClose={() => setShowSettingsModal(false)} 
+      />
     </div>
   );
 }

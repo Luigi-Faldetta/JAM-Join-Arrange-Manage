@@ -11,6 +11,7 @@ import {
   useGetUsersQuery,
 } from '../../services/JamDB';
 import { setExpenseList, addExpense, deleteExpense as removeExpenseFromStore } from '../../reduxFiles/slices/expenses';
+import { formatCurrency } from '../../reduxFiles/slices/preferences';
 import {
   FiPlus,
   FiTrash2,
@@ -38,6 +39,7 @@ export default function Expenses() {
   const { eventid } = useParams();
   const dispatch = useAppDispatch();
   const expenses = useSelector((state: RootState) => state.expenseReducer);
+  const { currency } = useSelector((state: RootState) => state.preferencesReducer);
 
   const [newExpense, setNewExpense] = useState({
     item: '',
@@ -253,7 +255,7 @@ export default function Expenses() {
 
         <div className="text-right">
           <div className="text-2xl font-bold text-green-600">
-            ${totalAmount.toFixed(2)}
+            {formatCurrency(totalAmount, currency)}
           </div>
           <div className="text-sm text-gray-600">Total spent</div>
         </div>
@@ -268,7 +270,7 @@ export default function Expenses() {
                 Total Expenses
               </p>
               <p className="text-2xl font-bold text-green-900">
-                ${totalAmount.toFixed(2)}
+                {formatCurrency(totalAmount, currency)}
               </p>
             </div>
             <div className="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center">
@@ -284,7 +286,7 @@ export default function Expenses() {
                 Average Expense
               </p>
               <p className="text-2xl font-bold text-blue-900">
-                ${averageExpense.toFixed(2)}
+                {formatCurrency(averageExpense, currency)}
               </p>
             </div>
             <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
@@ -340,7 +342,7 @@ export default function Expenses() {
                 onChange={(e) =>
                   setNewExpense({ ...newExpense, cost: e.target.value })
                 }
-                placeholder="Cost ($)"
+                placeholder={`Cost (${currency})`}
                 className="px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 placeholder:text-gray-500"
                 onKeyPress={(e) => e.key === 'Enter' && handleAddExpense()}
               />
@@ -421,7 +423,7 @@ export default function Expenses() {
                   <div className="flex items-center space-x-4">
                     <div className="text-right">
                       <div className="text-lg font-semibold text-gray-900">
-                        ${expense.amount.toFixed(2)}
+                        {formatCurrency(expense.amount, currency)}
                       </div>
                     </div>
 
@@ -476,7 +478,7 @@ export default function Expenses() {
                           </span>
                         </div>
                         <span className="text-sm font-semibold text-gray-700">
-                          ${userData.total.toFixed(2)} ({percentage.toFixed(1)}%)
+                          {formatCurrency(userData.total, currency)} ({percentage.toFixed(1)}%)
                         </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
@@ -558,7 +560,7 @@ export default function Expenses() {
                   }
                   
                   // Show individual balances first
-                  const hasImbalances = balances.some(p => Math.abs(p.paid - averagePerPerson) >= 0.01);
+                  const hasImbalances = balances.some(p => Math.abs(p.balance) >= 0.01);
                   
                   return (
                     <>
@@ -568,11 +570,11 @@ export default function Expenses() {
                           <div className="grid grid-cols-2 gap-4 text-sm">
                             <div>
                               <p className="text-gray-600">Total Event Cost</p>
-                              <p className="text-lg font-semibold text-gray-900">${totalAmount.toFixed(2)}</p>
+                              <p className="text-lg font-semibold text-gray-900">{formatCurrency(totalAmount, currency)}</p>
                             </div>
                             <div>
                               <p className="text-gray-600">Fair Share per Person</p>
-                              <p className="text-lg font-semibold text-purple-600">${averagePerPerson.toFixed(2)}</p>
+                              <p className="text-lg font-semibold text-purple-600">{formatCurrency(averagePerPerson, currency)}</p>
                             </div>
                           </div>
                           <p className="text-xs text-gray-500 mt-2">Split equally among {numPeople} attendee{numPeople !== 1 ? 's' : ''}</p>
@@ -583,7 +585,7 @@ export default function Expenses() {
                       <div className="space-y-3">
                         <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Individual Balances</h4>
                         {balances.map((person) => {
-                          const balance = person.paid - averagePerPerson;
+                          const balance = person.balance;
                           const isOwed = balance > 0;
                           const absBalance = Math.abs(balance);
                           
@@ -603,7 +605,7 @@ export default function Expenses() {
                                     {person.name}
                                   </p>
                                   <p className="text-xs text-gray-600">
-                                    {person.paid > 0 ? `Paid $${person.paid.toFixed(2)}` : 'No expenses yet'}
+                                    {person.paid > 0 ? `Paid ${formatCurrency(person.paid, currency)}` : 'No expenses yet'}
                                   </p>
                                 </div>
                               </div>
@@ -640,7 +642,7 @@ export default function Expenses() {
                                     <p className="text-xs text-gray-500">pays</p>
                                   </div>
                                   <div className="text-center px-2">
-                                    <div className="text-lg font-bold text-blue-600">${transaction.amount.toFixed(2)}</div>
+                                    <div className="text-lg font-bold text-blue-600">{formatCurrency(transaction.amount, currency)}</div>
                                     <div className="text-xs text-gray-500">to</div>
                                   </div>
                                   <div className="flex-1 text-right">
