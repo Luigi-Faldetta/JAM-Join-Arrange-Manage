@@ -232,7 +232,7 @@ export const es = {
     paid: 'Pagado',
     balance: 'Balance',
     suggestedPayments: 'Pagos Sugeridos',
-    pays: 'paga a',
+    pays: 'paga',
     descriptionPlaceholder: '¿Para qué fue este gasto?',
     amountPlaceholder: 'Cantidad',
     selectPayer: 'Selecciona quién pagó',
