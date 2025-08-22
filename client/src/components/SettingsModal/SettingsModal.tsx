@@ -71,8 +71,12 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="fixed inset-0 flex items-center justify-center z-50 p-4"
+            onClick={handleCancel}
           >
-            <div className="w-full max-w-md bg-white rounded-2xl shadow-xl">
+            <div 
+              className="w-full max-w-md bg-white rounded-2xl shadow-xl"
+              onClick={(e) => e.stopPropagation()}
+            >
             {/* Header */}
             <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-6 rounded-t-2xl">
               <div className="flex items-center justify-between">
