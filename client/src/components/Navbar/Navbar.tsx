@@ -61,7 +61,7 @@ function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-white/80 backdrop-blur-lg border-b border-gray-200/50 shadow-lg shadow-gray-900/5'
+          ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200/50 dark:border-gray-700/50 shadow-lg shadow-gray-900/5 dark:shadow-black/20'
           : 'bg-transparent'
       }`}
     >
@@ -75,7 +75,7 @@ function Navbar() {
                 alt="JAM Logo"
                 className="w-10 h-10 rounded-xl group-hover:scale-105 transition-transform duration-300"
               />
-              <span className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+              <span className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
                 JAM
               </span>
             </Link>
@@ -87,7 +87,7 @@ function Navbar() {
               <div key={item.name}>
                 <button
                   onClick={() => handleScrollToSection(item.to)}
-                  className="relative px-4 py-2 text-gray-700 hover:text-purple-600 font-medium cursor-pointer transition-colors duration-200 group"
+                  className="relative px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium cursor-pointer transition-colors duration-200 group"
                 >
                   {item.name}
                   <span className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-purple-600 to-pink-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></span>
@@ -110,7 +110,7 @@ function Navbar() {
           <div className="lg:hidden">
             <button
               onClick={() => setShowMobileMenu(!showMobileMenu)}
-              className="p-2 text-gray-700 hover:text-purple-600 transition-colors duration-200"
+              className="p-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-200"
             >
               {showMobileMenu ? (
                 <FiX className="w-6 h-6" />
@@ -124,7 +124,7 @@ function Navbar() {
 
       {/* Mobile Menu */}
       {showMobileMenu && (
-        <div className="lg:hidden bg-white/95 backdrop-blur-lg border-t border-gray-200/50">
+        <div className="lg:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg border-t border-gray-200/50 dark:border-gray-700/50">
           <div className="px-4 py-6 space-y-4">
             {navItems.map((item) => (
               <div key={item.name}>
@@ -133,14 +133,14 @@ function Navbar() {
                     handleScrollToSection(item.to);
                     setShowMobileMenu(false);
                   }}
-                  className="block w-full text-left px-4 py-3 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg font-medium cursor-pointer transition-all duration-200"
+                  className="block w-full text-left px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg font-medium cursor-pointer transition-all duration-200"
                 >
                   {item.name}
                 </button>
               </div>
             ))}
 
-            <div className="pt-4 border-t border-gray-200">
+            <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
               <button
                 onClick={() => {
                   handleSignInClick();

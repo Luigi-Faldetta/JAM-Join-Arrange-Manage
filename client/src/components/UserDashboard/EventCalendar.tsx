@@ -105,7 +105,7 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
       {/* Calendar Header */}
       <div className="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-4">
         <div className="flex items-center justify-between">
@@ -140,7 +140,7 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
           {t.calendar.daysShort.map((day) => (
             <div
               key={day}
-              className="text-center text-xs font-medium text-gray-500 py-2"
+              className="text-center text-xs font-medium text-gray-500 dark:text-gray-400 py-2"
             >
               {day}
             </div>
@@ -165,8 +165,8 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
                     isCurrentDay
                       ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
                       : hasEvents
-                      ? 'bg-purple-50 hover:bg-purple-100'
-                      : 'hover:bg-gray-50'
+                      ? 'bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30'
+                      : 'hover:bg-gray-50 dark:hover:bg-gray-700'
                   }
                   ${!isInCurrentMonth ? 'opacity-40' : ''}
                 `}
@@ -180,8 +180,8 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
                     isCurrentDay
                       ? 'text-white'
                       : isInCurrentMonth
-                      ? 'text-gray-900'
-                      : 'text-gray-400'
+                      ? 'text-gray-900 dark:text-white'
+                      : 'text-gray-400 dark:text-gray-500'
                   }
                 `}
                 >
@@ -226,8 +226,8 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
 
       {/* Upcoming Events List */}
       {sortedEventList.length > 0 && (
-        <div className="border-t border-gray-200 p-4">
-          <h4 className="text-sm font-semibold text-gray-900 mb-3">
+        <div className="border-t border-gray-200 dark:border-gray-700 p-4">
+          <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
             {t.calendar.upcomingEvents}
           </h4>
           <div className="space-y-2 max-h-48 overflow-y-auto">
@@ -244,7 +244,7 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
-                    className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                    className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
                   >
                     <div
                       className={`w-2 h-2 rounded-full flex-shrink-0 ${
@@ -253,10 +253,10 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
                     />
 
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium text-gray-900 truncate">
+                      <div className="text-sm font-medium text-gray-900 dark:text-white truncate">
                         {event.title}
                       </div>
-                      <div className="flex items-center space-x-2 text-xs text-gray-500">
+                      <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
                         <FiClock className="w-3 h-3" />
                         <span>{formatDate(eventDate, 'MMM D, h:mm A')}</span>
                         {event.location && (
@@ -275,15 +275,15 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
       )}
 
       {/* Legend */}
-      <div className="border-t border-gray-200 px-4 py-3 bg-gray-50">
+      <div className="border-t border-gray-200 dark:border-gray-700 px-4 py-3 bg-gray-50 dark:bg-gray-700">
         <div className="flex items-center justify-center space-x-4 text-xs">
           <div className="flex items-center space-x-1">
             <div className="w-2 h-2 rounded-full bg-purple-600"></div>
-            <span className="text-gray-600">{t.calendar.hosting}</span>
+            <span className="text-gray-600 dark:text-gray-300">{t.calendar.hosting}</span>
           </div>
           <div className="flex items-center space-x-1">
             <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-            <span className="text-gray-600">{t.calendar.attending}</span>
+            <span className="text-gray-600 dark:text-gray-300">{t.calendar.attending}</span>
           </div>
         </div>
       </div>
@@ -303,17 +303,17 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
               transform: 'translateX(-50%)',
             }}
           >
-            <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 p-4 max-w-xs">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 p-4 max-w-xs">
               {/* Tooltip Header */}
               <div className="flex items-center space-x-2 mb-3">
                 <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
                   <FiCalendar className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 text-sm">
+                  <h4 className="font-semibold text-gray-900 dark:text-white text-sm">
                     {formatDate(hoveredDay, 'MMMM D, YYYY')}
                   </h4>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
                     {getEventsForDay(hoveredDay).length} {getEventsForDay(hoveredDay).length === 1 ? t.calendar.event : t.calendar.events}
                   </p>
                 </div>
@@ -333,19 +333,19 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
                             isHost ? 'bg-purple-600' : 'bg-blue-500'
                           }`}
                         />
-                        <h5 className="font-medium text-gray-900 text-sm truncate">
+                        <h5 className="font-medium text-gray-900 dark:text-white text-sm truncate">
                           {event.title}
                         </h5>
                       </div>
                       
                       <div className="ml-4 space-y-1">
-                        <div className="flex items-center space-x-2 text-xs text-gray-600">
+                        <div className="flex items-center space-x-2 text-xs text-gray-600 dark:text-gray-300">
                           <FiClock className="w-3 h-3 flex-shrink-0" />
                           <span>{formatDate(eventTime, 'h:mm A')}</span>
                         </div>
                         
                         {event.location && (
-                          <div className="flex items-center space-x-2 text-xs text-gray-600">
+                          <div className="flex items-center space-x-2 text-xs text-gray-600 dark:text-gray-300">
                             <FiMapPin className="w-3 h-3 flex-shrink-0" />
                             <span className="truncate">{event.location}</span>
                           </div>
@@ -356,7 +356,7 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
                 })}
                 
                 {getEventsForDay(hoveredDay).length > 3 && (
-                  <div className="text-xs text-gray-500 text-center pt-2 border-t border-gray-100">
+                  <div className="text-xs text-gray-500 dark:text-gray-400 text-center pt-2 border-t border-gray-100 dark:border-gray-600">
                     +{getEventsForDay(hoveredDay).length - 3} {t.calendar.more} {getEventsForDay(hoveredDay).length - 3 === 1 ? t.calendar.event : t.calendar.events}
                   </div>
                 )}
@@ -364,7 +364,7 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
 
               {/* Tooltip Arrow */}
               <div className="absolute left-1/2 top-full transform -translate-x-1/2">
-                <div className="w-3 h-3 bg-white border-r border-b border-gray-200 rotate-45 -mt-1.5"></div>
+                <div className="w-3 h-3 bg-white dark:bg-gray-800 border-r border-b border-gray-200 dark:border-gray-700 rotate-45 -mt-1.5"></div>
               </div>
             </div>
           </motion.div>

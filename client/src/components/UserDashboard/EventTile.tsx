@@ -46,7 +46,7 @@ export default function EventTile({
         whileHover={{ scale: 1.01 }}
         whileTap={{ scale: 0.99 }}
         onClick={handleEventClick}
-        className="bg-white rounded-2xl border border-gray-200 hover:border-purple-300 hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden"
+        className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-500 hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden"
       >
         <div className="flex items-center p-6">
           {/* Event Image */}
@@ -66,7 +66,7 @@ export default function EventTile({
             <div className="flex items-start justify-between">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-2 mb-2">
-                  <h3 className="text-lg font-semibold text-gray-900 truncate">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white truncate">
                     {event.title}
                   </h3>
                   {isHost && (
@@ -78,15 +78,15 @@ export default function EventTile({
                   <div
                     className={`px-2 py-1 rounded-lg text-xs font-medium ${
                       isUpcoming
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-gray-100 text-gray-600'
+                        ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
                     }`}
                   >
                     {isUpcoming ? t.eventTile.upcoming : t.eventTile.past}
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-gray-600">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-gray-600 dark:text-gray-300">
                   <div className="flex items-center space-x-1">
                     <FiCalendar className="w-4 h-4" />
                     <span>{formatDate(event.date, 'MMM D, YYYY')}</span>
@@ -102,14 +102,14 @@ export default function EventTile({
                 </div>
 
                 {event.location && (
-                  <div className="flex items-center space-x-1 text-sm text-gray-600 mt-1">
+                  <div className="flex items-center space-x-1 text-sm text-gray-600 dark:text-gray-300 mt-1">
                     <FiMapPin className="w-4 h-4" />
                     <span className="truncate">{event.location}</span>
                   </div>
                 )}
               </div>
 
-              <FiArrowRight className="w-5 h-5 text-gray-400 ml-4 flex-shrink-0" />
+              <FiArrowRight className="w-5 h-5 text-gray-400 dark:text-gray-500 ml-4 flex-shrink-0" />
             </div>
           </div>
         </div>
@@ -122,7 +122,7 @@ export default function EventTile({
       whileHover={{ scale: 1.02, y: -5 }}
       whileTap={{ scale: 0.98 }}
       onClick={handleEventClick}
-      className="bg-white rounded-2xl shadow-lg border border-gray-200 hover:border-purple-300 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden group"
+      className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-500 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden group"
     >
       {/* Event Image */}
       <div className="relative h-48 overflow-hidden">
@@ -173,7 +173,7 @@ export default function EventTile({
       <div className="p-6">
         <div className="space-y-3">
           {/* Date and Time */}
-          <div className="flex items-center space-x-2 text-gray-600">
+          <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
             <FiCalendar className="w-4 h-4" />
             <span className="text-sm font-medium">
               {formatDate(event.date, 'ddd, MMM D - h:mm A')}
@@ -181,14 +181,14 @@ export default function EventTile({
           </div>
 
           {/* Time from now */}
-          <div className="flex items-center space-x-2 text-gray-600">
+          <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
             <FiClock className="w-4 h-4" />
             <span className="text-sm">{timeFromNow}</span>
           </div>
 
           {/* Location */}
           {event.location && (
-            <div className="flex items-center space-x-2 text-gray-600">
+            <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
               <FiMapPin className="w-4 h-4" />
               <span className="text-sm truncate">{event.location}</span>
             </div>
@@ -196,7 +196,7 @@ export default function EventTile({
 
           {/* Description */}
           {event.description && (
-            <p className="text-sm text-gray-600 line-clamp-2 mt-3">
+            <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 mt-3">
               {event.description}
             </p>
           )}

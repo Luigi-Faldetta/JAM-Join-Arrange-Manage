@@ -159,7 +159,7 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm"
             onClick={handleClose}
           />
 
@@ -168,7 +168,7 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="relative z-10 bg-white rounded-3xl shadow-2xl border border-gray-200 w-full max-w-2xl max-h-[95vh] overflow-hidden"
+            className="relative z-10 bg-white dark:bg-gray-800 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-600 dark:border-gray-700 w-full max-w-2xl max-h-[95vh] overflow-hidden"
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-4 rounded-t-3xl">
@@ -192,7 +192,7 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
             <form onSubmit={handleFormSubmit} className="p-6 space-y-4 max-h-[calc(95vh-120px)] overflow-y-auto">
               {/* Event Name */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t.editModal.eventName} {t.editModal.required}
                 </label>
                 <input
@@ -200,7 +200,7 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   maxLength={50}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white text-gray-900 placeholder:text-gray-500"
+                  className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 dark:text-gray-500"
                   placeholder={t.editModal.eventNamePlaceholder}
                   required
                   autoComplete="off"
@@ -209,11 +209,11 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
 
               {/* Date & Time */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t.editModal.dateTime} {t.editModal.required}
                 </label>
                 <div className="relative">
-                  <FiCalendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <FiCalendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                   <DatePicker
                     selectsStart
                     placeholderText={t.editModal.selectDateTime}
@@ -223,7 +223,7 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
                     dateFormat="EEE, MMM d 'at' h:mm aa"
                     minDate={new Date()}
                     wrapperClassName="w-full"
-                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white text-gray-900 placeholder:text-gray-500"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 dark:text-gray-500"
                     autoComplete="off"
                   />
                 </div>
@@ -231,16 +231,16 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
 
               {/* Location */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t.editModal.location}
                 </label>
                 <div className="relative">
-                  <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                   <input
                     name="eventLocation"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white text-gray-900 placeholder:text-gray-500"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 dark:text-gray-500"
                     placeholder={t.editModal.locationPlaceholder}
                     autoComplete="off"
                   />
@@ -249,17 +249,17 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
 
               {/* Description */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t.editModal.description}
                 </label>
                 <div className="relative">
-                  <FiFileText className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                  <FiFileText className="absolute left-3 top-3 w-5 h-5 text-gray-400 dark:text-gray-500" />
                   <textarea
                     name="eventDescription"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows={3}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 resize-none bg-white text-gray-900 placeholder:text-gray-500"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 resize-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 dark:text-gray-500"
                     placeholder={t.editModal.descriptionPlaceholder}
                     autoComplete="off"
                   />
@@ -268,7 +268,7 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
 
               {/* Image Upload */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t.editModal.eventImage}
                 </label>
 
@@ -277,7 +277,7 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
                     <img
                       src={previewUrl}
                       alt={t.editModal.eventPreview}
-                      className="w-full h-32 object-cover rounded-xl border border-gray-200"
+                      className="w-full h-32 object-cover rounded-xl border border-gray-200 dark:border-gray-600"
                     />
                     <button
                       type="button"
@@ -301,10 +301,10 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
                     />
                     <label
                       htmlFor="event-image"
-                      className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-purple-500 hover:bg-purple-50 transition-all duration-200 group"
+                      className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all duration-200 group"
                     >
-                      <FiImage className="w-8 h-8 text-gray-400 group-hover:text-purple-500 mb-2" />
-                      <span className="text-sm text-gray-600 group-hover:text-purple-600">
+                      <FiImage className="w-8 h-8 text-gray-400 dark:text-gray-500 group-hover:text-purple-500 mb-2" />
+                      <span className="text-sm text-gray-600 dark:text-gray-300 group-hover:text-purple-600">
                         {t.editModal.clickToUpload}
                       </span>
                     </label>

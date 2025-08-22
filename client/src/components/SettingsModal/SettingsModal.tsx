@@ -61,7 +61,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm z-50"
             onClick={handleCancel}
           />
 
@@ -74,7 +74,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             onClick={handleCancel}
           >
             <div 
-              className="w-full max-w-md bg-white rounded-2xl shadow-xl"
+              className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl border dark:border-gray-700"
               onClick={(e) => e.stopPropagation()}
             >
             {/* Header */}
@@ -94,7 +94,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             <div className="p-6 space-y-6">
               {/* Currency Selection */}
               <div className="space-y-3">
-                <div className="flex items-center space-x-2 text-gray-700">
+                <div className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
                   <FiDollarSign className="w-5 h-5" />
                   <h3 className="font-semibold">{t.settings.currency}</h3>
                 </div>
@@ -105,13 +105,13 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                       onClick={() => setSelectedCurrency(currency.value)}
                       className={`p-3 rounded-lg border-2 transition-all duration-200 ${
                         selectedCurrency === currency.value
-                          ? 'border-purple-600 bg-purple-50 text-purple-700'
-                          : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                          ? 'border-purple-600 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'
+                          : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700'
                       }`}
                     >
                       <div className="text-2xl mb-1">{currency.symbol}</div>
-                      <div className="text-sm font-medium">{currency.value}</div>
-                      <div className="text-xs text-gray-600">{currency.label}</div>
+                      <div className="text-sm font-medium text-gray-900 dark:text-white">{currency.value}</div>
+                      <div className="text-xs text-gray-600 dark:text-gray-400">{currency.label}</div>
                     </button>
                   ))}
                 </div>
@@ -119,7 +119,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
 
               {/* Language Selection */}
               <div className="space-y-3">
-                <div className="flex items-center space-x-2 text-gray-700">
+                <div className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
                   <FiGlobe className="w-5 h-5" />
                   <h3 className="font-semibold">{t.settings.language}</h3>
                 </div>
@@ -130,12 +130,12 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                       onClick={() => setSelectedLanguage(language.value)}
                       className={`w-full p-3 rounded-lg border-2 transition-all duration-200 flex items-center space-x-3 ${
                         selectedLanguage === language.value
-                          ? 'border-purple-600 bg-purple-50 text-purple-700'
-                          : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                          ? 'border-purple-600 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'
+                          : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700'
                       }`}
                     >
                       <span className="text-2xl">{language.flag}</span>
-                      <span className="font-medium">{language.label}</span>
+                      <span className="font-medium text-gray-900 dark:text-white">{language.label}</span>
                     </button>
                   ))}
                 </div>
@@ -143,7 +143,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
 
               {/* Theme Selection */}
               <div className="space-y-3">
-                <div className="flex items-center space-x-2 text-gray-700">
+                <div className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
                   <FiMoon className="w-5 h-5" />
                   <h3 className="font-semibold">{t.settings.theme}</h3>
                 </div>
@@ -154,12 +154,12 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                       onClick={() => setSelectedTheme(theme.value)}
                       className={`p-4 rounded-lg border-2 transition-all duration-200 flex items-center justify-center space-x-2 ${
                         selectedTheme === theme.value
-                          ? 'border-purple-600 bg-purple-50 text-purple-700'
-                          : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                          ? 'border-purple-600 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'
+                          : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700'
                       }`}
                     >
                       {theme.icon}
-                      <span className="font-medium">{theme.label}</span>
+                      <span className="font-medium text-gray-900 dark:text-white">{theme.label}</span>
                     </button>
                   ))}
                 </div>
@@ -167,10 +167,10 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             </div>
 
             {/* Footer */}
-            <div className="p-6 bg-gray-50 rounded-b-2xl flex items-center justify-end space-x-3">
+            <div className="p-6 bg-gray-50 dark:bg-gray-700 rounded-b-2xl flex items-center justify-end space-x-3">
               <button
                 onClick={handleCancel}
-                className="px-6 py-2 text-gray-600 hover:text-gray-800 font-medium transition-colors"
+                className="px-6 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white font-medium transition-colors"
               >
                 {t.settings.cancel}
               </button>
