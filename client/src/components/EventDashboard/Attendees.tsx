@@ -49,7 +49,7 @@ export default function Attendees() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-48">
-        <div className="flex items-center space-x-2 text-gray-600">
+        <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
           <FiLoader className="w-5 h-5 animate-spin" />
           <span>{t.event.loadingAttendees}</span>
         </div>
@@ -66,10 +66,10 @@ export default function Attendees() {
             <FiUsers className="w-8 h-8 text-white" />
           </div>
           <div>
-            <h2 className="text-3xl font-bold text-gray-900">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
               {attendees.length}
             </h2>
-            <p className="text-gray-600 font-medium">
+            <p className="text-gray-600 dark:text-gray-300 font-medium">
               {attendees.length === 1 ? t.event.personGoing : t.event.peopleGoing}
             </p>
           </div>
@@ -81,19 +81,19 @@ export default function Attendees() {
             <button
               onClick={handlePrevious}
               disabled={currentPage === 0}
-              className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FiChevronLeft className="w-5 h-5" />
             </button>
 
-            <span className="text-sm text-gray-600 px-3">
+            <span className="text-sm text-gray-600 dark:text-gray-300 px-3">
               {currentPage + 1} {t.event.pageOf} {totalPages}
             </span>
 
             <button
               onClick={handleNext}
               disabled={currentPage === totalPages - 1}
-              className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FiChevronRight className="w-5 h-5" />
             </button>
@@ -131,7 +131,7 @@ export default function Attendees() {
                         className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden ring-4 transition-all duration-300 ${
                           isHost
                             ? 'ring-gradient-to-r from-purple-500 to-pink-500'
-                            : 'ring-blue-200 group-hover:ring-blue-400'
+                            : 'ring-blue-200 dark:ring-blue-800 group-hover:ring-blue-400 dark:group-hover:ring-blue-600'
                         } ${
                           hoveredUser === attendee.userId ? 'scale-110' : ''
                         }`}
@@ -158,7 +158,7 @@ export default function Attendees() {
                       )}
 
                       {/* Online Status Indicator */}
-                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
                     </div>
 
                     {/* Name */}
@@ -166,14 +166,14 @@ export default function Attendees() {
                       <p
                         className={`text-sm font-medium transition-colors duration-200 ${
                           hoveredUser === attendee.userId
-                            ? 'text-blue-600'
-                            : 'text-gray-900'
+                            ? 'text-blue-600 dark:text-blue-400'
+                            : 'text-gray-900 dark:text-white'
                         }`}
                       >
                         {attendee.name}
                       </p>
                       {isHost && (
-                        <p className="text-xs text-purple-600 font-medium">
+                        <p className="text-xs text-purple-600 dark:text-purple-400 font-medium">
                           {t.event.host}
                         </p>
                       )}
@@ -190,7 +190,7 @@ export default function Attendees() {
                         transition={{ duration: 0.2 }}
                         className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 z-10"
                       >
-                        <div className="bg-white rounded-xl shadow-xl border border-gray-200 p-4 min-w-48">
+                        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 p-4 min-w-48">
                           <div className="flex items-center space-x-3">
                             <img
                               src={
@@ -201,14 +201,14 @@ export default function Attendees() {
                               className="w-12 h-12 rounded-xl object-cover"
                             />
                             <div>
-                              <p className="font-semibold text-gray-900">
+                              <p className="font-semibold text-gray-900 dark:text-white">
                                 {attendee.name}
                               </p>
-                              <p className="text-sm text-gray-600">
+                              <p className="text-sm text-gray-600 dark:text-gray-300">
                                 {isHost ? t.event.eventHost : t.event.attendee}
                               </p>
                               {attendee.email && (
-                                <p className="text-xs text-gray-500 truncate max-w-32">
+                                <p className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-32">
                                   {attendee.email}
                                 </p>
                               )}
@@ -231,13 +231,13 @@ export default function Attendees() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center py-16"
         >
-          <div className="w-24 h-24 bg-gray-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
-            <FiUserPlus className="w-12 h-12 text-gray-400" />
+          <div className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-3xl flex items-center justify-center mx-auto mb-6">
+            <FiUserPlus className="w-12 h-12 text-gray-400 dark:text-gray-500" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
             {t.event.noAttendeesYet}
           </h3>
-          <p className="text-gray-600 max-w-md mx-auto">
+          <p className="text-gray-600 dark:text-gray-300 max-w-md mx-auto">
             {t.event.shareEventInvite}
           </p>
         </motion.div>
@@ -253,7 +253,7 @@ export default function Attendees() {
               className={`w-2 h-2 rounded-full transition-all duration-200 ${
                 i === currentPage
                   ? 'bg-blue-600 w-6'
-                  : 'bg-gray-300 hover:bg-gray-400'
+                  : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
               }`}
             />
           ))}

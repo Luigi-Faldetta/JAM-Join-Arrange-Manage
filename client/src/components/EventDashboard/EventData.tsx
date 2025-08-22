@@ -45,12 +45,12 @@ export default function EventData({
 
   if (isLoading || !eventData?.data) {
     return (
-      <div className="bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
-        <div className="h-64 bg-gray-100 animate-pulse"></div>
+      <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl border border-gray-200 dark:border-gray-600 dark:border-gray-700 overflow-hidden">
+        <div className="h-64 bg-gray-100 dark:bg-gray-700 animate-pulse"></div>
         <div className="p-8 space-y-4">
-          <div className="h-8 bg-gray-100 rounded animate-pulse"></div>
-          <div className="h-4 bg-gray-100 rounded animate-pulse w-3/4"></div>
-          <div className="h-4 bg-gray-100 rounded animate-pulse w-1/2"></div>
+          <div className="h-8 bg-gray-100 dark:bg-gray-700 rounded animate-pulse"></div>
+          <div className="h-4 bg-gray-100 dark:bg-gray-700 rounded animate-pulse w-3/4"></div>
+          <div className="h-4 bg-gray-100 dark:bg-gray-700 rounded animate-pulse w-1/2"></div>
         </div>
       </div>
     );
@@ -62,7 +62,7 @@ export default function EventData({
   const attendeeCount = event.UserEvents?.length || 0;
 
   return (
-    <div className="bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
+    <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl border border-gray-200 dark:border-gray-600 dark:border-gray-700 overflow-hidden">
       {/* Hero Section */}
       <div className="relative h-80 overflow-hidden">
         <img
@@ -137,12 +137,12 @@ export default function EventData({
             {event.description && (
               <div>
                 <div className="flex items-center space-x-2 mb-3">
-                  <FiInfo className="w-5 h-5 text-gray-600" />
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <FiInfo className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                     {t.eventData.aboutThisEvent}
                   </h3>
                 </div>
-                <p className="text-gray-700 leading-relaxed">
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   {event.description}
                 </p>
               </div>
@@ -152,12 +152,12 @@ export default function EventData({
             {event.location && (
               <div>
                 <div className="flex items-center space-x-2 mb-3">
-                  <FiMapPin className="w-5 h-5 text-gray-600" />
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <FiMapPin className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                     {t.eventData.location}
                   </h3>
                 </div>
-                <p className="text-gray-700">{event.location}</p>
+                <p className="text-gray-700 dark:text-gray-300">{event.location}</p>
               </div>
             )}
 
@@ -165,14 +165,14 @@ export default function EventData({
             {event.tags && event.tags.length > 0 && (
               <div>
                 <div className="flex items-center space-x-2 mb-3">
-                  <FiTag className="w-5 h-5 text-gray-600" />
-                  <h3 className="text-lg font-semibold text-gray-900">{t.eventData.tags}</h3>
+                  <FiTag className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t.eventData.tags}</h3>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {event.tags.map((tag: string, index: number) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium"
+                      className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-sm font-medium"
                     >
                       {tag}
                     </span>
@@ -186,8 +186,8 @@ export default function EventData({
           <div className="space-y-6">
             {/* Join/Leave Event */}
             {!userIsHost && (
-              <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl p-6 border border-purple-200 dark:border-purple-700">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                   {t.eventData.eventParticipation}
                 </h3>
                 <ToggleButton
@@ -200,10 +200,10 @@ export default function EventData({
             )}
 
             {/* Share Event */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-200">
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl p-6 border border-blue-200 dark:border-blue-700">
               <div className="flex items-center space-x-2 mb-4">
                 <FiShare2 className="w-5 h-5 text-blue-600" />
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   {t.eventData.shareEvent}
                 </h3>
               </div>
@@ -212,8 +212,8 @@ export default function EventData({
 
             {/* Host Actions */}
             {userIsHost && (
-              <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 rounded-2xl p-6 border border-gray-200 dark:border-gray-600">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                   {t.eventData.hostActions}
                 </h3>
                 <div className="space-y-3">
@@ -237,30 +237,30 @@ export default function EventData({
             )}
 
             {/* Event Stats */}
-            <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-6 border border-green-200 dark:border-green-700">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 {t.eventData.eventStatistics}
               </h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">{t.eventData.totalAttendees}</span>
-                  <span className="font-semibold text-gray-900">
+                  <span className="text-gray-600 dark:text-gray-400">{t.eventData.totalAttendees}</span>
+                  <span className="font-semibold text-gray-900 dark:text-white">
                     {attendeeCount}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">{t.eventData.eventStatus}</span>
+                  <span className="text-gray-600 dark:text-gray-400">{t.eventData.eventStatus}</span>
                   <span
                     className={`font-semibold ${
-                      isUpcoming ? 'text-green-600' : 'text-gray-600'
+                      isUpcoming ? 'text-green-600' : 'text-gray-600 dark:text-gray-400'
                     }`}
                   >
                     {isUpcoming ? t.eventData.upcoming : t.eventData.completed}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">{t.eventData.timeUntilEvent}</span>
-                  <span className="font-semibold text-gray-900">
+                  <span className="text-gray-600 dark:text-gray-400">{t.eventData.timeUntilEvent}</span>
+                  <span className="font-semibold text-gray-900 dark:text-white">
                     {formatRelativeTime(eventDate)}
                   </span>
                 </div>

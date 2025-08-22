@@ -64,7 +64,7 @@ function DeleteEvent({ eventId, eventTitle, onClose, open }: DeleteEventProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm"
             onClick={onClose}
           />
 
@@ -73,7 +73,7 @@ function DeleteEvent({ eventId, eventTitle, onClose, open }: DeleteEventProps) {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="relative z-10 bg-white rounded-3xl shadow-2xl border border-gray-200 w-full max-w-md overflow-hidden"
+            className="relative z-10 bg-white dark:bg-gray-800 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md overflow-hidden"
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-red-500 to-red-600 px-6 py-4 rounded-t-3xl">
@@ -102,26 +102,26 @@ function DeleteEvent({ eventId, eventTitle, onClose, open }: DeleteEventProps) {
             <div className="p-6 space-y-4">
               {/* Event Title */}
               <div className="text-center">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                   {t.deleteModal.deleteEventTitle.replace('{title}', eventTitle)}
                 </h3>
-                <p className="text-gray-600 mb-1">
+                <p className="text-gray-600 dark:text-gray-300 mb-1">
                   {t.deleteModal.confirmDelete}
                 </p>
-                <p className="text-gray-500 text-sm">
+                <p className="text-gray-500 dark:text-gray-400 text-sm">
                   {t.deleteModal.dataWillBeRemoved}
                 </p>
-                <p className="text-gray-500 text-sm mt-2">
+                <p className="text-gray-500 dark:text-gray-400 text-sm mt-2">
                   {t.deleteModal.friendsWillBeSad}
                 </p>
               </div>
 
               {/* Error Message */}
               {errorMessage && (
-                <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4">
                   <div className="flex items-center space-x-2">
                     <FiAlertTriangle className="w-5 h-5 text-red-500" />
-                    <p className="text-red-700 text-sm">{errorMessage}</p>
+                    <p className="text-red-700 dark:text-red-300 text-sm">{errorMessage}</p>
                   </div>
                 </div>
               )}
@@ -131,7 +131,7 @@ function DeleteEvent({ eventId, eventTitle, onClose, open }: DeleteEventProps) {
                 <button
                   onClick={onClose}
                   disabled={isDeleting}
-                  className="flex-1 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {t.deleteModal.cancel}
                 </button>

@@ -26,6 +26,7 @@ import ContactUs from './pages/ContactUs/ContactUs';
 import SSOCallback from './components/SSOCallback/SSOCallback';
 import { useClerkSync } from './hooks/useClerkSync';
 import { TranslationProvider } from './hooks/useTranslation';
+import { useTheme } from './hooks/useTheme';
 
 const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY as string;
 if (!clerkPubKey) {
@@ -34,6 +35,7 @@ if (!clerkPubKey) {
 
 function ClerkSyncWrapper({ children }: { children: React.ReactNode }) {
   useClerkSync();
+  useTheme(); // Apply theme to document
   return <>{children}</>;
 }
 
@@ -43,7 +45,7 @@ function Layout() {
   return (
     <ClerkSyncWrapper>
       <TranslationProvider>
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
           <Navbar />
           <main className="flex-1">
             <Outlet />

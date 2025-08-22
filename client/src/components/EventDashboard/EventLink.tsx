@@ -123,21 +123,21 @@ export default function EventLink({ eventid }: EventLinkProps) {
               transition={{ duration: 0.2 }}
               className="absolute bottom-full left-0 right-0 mb-2 z-50"
             >
-              <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 p-4">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 p-4">
                 <div className="mb-4">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                     {t.shareModal.shareThisEvent}
                   </h3>
-                  <div className="flex items-center space-x-2 p-3 bg-gray-50 rounded-xl">
+                  <div className="flex items-center space-x-2 p-3 bg-gray-50 dark:bg-gray-700 rounded-xl">
                     <input
                       type="text"
                       value={eventUrl}
                       readOnly
-                      className="flex-1 bg-transparent text-sm text-gray-600 outline-none"
+                      className="flex-1 bg-transparent text-sm text-gray-600 dark:text-gray-300 outline-none"
                     />
                     <button
                       onClick={handleCopyLink}
-                      className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200"
+                      className="p-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-200"
                       title={t.shareModal.copyLinkTitle}
                     >
                       {copied ? (
@@ -170,7 +170,7 @@ export default function EventLink({ eventid }: EventLinkProps) {
               </div>
 
               {/* Arrow */}
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white"></div>
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-white dark:border-t-gray-800"></div>
             </motion.div>
           </>
         )}

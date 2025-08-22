@@ -273,7 +273,7 @@ export default function Todos() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-48">
-        <div className="flex items-center space-x-2 text-gray-600">
+        <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
           <FiLoader className="w-5 h-5 animate-spin" />
           <span>{t.tasks.loadingTasks}</span>
         </div>
@@ -286,13 +286,13 @@ export default function Todos() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">{t.tasks.title}</h2>
-          <p className="text-gray-600 mt-1">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t.tasks.title}</h2>
+          <p className="text-gray-600 dark:text-gray-300 mt-1">
             {t.tasks.subtitle}
           </p>
         </div>
 
-        <div className="flex items-center space-x-2 text-sm text-gray-600">
+        <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
           <FiClock className="w-4 h-4" />
           <span>
             {t.tasks.pendingCompleted
@@ -303,11 +303,11 @@ export default function Todos() {
       </div>
 
       {/* Add New Task */}
-      <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-200">
+      <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl p-6 border border-purple-200 dark:border-purple-700">
         {!isAddingTask ? (
           <button
             onClick={() => setIsAddingTask(true)}
-            className="flex items-center space-x-2 text-purple-600 hover:text-purple-700 font-medium transition-colors duration-200"
+            className="flex items-center space-x-2 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium transition-colors duration-200"
           >
             <FiPlus className="w-5 h-5" />
             <span>{t.tasks.addNewTask}</span>
@@ -319,7 +319,7 @@ export default function Todos() {
               value={newTask}
               onChange={(e) => setNewTask(e.target.value)}
               placeholder={t.tasks.enterTaskDescription}
-              className="flex-1 px-4 py-3 border border-purple-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 placeholder:text-gray-500"
+              className="flex-1 px-4 py-3 border border-purple-300 dark:border-purple-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400"
               onKeyPress={(e) => e.key === 'Enter' && handleAddTask()}
               autoFocus
             />
@@ -339,7 +339,7 @@ export default function Todos() {
                 setIsAddingTask(false);
                 setNewTask('');
               }}
-              className="flex items-center justify-center w-12 h-12 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-xl transition-all duration-200"
+              className="flex items-center justify-center w-12 h-12 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 text-gray-700 dark:text-gray-300 rounded-xl transition-all duration-200"
             >
               <FiX className="w-5 h-5" />
             </button>
@@ -353,7 +353,7 @@ export default function Todos() {
         <div className="space-y-4">
           <div className="flex items-center space-x-2">
             <FiCircle className="w-5 h-5 text-orange-500" />
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
               {t.tasks.pendingTasks} ({pendingTodos.length})
             </h3>
           </div>
@@ -367,7 +367,7 @@ export default function Todos() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition-all duration-200"
+                  className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md transition-all duration-200"
                 >
                   {editingTodo === todo.todoId ? (
                     <div className="flex items-center space-x-3">
@@ -375,7 +375,7 @@ export default function Todos() {
                         type="text"
                         value={editText}
                         onChange={(e) => setEditText(e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                         onKeyPress={(e) =>
                           e.key === 'Enter' && handleEditTodo(todo.todoId)
                         }
@@ -383,13 +383,13 @@ export default function Todos() {
                       />
                       <button
                         onClick={() => handleEditTodo(todo.todoId)}
-                        className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors duration-200"
+                        className="p-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors duration-200"
                       >
                         <FiCheck className="w-4 h-4" />
                       </button>
                       <button
                         onClick={cancelEditing}
-                        className="p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                        className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
                       >
                         <FiX className="w-4 h-4" />
                       </button>
@@ -405,7 +405,7 @@ export default function Todos() {
                         >
                           <FiCircle className="w-5 h-5" />
                         </button>
-                        <span className="text-gray-900 flex-1">
+                        <span className="text-gray-900 dark:text-white flex-1">
                           {todo.task}
                         </span>
                       </div>
@@ -413,13 +413,13 @@ export default function Todos() {
                       <div className="flex items-center space-x-2">
                         <button
                           onClick={() => startEditing(todo)}
-                          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200"
+                          className="p-2 text-gray-400 dark:text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-200"
                         >
                           <FiEdit3 className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteTodo(todo.todoId)}
-                          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200"
+                          className="p-2 text-gray-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-200"
                         >
                           <FiTrash2 className="w-4 h-4" />
                         </button>
@@ -431,7 +431,7 @@ export default function Todos() {
             </AnimatePresence>
 
             {pendingTodos.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                 <FiCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
                 <p>{t.tasks.noPendingTasks}</p>
               </div>
@@ -443,7 +443,7 @@ export default function Todos() {
         <div className="space-y-4">
           <div className="flex items-center space-x-2">
             <FiCheckCircle className="w-5 h-5 text-green-500" />
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
               {t.tasks.completedTasks} ({completedTodos.length})
             </h3>
           </div>
@@ -457,7 +457,7 @@ export default function Todos() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className="bg-green-50 rounded-xl border border-green-200 p-4"
+                  className="bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-700 p-4"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3 flex-1">
@@ -465,18 +465,18 @@ export default function Todos() {
                         onClick={() =>
                           handleToggleComplete(todo.todoId, todo.isCompleted)
                         }
-                        className="p-2 text-green-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-all duration-200 group"
+                        className="p-2 text-green-600 dark:text-green-400 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-all duration-200 group"
                         title={t.tasks.markAsIncomplete}
                       >
                         <FiCheckCircle className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
                       </button>
-                      <span className="text-gray-700 line-through flex-1">
+                      <span className="text-gray-700 dark:text-gray-300 line-through flex-1">
                         {todo.task}
                       </span>
                     </div>
 
                     <div className="flex items-center space-x-2">
-                      <span className="text-xs text-gray-500 px-2 py-1 bg-gray-100 rounded-full">
+                      <span className="text-xs text-gray-500 dark:text-gray-400 px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full">
                         {t.tasks.completed}
                       </span>
                     </div>
@@ -486,7 +486,7 @@ export default function Todos() {
             </AnimatePresence>
 
             {completedTodos.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                 <FiCheckCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
                 <p>{t.tasks.noCompletedTasks}</p>
               </div>
@@ -497,9 +497,9 @@ export default function Todos() {
 
       {/* Progress Summary */}
       {todos.length > 0 && (
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-200">
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl p-6 border border-blue-200 dark:border-blue-700">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
               {t.tasks.progressOverview}
             </h3>
             <span className="text-2xl font-bold text-blue-600">
@@ -507,7 +507,7 @@ export default function Todos() {
             </span>
           </div>
 
-          <div className="w-full bg-gray-200 rounded-full h-3 mb-4">
+          <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3 mb-4">
             <motion.div
               className="bg-gradient-to-r from-blue-600 to-indigo-600 h-3 rounded-full"
               initial={{ width: 0 }}
@@ -518,7 +518,7 @@ export default function Todos() {
             />
           </div>
 
-          <div className="flex justify-between text-sm text-gray-600">
+          <div className="flex justify-between text-sm text-gray-600 dark:text-gray-300">
             <span>
               {t.tasks.tasksCompleted
                 .replace('{completed}', completedTodos.length.toString())
