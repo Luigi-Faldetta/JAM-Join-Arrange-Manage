@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -177,6 +177,17 @@ export default function UserDashboardPage() {
     skip: !hasToken || !userId,
   });
 
+  // Safe refetch wrapper to prevent "Cannot refetch a query that has not been started yet" error
+  const safeRefetchEvents = useCallback(() => {
+    if (hasToken && userId && refetchEvents) {
+      try {
+        refetchEvents();
+      } catch (error) {
+        console.log('UserDashboard: Refetch error (can be safely ignored):', error);
+      }
+    }
+  }, [hasToken, userId, refetchEvents]);
+
   // Force component update and refetch events when manual data is received
   useEffect(() => {
     if (hasReceivedManualData && manualUserData) {
@@ -184,10 +195,10 @@ export default function UserDashboardPage() {
       // Refetch events when we get the userId from manual data
       if (manualUserData.userId && hasToken) {
         console.log('UserDashboard: Refetching events with userId:', manualUserData.userId);
-        refetchEvents();
+        safeRefetchEvents();
       }
     }
-  }, [hasReceivedManualData, manualUserData, refetchEvents, hasToken]);
+  }, [hasReceivedManualData, manualUserData, safeRefetchEvents, hasToken]);
   
   // Debug logging for events loading
   console.log('Events Loading State:', {
@@ -234,10 +245,10 @@ export default function UserDashboardPage() {
       console.log('UserDashboard: userId changed, refetching events:', { oldUserId: lastUserId, newUserId: userId });
       setLastUserId(userId);
       if (hasToken && userId) {
-        refetchEvents();
+        safeRefetchEvents();
       }
     }
-  }, [userId, lastUserId, refetchEvents, hasToken]);
+  }, [userId, lastUserId, safeRefetchEvents, hasToken]);
   
   // Monitor for userId becoming available from any source
   useEffect(() => {
@@ -255,10 +266,10 @@ export default function UserDashboardPage() {
       });
       setLastUserId(foundUserId);
       if (hasToken && foundUserId) {
-        refetchEvents();
+        safeRefetchEvents();
       }
     }
-  }, [userData?.data?.userId, manualUserData?.userId, lastUserId, eventList.length, refetchEvents, hasToken]);
+  }, [userData?.data?.userId, manualUserData?.userId, lastUserId, eventList.length, safeRefetchEvents, hasToken]);
   
   // Use events from Redux state, with local events as fallback (moved up to avoid reference issues)
   const eventsToUse = eventList.length > 0 ? eventList : localEvents;
@@ -271,7 +282,7 @@ export default function UserDashboardPage() {
       const pollInterval = setInterval(() => {
         console.log('UserDashboard: Polling for events...');
         if (hasToken && userId) {
-          refetchEvents();
+          safeRefetchEvents();
         }
       }, 2000); // Poll every 2 seconds
       
@@ -286,7 +297,7 @@ export default function UserDashboardPage() {
         clearTimeout(timeout);
       };
     }
-  }, [userId, eventsToUse.length, refetchEvents, hasToken]);
+  }, [userId, eventsToUse.length, safeRefetchEvents, hasToken]);
   
   // Stop polling when events are loaded
   useEffect(() => {
