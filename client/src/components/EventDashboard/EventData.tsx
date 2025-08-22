@@ -47,8 +47,9 @@ export default function EventData({
   const { eventid } = useParams();
 
   // Fetch actual attendee count using the same query as Attendees component
-  const { data: usersData } = useGetUsersQuery(eventid as string, {
-    skip: !eventid, // Skip if no eventId
+  // Only fetch if we have a valid eventId
+  const { data: usersData } = useGetUsersQuery(eventid!, {
+    skip: !eventid || typeof eventid !== 'string' || eventid.trim() === '',
   });
 
   if (isLoading || !eventData?.data) {

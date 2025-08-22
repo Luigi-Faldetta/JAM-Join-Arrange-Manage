@@ -29,8 +29,9 @@ export default function EventTile({
   const { t, formatDate, formatRelativeTime } = useTranslation();
 
   // Fetch actual attendee count using the same query as Attendees component
-  const { data: usersData } = useGetUsersQuery(event.eventId || '', {
-    skip: !event.eventId, // Skip if no eventId
+  // Only fetch if we have a valid eventId
+  const { data: usersData } = useGetUsersQuery(event.eventId!, {
+    skip: !event.eventId || typeof event.eventId !== 'string' || event.eventId.trim() === '',
   });
 
   const isHost = event.UserEvents?.some(
