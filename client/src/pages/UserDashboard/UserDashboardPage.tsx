@@ -86,7 +86,10 @@ export default function UserDashboardPage() {
     const token = localStorage.getItem('token');
     console.log('UserDashboard: Token from localStorage:', token ? 'Present' : 'Missing');
     
-    refetchMe();
+    // Only refetch if query has been started (token exists)
+    if (hasToken) {
+      refetchMe();
+    }
     
     // Manual API call as fallback (using same URL pattern as ProfilePage)
     if (token) {
@@ -119,7 +122,9 @@ export default function UserDashboardPage() {
           setHasReceivedManualData(true);
           // Force RTK Query to refetch to update cache
           setTimeout(() => {
-            refetchMe();
+            if (hasToken) {
+              refetchMe();
+            }
           }, 100);
         }
       })
@@ -129,7 +134,7 @@ export default function UserDashboardPage() {
     } else {
       console.warn('UserDashboard: No token found in localStorage');
     }
-  }, [refetchMe]);
+  }, [refetchMe, hasToken]);
 
   // Additional effect to refetch user data when user object is incomplete or missing userId (for Google OAuth users)
   useEffect(() => {
@@ -154,11 +159,13 @@ export default function UserDashboardPage() {
       retryAttempts.forEach((delay, index) => {
         setTimeout(() => {
           console.log(`UserDashboard: Retry attempt ${index + 1} for user data`);
-          refetchMe();
+          if (hasToken) {
+            refetchMe();
+          }
         }, delay);
       });
     }
-  }, [user, userId, refetchMe, hasReceivedManualData]);
+  }, [user, userId, refetchMe, hasReceivedManualData, hasToken]);
 
   // Get events - skip until we have both token and userId
   const { data: eventsData, isLoading, refetch: refetchEvents, error: eventsError } = useGetEventsQuery(userId || '', {
@@ -170,12 +177,12 @@ export default function UserDashboardPage() {
     if (hasReceivedManualData && manualUserData) {
       console.log('UserDashboard: Manual data received, forcing component update');
       // Refetch events when we get the userId from manual data
-      if (manualUserData.userId) {
+      if (manualUserData.userId && hasToken) {
         console.log('UserDashboard: Refetching events with userId:', manualUserData.userId);
         refetchEvents();
       }
     }
-  }, [hasReceivedManualData, manualUserData, refetchEvents]);
+  }, [hasReceivedManualData, manualUserData, refetchEvents, hasToken]);
   
   // Debug logging for events loading
   console.log('Events Loading State:', {
@@ -221,9 +228,11 @@ export default function UserDashboardPage() {
     if (userId && userId !== 'no-user-id' && userId !== lastUserId) {
       console.log('UserDashboard: userId changed, refetching events:', { oldUserId: lastUserId, newUserId: userId });
       setLastUserId(userId);
-      refetchEvents();
+      if (hasToken && userId) {
+        refetchEvents();
+      }
     }
-  }, [userId, lastUserId, refetchEvents]);
+  }, [userId, lastUserId, refetchEvents, hasToken]);
   
   // Monitor for userId becoming available from any source
   useEffect(() => {
@@ -240,9 +249,11 @@ export default function UserDashboardPage() {
         eventListLength: eventList.length
       });
       setLastUserId(foundUserId);
-      refetchEvents();
+      if (hasToken && foundUserId) {
+        refetchEvents();
+      }
     }
-  }, [userData?.data?.userId, manualUserData?.userId, lastUserId, eventList.length, refetchEvents]);
+  }, [userData?.data?.userId, manualUserData?.userId, lastUserId, eventList.length, refetchEvents, hasToken]);
   
   // Use events from Redux state, with local events as fallback (moved up to avoid reference issues)
   const eventsToUse = eventList.length > 0 ? eventList : localEvents;
@@ -254,7 +265,9 @@ export default function UserDashboardPage() {
       
       const pollInterval = setInterval(() => {
         console.log('UserDashboard: Polling for events...');
-        refetchEvents();
+        if (hasToken && userId) {
+          refetchEvents();
+        }
       }, 2000); // Poll every 2 seconds
       
       // Stop polling after 20 seconds or when we get events
@@ -268,7 +281,7 @@ export default function UserDashboardPage() {
         clearTimeout(timeout);
       };
     }
-  }, [userId, eventsToUse.length, refetchEvents]);
+  }, [userId, eventsToUse.length, refetchEvents, hasToken]);
   
   // Stop polling when events are loaded
   useEffect(() => {
