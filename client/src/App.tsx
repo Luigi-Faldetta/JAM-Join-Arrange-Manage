@@ -25,6 +25,7 @@ import CreateUserForm from './components/LandingDashboard/CreateUserForm';
 import ContactUs from './pages/ContactUs/ContactUs';
 import SSOCallback from './components/SSOCallback/SSOCallback';
 import { useClerkSync } from './hooks/useClerkSync';
+import { TranslationProvider } from './hooks/useTranslation';
 
 const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY as string;
 if (!clerkPubKey) {
@@ -41,16 +42,18 @@ function Layout() {
 
   return (
     <ClerkSyncWrapper>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50">
-        <Navbar />
-        <main className="flex-1">
-          <Outlet />
-        </main>
-        <Footer />
-        <Logout />
-        {deleteOpen && <Delete setOpen={setDeleteOpen} />}
-        <AuthModal />
-      </div>
+      <TranslationProvider>
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50">
+          <Navbar />
+          <main className="flex-1">
+            <Outlet />
+          </main>
+          <Footer />
+          <Logout />
+          {deleteOpen && <Delete setOpen={setDeleteOpen} />}
+          <AuthModal />
+        </div>
+      </TranslationProvider>
     </ClerkSyncWrapper>
   );
 }

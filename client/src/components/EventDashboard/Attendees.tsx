@@ -5,6 +5,7 @@ import { createUserList } from '../../reduxFiles/slices/users';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../reduxFiles/store';
+import { useTranslation } from '../../hooks/useTranslation';
 import {
   FiUsers,
   FiChevronLeft,
@@ -21,6 +22,7 @@ export default function Attendees() {
   const usersPerPage = 8;
   const appDispatch = useAppDispatch();
   const attendees = useSelector((state: RootState) => state.userList);
+  const { t } = useTranslation();
 
   const { data, error, isLoading } = useGetUsersQuery(eventid as string);
 
@@ -49,7 +51,7 @@ export default function Attendees() {
       <div className="flex justify-center items-center h-48">
         <div className="flex items-center space-x-2 text-gray-600">
           <FiLoader className="w-5 h-5 animate-spin" />
-          <span>Loading attendees...</span>
+          <span>{t.event.loadingAttendees}</span>
         </div>
       </div>
     );
@@ -68,7 +70,7 @@ export default function Attendees() {
               {attendees.length}
             </h2>
             <p className="text-gray-600 font-medium">
-              {attendees.length === 1 ? 'Person Going' : 'People Going'}
+              {attendees.length === 1 ? t.event.personGoing : t.event.peopleGoing}
             </p>
           </div>
         </div>
@@ -85,7 +87,7 @@ export default function Attendees() {
             </button>
 
             <span className="text-sm text-gray-600 px-3">
-              {currentPage + 1} of {totalPages}
+              {currentPage + 1} {t.event.pageOf} {totalPages}
             </span>
 
             <button
@@ -172,7 +174,7 @@ export default function Attendees() {
                       </p>
                       {isHost && (
                         <p className="text-xs text-purple-600 font-medium">
-                          Host
+                          {t.event.host}
                         </p>
                       )}
                     </div>
@@ -203,7 +205,7 @@ export default function Attendees() {
                                 {attendee.name}
                               </p>
                               <p className="text-sm text-gray-600">
-                                {isHost ? 'Event Host' : 'Attendee'}
+                                {isHost ? t.event.eventHost : t.event.attendee}
                               </p>
                               {attendee.email && (
                                 <p className="text-xs text-gray-500 truncate max-w-32">
@@ -233,10 +235,10 @@ export default function Attendees() {
             <FiUserPlus className="w-12 h-12 text-gray-400" />
           </div>
           <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            No attendees yet
+            {t.event.noAttendeesYet}
           </h3>
           <p className="text-gray-600 max-w-md mx-auto">
-            Share your event link to invite people and see them appear here.
+            {t.event.shareEventInvite}
           </p>
         </motion.div>
       )}

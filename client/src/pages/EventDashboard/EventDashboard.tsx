@@ -22,6 +22,7 @@ import {
 import { useAppDispatch } from '../../reduxFiles/store';
 import { openLogout } from '../../reduxFiles/slices/logout';
 import SettingsModal from '../../components/SettingsModal/SettingsModal';
+import { useTranslation } from '../../hooks/useTranslation';
 
 export default function EventDashboard() {
   const [userIsHost, setUserIsHost] = useState<boolean>(false);
@@ -32,6 +33,7 @@ export default function EventDashboard() {
   const [hasReceivedManualData, setHasReceivedManualData] = useState(false);
   const [loadingTimeout, setLoadingTimeout] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -238,7 +240,7 @@ export default function EventDashboard() {
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading event...</p>
+          <p className="text-gray-600 text-lg">{t.event.loadingEvent}</p>
         </div>
       </div>
     );
@@ -278,10 +280,10 @@ export default function EventDashboard() {
               <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
             </div>
             <h2 className="text-xl font-semibold text-gray-900 mb-2">
-              Loading your profile...
+              {t.event.loadingProfile}
             </h2>
             <p className="text-gray-600">
-              Syncing your profile information...
+              {t.dashboard.syncingProfile}
             </p>
           </div>
         </div>
@@ -311,7 +313,7 @@ export default function EventDashboard() {
                 className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-200 group"
               >
                 <FiArrowLeft className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
-                <span className="hidden sm:inline font-medium">Dashboard</span>
+                <span className="hidden sm:inline font-medium">{t.nav.dashboard}</span>
               </button>
 
               <div className="hidden md:block w-px h-8 bg-gray-300"></div>
@@ -322,7 +324,7 @@ export default function EventDashboard() {
                     {eventData.data.title}
                   </h1>
                   <p className="text-sm text-gray-500 hidden sm:block">
-                    {eventData.data.location || 'Location not specified'}
+                    {eventData.data.location || t.event.locationNotSpecified}
                   </p>
                 </div>
               </div>
@@ -333,7 +335,7 @@ export default function EventDashboard() {
                 <button
                   onClick={() => setShowSettingsModal(true)}
                   className="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-200 group border border-gray-200 hover:border-purple-400"
-                  title="Settings"
+                  title={t.nav.settings}
                 >
                   <FiSettings className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" />
                 </button>
@@ -341,7 +343,7 @@ export default function EventDashboard() {
                 <button
                   onClick={() => navigate('/profile')}
                   className="w-10 h-10 rounded-full overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border-2 border-gray-200 hover:border-purple-400"
-                  title="Profile"
+                  title={t.nav.profile}
                 >
                   <img
                     src={displayUser?.profilePic || '/no-profile-picture-icon.png'}
@@ -353,11 +355,11 @@ export default function EventDashboard() {
                 <button
                   onClick={handleSignOut}
                   className="flex items-center space-x-2 px-4 py-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl transition-all duration-200 group"
-                  title="Sign Out"
+                  title={t.nav.signOut}
                 >
                   <FiLogOut className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
                   <span className="hidden sm:inline text-sm font-medium">
-                    Sign Out
+                    {t.nav.signOut}
                   </span>
                 </button>
             </div>
@@ -406,7 +408,7 @@ export default function EventDashboard() {
                     }`}
                   >
                     <FiCheckSquare className="w-4 h-4" />
-                    <span>Tasks</span>
+                    <span>{t.event.tasks}</span>
                   </button>
 
                   <button
@@ -418,7 +420,7 @@ export default function EventDashboard() {
                     }`}
                   >
                     <FiDollarSign className="w-4 h-4" />
-                    <span>Expenses</span>
+                    <span>{t.event.expenses}</span>
                   </button>
                 </div>
 
@@ -467,10 +469,10 @@ export default function EventDashboard() {
                   <FiUsers className="w-6 h-6 text-white" />
                   <div>
                     <h2 className="text-xl font-bold text-white">
-                      Event Attendees
+                      {t.event.attendees}
                     </h2>
                     <p className="text-blue-100">
-                      See who's coming to your event
+                      {t.event.seeWhosComing}
                     </p>
                   </div>
                 </div>
@@ -478,7 +480,7 @@ export default function EventDashboard() {
                 <div className="flex items-center space-x-2">
                   <FiShare2 className="w-5 h-5 text-white" />
                   <span className="text-sm font-medium text-white">
-                    Share Event
+                    {t.event.shareEvent}
                   </span>
                 </div>
               </div>

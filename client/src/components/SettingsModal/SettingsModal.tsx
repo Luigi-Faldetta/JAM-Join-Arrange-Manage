@@ -4,32 +4,34 @@ import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../reduxFiles/store';
 import { setCurrency, setLanguage, setTheme, Currency, Language, Theme } from '../../reduxFiles/slices/preferences';
 import { FiX, FiGlobe, FiMoon, FiSun, FiDollarSign } from 'react-icons/fi';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface SettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const currencies: { value: Currency; label: string; symbol: string }[] = [
-  { value: 'USD', label: 'US Dollar', symbol: '$' },
-  { value: 'EUR', label: 'Euro', symbol: '€' },
-  { value: 'GBP', label: 'British Pound', symbol: '£' },
+const getCurrencies = (t: any): { value: Currency; label: string; symbol: string }[] => [
+  { value: 'USD', label: t.settings.currencies.usd, symbol: '$' },
+  { value: 'EUR', label: t.settings.currencies.eur, symbol: '€' },
+  { value: 'GBP', label: t.settings.currencies.gbp, symbol: '£' },
 ];
 
-const languages: { value: Language; label: string; flag: string }[] = [
-  { value: 'en', label: 'English', flag: '🇺🇸' },
-  { value: 'es', label: 'Español', flag: '🇪🇸' },
-  { value: 'fr', label: 'Français', flag: '🇫🇷' },
+const getLanguages = (t: any): { value: Language; label: string; flag: string }[] => [
+  { value: 'en', label: t.settings.languages.english, flag: '🇺🇸' },
+  { value: 'es', label: t.settings.languages.spanish, flag: '🇪🇸' },
+  { value: 'fr', label: t.settings.languages.french, flag: '🇫🇷' },
 ];
 
-const themes: { value: Theme; label: string; icon: React.ReactNode }[] = [
-  { value: 'light', label: 'Light', icon: <FiSun className="w-4 h-4" /> },
-  { value: 'dark', label: 'Dark', icon: <FiMoon className="w-4 h-4" /> },
+const getThemes = (t: any): { value: Theme; label: string; icon: React.ReactNode }[] => [
+  { value: 'light', label: t.settings.lightTheme, icon: <FiSun className="w-4 h-4" /> },
+  { value: 'dark', label: t.settings.darkTheme, icon: <FiMoon className="w-4 h-4" /> },
 ];
 
 export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
   const dispatch = useAppDispatch();
   const preferences = useSelector((state: RootState) => state.preferencesReducer);
+  const { t } = useTranslation();
   
   const [selectedCurrency, setSelectedCurrency] = useState<Currency>(preferences.currency);
   const [selectedLanguage, setSelectedLanguage] = useState<Language>(preferences.language);
@@ -74,7 +76,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             {/* Header */}
             <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-6 rounded-t-2xl">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-white">Settings</h2>
+                <h2 className="text-xl font-bold text-white">{t.settings.title}</h2>
                 <button
                   onClick={handleCancel}
                   className="p-2 hover:bg-white/20 rounded-lg transition-colors"
@@ -90,10 +92,10 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <div className="space-y-3">
                 <div className="flex items-center space-x-2 text-gray-700">
                   <FiDollarSign className="w-5 h-5" />
-                  <h3 className="font-semibold">Currency</h3>
+                  <h3 className="font-semibold">{t.settings.currency}</h3>
                 </div>
                 <div className="grid grid-cols-3 gap-3">
-                  {currencies.map((currency) => (
+                  {getCurrencies(t).map((currency) => (
                     <button
                       key={currency.value}
                       onClick={() => setSelectedCurrency(currency.value)}
@@ -115,10 +117,10 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <div className="space-y-3">
                 <div className="flex items-center space-x-2 text-gray-700">
                   <FiGlobe className="w-5 h-5" />
-                  <h3 className="font-semibold">Language</h3>
+                  <h3 className="font-semibold">{t.settings.language}</h3>
                 </div>
                 <div className="space-y-2">
-                  {languages.map((language) => (
+                  {getLanguages(t).map((language) => (
                     <button
                       key={language.value}
                       onClick={() => setSelectedLanguage(language.value)}
@@ -139,10 +141,10 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <div className="space-y-3">
                 <div className="flex items-center space-x-2 text-gray-700">
                   <FiMoon className="w-5 h-5" />
-                  <h3 className="font-semibold">Theme</h3>
+                  <h3 className="font-semibold">{t.settings.theme}</h3>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                  {themes.map((theme) => (
+                  {getThemes(t).map((theme) => (
                     <button
                       key={theme.value}
                       onClick={() => setSelectedTheme(theme.value)}
@@ -166,13 +168,13 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 onClick={handleCancel}
                 className="px-6 py-2 text-gray-600 hover:text-gray-800 font-medium transition-colors"
               >
-                Cancel
+                {t.settings.cancel}
               </button>
               <button
                 onClick={handleSave}
                 className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium rounded-lg hover:shadow-lg transition-all duration-200"
               >
-                Save Changes
+                {t.settings.saveChanges}
               </button>
             </div>
             </div>

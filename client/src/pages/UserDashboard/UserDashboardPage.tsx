@@ -22,11 +22,13 @@ import {
   FiSettings,
 } from 'react-icons/fi';
 import SettingsModal from '../../components/SettingsModal/SettingsModal';
+import { useTranslation } from '../../hooks/useTranslation';
 
 export default function UserDashboardPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const eventList = useSelector((state: RootState) => state.eventListReducer);
+  const { t } = useTranslation();
 
   const [showCalendar, setShowCalendar] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -339,7 +341,7 @@ export default function UserDashboardPage() {
 
   const stats = [
     {
-      title: 'Total Events',
+      title: t.dashboard.stats.totalEvents,
       value: totalEvents,
       icon: FiCalendar,
       color: 'from-blue-600 to-indigo-600',
@@ -347,7 +349,7 @@ export default function UserDashboardPage() {
       borderColor: 'border-blue-200',
     },
     {
-      title: 'Hosting',
+      title: t.dashboard.stats.hosting,
       value: hostingEvents,
       icon: FiStar,
       color: 'from-purple-600 to-pink-600',
@@ -355,7 +357,7 @@ export default function UserDashboardPage() {
       borderColor: 'border-purple-200',
     },
     {
-      title: 'Attending',
+      title: t.dashboard.stats.attending,
       value: attendingEvents,
       icon: FiUsers,
       color: 'from-green-600 to-emerald-600',
@@ -414,10 +416,10 @@ export default function UserDashboardPage() {
               <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
             </div>
             <h2 className="text-xl font-semibold text-gray-900 mb-2">
-              Loading your dashboard...
+              {t.dashboard.loading}
             </h2>
             <p className="text-gray-600">
-              Syncing your profile information...
+              {t.dashboard.syncingProfile}
             </p>
           </div>
         </div>
@@ -433,7 +435,7 @@ export default function UserDashboardPage() {
         <button
           onClick={() => setShowSettingsModal(true)}
           className="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-xl transition-all duration-200 group border border-gray-200 hover:border-purple-400"
-          title="Settings"
+          title={t.nav.settings}
         >
           <FiSettings className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" />
         </button>
@@ -445,7 +447,7 @@ export default function UserDashboardPage() {
         >
           <img
             src={displayUser?.profilePic || '/no-profile-picture-icon.png'}
-            alt="Profile"
+            alt={t.common.altText.profile}
             className="w-full h-full object-cover"
           />
         </button>
@@ -456,7 +458,7 @@ export default function UserDashboardPage() {
           className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 font-medium"
         >
           <FiLogOut className="w-4 h-4" />
-          <span>Sign Out</span>
+          <span>{t.nav.signOut}</span>
         </button>
       </div>
       
@@ -472,10 +474,10 @@ export default function UserDashboardPage() {
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
               <div className="mb-6 lg:mb-0">
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-2">
-                  Welcome back, {displayUser?.name?.split(' ')[0] || 'User'}!
+                  {t.dashboard.welcome}, {displayUser?.name?.split(' ')[0] || 'User'}!
                 </h1>
                 <p className="text-gray-600 text-lg">
-                  Manage your events and connect with friends
+                  {t.dashboard.welcomeSubtext}
                 </p>
               </div>
 
@@ -490,7 +492,7 @@ export default function UserDashboardPage() {
                   }`}
                 >
                   <FiCalendar className="w-4 h-4" />
-                  <span>Calendar</span>
+                  <span>{t.dashboard.calendar}</span>
                 </button>
               </div>
             </div>
@@ -562,10 +564,10 @@ export default function UserDashboardPage() {
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
               <div className="mb-4 lg:mb-0">
                 <h2 className="text-2xl font-bold text-white mb-2">
-                  Your Events
+                  {t.dashboard.yourEvents}
                 </h2>
                 <p className="text-gray-300">
-                  Manage and track all your events
+                  {t.dashboard.manageEvents}
                 </p>
               </div>
 
@@ -576,7 +578,7 @@ export default function UserDashboardPage() {
                   <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input
                     type="text"
-                    placeholder="Search events..."
+                    placeholder={t.dashboard.searchEvents}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200"
@@ -596,13 +598,13 @@ export default function UserDashboardPage() {
                     className="bg-white/10 border border-white/20 rounded-xl text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200"
                   >
                     <option value="all" className="text-gray-900">
-                      All Events
+                      {t.dashboard.filter.all}
                     </option>
                     <option value="hosting" className="text-gray-900">
-                      Hosting
+                      {t.dashboard.filter.hosting}
                     </option>
                     <option value="attending" className="text-gray-900">
-                      Attending
+                      {t.dashboard.filter.attending}
                     </option>
                   </select>
                 </div>
@@ -675,13 +677,13 @@ export default function UserDashboardPage() {
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   {searchTerm || filterMode !== 'all'
-                    ? 'No events found'
-                    : 'No events yet'}
+                    ? t.dashboard.noEventsFound
+                    : t.dashboard.noEvents}
                 </h3>
                 <p className="text-gray-600 max-w-md mx-auto mb-6">
                   {searchTerm || filterMode !== 'all'
-                    ? 'Try adjusting your search or filter criteria.'
-                    : 'Create your first event to get started and bring people together!'}
+                    ? t.dashboard.noEventsFoundDescription
+                    : t.dashboard.noEventsDescription}
                 </p>
                 {!searchTerm && filterMode === 'all' && <CreateEventForm />}
               </div>

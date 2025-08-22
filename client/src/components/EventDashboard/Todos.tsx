@@ -11,6 +11,7 @@ import {
   useGetMeQuery,
 } from '../../services/JamDB';
 import { setToDoList, addToToDoList, deleteToDoFromList, updateToDoList, editToDoInList } from '../../reduxFiles/slices/toDos';
+import { useTranslation } from '../../hooks/useTranslation';
 import {
   FiPlus,
   FiCheck,
@@ -42,6 +43,7 @@ interface ToDoState {
 }
 
 export default function Todos() {
+  const { t } = useTranslation();
   const { eventid } = useParams();
   const dispatch = useAppDispatch();
 
@@ -273,7 +275,7 @@ export default function Todos() {
       <div className="flex justify-center items-center h-48">
         <div className="flex items-center space-x-2 text-gray-600">
           <FiLoader className="w-5 h-5 animate-spin" />
-          <span>Loading tasks...</span>
+          <span>{t.tasks.loadingTasks}</span>
         </div>
       </div>
     );
@@ -284,16 +286,18 @@ export default function Todos() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Event Tasks</h2>
+          <h2 className="text-2xl font-bold text-gray-900">{t.tasks.title}</h2>
           <p className="text-gray-600 mt-1">
-            Organize and track tasks for your event
+            {t.tasks.subtitle}
           </p>
         </div>
 
         <div className="flex items-center space-x-2 text-sm text-gray-600">
           <FiClock className="w-4 h-4" />
           <span>
-            {pendingTodos.length} pending, {completedTodos.length} completed
+            {t.tasks.pendingCompleted
+              .replace('{pending}', pendingTodos.length.toString())
+              .replace('{completed}', completedTodos.length.toString())}
           </span>
         </div>
       </div>
@@ -306,7 +310,7 @@ export default function Todos() {
             className="flex items-center space-x-2 text-purple-600 hover:text-purple-700 font-medium transition-colors duration-200"
           >
             <FiPlus className="w-5 h-5" />
-            <span>Add new task</span>
+            <span>{t.tasks.addNewTask}</span>
           </button>
         ) : (
           <div className="flex items-center space-x-3">
@@ -314,7 +318,7 @@ export default function Todos() {
               type="text"
               value={newTask}
               onChange={(e) => setNewTask(e.target.value)}
-              placeholder="Enter task description..."
+              placeholder={t.tasks.enterTaskDescription}
               className="flex-1 px-4 py-3 border border-purple-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 placeholder:text-gray-500"
               onKeyPress={(e) => e.key === 'Enter' && handleAddTask()}
               autoFocus
@@ -350,7 +354,7 @@ export default function Todos() {
           <div className="flex items-center space-x-2">
             <FiCircle className="w-5 h-5 text-orange-500" />
             <h3 className="text-lg font-semibold text-gray-900">
-              Pending Tasks ({pendingTodos.length})
+              {t.tasks.pendingTasks} ({pendingTodos.length})
             </h3>
           </div>
 
@@ -429,7 +433,7 @@ export default function Todos() {
             {pendingTodos.length === 0 && (
               <div className="text-center py-8 text-gray-500">
                 <FiCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                <p>No pending tasks</p>
+                <p>{t.tasks.noPendingTasks}</p>
               </div>
             )}
           </div>
@@ -440,7 +444,7 @@ export default function Todos() {
           <div className="flex items-center space-x-2">
             <FiCheckCircle className="w-5 h-5 text-green-500" />
             <h3 className="text-lg font-semibold text-gray-900">
-              Completed Tasks ({completedTodos.length})
+              {t.tasks.completedTasks} ({completedTodos.length})
             </h3>
           </div>
 
@@ -462,7 +466,7 @@ export default function Todos() {
                           handleToggleComplete(todo.todoId, todo.isCompleted)
                         }
                         className="p-2 text-green-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-all duration-200 group"
-                        title="Mark as incomplete"
+                        title={t.tasks.markAsIncomplete}
                       >
                         <FiCheckCircle className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
                       </button>
@@ -473,7 +477,7 @@ export default function Todos() {
 
                     <div className="flex items-center space-x-2">
                       <span className="text-xs text-gray-500 px-2 py-1 bg-gray-100 rounded-full">
-                        Completed
+                        {t.tasks.completed}
                       </span>
                     </div>
                   </div>
@@ -484,7 +488,7 @@ export default function Todos() {
             {completedTodos.length === 0 && (
               <div className="text-center py-8 text-gray-500">
                 <FiCheckCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                <p>No completed tasks yet</p>
+                <p>{t.tasks.noCompletedTasks}</p>
               </div>
             )}
           </div>
@@ -496,7 +500,7 @@ export default function Todos() {
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-200">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900">
-              Progress Overview
+              {t.tasks.progressOverview}
             </h3>
             <span className="text-2xl font-bold text-blue-600">
               {Math.round((completedTodos.length / todos.length) * 100)}%
@@ -516,9 +520,13 @@ export default function Todos() {
 
           <div className="flex justify-between text-sm text-gray-600">
             <span>
-              {completedTodos.length} of {todos.length} tasks completed
+              {t.tasks.tasksCompleted
+                .replace('{completed}', completedTodos.length.toString())
+                .replace('{total}', todos.length.toString())}
             </span>
-            <span>{pendingTodos.length} remaining</span>
+            <span>
+              {t.tasks.remaining.replace('{remaining}', pendingTodos.length.toString())}
+            </span>
           </div>
         </div>
       )}

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDeleteEventMutation } from '../../services/JamDB';
 import { useAppDispatch } from '../../reduxFiles/store';
 import { deleteEventFromList } from '../../reduxFiles/slices/events';
+import { useTranslation } from '../../hooks/useTranslation';
 import {
   FiTrash2,
   FiX,
@@ -20,6 +21,7 @@ interface DeleteEventProps {
 }
 
 function DeleteEvent({ eventId, eventTitle, onClose, open }: DeleteEventProps) {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [deleteEvent] = useDeleteEventMutation();
   const [errorMessage, setErrorMessage] = useState('');
@@ -40,7 +42,7 @@ function DeleteEvent({ eventId, eventTitle, onClose, open }: DeleteEventProps) {
         setErrorMessage((res as any).error.data.message);
       }
     } catch (error) {
-      setErrorMessage('Error deleting event.');
+      setErrorMessage(t.deleteModal.errorDeleting);
     } finally {
       setIsDeleting(false);
     }
@@ -82,9 +84,9 @@ function DeleteEvent({ eventId, eventTitle, onClose, open }: DeleteEventProps) {
                   </div>
                   <div>
                     <h2 className="text-xl font-bold text-white">
-                      Delete Event
+                      {t.deleteModal.deleteEvent}
                     </h2>
-                    <p className="text-red-100 text-sm">This action cannot be undone</p>
+                    <p className="text-red-100 text-sm">{t.deleteModal.cannotBeUndone}</p>
                   </div>
                 </div>
                 <button
@@ -101,16 +103,16 @@ function DeleteEvent({ eventId, eventTitle, onClose, open }: DeleteEventProps) {
               {/* Event Title */}
               <div className="text-center">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Delete "{eventTitle}"?
+                  {t.deleteModal.deleteEventTitle.replace('{title}', eventTitle)}
                 </h3>
                 <p className="text-gray-600 mb-1">
-                  Are you sure you want to delete this event?
+                  {t.deleteModal.confirmDelete}
                 </p>
                 <p className="text-gray-500 text-sm">
-                  All event data, tasks, and expenses will be permanently removed.
+                  {t.deleteModal.dataWillBeRemoved}
                 </p>
                 <p className="text-gray-500 text-sm mt-2">
-                  Your friends will be sad 😔
+                  {t.deleteModal.friendsWillBeSad}
                 </p>
               </div>
 
@@ -131,7 +133,7 @@ function DeleteEvent({ eventId, eventTitle, onClose, open }: DeleteEventProps) {
                   disabled={isDeleting}
                   className="flex-1 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Cancel
+                  {t.deleteModal.cancel}
                 </button>
                 <button
                   onClick={handleDelete}
@@ -141,12 +143,12 @@ function DeleteEvent({ eventId, eventTitle, onClose, open }: DeleteEventProps) {
                   {isDeleting ? (
                     <>
                       <FiLoader className="w-5 h-5 animate-spin" />
-                      <span>Deleting...</span>
+                      <span>{t.deleteModal.deleting}</span>
                     </>
                   ) : (
                     <>
                       <FiTrash2 className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
-                      <span>Delete Event</span>
+                      <span>{t.deleteModal.deleteEvent}</span>
                     </>
                   )}
                 </button>
