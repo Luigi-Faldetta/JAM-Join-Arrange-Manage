@@ -9,6 +9,9 @@ import {
   useDeleteExpenseMutation,
   useGetMeQuery,
   useGetUsersQuery,
+  useConfirmPaymentMutation,
+  useConfirmReceiptMutation,
+  useGetEventSettlementsQuery,
 } from '../../services/JamDB';
 import { setExpenseList, addExpense, deleteExpense as removeExpenseFromStore } from '../../reduxFiles/slices/expenses';
 import { formatCurrency } from '../../reduxFiles/slices/preferences';
@@ -20,6 +23,8 @@ import {
   FiTrendingUp,
   FiCalendar,
   FiCheckCircle,
+  FiClock,
+  FiCheck,
 } from 'react-icons/fi';
 import { useTranslation } from '../../hooks/useTranslation';
 
@@ -31,6 +36,28 @@ interface Expense {
   paidBy: string;
   createdAt: string;
   User?: {
+    name: string;
+    profilePic?: string;
+  };
+}
+
+interface Settlement {
+  id: string;
+  eventId: string;
+  payerId: string;
+  receiverId: string;
+  amount: string;
+  payerConfirmed: boolean;
+  receiverConfirmed: boolean;
+  payerConfirmedAt?: string;
+  receiverConfirmedAt?: string;
+  Payer?: {
+    userId: string;
+    name: string;
+    profilePic?: string;
+  };
+  Receiver?: {
+    userId: string;
     name: string;
     profilePic?: string;
   };
@@ -48,15 +75,21 @@ export default function Expenses() {
     cost: '',
   });
   const [isAddingExpense, setIsAddingExpense] = useState(false);
+  const [confirmingPaymentId, setConfirmingPaymentId] = useState<string | null>(null);
+  const [confirmingReceiptId, setConfirmingReceiptId] = useState<string | null>(null);
 
   // API hooks
   const { data: expensesData, isLoading, error: expensesError, refetch: refetchExpenses } = useGetExpensesQuery(
-    eventid as string
+    eventid as string,
+    { skip: !eventid }
   );
   const { data: userData } = useGetMeQuery();
-  const { data: eventUsersData } = useGetUsersQuery(eventid as string);
+  const { data: eventUsersData } = useGetUsersQuery(eventid as string, { skip: !eventid });
   const [createExpense, { isLoading: isCreating }] = useCreateExpenseMutation();
   const [deleteExpense, { isLoading: isDeleting }] = useDeleteExpenseMutation();
+  const [confirmPayment, { isLoading: isConfirmingPayment }] = useConfirmPaymentMutation();
+  const [confirmReceipt, { isLoading: isConfirmingReceipt }] = useConfirmReceiptMutation();
+  const { data: settlementsData } = useGetEventSettlementsQuery(eventid as string, { skip: !eventid });
 
   useEffect(() => {
     console.log('Expenses useEffect triggered with:', { expensesData, expensesError });
@@ -197,10 +230,14 @@ export default function Expenses() {
           setIsAddingExpense(false);
           
           // Also refetch to ensure backend consistency
-          console.log('Refetching expenses for consistency...');
-          refetchExpenses().then((refetchResult) => {
-            console.log('Refetch expenses result:', refetchResult);
-          });
+          if (refetchExpenses) {
+            console.log('Refetching expenses for consistency...');
+            refetchExpenses().then((refetchResult) => {
+              console.log('Refetch expenses result:', refetchResult);
+            }).catch((err) => {
+              console.log('Refetch error (can be ignored):', err);
+            });
+          }
         } else {
           console.log('Expense creation data exists but not successful:', result.data);
         }
@@ -233,6 +270,62 @@ export default function Expenses() {
       // If delete failed, we should revert the optimistic update
       // But for simplicity, we'll let the next refetch restore the state
     }
+  };
+
+  const handleConfirmPayment = async (receiverId: string, amount: number) => {
+    if (!userData?.data?.userId || confirmingPaymentId) return;
+
+    const paymentId = `${userData.data.userId}-${receiverId}-${amount}`;
+    setConfirmingPaymentId(paymentId);
+
+    try {
+      const result = await confirmPayment({
+        eventId: eventid as string,
+        payerId: userData.data.userId,
+        receiverId,
+        amount,
+      }).unwrap();
+      
+      // Success - the UI will update automatically via RTK Query
+      console.log('Payment confirmed successfully:', result);
+    } catch (error) {
+      console.error('Error confirming payment:', error);
+    } finally {
+      setConfirmingPaymentId(null);
+    }
+  };
+
+  const handleConfirmReceipt = async (settlementId: string) => {
+    if (!userData?.data?.userId || confirmingReceiptId) return;
+
+    setConfirmingReceiptId(settlementId);
+
+    try {
+      const result = await confirmReceipt({
+        settlementId,
+        userId: userData.data.userId,
+      }).unwrap();
+      
+      // Success - the UI will update automatically via RTK Query
+      console.log('Receipt confirmed successfully:', result);
+    } catch (error) {
+      console.error('Error confirming receipt:', error);
+    } finally {
+      setConfirmingReceiptId(null);
+    }
+  };
+
+  // Helper function to get settlement status
+  const getSettlementStatus = (payerId: string, receiverId: string, amount: number): Settlement | null => {
+    if (!settlementsData?.data) return null;
+    
+    const settlement = settlementsData.data.find((settlement: Settlement) => 
+      settlement.payerId === payerId &&
+      settlement.receiverId === receiverId &&
+      Math.abs(parseFloat(settlement.amount) - amount) < 0.01
+    );
+    
+    return settlement;
   };
 
   if (isLoading) {
@@ -564,6 +657,20 @@ export default function Expenses() {
                   // Show individual balances first
                   const hasImbalances = balances.some(p => Math.abs(p.balance) >= 0.01);
                   
+                  // Check if all transactions are settled
+                  const allTransactionsSettled = transactions.length > 0 && transactions.every(transaction => {
+                    const settlement = getSettlementStatus(
+                      transaction.from.userId,
+                      transaction.to.userId,
+                      transaction.amount
+                    );
+                    return settlement?.payerConfirmed && settlement?.receiverConfirmed;
+                  });
+                  
+                  
+                  // Only show settled message when there are no imbalances AND either no transactions or all are settled
+                  const showSettledMessage = !hasImbalances && (transactions.length === 0 || allTransactionsSettled);
+                  
                   return (
                     <>
                       {/* Summary */}
@@ -631,45 +738,135 @@ export default function Expenses() {
                           <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">{t.expenses.suggestedPayments}</h4>
                           <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
                             <p className="text-xs text-blue-700 dark:text-blue-300 mb-3">{t.expenses.settleBalancesInstruction}</p>
-                            {transactions.map((transaction, index) => (
-                              <div key={index} className="flex items-center justify-between p-3 bg-white dark:bg-gray-700 rounded-lg mb-2 last:mb-0 shadow-sm">
-                                <div className="flex items-center space-x-3 flex-1">
-                                  <img
-                                    src={transaction.from.profilePic || '/no-profile-picture-icon.png'}
-                                    alt={transaction.from.name}
-                                    className="w-8 h-8 rounded-full object-cover"
-                                  />
-                                  <div className="flex-1">
-                                    <p className="text-sm font-medium text-gray-900 dark:text-white">{transaction.from.name}</p>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400">{t.expenses.pays}</p>
+                            {transactions.map((transaction, index) => {
+                              const settlement = getSettlementStatus(
+                                transaction.from.userId,
+                                transaction.to.userId,
+                                transaction.amount
+                              );
+                              const transactionKey = `${transaction.from.userId}-${transaction.to.userId}-${transaction.amount}`;
+                              const isCurrentUserPayer = userData?.data?.userId === transaction.from.userId;
+                              const isCurrentUserReceiver = userData?.data?.userId === transaction.to.userId;
+                              const canConfirmPayment = isCurrentUserPayer && !settlement?.payerConfirmed;
+                              const canConfirmReceipt = isCurrentUserReceiver && settlement?.payerConfirmed && !settlement?.receiverConfirmed;
+                              const isFullySettled = settlement?.payerConfirmed && settlement?.receiverConfirmed;
+                              const isConfirmingThisPayment = confirmingPaymentId === transactionKey;
+
+                              return (
+                                <div key={index} className="p-3 bg-white dark:bg-gray-700 rounded-lg mb-2 last:mb-0 shadow-sm">
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex items-center space-x-3 flex-1">
+                                      <img
+                                        src={transaction.from.profilePic || '/no-profile-picture-icon.png'}
+                                        alt={transaction.from.name}
+                                        className="w-8 h-8 rounded-full object-cover"
+                                      />
+                                      <div className="flex-1">
+                                        <p className="text-sm font-medium text-gray-900 dark:text-white">{transaction.from.name}</p>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">{t.expenses.pays}</p>
+                                      </div>
+                                      <div className="text-center px-2">
+                                        <div className="text-lg font-bold text-blue-600">{formatCurrency(transaction.amount, currency)}</div>
+                                        <div className="text-xs text-gray-500 dark:text-gray-400">{t.expenses.to}</div>
+                                      </div>
+                                      <div className="flex-1 text-right">
+                                        <p className="text-sm font-medium text-gray-900 dark:text-white">{transaction.to.name}</p>
+                                      </div>
+                                      <img
+                                        src={transaction.to.profilePic || '/no-profile-picture-icon.png'}
+                                        alt={transaction.to.name}
+                                        className="w-8 h-8 rounded-full object-cover"
+                                      />
+                                    </div>
                                   </div>
-                                  <div className="text-center px-2">
-                                    <div className="text-lg font-bold text-blue-600">{formatCurrency(transaction.amount, currency)}</div>
-                                    <div className="text-xs text-gray-500 dark:text-gray-400">{t.expenses.to}</div>
+
+                                  {/* Settlement Status and Actions */}
+                                  <div className="mt-3 flex items-center justify-between">
+                                    <div className="flex items-center space-x-2">
+                                      {isFullySettled ? (
+                                        <div className="flex items-center space-x-2 text-green-600">
+                                          <FiCheckCircle className="w-4 h-4" />
+                                          <span className="text-sm font-medium">Settled</span>
+                                        </div>
+                                      ) : settlement?.payerConfirmed ? (
+                                        <div className="flex items-center space-x-2 text-yellow-600">
+                                          <FiClock className="w-4 h-4" />
+                                          <span className="text-sm">Awaiting confirmation</span>
+                                        </div>
+                                      ) : (
+                                        <div className="flex items-center space-x-2 text-gray-500">
+                                          <FiDollarSign className="w-4 h-4" />
+                                          <span className="text-sm">Pending payment</span>
+                                        </div>
+                                      )}
+                                    </div>
+
+                                    {canConfirmPayment && (
+                                      <button
+                                        onClick={() => handleConfirmPayment(transaction.to.userId, transaction.amount)}
+                                        disabled={isConfirmingThisPayment}
+                                        className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-all duration-200"
+                                      >
+                                        {isConfirmingThisPayment ? (
+                                          <FiLoader className="w-4 h-4 animate-spin" />
+                                        ) : (
+                                          <FiCheck className="w-4 h-4" />
+                                        )}
+                                        <span>{isConfirmingThisPayment ? 'Confirming...' : 'Mark as Paid'}</span>
+                                      </button>
+                                    )}
+
+                                    {canConfirmReceipt && settlement && (
+                                      <button
+                                        onClick={() => handleConfirmReceipt(settlement.id)}
+                                        disabled={confirmingReceiptId === settlement.id}
+                                        className="flex items-center space-x-2 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-all duration-200"
+                                      >
+                                        {confirmingReceiptId === settlement.id ? (
+                                          <FiLoader className="w-4 h-4 animate-spin" />
+                                        ) : (
+                                          <FiCheck className="w-4 h-4" />
+                                        )}
+                                        <span>{confirmingReceiptId === settlement.id ? 'Confirming...' : 'Confirm Receipt'}</span>
+                                      </button>
+                                    )}
+
+                                    {isCurrentUserPayer && settlement?.payerConfirmed && !settlement?.receiverConfirmed && (
+                                      <div className="text-sm text-gray-600">
+                                        Waiting for {transaction.to.name} to confirm
+                                      </div>
+                                    )}
+
+                                    {isCurrentUserReceiver && !settlement?.payerConfirmed && (
+                                      <div className="text-sm text-gray-600">
+                                        Waiting for payment
+                                      </div>
+                                    )}
                                   </div>
-                                  <div className="flex-1 text-right">
-                                    <p className="text-sm font-medium text-gray-900 dark:text-white">{transaction.to.name}</p>
-                                  </div>
-                                  <img
-                                    src={transaction.to.profilePic || '/no-profile-picture-icon.png'}
-                                    alt={transaction.to.name}
-                                    className="w-8 h-8 rounded-full object-cover"
-                                  />
                                 </div>
-                              </div>
-                            ))}
+                              );
+                            })}
                           </div>
                         </div>
                       )}
                       
                       {/* All Balanced Message */}
-                      {!hasImbalances && (
+                      {showSettledMessage && totalAmount > 0 && (
                         <div className="text-center py-6 text-gray-500">
                           <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full mx-auto mb-3 flex items-center justify-center">
                             <FiCheckCircle className="w-6 h-6 text-green-600" />
                           </div>
                           <p className="font-medium">{t.expenses.settledUp}</p>
                           <p className="text-sm">{t.expenses.everyonePaid}</p>
+                        </div>
+                      )}
+                      
+                      {/* No Expenses Message */}
+                      {totalAmount === 0 && (
+                        <div className="text-center py-6 text-gray-500">
+                          <FiDollarSign className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                          <p className="font-medium">No expenses yet</p>
+                          <p className="text-sm">Add expenses to track payments</p>
                         </div>
                       )}
                     </>

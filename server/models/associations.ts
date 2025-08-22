@@ -4,6 +4,7 @@ import Todo from './todo';
 import Expense from './expense';
 import UserEvent from './userEvent';
 import EventChat from './eventChat';
+import ExpenseSettlement from './expenseSettlement';
 
 Event.belongsToMany(User, {
   through: UserEvent,
@@ -59,4 +60,32 @@ EventChat.belongsTo(Event, {
   foreignKey: 'eventId'
 });
 
-export { User, Event, UserEvent, EventChat };
+ExpenseSettlement.belongsTo(Event, {
+  foreignKey: 'eventId',
+});
+
+ExpenseSettlement.belongsTo(User, {
+  foreignKey: 'payerId',
+  as: 'Payer',
+});
+
+ExpenseSettlement.belongsTo(User, {
+  foreignKey: 'receiverId',
+  as: 'Receiver',
+});
+
+Event.hasMany(ExpenseSettlement, {
+  foreignKey: 'eventId'
+});
+
+User.hasMany(ExpenseSettlement, {
+  foreignKey: 'payerId',
+  as: 'PayerSettlements'
+});
+
+User.hasMany(ExpenseSettlement, {
+  foreignKey: 'receiverId',
+  as: 'ReceiverSettlements'
+});
+
+export { User, Event, UserEvent, EventChat, ExpenseSettlement };

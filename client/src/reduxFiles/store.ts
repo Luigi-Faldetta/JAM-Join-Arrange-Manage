@@ -10,6 +10,7 @@ import { logoutReducer } from './slices/logout';
 import { chatReducer } from './slices/chat';
 import { authModalReducer } from './slices/authModal';
 import preferencesReducer from './slices/preferences';
+import settlementReducer from './slices/settlements';
 
 const store = configureStore({
   reducer: {
@@ -25,6 +26,7 @@ const store = configureStore({
     userList: userReducers.userListReducer,
     toDoListReducer, // <-- fixed
     expenseReducer, // <-- fixed
+    settlementReducer,
     [thesisDbApi.reducerPath]: thesisDbApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>

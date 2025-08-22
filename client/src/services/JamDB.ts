@@ -10,7 +10,7 @@ import { ExpenseSheet } from './ApiResponseType';
 import { io } from 'socket.io-client';
 const URL =
   process.env.NODE_ENV !== 'production'
-    ? process.env.REACT_APP_API_BASE_URL || 'http://localhost:3200/'
+    ? process.env.REACT_APP_API_BASE_URL || 'http://localhost:3200'
     : process.env.REACT_APP_API_BASE_URL || 'https://jam-join-arrange-manage-production.up.railway.app';
 
 // Only initialize socket if we have a valid URL and are not in a static build
@@ -29,7 +29,7 @@ export const fetchLogin = async (email: string) => {
 };
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: URL,
+  baseUrl: URL + '/',
   prepareHeaders: (headers, { getState, endpoint }) => {
     // Always read fresh token from localStorage for each request
     const token = localStorage.getItem('token');
@@ -77,6 +77,7 @@ export const thesisDbApi = createApi({
     'UserState',
     'ExpenseSheet',
     'Me',
+    'Settlement',
   ], //for tracking what will be referenced from the cache
   endpoints: (build) => ({
     // build.mutation has two type parameters, the first is response type the second is parameter type.
@@ -479,6 +480,65 @@ export const thesisDbApi = createApi({
       }),
       invalidatesTags: ['Me', 'UserState'],
     }),
+
+    // Settlement endpoints
+    confirmPayment: build.mutation<
+      ApiResponse<{
+        id: string;
+        eventId: string;
+        payerId: string;
+        receiverId: string;
+        amount: string;
+        payerConfirmed: boolean;
+        receiverConfirmed: boolean;
+      }>,
+      { eventId: string; receiverId: string; amount: number; payerId: string }
+    >({
+      query: (body) => ({
+        url: 'settlements/confirm-payment',
+        method: 'POST',
+        body,
+        headers: { 'Content-type': 'application/json; charset=UTF-8' },
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: 'Settlement', id: arg.eventId },
+        'Settlement',
+      ],
+    }),
+
+    confirmReceipt: build.mutation<
+      ApiResponse<any>,
+      { settlementId: string; userId: string }
+    >({
+      query: (body) => ({
+        url: 'settlements/confirm-receipt',
+        method: 'POST',
+        body,
+        headers: { 'Content-type': 'application/json; charset=UTF-8' },
+      }),
+      invalidatesTags: ['Settlement'],
+    }),
+
+    getEventSettlements: build.query<ApiResponse<any[]>, string>({
+      query: (eventId) => ({
+        url: `settlements/${eventId}`,
+      }),
+      providesTags: (result, error, eventId) => [
+        { type: 'Settlement', id: eventId },
+        'Settlement',
+      ],
+    }),
+
+    getUserSettlements: build.query<
+      ApiResponse<any[]>,
+      { userId: string; eventId?: string }
+    >({
+      query: ({ userId, eventId }) => ({
+        url: `user-settlements/${userId}`,
+        params: eventId ? { eventId } : undefined,
+      }),
+      providesTags: ['Settlement'],
+    }),
   }),
 });
 
@@ -532,4 +592,10 @@ export const {
   //msg
   useAddMsgMutation,
   useGetMsgsQuery,
+
+  //settlements
+  useConfirmPaymentMutation,
+  useConfirmReceiptMutation,
+  useGetEventSettlementsQuery,
+  useGetUserSettlementsQuery,
 } = thesisDbApi;

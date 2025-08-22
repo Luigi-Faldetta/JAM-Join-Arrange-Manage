@@ -13,6 +13,7 @@ import {
   eventChat,
   email,
   clerkAuth,
+  settlement,
 } from './controllers/index.js';
 
 // Health check - keeping your original format
@@ -83,5 +84,13 @@ router.post('/chat/', eventChat.newMessage);
 // EMAIL ROUTES - EXACTLY AS ORIGINAL
 // ============================================================================
 router.get('/passwordreset/:email', email.resetPassword);
+
+// ============================================================================
+// SETTLEMENT ROUTES
+// ============================================================================
+router.post('/settlements/confirm-payment', session.authorize, settlement.confirmPayment);
+router.post('/settlements/confirm-receipt', session.authorize, settlement.confirmReceipt);
+router.get('/settlements/:eventid', session.authorize, settlement.getEventSettlements);
+router.get('/user-settlements/:userid', session.authorize, settlement.getUserSettlements);
 
 export default router;
