@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import { EventState } from '../../reduxFiles/slices/events';
 import { useTranslation } from '../../hooks/useTranslation';
+import { useGetUsersQuery } from '../../services/JamDB';
 import {
   FiCalendar,
   FiMapPin,
@@ -27,11 +28,17 @@ export default function EventTile({
   const navigate = useNavigate();
   const { t, formatDate, formatRelativeTime } = useTranslation();
 
+  // Fetch actual attendee count using the same query as Attendees component
+  const { data: usersData } = useGetUsersQuery(event.eventId || '', {
+    skip: !event.eventId, // Skip if no eventId
+  });
+
   const isHost = event.UserEvents?.some(
     (userEvent) => userEvent.userId === userId && userEvent.isHost
   );
 
-  const attendeeCount = event.UserEvents?.length || 0;
+  // Use actual user count from API instead of potentially stale UserEvents array
+  const attendeeCount = usersData?.data?.length || event.UserEvents?.length || 0;
   const eventDate = moment(event.date);
   const isUpcoming = eventDate.isAfter(moment());
   const timeFromNow = formatRelativeTime(event.date);

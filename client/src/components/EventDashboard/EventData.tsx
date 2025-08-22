@@ -5,6 +5,8 @@ import EventLink from './EventLink';
 import EditEvent from './EditEvent';
 import DeleteEvent from './DeleteEvent';
 import { useTranslation } from '../../hooks/useTranslation';
+import { useGetUsersQuery } from '../../services/JamDB';
+import { useParams } from 'react-router-dom';
 import {
   FiCalendar,
   FiMapPin,
@@ -42,6 +44,12 @@ export default function EventData({
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { t, formatDate, formatRelativeTime } = useTranslation();
+  const { eventid } = useParams();
+
+  // Fetch actual attendee count using the same query as Attendees component
+  const { data: usersData } = useGetUsersQuery(eventid as string, {
+    skip: !eventid, // Skip if no eventId
+  });
 
   if (isLoading || !eventData?.data) {
     return (
@@ -59,7 +67,8 @@ export default function EventData({
   const event = eventData.data;
   const eventDate = moment(event.date);
   const isUpcoming = eventDate.isAfter(moment());
-  const attendeeCount = event.UserEvents?.length || 0;
+  // Use actual user count from API instead of potentially stale UserEvents array
+  const attendeeCount = usersData?.data?.length || event.UserEvents?.length || 0;
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl border border-gray-200 dark:border-gray-600 dark:border-gray-700 overflow-hidden">
