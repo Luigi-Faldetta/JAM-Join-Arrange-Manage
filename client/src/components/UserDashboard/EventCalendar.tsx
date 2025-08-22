@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import moment from 'moment';
+import { useTranslation } from '../../hooks/useTranslation';
 import {
   FiChevronLeft,
   FiChevronRight,
@@ -22,6 +23,7 @@ interface EventCalendarProps {
 }
 
 function EventCalendar({ sortedEventList }: EventCalendarProps) {
+  const { t, formatDate } = useTranslation();
   const [currentDate, setCurrentDate] = useState(moment());
   const [hoveredDay, setHoveredDay] = useState<moment.Moment | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
@@ -42,7 +44,7 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
   const getEventsForDay = (date: moment.Moment) => {
     return sortedEventList.filter(
       (event) =>
-        moment(event.date).format('YYYY-MM-DD') === date.format('YYYY-MM-DD')
+        formatDate(event.date, 'YYYY-MM-DD') === formatDate(date, 'YYYY-MM-DD')
     );
   };
 
@@ -55,7 +57,7 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
   };
 
   const isToday = (date: moment.Moment) => {
-    return date.format('YYYY-MM-DD') === moment().format('YYYY-MM-DD');
+    return formatDate(date, 'YYYY-MM-DD') === formatDate(moment(), 'YYYY-MM-DD');
   };
 
   const isCurrentMonth = (date: moment.Moment) => {
@@ -110,7 +112,7 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
           <div className="flex items-center space-x-2">
             <FiCalendar className="w-5 h-5 text-white" />
             <h3 className="text-lg font-semibold text-white">
-              {currentDate.format('MMMM YYYY')}
+              {formatDate(currentDate, 'MMMM YYYY')}
             </h3>
           </div>
 
@@ -135,7 +137,7 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
       <div className="p-4">
         {/* Day Headers */}
         <div className="grid grid-cols-7 gap-1 mb-2">
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+          {t.calendar.daysShort.map((day) => (
             <div
               key={day}
               className="text-center text-xs font-medium text-gray-500 py-2"
@@ -183,7 +185,7 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
                   }
                 `}
                 >
-                  {date.format('D')}
+                  {formatDate(date, 'D')}
                 </div>
 
                 {/* Event Indicators */}
@@ -226,7 +228,7 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
       {sortedEventList.length > 0 && (
         <div className="border-t border-gray-200 p-4">
           <h4 className="text-sm font-semibold text-gray-900 mb-3">
-            Upcoming Events
+            {t.calendar.upcomingEvents}
           </h4>
           <div className="space-y-2 max-h-48 overflow-y-auto">
             {sortedEventList
@@ -256,7 +258,7 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
                       </div>
                       <div className="flex items-center space-x-2 text-xs text-gray-500">
                         <FiClock className="w-3 h-3" />
-                        <span>{eventDate.format('MMM D, h:mm A')}</span>
+                        <span>{formatDate(eventDate, 'MMM D, h:mm A')}</span>
                         {event.location && (
                           <>
                             <FiMapPin className="w-3 h-3" />
@@ -277,11 +279,11 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
         <div className="flex items-center justify-center space-x-4 text-xs">
           <div className="flex items-center space-x-1">
             <div className="w-2 h-2 rounded-full bg-purple-600"></div>
-            <span className="text-gray-600">Hosting</span>
+            <span className="text-gray-600">{t.calendar.hosting}</span>
           </div>
           <div className="flex items-center space-x-1">
             <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-            <span className="text-gray-600">Attending</span>
+            <span className="text-gray-600">{t.calendar.attending}</span>
           </div>
         </div>
       </div>
@@ -309,10 +311,10 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
                 </div>
                 <div>
                   <h4 className="font-semibold text-gray-900 text-sm">
-                    {hoveredDay.format('MMMM D, YYYY')}
+                    {formatDate(hoveredDay, 'MMMM D, YYYY')}
                   </h4>
                   <p className="text-xs text-gray-500">
-                    {getEventsForDay(hoveredDay).length} event{getEventsForDay(hoveredDay).length !== 1 ? 's' : ''}
+                    {getEventsForDay(hoveredDay).length} {getEventsForDay(hoveredDay).length === 1 ? t.calendar.event : t.calendar.events}
                   </p>
                 </div>
               </div>
@@ -339,7 +341,7 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
                       <div className="ml-4 space-y-1">
                         <div className="flex items-center space-x-2 text-xs text-gray-600">
                           <FiClock className="w-3 h-3 flex-shrink-0" />
-                          <span>{eventTime.format('h:mm A')}</span>
+                          <span>{formatDate(eventTime, 'h:mm A')}</span>
                         </div>
                         
                         {event.location && (
@@ -355,7 +357,7 @@ function EventCalendar({ sortedEventList }: EventCalendarProps) {
                 
                 {getEventsForDay(hoveredDay).length > 3 && (
                   <div className="text-xs text-gray-500 text-center pt-2 border-t border-gray-100">
-                    +{getEventsForDay(hoveredDay).length - 3} more event{getEventsForDay(hoveredDay).length - 3 !== 1 ? 's' : ''}
+                    +{getEventsForDay(hoveredDay).length - 3} {t.calendar.more} {getEventsForDay(hoveredDay).length - 3 === 1 ? t.calendar.event : t.calendar.events}
                   </div>
                 )}
               </div>

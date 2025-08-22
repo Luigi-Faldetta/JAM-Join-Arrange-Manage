@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from '../../hooks/useTranslation';
 import {
   FiShare2,
   FiCopy,
@@ -16,6 +17,7 @@ interface EventLinkProps {
 }
 
 export default function EventLink({ eventid }: EventLinkProps) {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
 
@@ -42,42 +44,42 @@ export default function EventLink({ eventid }: EventLinkProps) {
 
   const shareOptions = [
     {
-      name: 'Copy Link',
+      name: t.shareModal.copyLink,
       icon: FiCopy,
       action: handleCopyLink,
       color: 'from-gray-600 to-gray-700',
       hoverColor: 'hover:from-gray-700 hover:to-gray-800',
     },
     {
-      name: 'Email',
+      name: t.shareModal.email,
       icon: FiMail,
       action: () =>
         window.open(
-          `mailto:?subject=Join my event&body=Check out this event: ${eventUrl}`
+          `mailto:?subject=${t.shareModal.joinMyEvent}&body=${t.shareModal.checkOutThisEvent}: ${eventUrl}`
         ),
       color: 'from-blue-600 to-blue-700',
       hoverColor: 'hover:from-blue-700 hover:to-blue-800',
     },
     {
-      name: 'WhatsApp',
+      name: t.shareModal.whatsapp,
       icon: FiMessageCircle,
       action: () =>
-        window.open(`https://wa.me/?text=Check out this event: ${eventUrl}`),
+        window.open(`https://wa.me/?text=${t.shareModal.checkOutThisEvent}: ${eventUrl}`),
       color: 'from-green-600 to-green-700',
       hoverColor: 'hover:from-green-700 hover:to-green-800',
     },
     {
-      name: 'Twitter',
+      name: t.shareModal.twitter,
       icon: FiTwitter,
       action: () =>
         window.open(
-          `https://twitter.com/intent/tweet?text=Check out this event: ${eventUrl}`
+          `https://twitter.com/intent/tweet?text=${t.shareModal.checkOutThisEvent}: ${eventUrl}`
         ),
       color: 'from-sky-600 to-sky-700',
       hoverColor: 'hover:from-sky-700 hover:to-sky-800',
     },
     {
-      name: 'Facebook',
+      name: t.shareModal.facebook,
       icon: FiFacebook,
       action: () =>
         window.open(`https://www.facebook.com/sharer/sharer.php?u=${eventUrl}`),
@@ -96,7 +98,7 @@ export default function EventLink({ eventid }: EventLinkProps) {
         className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-3 px-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group"
       >
         <FiShare2 className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
-        <span>Share Event</span>
+        <span>{t.shareModal.shareEvent}</span>
         <FiExternalLink className="w-3 h-3 opacity-70" />
       </motion.button>
 
@@ -124,7 +126,7 @@ export default function EventLink({ eventid }: EventLinkProps) {
               <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 p-4">
                 <div className="mb-4">
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    Share this event
+                    {t.shareModal.shareThisEvent}
                   </h3>
                   <div className="flex items-center space-x-2 p-3 bg-gray-50 rounded-xl">
                     <input
@@ -136,7 +138,7 @@ export default function EventLink({ eventid }: EventLinkProps) {
                     <button
                       onClick={handleCopyLink}
                       className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200"
-                      title="Copy link"
+                      title={t.shareModal.copyLinkTitle}
                     >
                       {copied ? (
                         <FiCheck className="w-4 h-4 text-green-600" />
@@ -183,7 +185,7 @@ export default function EventLink({ eventid }: EventLinkProps) {
             exit={{ opacity: 0, y: -10 }}
             className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-3 py-1 rounded-lg text-sm font-medium whitespace-nowrap"
           >
-            Link copied!
+            {t.shareModal.linkCopied}
           </motion.div>
         )}
       </AnimatePresence>

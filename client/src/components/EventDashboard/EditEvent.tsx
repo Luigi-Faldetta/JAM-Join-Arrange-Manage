@@ -9,6 +9,7 @@ import {
   updateEvent,
 } from '../../reduxFiles/slices/events';
 import { useUpdateEventMutation } from '../../services/JamDB';
+import { useTranslation } from '../../hooks/useTranslation';
 import {
   FiX,
   FiCalendar,
@@ -26,6 +27,7 @@ interface EditEventProps {
 }
 
 function EditEvent({ open, setOpen, eventData }: EditEventProps) {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [eventFile, setEventFile] = useState<File | null>(null);
   const [eventDate, setEventDate] = useState<Date | null>(null);
@@ -173,9 +175,9 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-2xl font-bold text-white">
-                    Edit Event
+                    {t.editModal.editEvent}
                   </h2>
-                  <p className="text-purple-100">Update your event details</p>
+                  <p className="text-purple-100">{t.editModal.updateEventDetails}</p>
                 </div>
                 <button
                   onClick={handleClose}
@@ -191,7 +193,7 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
               {/* Event Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Event Name *
+                  {t.editModal.eventName} {t.editModal.required}
                 </label>
                 <input
                   name="eventName"
@@ -199,7 +201,7 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
                   onChange={(e) => setTitle(e.target.value)}
                   maxLength={50}
                   className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white text-gray-900 placeholder:text-gray-500"
-                  placeholder="e.g., Anna's Birthday Party"
+                  placeholder={t.editModal.eventNamePlaceholder}
                   required
                   autoComplete="off"
                 />
@@ -208,13 +210,13 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
               {/* Date & Time */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Date & Time *
+                  {t.editModal.dateTime} {t.editModal.required}
                 </label>
                 <div className="relative">
                   <FiCalendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <DatePicker
                     selectsStart
-                    placeholderText="Select date & time"
+                    placeholderText={t.editModal.selectDateTime}
                     showTimeSelect
                     selected={eventDate}
                     onChange={(date) => setEventDate(date)}
@@ -230,7 +232,7 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
               {/* Location */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Location
+                  {t.editModal.location}
                 </label>
                 <div className="relative">
                   <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -239,7 +241,7 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
                     className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white text-gray-900 placeholder:text-gray-500"
-                    placeholder="e.g., 123 Rainbow Lane, City"
+                    placeholder={t.editModal.locationPlaceholder}
                     autoComplete="off"
                   />
                 </div>
@@ -248,7 +250,7 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
               {/* Description */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description
+                  {t.editModal.description}
                 </label>
                 <div className="relative">
                   <FiFileText className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
@@ -258,7 +260,7 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
                     onChange={(e) => setDescription(e.target.value)}
                     rows={3}
                     className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 resize-none bg-white text-gray-900 placeholder:text-gray-500"
-                    placeholder="Tell people what to expect at your event..."
+                    placeholder={t.editModal.descriptionPlaceholder}
                     autoComplete="off"
                   />
                 </div>
@@ -267,14 +269,14 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
               {/* Image Upload */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Event Image
+                  {t.editModal.eventImage}
                 </label>
 
                 {previewUrl ? (
                   <div className="relative">
                     <img
                       src={previewUrl}
-                      alt="Event preview"
+                      alt={t.editModal.eventPreview}
                       className="w-full h-32 object-cover rounded-xl border border-gray-200"
                     />
                     <button
@@ -303,7 +305,7 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
                     >
                       <FiImage className="w-8 h-8 text-gray-400 group-hover:text-purple-500 mb-2" />
                       <span className="text-sm text-gray-600 group-hover:text-purple-600">
-                        Click to upload event image
+                        {t.editModal.clickToUpload}
                       </span>
                     </label>
                   </div>
@@ -319,12 +321,12 @@ function EditEvent({ open, setOpen, eventData }: EditEventProps) {
                 {isLoading ? (
                   <>
                     <FiLoader className="w-5 h-5 animate-spin" />
-                    <span>Updating Event...</span>
+                    <span>{t.editModal.updatingEvent}</span>
                   </>
                 ) : (
                   <>
                     <FiSave className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
-                    <span>Update Event</span>
+                    <span>{t.editModal.updateEvent}</span>
                   </>
                 )}
               </button>

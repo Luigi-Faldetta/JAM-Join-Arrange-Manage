@@ -10,6 +10,7 @@ import {
   EventState,
 } from '../../reduxFiles/slices/events';
 import { useAddEventMutation, useGetMeQuery } from '../../services/JamDB';
+import { useTranslation } from '../../hooks/useTranslation';
 import {
   FiPlus,
   FiX,
@@ -24,6 +25,7 @@ import {
 
 function CreateEventForm() {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const [eventDate, setEventDate] = useState<Date | null>(null);
   const [open, setOpen] = useState(false);
@@ -69,7 +71,7 @@ function CreateEventForm() {
 
     if (!userId) {
       console.error('User ID not available');
-      setErrorMessage('Unable to identify user. Please refresh the page and try again.');
+      setErrorMessage(t.createEvent.userIdentificationError);
       setIsLoading(false);
       
       // Try to refetch user data
@@ -168,9 +170,9 @@ function CreateEventForm() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-2xl font-bold text-white">
-                      Create New Event
+                      {t.createEvent.title}
                     </h2>
-                    <p className="text-purple-100">Bring people together</p>
+                    <p className="text-purple-100">{t.createEvent.subtitle}</p>
                   </div>
                   <button
                     onClick={() => setOpen(false)}
@@ -194,13 +196,13 @@ function CreateEventForm() {
                 {/* Event Name */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Event Name *
+                    {t.createEvent.eventName} {t.createEvent.requiredField}
                   </label>
                   <input
                     name="eventName"
                     maxLength={50}
                     className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white text-gray-900 placeholder:text-gray-500"
-                    placeholder="e.g., Anna's Birthday Party"
+                    placeholder={t.createEvent.eventNamePlaceholder}
                     required
                     autoComplete="off"
                   />
@@ -209,13 +211,13 @@ function CreateEventForm() {
                 {/* Date & Time */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Date & Time *
+                    {t.createEvent.dateTime} {t.createEvent.requiredField}
                   </label>
                   <div className="relative">
                     <FiCalendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <DatePicker
                       selectsStart
-                      placeholderText="Select date & time"
+                      placeholderText={t.createEvent.selectDateTime}
                       showTimeSelect
                       selected={eventDate}
                       onChange={(date) => setEventDate(date)}
@@ -231,14 +233,14 @@ function CreateEventForm() {
                 {/* Location */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Location
+                    {t.createEvent.location}
                   </label>
                   <div className="relative">
                     <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
                       name="eventLocation"
                       className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-white text-gray-900 placeholder:text-gray-500"
-                      placeholder="e.g., 123 Rainbow Lane, City"
+                      placeholder={t.createEvent.locationPlaceholderLong}
                       autoComplete="off"
                     />
                   </div>
@@ -247,7 +249,7 @@ function CreateEventForm() {
                 {/* Description */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Description
+                    {t.createEvent.description}
                   </label>
                   <div className="relative">
                     <FiFileText className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
@@ -255,7 +257,7 @@ function CreateEventForm() {
                       name="eventDescription"
                       rows={3}
                       className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 resize-none bg-white text-gray-900 placeholder:text-gray-500"
-                      placeholder="Tell people what to expect at your event..."
+                      placeholder={t.createEvent.descriptionPlaceholderLong}
                       autoComplete="off"
                     />
                   </div>
@@ -264,14 +266,14 @@ function CreateEventForm() {
                 {/* Image Upload */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Event Image
+                    {t.createEvent.eventImage}
                   </label>
 
                   {previewUrl ? (
                     <div className="relative">
                       <img
                         src={previewUrl}
-                        alt="Event preview"
+                        alt={t.common.altText.eventPreview}
                         className="w-full h-32 object-cover rounded-xl border border-gray-200"
                       />
                       <button
@@ -300,7 +302,7 @@ function CreateEventForm() {
                       >
                         <FiImage className="w-8 h-8 text-gray-400 group-hover:text-purple-500 mb-2" />
                         <span className="text-sm text-gray-600 group-hover:text-purple-600">
-                          Click to upload event image
+                          {t.createEvent.clickToUpload}
                         </span>
                       </label>
                     </div>
@@ -316,12 +318,12 @@ function CreateEventForm() {
                   {isLoading ? (
                     <>
                       <FiLoader className="w-5 h-5 animate-spin" />
-                      <span>Creating Event...</span>
+                      <span>{t.createEvent.creatingEvent}</span>
                     </>
                   ) : (
                     <>
                       <FiCheck className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
-                      <span>Create Event</span>
+                      <span>{t.createEvent.create}</span>
                     </>
                   )}
                 </button>
@@ -341,7 +343,7 @@ function CreateEventForm() {
         className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group"
       >
         <FiPlus className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
-        <span>Host Event</span>
+        <span>{t.createEvent.hostEvent}</span>
       </button>
       {createModal()}
     </>

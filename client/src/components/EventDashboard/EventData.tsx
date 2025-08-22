@@ -4,6 +4,7 @@ import ToggleButton from './ToggleButton';
 import EventLink from './EventLink';
 import EditEvent from './EditEvent';
 import DeleteEvent from './DeleteEvent';
+import { useTranslation } from '../../hooks/useTranslation';
 import {
   FiCalendar,
   FiMapPin,
@@ -40,6 +41,7 @@ export default function EventData({
 }: EventDataProps) {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const { t, formatDate, formatRelativeTime } = useTranslation();
 
   if (isLoading || !eventData?.data) {
     return (
@@ -83,7 +85,7 @@ export default function EventData({
             }`}
           >
             <FiCalendar className="w-4 h-4" />
-            <span>{isUpcoming ? 'Upcoming Event' : 'Past Event'}</span>
+            <span>{isUpcoming ? t.eventData.upcomingEvent : t.eventData.pastEvent}</span>
           </div>
         </div>
 
@@ -92,7 +94,7 @@ export default function EventData({
           <div className="absolute top-6 right-6">
             <div className="flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-medium">
               <FiStar className="w-4 h-4" />
-              <span>You're the Host</span>
+              <span>{t.eventData.youreTheHost}</span>
             </div>
           </div>
         )}
@@ -107,20 +109,19 @@ export default function EventData({
             <div className="flex items-center space-x-2">
               <FiCalendar className="w-5 h-5" />
               <span className="font-medium">
-                {eventDate.format('dddd, MMMM D, YYYY')}
+                {formatDate(eventDate, 'dddd, MMMM D, YYYY')}
               </span>
             </div>
 
             <div className="flex items-center space-x-2">
               <FiClock className="w-5 h-5" />
-              <span className="font-medium">{eventDate.format('h:mm A')}</span>
+              <span className="font-medium">{formatDate(eventDate, 'h:mm A')}</span>
             </div>
 
             <div className="flex items-center space-x-2">
               <FiUsers className="w-5 h-5" />
               <span className="font-medium">
-                {attendeeCount} {attendeeCount === 1 ? 'person' : 'people'}{' '}
-                attending
+                {attendeeCount} {attendeeCount === 1 ? t.eventData.personAttending : t.eventData.peopleAttending}
               </span>
             </div>
           </div>
@@ -138,7 +139,7 @@ export default function EventData({
                 <div className="flex items-center space-x-2 mb-3">
                   <FiInfo className="w-5 h-5 text-gray-600" />
                   <h3 className="text-lg font-semibold text-gray-900">
-                    About this event
+                    {t.eventData.aboutThisEvent}
                   </h3>
                 </div>
                 <p className="text-gray-700 leading-relaxed">
@@ -153,7 +154,7 @@ export default function EventData({
                 <div className="flex items-center space-x-2 mb-3">
                   <FiMapPin className="w-5 h-5 text-gray-600" />
                   <h3 className="text-lg font-semibold text-gray-900">
-                    Location
+                    {t.eventData.location}
                   </h3>
                 </div>
                 <p className="text-gray-700">{event.location}</p>
@@ -165,7 +166,7 @@ export default function EventData({
               <div>
                 <div className="flex items-center space-x-2 mb-3">
                   <FiTag className="w-5 h-5 text-gray-600" />
-                  <h3 className="text-lg font-semibold text-gray-900">Tags</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">{t.eventData.tags}</h3>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {event.tags.map((tag: string, index: number) => (
@@ -187,7 +188,7 @@ export default function EventData({
             {!userIsHost && (
               <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-200">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  Event Participation
+                  {t.eventData.eventParticipation}
                 </h3>
                 <ToggleButton
                   isJoined={isJoined}
@@ -203,7 +204,7 @@ export default function EventData({
               <div className="flex items-center space-x-2 mb-4">
                 <FiShare2 className="w-5 h-5 text-blue-600" />
                 <h3 className="text-lg font-semibold text-gray-900">
-                  Share Event
+                  {t.eventData.shareEvent}
                 </h3>
               </div>
               <EventLink eventid={event.eventId} />
@@ -213,7 +214,7 @@ export default function EventData({
             {userIsHost && (
               <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  Host Actions
+                  {t.eventData.hostActions}
                 </h3>
                 <div className="space-y-3">
                   <button
@@ -221,7 +222,7 @@ export default function EventData({
                     className="w-full flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-xl transition-all duration-200"
                   >
                     <FiEdit3 className="w-4 h-4" />
-                    <span>Edit Event</span>
+                    <span>{t.eventData.editEvent}</span>
                   </button>
 
                   <button
@@ -229,7 +230,7 @@ export default function EventData({
                     className="w-full flex items-center justify-center space-x-2 bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-4 rounded-xl transition-all duration-200"
                   >
                     <FiTrash2 className="w-4 h-4" />
-                    <span>Delete Event</span>
+                    <span>{t.eventData.deleteEvent}</span>
                   </button>
                 </div>
               </div>
@@ -238,29 +239,29 @@ export default function EventData({
             {/* Event Stats */}
             <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-200">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Event Statistics
+                {t.eventData.eventStatistics}
               </h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Total Attendees</span>
+                  <span className="text-gray-600">{t.eventData.totalAttendees}</span>
                   <span className="font-semibold text-gray-900">
                     {attendeeCount}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Event Status</span>
+                  <span className="text-gray-600">{t.eventData.eventStatus}</span>
                   <span
                     className={`font-semibold ${
                       isUpcoming ? 'text-green-600' : 'text-gray-600'
                     }`}
                   >
-                    {isUpcoming ? 'Upcoming' : 'Completed'}
+                    {isUpcoming ? t.eventData.upcoming : t.eventData.completed}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Time Until Event</span>
+                  <span className="text-gray-600">{t.eventData.timeUntilEvent}</span>
                   <span className="font-semibold text-gray-900">
-                    {eventDate.fromNow()}
+                    {formatRelativeTime(eventDate)}
                   </span>
                 </div>
               </div>

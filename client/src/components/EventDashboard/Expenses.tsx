@@ -21,6 +21,7 @@ import {
   FiCalendar,
   FiCheckCircle,
 } from 'react-icons/fi';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface Expense {
   expenseId: string;
@@ -40,6 +41,7 @@ export default function Expenses() {
   const dispatch = useAppDispatch();
   const expenses = useSelector((state: RootState) => state.expenseReducer);
   const { currency } = useSelector((state: RootState) => state.preferencesReducer);
+  const { t } = useTranslation();
 
   const [newExpense, setNewExpense] = useState({
     item: '',
@@ -238,7 +240,7 @@ export default function Expenses() {
       <div className="flex justify-center items-center h-48">
         <div className="flex items-center space-x-2 text-gray-600">
           <FiLoader className="w-5 h-5 animate-spin" />
-          <span>Loading expenses...</span>
+          <span>{t.common.loading}</span>
         </div>
       </div>
     );
@@ -249,15 +251,15 @@ export default function Expenses() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Event Expenses</h2>
-          <p className="text-gray-600 mt-1">Track and manage event costs</p>
+          <h2 className="text-2xl font-bold text-gray-900">{t.expenses.title}</h2>
+          <p className="text-gray-600 mt-1">{t.expenses.trackAndManage}</p>
         </div>
 
         <div className="text-right">
           <div className="text-2xl font-bold text-green-600">
             {formatCurrency(totalAmount, currency)}
           </div>
-          <div className="text-sm text-gray-600">Total spent</div>
+          <div className="text-sm text-gray-600">{t.expenses.totalExpenses}</div>
         </div>
       </div>
 
@@ -267,7 +269,7 @@ export default function Expenses() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-green-700 mb-1">
-                Total Expenses
+                {t.expenses.totalExpenses}
               </p>
               <p className="text-2xl font-bold text-green-900">
                 {formatCurrency(totalAmount, currency)}
@@ -283,7 +285,7 @@ export default function Expenses() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-blue-700 mb-1">
-                Average Expense
+                {t.expenses.averageExpense}
               </p>
               <p className="text-2xl font-bold text-blue-900">
                 {formatCurrency(averageExpense, currency)}
@@ -299,7 +301,7 @@ export default function Expenses() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-purple-700 mb-1">
-                Total Items
+                {t.expenses.totalItems}
               </p>
               <p className="text-2xl font-bold text-purple-900">
                 {validExpenses.length}
@@ -320,7 +322,7 @@ export default function Expenses() {
             className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
           >
             <FiPlus className="w-5 h-5" />
-            <span>Add new expense</span>
+            <span>{t.expenses.addExpense}</span>
           </button>
         ) : (
           <div className="space-y-4">
@@ -331,7 +333,7 @@ export default function Expenses() {
                 onChange={(e) =>
                   setNewExpense({ ...newExpense, item: e.target.value })
                 }
-                placeholder="What did you buy?"
+                placeholder={t.expenses.descriptionPlaceholder}
                 className="px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 placeholder:text-gray-500"
                 onKeyPress={(e) => e.key === 'Enter' && handleAddExpense()}
               />
@@ -342,7 +344,7 @@ export default function Expenses() {
                 onChange={(e) =>
                   setNewExpense({ ...newExpense, cost: e.target.value })
                 }
-                placeholder={`Cost (${currency})`}
+                placeholder={t.expenses.amountPlaceholder}
                 className="px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 placeholder:text-gray-500"
                 onKeyPress={(e) => e.key === 'Enter' && handleAddExpense()}
               />
@@ -363,7 +365,7 @@ export default function Expenses() {
                 ) : (
                   <FiPlus className="w-4 h-4" />
                 )}
-                <span>Add Expense</span>
+                <span>{t.expenses.addExpense}</span>
               </button>
 
               <button
@@ -373,7 +375,7 @@ export default function Expenses() {
                 }}
                 className="px-6 py-3 bg-gray-300 hover:bg-gray-400 text-gray-700 font-medium rounded-xl transition-all duration-200"
               >
-                Cancel
+                {t.common.cancel}
               </button>
             </div>
           </div>
@@ -384,7 +386,7 @@ export default function Expenses() {
       <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
         <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900">
-            Expense History
+            {t.expenses.expenseHistory}
           </h3>
         </div>
 
@@ -414,7 +416,7 @@ export default function Expenses() {
                         {expense.description}
                       </h4>
                       <p className="text-sm text-gray-600">
-                        Paid by {expense.User?.name} •{' '}
+                        {t.expenses.paidBy} {expense.User?.name} •{' '}
                         {new Date(expense.createdAt).toLocaleDateString()}
                       </p>
                     </div>
@@ -441,8 +443,8 @@ export default function Expenses() {
             {validExpenses.length === 0 && (
               <div className="text-center py-12 text-gray-500">
                 <FiDollarSign className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                <p>No expenses recorded yet</p>
-                <p className="text-sm">Add your first expense to get started</p>
+                <p>{t.expenses.noExpenses}</p>
+                <p className="text-sm">{t.expenses.noExpensesDescription}</p>
               </div>
             )}
           </AnimatePresence>
@@ -456,7 +458,7 @@ export default function Expenses() {
           <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
             <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900">
-                Spending Breakdown
+                {t.expenses.spendingBreakdown}
               </h3>
             </div>
 
@@ -498,10 +500,10 @@ export default function Expenses() {
           <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
             <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900">
-                Payment Balance
+                {t.expenses.paymentBalance}
               </h3>
               <p className="text-sm text-gray-600 mt-1">
-                Who owes money and who is owed
+                {t.expenses.settlementDescription}
               </p>
             </div>
 
@@ -569,21 +571,21 @@ export default function Expenses() {
                         <div className="bg-gray-50 p-4 rounded-lg mb-4">
                           <div className="grid grid-cols-2 gap-4 text-sm">
                             <div>
-                              <p className="text-gray-600">Total Event Cost</p>
+                              <p className="text-gray-600">{t.expenses.totalExpenses}</p>
                               <p className="text-lg font-semibold text-gray-900">{formatCurrency(totalAmount, currency)}</p>
                             </div>
                             <div>
-                              <p className="text-gray-600">Fair Share per Person</p>
+                              <p className="text-gray-600">{t.expenses.perPerson}</p>
                               <p className="text-lg font-semibold text-purple-600">{formatCurrency(averagePerPerson, currency)}</p>
                             </div>
                           </div>
-                          <p className="text-xs text-gray-500 mt-2">Split equally among {numPeople} attendee{numPeople !== 1 ? 's' : ''}</p>
+                          <p className="text-xs text-gray-500 mt-2">{t.expenses.splitEqually} {numPeople} {numPeople !== 1 ? t.expenses.attendees : t.expenses.attendee}</p>
                         </div>
                       )}
                       
                       {/* Individual Balances */}
                       <div className="space-y-3">
-                        <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Individual Balances</h4>
+                        <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">{t.expenses.balance}</h4>
                         {balances.map((person) => {
                           const balance = person.balance;
                           const isOwed = balance > 0;
@@ -605,7 +607,7 @@ export default function Expenses() {
                                     {person.name}
                                   </p>
                                   <p className="text-xs text-gray-600">
-                                    {person.paid > 0 ? `Paid ${formatCurrency(person.paid, currency)}` : 'No expenses yet'}
+                                    {person.paid > 0 ? `${t.expenses.paid} ${formatCurrency(person.paid, currency)}` : t.expenses.noExpenses}
                                   </p>
                                 </div>
                               </div>
@@ -615,7 +617,7 @@ export default function Expenses() {
                                   {isOwed ? '+' : '-'}${absBalance.toFixed(2)}
                                 </div>
                                 <div className={`text-xs ${isOwed ? 'text-green-600' : 'text-red-600'}`}>
-                                  {isOwed ? 'Is owed' : 'Owes'}
+                                  {isOwed ? t.expenses.owesYou : t.expenses.youOwe}
                                 </div>
                               </div>
                             </div>
@@ -626,9 +628,9 @@ export default function Expenses() {
                       {/* Settlement Transactions */}
                       {transactions.length > 0 && (
                         <div className="space-y-3 mt-6">
-                          <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Suggested Settlements</h4>
+                          <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">{t.expenses.suggestedPayments}</h4>
                           <div className="bg-blue-50 p-3 rounded-lg">
-                            <p className="text-xs text-blue-700 mb-3">To settle all balances, make these payments:</p>
+                            <p className="text-xs text-blue-700 mb-3">{t.expenses.settleBalancesInstruction}</p>
                             {transactions.map((transaction, index) => (
                               <div key={index} className="flex items-center justify-between p-3 bg-white rounded-lg mb-2 last:mb-0 shadow-sm">
                                 <div className="flex items-center space-x-3 flex-1">
@@ -639,11 +641,11 @@ export default function Expenses() {
                                   />
                                   <div className="flex-1">
                                     <p className="text-sm font-medium text-gray-900">{transaction.from.name}</p>
-                                    <p className="text-xs text-gray-500">pays</p>
+                                    <p className="text-xs text-gray-500">{t.expenses.pays}</p>
                                   </div>
                                   <div className="text-center px-2">
                                     <div className="text-lg font-bold text-blue-600">{formatCurrency(transaction.amount, currency)}</div>
-                                    <div className="text-xs text-gray-500">to</div>
+                                    <div className="text-xs text-gray-500">{t.expenses.to}</div>
                                   </div>
                                   <div className="flex-1 text-right">
                                     <p className="text-sm font-medium text-gray-900">{transaction.to.name}</p>
@@ -666,8 +668,8 @@ export default function Expenses() {
                           <div className="w-12 h-12 bg-green-100 rounded-full mx-auto mb-3 flex items-center justify-center">
                             <FiCheckCircle className="w-6 h-6 text-green-600" />
                           </div>
-                          <p className="font-medium">All balanced!</p>
-                          <p className="text-sm">Everyone has paid their fair share</p>
+                          <p className="font-medium">{t.expenses.settledUp}</p>
+                          <p className="text-sm">{t.expenses.everyonePaid}</p>
                         </div>
                       )}
                     </>

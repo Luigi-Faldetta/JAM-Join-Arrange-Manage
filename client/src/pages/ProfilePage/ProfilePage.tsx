@@ -17,10 +17,12 @@ import {
   FiArrowLeft,
   FiLogOut,
 } from 'react-icons/fi';
+import { useTranslation } from '../../hooks/useTranslation';
 
 export default function ProfilePage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const { data: userData, isLoading, refetch: refetchMe } = useGetMeQuery();
   const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
 
@@ -109,7 +111,7 @@ export default function ProfilePage() {
     e.preventDefault();
 
     if (!user?.userId) {
-      setShowError('User data not loaded. Please refresh the page.');
+      setShowError(t.profile.userDataNotLoaded);
       // Try to refetch user data
       refetchMe();
       return;
@@ -119,12 +121,12 @@ export default function ProfilePage() {
       formData.newPassword &&
       formData.newPassword !== formData.confirmPassword
     ) {
-      setShowError('New passwords do not match');
+      setShowError(t.profile.passwordsDoNotMatch);
       return;
     }
 
     if (formData.newPassword && passwordStrength < 75) {
-      setShowError('Password is too weak. Please use a stronger password.');
+      setShowError(t.profile.passwordTooWeak);
       return;
     }
 
@@ -151,7 +153,7 @@ export default function ProfilePage() {
       
       // Don't make API call if nothing changed
       if (Object.keys(updateData).length === 0) {
-        setShowError('No changes to save.');
+        setShowError(t.profile.noChangesToSave);
         return;
       }
 
@@ -168,12 +170,12 @@ export default function ProfilePage() {
         if ((result.error as any)?.status === 409) {
           const errorMessage = (result.error as any)?.data?.message;
           if (errorMessage === 'Email already exists') {
-            setShowError('This email is already in use by another account.');
+            setShowError(t.profile.emailAlreadyInUse);
           } else {
-            setShowError(errorMessage || 'Failed to update profile. Please try again.');
+            setShowError(errorMessage || t.profile.updateError);
           }
         } else {
-          setShowError('Failed to update profile. Please try again.');
+          setShowError(t.profile.updateError);
         }
       } else if ('data' in result && result.data.success) {
         setShowSuccess(true);
@@ -185,10 +187,10 @@ export default function ProfilePage() {
         }));
         setTimeout(() => setShowSuccess(false), 3000);
       } else {
-        setShowError('Failed to update profile. Please try again.');
+        setShowError(t.profile.updateError);
       }
     } catch (error) {
-      setShowError('An error occurred while updating your profile.');
+      setShowError(t.profile.generalError);
     }
   };
 
@@ -203,7 +205,7 @@ export default function ProfilePage() {
     // Check if user data is available
     if (!user?.userId) {
       console.error('User data not available:', user);
-      setShowError('User data not loaded. Please refresh the page.');
+      setShowError(t.profile.userDataNotLoaded);
       // Try to refetch
       refetchMe();
       return;
@@ -230,7 +232,7 @@ export default function ProfilePage() {
       );
 
       if (!cloudinaryRes.ok) {
-        throw new Error('Failed to upload image');
+        throw new Error(t.profile.uploadImageError);
       }
 
       const uploadedImage = await cloudinaryRes.json();
@@ -254,7 +256,7 @@ export default function ProfilePage() {
           setShowSuccess(true);
           setTimeout(() => setShowSuccess(false), 3000);
         } else {
-          setShowError('Failed to update profile picture');
+          setShowError(t.profile.updateProfilePicError);
         }
       } else if ('data' in result && result.data.success) {
         setShowSuccess(true);
@@ -264,7 +266,7 @@ export default function ProfilePage() {
       }
     } catch (error) {
       console.error('Upload error:', error);
-      setShowError('Failed to upload image. Please try again.');
+      setShowError(t.profile.retryUpload);
     } finally {
       setUploadingImage(false);
     }
@@ -275,7 +277,7 @@ export default function ProfilePage() {
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 flex items-center justify-center">
         <div className="flex items-center space-x-2 text-gray-600">
           <FiLoader className="w-6 h-6 animate-spin" />
-          <span className="text-lg">Loading profile...</span>
+          <span className="text-lg">{t.profile.loadingProfile}</span>
         </div>
       </div>
     );
@@ -291,7 +293,7 @@ export default function ProfilePage() {
           className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 font-medium"
         >
           <FiArrowLeft className="w-4 h-4" />
-          <span>Back to Dashboard</span>
+          <span>{t.profile.backToDashboard}</span>
         </button>
       </div>
       
@@ -301,7 +303,7 @@ export default function ProfilePage() {
           className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 font-medium"
         >
           <FiLogOut className="w-4 h-4" />
-          <span>Sign Out</span>
+          <span>{t.nav.signOut}</span>
         </button>
       </div>
 
@@ -314,10 +316,10 @@ export default function ProfilePage() {
           className="text-center mb-8"
         >
           <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-2">
-            Profile Settings
+            {t.profile.title}
           </h1>
           <p className="text-gray-600 text-lg">
-            Manage your account information and preferences
+            {t.profile.subtitle}
           </p>
         </motion.div>
 
@@ -333,7 +335,7 @@ export default function ProfilePage() {
             <div className="relative inline-block">
               <img
                 src={user?.profilePic || '/no-profile-picture-icon.png'}
-                alt="Profile"
+                alt={t.common.altText.profile}
                 className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
                 key={user?.profilePic} // Force re-render when profile pic changes
               />
@@ -352,7 +354,7 @@ export default function ProfilePage() {
                 className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-center space-x-2 text-green-700"
               >
                 <FiCheck className="w-5 h-5" />
-                <span>Profile updated successfully!</span>
+                <span>{t.profile.profileUpdated}</span>
               </motion.div>
             )}
 
@@ -373,14 +375,14 @@ export default function ProfilePage() {
                 <div className="flex items-center space-x-2 mb-6">
                   <FiUser className="w-5 h-5 text-gray-600" />
                   <h3 className="text-xl font-semibold text-gray-900">
-                    Personal Information
+                    {t.profile.personalInfo}
                   </h3>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Full Name
+                      {t.profile.fullName}
                     </label>
                     <input
                       type="text"
@@ -388,13 +390,13 @@ export default function ProfilePage() {
                       value={formData.name}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
-                      placeholder="Enter your full name"
+                      placeholder={t.profile.namePlaceholder}
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Phone Number
+                      {t.profile.phoneNumber}
                     </label>
                     <input
                       type="tel"
@@ -402,14 +404,14 @@ export default function ProfilePage() {
                       value={formData.phone}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
-                      placeholder="Enter your phone number"
+                      placeholder={t.profile.phonePlaceholder}
                     />
                   </div>
                 </div>
 
                 <div className="mt-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email Address
+                    {t.profile.emailAddress}
                   </label>
                   <div className="relative">
                     <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -419,7 +421,7 @@ export default function ProfilePage() {
                       value={formData.email}
                       onChange={handleInputChange}
                       className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
-                      placeholder="Enter your email address"
+                      placeholder={t.profile.emailPlaceholder}
                     />
                   </div>
                 </div>
@@ -427,7 +429,7 @@ export default function ProfilePage() {
                 {/* Profile Picture Section */}
                 <div className="mt-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Profile Picture
+                    {t.profile.profilePicture}
                   </label>
                   <div className="flex items-center space-x-4">
                     <img
@@ -447,7 +449,7 @@ export default function ProfilePage() {
                         <FiUploadCloud className="w-5 h-5" />
                       )}
                       <span className="text-sm font-medium">
-                        {uploadingImage ? 'Uploading...' : 'Upload Photo'}
+                        {uploadingImage ? t.profile.uploading : t.profile.uploadPhoto}
                       </span>
                     </label>
                     <input
@@ -460,7 +462,7 @@ export default function ProfilePage() {
                     />
                   </div>
                   <p className="mt-2 text-xs text-gray-500">
-                    JPG, PNG or GIF. Max size of 5MB.
+                    {t.profile.photoInfo}
                   </p>
                 </div>
               </div>
@@ -470,14 +472,14 @@ export default function ProfilePage() {
                 <div className="flex items-center space-x-2 mb-6">
                   <FiShield className="w-5 h-5 text-gray-600" />
                   <h3 className="text-xl font-semibold text-gray-900">
-                    Security
+                    {t.profile.security}
                   </h3>
                 </div>
 
                 <div className="space-y-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Current Password
+                      {t.profile.currentPassword}
                     </label>
                     <div className="relative">
                       <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -487,7 +489,7 @@ export default function ProfilePage() {
                         value={formData.currentPassword}
                         onChange={handleInputChange}
                         className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
-                        placeholder="Enter current password to change"
+                        placeholder={t.profile.currentPasswordPlaceholder}
                       />
                     </div>
                   </div>
@@ -495,7 +497,7 @@ export default function ProfilePage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        New Password
+                        {t.profile.newPassword}
                       </label>
                       <input
                         type="password"
@@ -503,14 +505,14 @@ export default function ProfilePage() {
                         value={formData.newPassword}
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
-                        placeholder="Enter new password"
+                        placeholder={t.profile.newPasswordPlaceholder}
                       />
 
                       {/* Password Strength Indicator */}
                       {formData.newPassword && (
                         <div className="mt-2">
                           <div className="flex justify-between text-xs text-gray-600 mb-1">
-                            <span>Password Strength</span>
+                            <span>{t.profile.passwordStrength}</span>
                             <span>{passwordStrength}%</span>
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-2">
@@ -531,7 +533,7 @@ export default function ProfilePage() {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Confirm New Password
+                        {t.profile.confirmPassword}
                       </label>
                       <input
                         type="password"
@@ -539,7 +541,7 @@ export default function ProfilePage() {
                         value={formData.confirmPassword}
                         onChange={handleInputChange}
                         className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
-                        placeholder="Confirm new password"
+                        placeholder={t.profile.confirmPasswordPlaceholder}
                       />
                     </div>
                   </div>
@@ -560,7 +562,7 @@ export default function ProfilePage() {
                   ) : (
                     <FiSave className="w-5 h-5" />
                   )}
-                  <span>{isUpdating ? 'Saving...' : 'Save Changes'}</span>
+                  <span>{isUpdating ? t.profile.saving : t.profile.saveChanges}</span>
                 </motion.button>
               </div>
             </form>

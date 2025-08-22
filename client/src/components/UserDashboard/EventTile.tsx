@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import { EventState } from '../../reduxFiles/slices/events';
+import { useTranslation } from '../../hooks/useTranslation';
 import {
   FiCalendar,
   FiMapPin,
@@ -24,6 +25,7 @@ export default function EventTile({
   viewMode = 'grid',
 }: EventTileProps) {
   const navigate = useNavigate();
+  const { t, formatDate, formatRelativeTime } = useTranslation();
 
   const isHost = event.UserEvents?.some(
     (userEvent) => userEvent.userId === userId && userEvent.isHost
@@ -32,7 +34,7 @@ export default function EventTile({
   const attendeeCount = event.UserEvents?.length || 0;
   const eventDate = moment(event.date);
   const isUpcoming = eventDate.isAfter(moment());
-  const timeFromNow = eventDate.fromNow();
+  const timeFromNow = formatRelativeTime(event.date);
 
   const handleEventClick = () => {
     navigate(`/event-dashboard/${event.eventId}`);
@@ -70,7 +72,7 @@ export default function EventTile({
                   {isHost && (
                     <div className="flex items-center space-x-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-2 py-1 rounded-lg text-xs font-medium">
                       <FiStar className="w-3 h-3" />
-                      <span>Host</span>
+                      <span>{t.eventTile.host}</span>
                     </div>
                   )}
                   <div
@@ -80,14 +82,14 @@ export default function EventTile({
                         : 'bg-gray-100 text-gray-600'
                     }`}
                   >
-                    {isUpcoming ? 'Upcoming' : 'Past'}
+                    {isUpcoming ? t.eventTile.upcoming : t.eventTile.past}
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-gray-600">
                   <div className="flex items-center space-x-1">
                     <FiCalendar className="w-4 h-4" />
-                    <span>{eventDate.format('MMM D, YYYY')}</span>
+                    <span>{formatDate(event.date, 'MMM D, YYYY')}</span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <FiClock className="w-4 h-4" />
@@ -95,7 +97,7 @@ export default function EventTile({
                   </div>
                   <div className="flex items-center space-x-1">
                     <FiUsers className="w-4 h-4" />
-                    <span>{attendeeCount} attending</span>
+                    <span>{attendeeCount} {t.eventTile.attending}</span>
                   </div>
                 </div>
 
@@ -141,7 +143,7 @@ export default function EventTile({
           {isHost && (
             <div className="flex items-center space-x-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1 rounded-full text-xs font-medium">
               <FiStar className="w-3 h-3" />
-              <span>Host</span>
+              <span>{t.eventTile.host}</span>
             </div>
           )}
           <div
@@ -149,7 +151,7 @@ export default function EventTile({
               isUpcoming ? 'bg-green-500 text-white' : 'bg-gray-500 text-white'
             }`}
           >
-            {isUpcoming ? 'Upcoming' : 'Past'}
+            {isUpcoming ? t.eventTile.upcoming : t.eventTile.past}
           </div>
         </div>
 
@@ -174,7 +176,7 @@ export default function EventTile({
           <div className="flex items-center space-x-2 text-gray-600">
             <FiCalendar className="w-4 h-4" />
             <span className="text-sm font-medium">
-              {eventDate.format('ddd, MMM D - h:mm A')}
+              {formatDate(event.date, 'ddd, MMM D - h:mm A')}
             </span>
           </div>
 
@@ -203,7 +205,7 @@ export default function EventTile({
         {/* Action Button */}
         <div className="mt-6">
           <div className="flex items-center justify-between text-purple-600 font-medium group-hover:text-purple-700 transition-colors duration-200">
-            <span>Manage Event</span>
+            <span>{t.eventTile.manageEvent}</span>
             <FiArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
           </div>
         </div>
