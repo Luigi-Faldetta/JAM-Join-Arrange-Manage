@@ -57,6 +57,7 @@ const syncClerkUser = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const _a = Object.assign({}, user.dataValues), { password } = _a, safeUser = __rest(_a, ["password"]);
         res.status(200).json({
             success: true,
+            error: null,
             data: {
                 user: safeUser,
                 token,

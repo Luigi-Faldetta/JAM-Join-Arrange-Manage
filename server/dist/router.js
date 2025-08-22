@@ -66,4 +66,11 @@ router.post('/chat/', index_js_1.eventChat.newMessage);
 // EMAIL ROUTES - EXACTLY AS ORIGINAL
 // ============================================================================
 router.get('/passwordreset/:email', index_js_1.email.resetPassword);
+// ============================================================================
+// SETTLEMENT ROUTES
+// ============================================================================
+router.post('/settlements/confirm-payment', index_js_1.session.authorize, index_js_1.settlement.confirmPayment);
+router.post('/settlements/confirm-receipt', index_js_1.session.authorize, index_js_1.settlement.confirmReceipt);
+router.get('/settlements/:eventid', index_js_1.session.authorize, index_js_1.settlement.getEventSettlements);
+router.get('/user-settlements/:userid', index_js_1.session.authorize, index_js_1.settlement.getUserSettlements);
 exports.default = router;

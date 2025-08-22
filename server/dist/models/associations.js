@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.EventChat = exports.UserEvent = exports.Event = exports.User = void 0;
+exports.ExpenseSettlement = exports.EventChat = exports.UserEvent = exports.Event = exports.User = void 0;
 const user_1 = __importDefault(require("./user"));
 exports.User = user_1.default;
 const event_1 = __importDefault(require("./event"));
@@ -14,6 +14,8 @@ const userEvent_1 = __importDefault(require("./userEvent"));
 exports.UserEvent = userEvent_1.default;
 const eventChat_1 = __importDefault(require("./eventChat"));
 exports.EventChat = eventChat_1.default;
+const expenseSettlement_1 = __importDefault(require("./expenseSettlement"));
+exports.ExpenseSettlement = expenseSettlement_1.default;
 event_1.default.belongsToMany(user_1.default, {
     through: userEvent_1.default,
     foreignKey: 'eventId',
@@ -54,4 +56,26 @@ eventChat_1.default.belongsTo(user_1.default, {
 });
 eventChat_1.default.belongsTo(event_1.default, {
     foreignKey: 'eventId'
+});
+expenseSettlement_1.default.belongsTo(event_1.default, {
+    foreignKey: 'eventId',
+});
+expenseSettlement_1.default.belongsTo(user_1.default, {
+    foreignKey: 'payerId',
+    as: 'Payer',
+});
+expenseSettlement_1.default.belongsTo(user_1.default, {
+    foreignKey: 'receiverId',
+    as: 'Receiver',
+});
+event_1.default.hasMany(expenseSettlement_1.default, {
+    foreignKey: 'eventId'
+});
+user_1.default.hasMany(expenseSettlement_1.default, {
+    foreignKey: 'payerId',
+    as: 'PayerSettlements'
+});
+user_1.default.hasMany(expenseSettlement_1.default, {
+    foreignKey: 'receiverId',
+    as: 'ReceiverSettlements'
 });
