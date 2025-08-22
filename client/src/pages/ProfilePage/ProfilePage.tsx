@@ -274,8 +274,8 @@ export default function ProfilePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 flex items-center justify-center">
-        <div className="flex items-center space-x-2 text-gray-600">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900 flex items-center justify-center">
+        <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
           <FiLoader className="w-6 h-6 animate-spin" />
           <span className="text-lg">{t.profile.loadingProfile}</span>
         </div>
@@ -285,7 +285,7 @@ export default function ProfilePage() {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900">
       {/* Top Navigation Buttons */}
       <div className="absolute top-4 left-4 z-50 mb-6 sm:mb-0">
         <button
@@ -315,10 +315,10 @@ export default function ProfilePage() {
           transition={{ duration: 0.6 }}
           className="text-center mb-8"
         >
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-2">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-2">
             {t.profile.title}
           </h1>
-          <p className="text-gray-600 text-lg">
+          <p className="text-gray-600 dark:text-gray-300 text-lg">
             {t.profile.subtitle}
           </p>
         </motion.div>
@@ -328,7 +328,7 @@ export default function ProfilePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden"
+          className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden"
         >
           {/* Profile Header */}
           <div className="bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-12 text-center">
@@ -351,7 +351,7 @@ export default function ProfilePage() {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-center space-x-2 text-green-700"
+                className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl flex items-center space-x-2 text-green-700 dark:text-green-400"
               >
                 <FiCheck className="w-5 h-5" />
                 <span>{t.profile.profileUpdated}</span>
@@ -362,7 +362,7 @@ export default function ProfilePage() {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center space-x-2 text-red-700"
+                className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl flex items-center space-x-2 text-red-700 dark:text-red-400"
               >
                 <FiAlertCircle className="w-5 h-5" />
                 <span>{showError}</span>
@@ -373,15 +373,15 @@ export default function ProfilePage() {
               {/* Personal Information */}
               <div>
                 <div className="flex items-center space-x-2 mb-6">
-                  <FiUser className="w-5 h-5 text-gray-600" />
-                  <h3 className="text-xl font-semibold text-gray-900">
+                  <FiUser className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                     {t.profile.personalInfo}
                   </h3>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       {t.profile.fullName}
                     </label>
                     <input
@@ -389,13 +389,13 @@ export default function ProfilePage() {
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                       placeholder={t.profile.namePlaceholder}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       {t.profile.phoneNumber}
                     </label>
                     <input
@@ -403,24 +403,24 @@ export default function ProfilePage() {
                       name="phone"
                       value={formData.phone}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                       placeholder={t.profile.phonePlaceholder}
                     />
                   </div>
                 </div>
 
                 <div className="mt-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     {t.profile.emailAddress}
                   </label>
                   <div className="relative">
-                    <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                     <input
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                      className="w-full pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                       placeholder={t.profile.emailPlaceholder}
                     />
                   </div>
@@ -428,18 +428,18 @@ export default function ProfilePage() {
 
                 {/* Profile Picture Section */}
                 <div className="mt-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     {t.profile.profilePicture}
                   </label>
                   <div className="flex items-center space-x-4">
                     <img
                       src={user?.profilePic || '/no-profile-picture-icon.png'}
                       alt="Current profile"
-                      className="w-20 h-20 rounded-full object-cover border-2 border-gray-300"
+                      className="w-20 h-20 rounded-full object-cover border-2 border-gray-300 dark:border-gray-600"
                     />
                     <label
                       htmlFor="profile-picture-upload"
-                      className={`flex items-center space-x-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg cursor-pointer transition-all duration-200 ${
+                      className={`flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg cursor-pointer transition-all duration-200 ${
                         uploadingImage ? 'opacity-50 cursor-not-allowed' : ''
                       }`}
                     >
@@ -461,34 +461,34 @@ export default function ProfilePage() {
                       onChange={handleImageUpload}
                     />
                   </div>
-                  <p className="mt-2 text-xs text-gray-500">
+                  <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
                     {t.profile.photoInfo}
                   </p>
                 </div>
               </div>
 
               {/* Security Section */}
-              <div className="border-t border-gray-200 pt-8">
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-8">
                 <div className="flex items-center space-x-2 mb-6">
-                  <FiShield className="w-5 h-5 text-gray-600" />
-                  <h3 className="text-xl font-semibold text-gray-900">
+                  <FiShield className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                     {t.profile.security}
                   </h3>
                 </div>
 
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       {t.profile.currentPassword}
                     </label>
                     <div className="relative">
-                      <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                       <input
                         type="password"
                         name="currentPassword"
                         value={formData.currentPassword}
                         onChange={handleInputChange}
-                        className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                        className="w-full pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                         placeholder={t.profile.currentPasswordPlaceholder}
                       />
                     </div>
@@ -496,7 +496,7 @@ export default function ProfilePage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         {t.profile.newPassword}
                       </label>
                       <input
@@ -504,18 +504,18 @@ export default function ProfilePage() {
                         name="newPassword"
                         value={formData.newPassword}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                         placeholder={t.profile.newPasswordPlaceholder}
                       />
 
                       {/* Password Strength Indicator */}
                       {formData.newPassword && (
                         <div className="mt-2">
-                          <div className="flex justify-between text-xs text-gray-600 mb-1">
+                          <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 mb-1">
                             <span>{t.profile.passwordStrength}</span>
                             <span>{passwordStrength}%</span>
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
                             <div
                               className={`h-2 rounded-full transition-all duration-300 ${
                                 passwordStrength < 50
@@ -532,7 +532,7 @@ export default function ProfilePage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         {t.profile.confirmPassword}
                       </label>
                       <input
@@ -540,7 +540,7 @@ export default function ProfilePage() {
                         name="confirmPassword"
                         value={formData.confirmPassword}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                         placeholder={t.profile.confirmPasswordPlaceholder}
                       />
                     </div>
@@ -549,7 +549,7 @@ export default function ProfilePage() {
               </div>
 
               {/* Submit Button */}
-              <div className="flex justify-end pt-6 border-t border-gray-200">
+              <div className="flex justify-end pt-6 border-t border-gray-200 dark:border-gray-700">
                 <motion.button
                   type="submit"
                   disabled={isUpdating}
