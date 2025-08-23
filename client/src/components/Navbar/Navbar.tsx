@@ -87,7 +87,7 @@ function Navbar() {
               <div key={item.name}>
                 <button
                   onClick={() => handleScrollToSection(item.to)}
-                  className="relative px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium cursor-pointer transition-colors duration-200 group"
+                  className="relative px-4 py-2 text-gray-900 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium cursor-pointer transition-colors duration-200 group"
                 >
                   {item.name}
                   <span className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-purple-600 to-pink-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"></span>
@@ -110,7 +110,7 @@ function Navbar() {
           <div className="lg:hidden">
             <button
               onClick={() => setShowMobileMenu(!showMobileMenu)}
-              className="p-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-200"
+              className="p-2 text-gray-900 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-200"
             >
               {showMobileMenu ? (
                 <FiX className="w-6 h-6" />
@@ -133,7 +133,7 @@ function Navbar() {
                     handleScrollToSection(item.to);
                     setShowMobileMenu(false);
                   }}
-                  className="block w-full text-left px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg font-medium cursor-pointer transition-all duration-200"
+                  className="block w-full text-left px-4 py-3 text-gray-900 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg font-medium cursor-pointer transition-all duration-200"
                 >
                   {item.name}
                 </button>
