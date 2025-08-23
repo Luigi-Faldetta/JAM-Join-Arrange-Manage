@@ -21,6 +21,7 @@ export const useTheme = () => {
     
     // Force a repaint to ensure theme is applied
     document.documentElement.style.display = 'none';
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     document.documentElement.offsetHeight; // Trigger reflow
     document.documentElement.style.display = '';
   }, [theme]);
