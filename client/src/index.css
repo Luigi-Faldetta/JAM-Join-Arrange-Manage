@@ -20,6 +20,28 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* Prevent media query dark mode preference from overriding app theme */
+@media (prefers-color-scheme: dark) {
+    html:not(.light) {
+        color-scheme: light dark;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    html:not(.dark) {
+        color-scheme: light dark;
+    }
+}
+
+/* Ensure theme classes take precedence */
+html.light {
+    color-scheme: light;
+}
+
+html.dark {
+    color-scheme: dark;
+}
+
 /* Prevent horizontal scroll on mobile */
 * {
     max-width: 100vw;

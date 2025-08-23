@@ -55,7 +55,21 @@ const preferencesSlice = createSlice({
       state.theme = action.payload;
       // Save to localStorage
       try {
-        localStorage.setItem('userPreferences', JSON.stringify(state));
+        const newPreferences = { ...state, theme: action.payload };
+        localStorage.setItem('userPreferences', JSON.stringify(newPreferences));
+        console.log('Theme saved to localStorage:', action.payload);
+        
+        // Also immediately apply the theme to ensure it takes effect
+        document.documentElement.classList.remove('dark', 'light');
+        document.body.classList.remove('dark', 'light');
+        
+        if (action.payload === 'dark') {
+          document.documentElement.classList.add('dark');
+          document.body.classList.add('dark');
+        } else {
+          document.documentElement.classList.add('light');
+          document.body.classList.add('light');
+        }
       } catch (error) {
         console.error('Failed to save preferences:', error);
       }
