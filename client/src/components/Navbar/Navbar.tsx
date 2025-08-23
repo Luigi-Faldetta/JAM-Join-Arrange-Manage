@@ -45,35 +45,11 @@ function Navbar() {
     const navItem = navItems.find((item) => item.to === targetId);
 
     if (element && navItem) {
-      // Get navbar height dynamically
-      const navbar = document.querySelector('nav');
-      const navbarHeight = navbar ? navbar.offsetHeight : 80;
-      
-      // Use different offsets for mobile vs desktop
+      // Use mobile adjustment to existing desktop offsets
       const isMobile = window.innerWidth < 1024; // lg breakpoint
-      let mobileOffset = 0;
+      const mobileAdjustment = isMobile ? 30 : 0; // Scroll slightly further down on mobile
       
-      if (isMobile) {
-        // Mobile-specific offsets to account for smaller viewport and navbar
-        switch (targetId) {
-          case 'hero':
-            mobileOffset = -navbarHeight - 20; // Extra space for hero
-            break;
-          case 'about':
-            mobileOffset = -navbarHeight - 20;
-            break;
-          case 'faq':
-            mobileOffset = -navbarHeight - 20;
-            break;
-          case 'contact':
-            mobileOffset = -navbarHeight - 20;
-            break;
-          default:
-            mobileOffset = -navbarHeight - 20;
-        }
-      }
-      
-      const offsetTop = element.offsetTop + (isMobile ? mobileOffset : navItem.offset);
+      const offsetTop = element.offsetTop + navItem.offset + mobileAdjustment;
       window.scrollTo({
         top: offsetTop,
         behavior: 'smooth',
