@@ -61,7 +61,13 @@ export default function EventDashboard() {
         // Trigger refetches now that token is available
         setTimeout(() => {
           console.log('EventDashboard: Refetching user data');
-          refetchMe();
+          if (refetchMe) {
+            try {
+              refetchMe();
+            } catch (error) {
+              console.warn('Failed to refetch user data:', error);
+            }
+          }
         }, 100);
       }
     };
@@ -91,7 +97,13 @@ export default function EventDashboard() {
     const token = localStorage.getItem('token');
     console.log('EventDashboard: Token from localStorage:', token ? 'Present' : 'Missing');
     
-    refetchMe();
+    if (hasToken && refetchMe) {
+      try {
+        refetchMe();
+      } catch (error) {
+        console.warn('Failed to refetch user data:', error);
+      }
+    }
     
     // Manual API call as fallback (using same URL pattern as ProfilePage)
     if (token) {
@@ -124,7 +136,13 @@ export default function EventDashboard() {
           setHasReceivedManualData(true);
           // Force RTK Query to refetch to update cache
           setTimeout(() => {
-            refetchMe();
+            if (hasToken && refetchMe) {
+              try {
+                refetchMe();
+              } catch (error) {
+                console.warn('Failed to refetch user data:', error);
+              }
+            }
           }, 100);
         }
       })
@@ -134,7 +152,7 @@ export default function EventDashboard() {
     } else {
       console.warn('EventDashboard: No token found in localStorage');
     }
-  }, [refetchMe]);
+  }, [refetchMe, hasToken]);
 
   // Additional effect to refetch user data when user object is incomplete (for Google OAuth users)
   useEffect(() => {
@@ -149,11 +167,17 @@ export default function EventDashboard() {
       retryAttempts.forEach((delay, index) => {
         setTimeout(() => {
           console.log(`EventDashboard: Retry attempt ${index + 1} for user data`);
-          refetchMe();
+          if (hasToken && refetchMe) {
+            try {
+              refetchMe();
+            } catch (error) {
+              console.warn('Failed to refetch user data:', error);
+            }
+          }
         }, delay);
       });
     }
-  }, [user, refetchMe, hasReceivedManualData]);
+  }, [user, refetchMe, hasReceivedManualData, hasToken]);
 
   // Force component update when manual data is received
   useEffect(() => {
