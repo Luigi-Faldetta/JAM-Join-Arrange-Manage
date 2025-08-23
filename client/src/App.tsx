@@ -28,6 +28,7 @@ import { useClerkSync } from './hooks/useClerkSync';
 import { TranslationProvider } from './hooks/useTranslation';
 import { useTheme } from './hooks/useTheme';
 import { useViewportFix } from './hooks/useViewportFix';
+import { ThemeProvider } from './components/ThemeProvider';
 
 const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY as string;
 if (!clerkPubKey) {
@@ -89,7 +90,9 @@ const router = createBrowserRouter(
 function App() {
   const AppContent = () => (
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <ThemeProvider>
+        <RouterProvider router={router} />
+      </ThemeProvider>
     </Provider>
   );
 
