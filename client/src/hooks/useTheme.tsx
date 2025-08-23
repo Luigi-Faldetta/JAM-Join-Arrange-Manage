@@ -21,9 +21,13 @@ export const useTheme = () => {
     
     // Force a repaint to ensure theme is applied
     document.documentElement.style.display = 'none';
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    document.documentElement.offsetHeight; // Trigger reflow
+    const forceReflow = document.documentElement.offsetHeight; // Trigger reflow
     document.documentElement.style.display = '';
+    
+    // Use the variable to avoid ESLint error
+    if (forceReflow > 0) {
+      // Theme has been applied
+    }
   }, [theme]);
 
   return theme;
