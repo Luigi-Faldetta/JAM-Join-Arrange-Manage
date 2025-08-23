@@ -223,7 +223,7 @@ function AuthModal() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto"
       >
         {/* Backdrop */}
         <motion.div
@@ -240,7 +240,7 @@ function AuthModal() {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="relative bg-white rounded-3xl shadow-2xl border border-gray-200 w-full max-w-md max-h-[90vh] overflow-y-auto"
+            className="relative bg-white rounded-3xl shadow-2xl border border-gray-200 w-full max-w-md mx-auto my-8"
           >
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-gray-200">
@@ -427,7 +427,7 @@ function AuthModal() {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="relative bg-white rounded-3xl shadow-2xl border border-gray-200 w-full max-w-sm"
+            className="relative bg-white rounded-3xl shadow-2xl border border-gray-200 w-full max-w-sm mx-auto my-8"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-gray-200">

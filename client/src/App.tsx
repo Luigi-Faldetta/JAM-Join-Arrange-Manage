@@ -27,6 +27,7 @@ import SSOCallback from './components/SSOCallback/SSOCallback';
 import { useClerkSync } from './hooks/useClerkSync';
 import { TranslationProvider } from './hooks/useTranslation';
 import { useTheme } from './hooks/useTheme';
+import { useViewportFix } from './hooks/useViewportFix';
 
 const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY as string;
 if (!clerkPubKey) {
@@ -36,6 +37,7 @@ if (!clerkPubKey) {
 function ClerkSyncWrapper({ children }: { children: React.ReactNode }) {
   useClerkSync();
   useTheme(); // Apply theme to document
+  useViewportFix(); // Fix mobile viewport issues
   return <>{children}</>;
 }
 
