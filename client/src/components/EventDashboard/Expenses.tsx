@@ -676,7 +676,7 @@ export default function Expenses() {
                       {/* Summary */}
                       {totalAmount > 0 && (
                         <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg mb-4">
-                          <div className="grid grid-cols-2 gap-4 text-sm">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                             <div>
                               <p className="text-gray-600 dark:text-gray-400">{t.expenses.totalExpenses}</p>
                               <p className="text-lg font-semibold text-gray-900 dark:text-white">{formatCurrency(totalAmount, currency)}</p>
@@ -701,16 +701,16 @@ export default function Expenses() {
                           if (absBalance < 0.01) return null;
                           
                           return (
-                            <div key={person.userId} className="flex items-center justify-between p-3 rounded-lg" 
+                            <div key={person.userId} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 rounded-lg gap-2" 
                                  style={{ backgroundColor: isOwed ? '#f0fdf4' : '#fef2f2' }}>
-                              <div className="flex items-center space-x-3">
+                              <div className="flex items-center space-x-3 flex-1 min-w-0">
                                 <img
                                   src={person.profilePic || '/no-profile-picture-icon.png'}
                                   alt={person.name}
-                                  className="w-8 h-8 rounded-full object-cover"
+                                  className="w-8 h-8 rounded-full object-cover flex-shrink-0"
                                 />
-                                <div>
-                                  <p className="font-medium text-gray-900 dark:text-white text-sm">
+                                <div className="min-w-0 flex-1">
+                                  <p className="font-medium text-gray-900 dark:text-white text-sm truncate">
                                     {person.name}
                                   </p>
                                   <p className="text-xs text-gray-600 dark:text-gray-400">
@@ -719,7 +719,7 @@ export default function Expenses() {
                                 </div>
                               </div>
                               
-                              <div className="text-right">
+                              <div className="text-right flex-shrink-0">
                                 <div className={`text-sm font-semibold ${isOwed ? 'text-green-600' : 'text-red-600'}`}>
                                   {isOwed ? '+' : '-'}${absBalance.toFixed(2)}
                                 </div>
@@ -754,34 +754,38 @@ export default function Expenses() {
 
                               return (
                                 <div key={index} className="p-3 bg-white dark:bg-gray-700 rounded-lg mb-2 last:mb-0 shadow-sm">
-                                  <div className="flex items-center justify-between">
-                                    <div className="flex items-center space-x-3 flex-1">
-                                      <img
-                                        src={transaction.from.profilePic || '/no-profile-picture-icon.png'}
-                                        alt={transaction.from.name}
-                                        className="w-8 h-8 rounded-full object-cover"
-                                      />
-                                      <div className="flex-1">
-                                        <p className="text-sm font-medium text-gray-900 dark:text-white">{transaction.from.name}</p>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400">{t.expenses.pays}</p>
+                                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                    <div className="flex items-center justify-between sm:justify-start gap-2 w-full">
+                                      <div className="flex items-center gap-2 min-w-0">
+                                        <img
+                                          src={transaction.from.profilePic || '/no-profile-picture-icon.png'}
+                                          alt={transaction.from.name}
+                                          className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+                                        />
+                                        <div className="min-w-0">
+                                          <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{transaction.from.name}</p>
+                                          <p className="text-xs text-gray-500 dark:text-gray-400">{t.expenses.pays}</p>
+                                        </div>
                                       </div>
-                                      <div className="text-center px-2">
+                                      <div className="text-center flex-shrink-0 px-2">
                                         <div className="text-lg font-bold text-blue-600">{formatCurrency(transaction.amount, currency)}</div>
                                         <div className="text-xs text-gray-500 dark:text-gray-400">{t.expenses.to}</div>
                                       </div>
-                                      <div className="flex-1 text-right">
-                                        <p className="text-sm font-medium text-gray-900 dark:text-white">{transaction.to.name}</p>
+                                      <div className="flex items-center gap-2 min-w-0 justify-end">
+                                        <div className="text-right min-w-0">
+                                          <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{transaction.to.name}</p>
+                                        </div>
+                                        <img
+                                          src={transaction.to.profilePic || '/no-profile-picture-icon.png'}
+                                          alt={transaction.to.name}
+                                          className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+                                        />
                                       </div>
-                                      <img
-                                        src={transaction.to.profilePic || '/no-profile-picture-icon.png'}
-                                        alt={transaction.to.name}
-                                        className="w-8 h-8 rounded-full object-cover"
-                                      />
                                     </div>
                                   </div>
 
                                   {/* Settlement Status and Actions */}
-                                  <div className="mt-3 flex items-center justify-between">
+                                  <div className="mt-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                     <div className="flex items-center space-x-2">
                                       {isFullySettled ? (
                                         <div className="flex items-center space-x-2 text-green-600">
@@ -805,7 +809,7 @@ export default function Expenses() {
                                       <button
                                         onClick={() => handleConfirmPayment(transaction.to.userId, transaction.amount)}
                                         disabled={isConfirmingThisPayment}
-                                        className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-all duration-200"
+                                        className="flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-all duration-200 w-full sm:w-auto"
                                       >
                                         {isConfirmingThisPayment ? (
                                           <FiLoader className="w-4 h-4 animate-spin" />
@@ -820,7 +824,7 @@ export default function Expenses() {
                                       <button
                                         onClick={() => handleConfirmReceipt(settlement.id)}
                                         disabled={confirmingReceiptId === settlement.id}
-                                        className="flex items-center space-x-2 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-all duration-200"
+                                        className="flex items-center justify-center space-x-2 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-all duration-200 w-full sm:w-auto"
                                       >
                                         {confirmingReceiptId === settlement.id ? (
                                           <FiLoader className="w-4 h-4 animate-spin" />
@@ -832,13 +836,13 @@ export default function Expenses() {
                                     )}
 
                                     {isCurrentUserPayer && settlement?.payerConfirmed && !settlement?.receiverConfirmed && (
-                                      <div className="text-sm text-gray-600">
+                                      <div className="text-sm text-gray-600 text-center sm:text-left">
                                         Waiting for {transaction.to.name} to confirm
                                       </div>
                                     )}
 
                                     {isCurrentUserReceiver && !settlement?.payerConfirmed && (
-                                      <div className="text-sm text-gray-600">
+                                      <div className="text-sm text-gray-600 text-center sm:text-left">
                                         Waiting for payment
                                       </div>
                                     )}
