@@ -4,7 +4,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 export interface MsgState {
     //update interface once types are declared
     id?:number,
-    userId: string, 
+    userId: string | null, 
     eventId: string, 
     message: string,
     User?: any

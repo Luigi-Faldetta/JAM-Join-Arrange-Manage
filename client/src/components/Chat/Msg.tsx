@@ -1,6 +1,7 @@
 import moment from "moment";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { MsgState } from "../../reduxFiles/slices/msg";
+import { motion } from "framer-motion";
 
 interface MsgProps {
   messages: MsgState[];
@@ -28,44 +29,57 @@ const Msg = ({ messages, userId, messagesRef }: MsgProps) => {
     <>
       {sortedMessages &&
         sortedMessages.map((messageData: MsgState, i: number) => {
-          const isCurrentUser = messageData.userId === userId;
-
-          const messageClassName = `relative text-m p-1 px-2 shadow rounded-xl m-1 ${
-            isCurrentUser
-              ? "bg-pink-300 border-2 border-pink-500 ml-12 text-black"
-              : "bg-indigo-700 border-2 border-indigo-900 mr-12 text-white"
-          } inline-block`;
-
-          const dateClassName = `${
-            isCurrentUser
-              ? "flex justify-end text-slate-600 text-xs"
-              : "flex justify-end text-slate-400 text-xs"
-          }`;
+          // Add safety check for messageData
+          if (!messageData || !messageData.message) {
+            return null;
+          }
+          
+          const isCurrentUser = messageData.userId && userId && messageData.userId === userId;
 
           return (
-            <div
+            <motion.div
               key={messageData.id}
-              className={messageClassName}
+              initial={{ opacity: 0, y: 20, scale: 0.8 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'} mb-4`}
               ref={messages.length === i + 1 ? messagesRef : undefined}
             >
-              {!isCurrentUser && (
-                <div className="user">
-                  {messageData.User && messageData.User.profilePic && (
-                    <img
-                      src={messageData.User.profilePic}
-                      className="object-cover h-8 w-8 rounded-full"
-                      alt=""
-                    />
-                  )}
-                  <div className="p-2">{messageData.User.name}</div>
-                </div>
-              )}
+              <div className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl shadow-lg ${
+                isCurrentUser
+                  ? "bg-gradient-to-br from-purple-500 to-pink-500 text-white ml-4"
+                  : "bg-white border border-gray-200 text-gray-800 mr-4"
+              }`}>
+                {!isCurrentUser && (
+                  <div className="flex items-center space-x-2 mb-2">
+                    {messageData.User && messageData.User.profilePic && (
+                      <img
+                        src={messageData.User.profilePic}
+                        className="object-cover h-6 w-6 rounded-full"
+                        alt=""
+                      />
+                    )}
+                    <span className="text-sm font-medium text-gray-600">
+                      {messageData.User?.name || 'Anonymous'}
+                    </span>
+                  </div>
+                )}
 
-              <div className="message">{messageData.message}</div>
-              <div className={dateClassName}>
-                {moment(messageData.date).calendar()}
+                <div className={`text-sm leading-relaxed ${
+                  isCurrentUser ? 'text-white' : 'text-gray-800'
+                }`}>
+                  {messageData.message}
+                </div>
+                
+                <div className={`text-xs mt-2 ${
+                  isCurrentUser 
+                    ? 'text-purple-100 text-right' 
+                    : 'text-gray-500 text-right'
+                }`}>
+                  {moment(messageData.date).calendar()}
+                </div>
               </div>
-            </div>
+            </motion.div>
           );
         })}
     </>

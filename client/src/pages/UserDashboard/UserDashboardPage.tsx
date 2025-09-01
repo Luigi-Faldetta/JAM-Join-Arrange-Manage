@@ -23,6 +23,7 @@ import {
 } from 'react-icons/fi';
 import SettingsModal from '../../components/SettingsModal/SettingsModal';
 import { useTranslation } from '../../hooks/useTranslation';
+import Chat from '../../components/Chat/Chat';
 
 export default function UserDashboardPage() {
   const dispatch = useAppDispatch();
@@ -480,6 +481,9 @@ export default function UserDashboardPage() {
             className="w-full h-full object-cover"
           />
         </button>
+        
+        {/* Chat Button */}
+        <Chat />
         
         {/* Sign Out Button */}
         <button

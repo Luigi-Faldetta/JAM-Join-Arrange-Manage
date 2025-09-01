@@ -4,11 +4,14 @@ import { RootState, useAppDispatch } from "../../reduxFiles/store";
 import { useAuth } from "../../utils/useAuth";
 import "./chatContainer.css";
 import { useSelector } from "react-redux";
+import { useClickAway } from "@uidotdev/usehooks";
+import { motion } from "framer-motion";
 import {
   socket,
   useAddMsgMutation,
   useGetEventQuery,
   useGetMsgsQuery,
+  useGetMeQuery,
 } from "../../services/JamDB";
 import moment from "moment";
 import { MsgState, addMessage, setMessages } from "../../reduxFiles/slices/msg";
@@ -24,7 +27,12 @@ function ChatContainer() {
   useAuth();
   const [message, setMessage] = useState("");
   const messagesRef = useRef<HTMLDivElement>(null);
-  const userId = localStorage.getItem("token");
+  const { data: userData } = useGetMeQuery();
+  const userId = userData?.data?.userId;
+  
+  const chatContainerRef = useClickAway(() => {
+    dispatch(closeChat());
+  });
 
 
   const { data: dataevent } = useGetEventQuery(eventId as string);
@@ -38,7 +46,7 @@ function ChatContainer() {
   const data = _data?.data;
   const handleMessageSubmit = async (message: string) => {
     try {
-      if (socket) {
+      if (socket && userId) {
         socket.emit("newMessage", { userId, eventId, message });
       }
 
@@ -101,47 +109,85 @@ function ChatContainer() {
   }, [data, isLoading]);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="chat-container border-2 border-indigo-900 md:rounded-xl">
-        <div className="chat-header">
-          <div className="chat-title w-full text-base text-center text-black">{dataevent?.data.title}</div>
-          <div className="close absolute right-4" onClick={() => dispatch(closeChat())}>
-            ×
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8, y: 20 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.8, y: 20 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="fixed bottom-4 right-4 z-40"
+    >
+      <form onSubmit={handleSubmit}>
+        <div 
+          className="w-80 h-96 bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl border-2 border-transparent bg-gradient-to-br from-purple-500/20 via-pink-500/20 to-purple-600/20 overflow-hidden flex flex-col"
+          style={{
+            background: 'linear-gradient(white, white) padding-box, linear-gradient(135deg, #8b5cf6, #ec4899, #8b5cf6) border-box'
+          }}
+          ref={chatContainerRef}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-purple-50 to-pink-50">
+            <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent truncate">
+              {dataevent?.data.title}
+            </h3>
+            <motion.button
+              whileHover={{ scale: 1.1, rotate: 90 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => dispatch(closeChat())}
+              className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors duration-200 text-2xl font-light"
+              type="button"
+            >
+              ×
+            </motion.button>
+          </div>
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gradient-to-b from-gray-50/50 to-white/50">
+            {isLoading ? (
+              <div className="flex items-center justify-center h-full">
+                <ColorRing
+                  visible={true}
+                  height="60"
+                  width="60"
+                  ariaLabel="loading-messages"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                  colors={["#8b5cf6", "#a855f7", "#c084fc", "#ec4899", "#f472b6"]}
+                />
+              </div>
+            ) : (
+              isSuccess && (
+                <Msg messages={messages} userId={userId || null} messagesRef={messagesRef} />
+              )
+            )}
+          </div>
+          {/* Input */}
+          <div className="p-4 border-t border-gray-200 bg-white/80">
+            <div className="relative flex items-center">
+              <input
+                className="flex-1 py-3 px-4 pr-12 rounded-xl border-2 border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-200 bg-white/90 text-gray-800 placeholder-gray-500 transition-all duration-200"
+                type="text"
+                placeholder="Type your message..."
+                value={message}
+                onChange={(event) => setMessage(event.target.value)}
+                onKeyDown={handleKeyDown}
+                name="message"
+                autoComplete="off"
+                autoCapitalize="off"
+              />
+              <motion.button
+                type="button"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleSubmit}
+                disabled={!message.trim()}
+                className="absolute right-2 p-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 disabled:from-gray-300 disabled:to-gray-400 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 disabled:cursor-not-allowed"
+              >
+                <VscSend className="w-4 h-4" />
+              </motion.button>
+            </div>
           </div>
         </div>
-        <div className="chat-messages">
-          {isLoading ? (
-            <ColorRing
-              visible={true}
-              height="50%"
-              width="100%"
-              ariaLabel="blocks-loading"
-              wrapperStyle={{}}
-              wrapperClass="blocks-wrapper"
-              colors={["#ec4899", "#ec4899", "#ec4899", "#ec4899", "#ec4899"]}
-            />
-          ) : (
-            isSuccess && (
-              <Msg messages={messages} userId={userId} messagesRef={messagesRef} />
-            )
-          )}
-        </div>
-        <div className="input-container">
-          <input
-            className="bg-white border-slate-300 md:active:border-pink-500 md:focus:border-pink-500 w-5/6 py-4 px-3 rounded-xl xl-2 pr-2"
-            type="text"
-            placeholder="Type your message here..."
-            value={message}
-            onChange={(event) => setMessage(event.target.value)}
-            onKeyDown={handleKeyDown}
-            name="message"
-            autoComplete="off" // Disable autocomplete
-            autoCapitalize="off" // Disable autocapitalize
-          />
-          <VscSend className="absolute right-8 h-6 w-6 fill-pink-500" onClick={handleSubmit} />
-        </div>
-      </div>
-    </form>
+      </form>
+    </motion.div>
   );
 }
 

@@ -46,20 +46,20 @@ function Chat() {
   };
 
   return (
-    <div className="flex items-center">
+    <div className="relative flex items-center">
       <button
         type="button"
-        className=""
+        className="p-2.5 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
         id="user-menu-button"
         aria-expanded={chatDropdown ? 'true' : 'false'}
         onClick={handleChatClick}
         data-dropdown-toggle="user-dropdown"
         data-dropdown-placement="bottom"
       >
-        <span className="sr-only">Open user menu</span>
+        <span className="sr-only">Open chat menu</span>
         <HiOutlineChatBubbleLeftRight
           id="chat-icon"
-          className="w-8 h-8 md:hover:text-pink-500 stroke-black"
+          className="w-5 h-5 text-white"
         />
       </button>
       {chatDropdown && (
@@ -72,9 +72,9 @@ function Chat() {
                   onClick={() => handleEventClick(event.eventId as string)}
                   className="event-item"
                 >
-                  <div className="avatar-wrapper flex overflow-hidden border border-slate-300">
+                  <div className="avatar-wrapper">
                     <img
-                      className="avatar w-full h-full object-cover"
+                      className="w-full h-full object-cover"
                       src={
                         event.coverPic
                           ? event.coverPic
@@ -87,7 +87,7 @@ function Chat() {
                 </li>
               ))
             ) : (
-              <div>No chats available at the moment.</div>
+              <div className="px-4 py-2 text-gray-500 text-sm">No chats available at the moment.</div>
             )}
           </ul>
         </div>
