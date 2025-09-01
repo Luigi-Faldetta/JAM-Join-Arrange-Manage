@@ -9,7 +9,7 @@ import {
   Navigate,
   Outlet,
 } from 'react-router-dom';
-import store from './reduxFiles/store';
+import store, { RootState } from './reduxFiles/store';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import Logout from './components/Logout';
@@ -29,6 +29,9 @@ import { TranslationProvider } from './hooks/useTranslation';
 import { useTheme } from './hooks/useTheme';
 import { useViewportFix } from './hooks/useViewportFix';
 import { ThemeProvider } from './components/ThemeProvider';
+import ChatContainer from './components/Chat/ChatContainer';
+import { useSelector } from 'react-redux';
+import { AnimatePresence } from 'framer-motion';
 
 const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY as string;
 if (!clerkPubKey) {
@@ -44,12 +47,15 @@ function ClerkSyncWrapper({ children }: { children: React.ReactNode }) {
 
 function Layout() {
   const [deleteOpen, setDeleteOpen] = React.useState(false);
+  const chatState = useSelector((state: RootState) => state.chatReducer);
+  const userToken = localStorage.getItem('token');
 
   return (
     <ClerkSyncWrapper>
       <TranslationProvider>
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
           <Navbar />
+          
           <main className="flex-1">
             <Outlet />
           </main>
@@ -57,6 +63,13 @@ function Layout() {
           <Logout />
           {deleteOpen && <Delete setOpen={setDeleteOpen} />}
           <AuthModal />
+          
+          {/* Chat Container - Conditional rendering with animation */}
+          <AnimatePresence>
+            {chatState.isOpen && userToken && (
+              <ChatContainer />
+            )}
+          </AnimatePresence>
         </div>
       </TranslationProvider>
     </ClerkSyncWrapper>

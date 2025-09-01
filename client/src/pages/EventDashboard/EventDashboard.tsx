@@ -23,6 +23,7 @@ import { useAppDispatch } from '../../reduxFiles/store';
 import { openLogout } from '../../reduxFiles/slices/logout';
 import SettingsModal from '../../components/SettingsModal/SettingsModal';
 import { useTranslation } from '../../hooks/useTranslation';
+import Chat from '../../components/Chat/Chat';
 
 export default function EventDashboard() {
   const [userIsHost, setUserIsHost] = useState<boolean>(false);
@@ -375,6 +376,9 @@ export default function EventDashboard() {
                     className="w-full h-full object-cover"
                   />
                 </button>
+
+                {/* Chat Button */}
+                <Chat />
 
                 <button
                   onClick={handleSignOut}
