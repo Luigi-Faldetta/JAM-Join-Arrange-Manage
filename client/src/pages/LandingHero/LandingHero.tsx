@@ -33,7 +33,7 @@ const LandingHero: React.FC<LandingHeroProps> = ({ eventData }) => {
           className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-gray-900"
         >
           <span className="block">Organize Events Effortlessly with</span>
-          <span className="block bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 bg-clip-text text-transparent mt-2">
+          <span className="block bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 bg-clip-text text-transparent mt-2 py-2 leading-relaxed">
             JAM: Join, Arrange, Manage
           </span>
         </motion.h1>
